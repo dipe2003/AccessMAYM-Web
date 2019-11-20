@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+      xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    
+    <!-- Modal Nueva Deteccion -->
+    <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
+        <div class="modal-dialog">
+            <h:panelGroup id="panel_modal">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: gray; color: white;">
+                        <h4 class="modal-title">Deteccion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <strong><label for="nombre_nueva_deteccion">Nombre</label></strong>
+                            <h:inputText id="nombre_nueva_deteccion" class="form-control" value="#{modalDetecciones.nombreNuevaDeteccion}" 
+                                         required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." >
+                                <f:ajax execute="@this" event="change" render="panel_modal" />
+                            </h:inputText>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
+                            <h:selectOneRadio id="tipo_nueva_deteccion" value="#{modalDetecciones.tipoDeDeteccionSeleccionada}" >
+                                <c:forEach items="#{modalDetecciones.tiposDeteccion}" var="tipo">
+                                    <div class="radio" >
+                                        <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                    </div>
+                                </c:forEach>
+                                <f:ajax execute="@this" event="change" />
+                            </h:selectOneRadio>  
+                        </div>
+                        <h:panelGroup id="panel_mensajes_modal">
+                            <div class="form-group-sm">
+                                <h:message for="nombre_nueva_deteccion" class="msj_error"/>
+                            </div>
+                            <div class="form-group-sm">
+                                <h:message for="tipo_nueva_deteccion" class="msj_error"/>
+                            </div>
+                            <div class="form-group-sm">
+                                <h:message for="btn_nueva_deteccion" class="msj_info"/>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <c:if test="#{modalDetecciones.nombreNuevaDeteccion == '' || modalDetecciones.nombreNuevaDeteccion == null  }" >
+                                    <h:commandButton id="btn_nueva_deteccion" title="No se ingreso nombre de deteccion." style="width: 99%;" class="btn btn-primary disabled" value="Guardar" disabled="true" />
+                                </c:if>
+                                <c:if test="#{modalDetecciones.nombreNuevaDeteccion != '' and modalDetecciones.nombreNuevaDeteccion != null}" >
+                                    <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{modalDetecciones.nuevaDeteccion()}">
+                                        <f:ajax execute="panel_modal" onevent="indicador" />
+                                        <f:ajax render="form_accion:panel_tipodeteccion" />
+                                        <f:ajax render="form_accion:deteccion" />
+                                        <f:ajax render="panel_modal panel_mensajes_modal" />
+                                    </h:commandButton>
+                                </c:if>
+                            </div>
+                            <div class="col-sm-6">
+                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" action="#{modalDetecciones.limpiarModalDeteccion()}" value="Cerrar">
+                                    <f:ajax render="panel_modal panel_mensajes_modal" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </div>
+    </div>
+    
+</html>

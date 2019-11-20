@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%">  
+           <div class="panel panel-info">
+                <div class="panel-heading">Seguimiento de Accion Correctiva</div>
+                <div class="panel-body">
+                    Aqui se describe la medida #{actividadesAC.tipoActividad} a agregar a la accion seleccionada.
+                    Luego se debera registrar la fecha en la que se implemente mediante la opcion de realizar seguimiento.
+                </div>                  
+            </div>
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_agregar_actividades">                
+                <c:choose>
+                    <c:when test="#{actividadesAC.tipoActividad == 'correctiva'}">
+                        <!-- Medidas Correctivas -->                        
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Medida Correctiva / Correccion:</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <strong><label for="descripcion_correctiva">Descripcion:</label></strong>                                    
+                                    <h:inputTextarea id="descripcion_correctiva" class="form-control" value="#{actividadesAC.descripcionMedidaCorrectiva}"
+                                                     required="true" requiredMessage="Se debe ingresar Descripcion de Medida Correctiva." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="responsable_correctiva">Responsable de Implementacion:</label></strong>                                    
+                                    <h:selectOneMenu id="responsable_correctiva" class="form-control" value="#{actividadesAC.responsableMedidaCorrectiva}"
+                                                     required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
+                                        <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
+                                        <c:forEach items="#{actividadesAC.listaUsuariosEmpresa}" var="entry">
+                                            <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="fecha_estimada_correctiva">Fecha Estimada de Implementacion:</label></strong>                                    
+                                    <h:inputText id="fecha_estimada_correctiva" class="form-control calendario" p:placeholder="Fecha Estimada de Implementacion" 
+                                                 value="#{actividadesAC.strFechaEstimadaCorrectiva}" required="true" requiredMessage="No se ingreso Fecha Estimada de Implementacion"/>
+                                </div>
+                                <div class="form-group">
+                                    <c:choose>
+                                        <c:when test="#{actividadesAC.idActividadEditar > 0}">
+                                            <h:commandButton id="btn_guardar_medida_correctiva" class="btn btn-primary" value="Guardar Medida Correctiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
+                                            </h:commandButton>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                <h:commandButton id="btn_remover_medida_correctiva" class="btn btn-danger" value="Eliminar Medida Correctiva" onclick="if (! confirm('Seguro que va a eliminar esta medida corectiva? Se eliminaran todos los datos relacionados.')) return false">
+                                                    <f:ajax execute="@form" event="click" listener="#{actividadesAC.removerMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
+                                                </h:commandButton>  
+                                            </c:if>                                            
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:commandButton id="btn_agregar_medida_correctiva" class="btn btn-primary" value="Agregar Medida Correctiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaCorrectiva()}" onevent="indicador" render="panel_mensajes_correctivas"/>
+                                            </h:commandButton>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <h:panelGroup id="panel_mensajes_correctivas">
+                                        <div class="form-group-sm">
+                                            <h:message for="descripcion_correctiva" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="responsable_correctiva" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="fecha_estimada_correctiva" class="msj_error"/>
+                                        </div>                   
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_agregar_medida_correctiva" class="msj_error"/>
+                                        </div>               
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_remover_medida_correctiva" class="msj_error"/>
+                                        </div>               
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_guardar_medida_correctiva" class="msj_error"/>
+                                        </div>               
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- Medidas Preventivas -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Medida Preventiva / Prevencion de Recurrencia</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <strong><label for="descripcion_preventiva">Descripcion:</label></strong>                                    
+                                    <h:inputTextarea id="descripcion_preventiva" class="form-control" value="#{actividadesAC.descripcionMedidaPreventiva}"
+                                                     required="true" requiredMessage="Se debe ingresar Descripcion de Medida Preventiva." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="responsable_preventiva">Responsable de Implementacion:</label></strong>                                    
+                                    <h:selectOneMenu id="responsable_preventiva" class="form-control" value="#{actividadesAC.responsableMedidaPreventiva}"
+                                                     required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
+                                        <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
+                                        <c:forEach items="#{actividadesAC.listaUsuariosEmpresa}" var="entry">
+                                            <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="fecha_estimada_preventiva">Fecha Estimada de Implementacion:</label></strong>                                    
+                                    <h:inputText id="fecha_estimada_preventiva" class="form-control calendario" p:placeholder="Fecha Estimada de Implementacion" 
+                                                 value="#{actividadesAC.strFechaEstimadaPreventiva}" required="true" requiredMessage="No se ingreso Fecha Estimada de Implementacion"/>
+                                </div>
+                                <div class="form-group">
+                                    <c:choose>
+                                        <c:when test="#{actividadesAC.idActividadEditar > 0}">
+                                            <h:commandButton id="btn_guardar_medida_preventiva" class="btn btn-primary" value="Guardar Medida Preventiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.guardarMedidaPreventiva()}" render="panel_mensajes_preventivas"/>
+                                            </h:commandButton>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                <h:commandButton id="btn_remover_medida_preventiva" class="btn btn-danger" value="Eliminar Medida Preventiva" onclick="if (! confirm('Seguro que va a eliminar esta medida preventiva? Se eliminaran todos los datos relacionados.')) return false">
+                                                    <f:ajax execute="@form" event="click" listener="#{actividadesAC.removerMedidaPreventiva()}" onevent="indicador" render="panel_mensajes_preventivas"/>
+                                                </h:commandButton>  
+                                            </c:if>                                            
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:commandButton id="btn_agregar_medida_preventiva" class="btn btn-primary" value="Agregar Medida Preventiva">
+                                                <f:ajax execute="@form" event="click" listener="#{actividadesAC.agregarMedidaPreventiva()}" onevent="indicador" render="panel_mensajes_preventivas"/>
+                                            </h:commandButton>  
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <h:panelGroup id="panel_mensajes_preventivas">
+                                        <div class="form-group-sm">
+                                            <h:message for="descripcion_preventiva" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="responsable_preventiva" class="msj_error"/>
+                                        </div>
+                                        <div class="form-group-sm">
+                                            <h:message for="fecha_estimada_preventiva" class="msj_error"/>
+                                        </div>                
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_agregar_medida_preventiva" class="msj_error"/>
+                                        </div>                    
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_guardar_medida_preventiva" class="msj_error"/>
+                                        </div>                    
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_remover_medida_preventiva" class="msj_error"/>
+                                        </div>                    
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>                
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

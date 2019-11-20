@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 1%"> 
+            <div class="panel panel-info">
+                <div class="panel-heading">Crear Accion Correctiva</div>
+                <div class="panel-body">
+                    Aqui puedes crear una accion Correctiva. Todos los campos son obligatorios.
+                </div>                  
+            </div>
+        </div>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_accion" enctype="multipart/form-data">
+                <!-- Descripcion -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                    <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion del desvio." 
+                                                 value="#{crearAccionCorrectiva.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="form-group">
+                                    <strong><label for="area">Area / Sector:</label></strong>
+                                    <h:selectOneMenu id="area" class="form-control" value="#{crearAccionCorrectiva.areaSectorAccionSeleccionada}"
+                                                     required="true" requiredMessage="No se selecciono area">
+                                        <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                        <c:forEach items="#{crearAccionCorrectiva.listaAreasSectores}" var="area">
+                                            <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                        </c:forEach>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <h:panelGroup id="panel_tipodeteccion">
+                                        <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                                        <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionCorrectiva.tipoDeDeteccionSeleccionada}" >
+                                            <c:forEach items="#{crearAccionCorrectiva.tiposDeteccion}" var="tipo">
+                                                <div class="radio" >
+                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                </div>
+                                            </c:forEach>
+                                            <f:ajax execute="@this"/>
+                                            <f:ajax render="deteccion" listener="#{crearAccionCorrectiva.actualizarDeteccion()}" onevent="indicador"/>
+                                        </h:selectOneRadio>
+                                    </h:panelGroup>
+                                </div> 
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <strong><label for="deteccion">Generada Por:</label></strong>                                    
+                                    <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccionCorrectiva.deteccionSeleccionada}" 
+                                                     required="true" requiredMessage="No se selecciono Deteccion.">
+                                        <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                        <c:forEach items="#{crearAccionCorrectiva.listaDetecciones}" var="deteccion">
+                                            <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                        </c:forEach>
+                                        <f:ajax execute="@this"/>
+                                    </h:selectOneMenu>                                    
+                                </div>
+                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" >
+                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                    <f:ajax delay="100" render="modal_nueva" />
+                                </h:commandLink> 
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
+                                    <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}">                                        
+                                        <c:forEach items="#{crearAccionCorrectiva.tiposDesvios}" var="tipo" >
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>  
+                                        <f:ajax execute="@this"/>
+                                    </h:selectOneRadio>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="descripcion">Descripcion:</label></strong>                                    
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccionCorrectiva.descripcion}" 
+                                             required="true" requiredMessage="No se ingreso descripcion."/>
+                        </div>
+                        
+                        <h:panelGroup id="panel_producto_afectado">
+                            <c:choose>
+                                <c:when test="#{empty productoInvolucrado.listaProductosAfectados}">
+                                    <div class="form-group">
+                                        <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                        No
+                                    </div>
+                                    <div class="form-group">
+                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
+                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
+                                        </h:commandLink> 
+                                    </div>   
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="form-group">
+                                        <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                        Si
+                                    </div>
+                                    <div class="form-group">
+                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
+                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
+                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
+                                        </h:commandLink> 
+                                    </div>  
+                                    
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre del Producto:</th>
+                                                        <th>Datos del Producto:</th>
+                                                        <th></th>
+                                                    </tr>                                                
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach items="#{productoInvolucrado.listaProductosAfectados}" var="producto">
+                                                        <tr>
+                                                            <td>#{producto.key}</td>
+                                                            <td>#{producto.value}</td>
+                                                            <td><div class="btn-group">
+                                                                    <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
+                                                                                   action="#{productoInvolucrado.cargarDatosProducto(producto.key)}">
+                                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                                        <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
+                                                                    </h:commandLink>
+                                                                    <h:commandLink class="btn btn-danger" action="#{productoInvolucrado.quitarProductoGenerico(producto.key)}" 
+                                                                                   onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
+                                                                        <span class="glyphicon glyphicon-trash"> </span>
+                                                                        <f:ajax render="panel_producto_afectado panel_mensajes"/>
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>  
+                        </h:panelGroup>                       
+                    </div>
+                </div>   
+                
+                <h:panelGroup id="panel_mensajes">
+                    <div class="form-group-sm">
+                        <h:message for="fecha_deteccion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="area" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="deteccion" class="msj_error"/>
+                    </div>                    
+                    <div class="form-group-sm">
+                        <h:message for="descripcion" class="msj_error"/>
+                    </div>
+                    <div class="form-group-sm">
+                        <h:message for="crear_accion" class="msj_error"/>
+                    </div>
+                </h:panelGroup>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h:commandButton id="crear_accion" class="btn btn-success" style="width: 99%" value="Guardar" action="#{crearAccionCorrectiva.crearAccionCorrectiva()}">
+                            <f:ajax execute="deteccion descripcion fecha_deteccion area" onevent="indicador" render="panel_mensajes"/>
+                        </h:commandButton>
+                    </div>
+                    <div class="col-sm-6">
+                        <h:button class="btn btn-default" value="Reset" style="width: 99%" p:type="reset" />
+                    </div>
+                </div>
+            </h:form>
+            <h:form id="form_accion_modal">
+                <!-- Modal Nueva Deteccion -->
+                <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>    
+               
+                <!-- Panel de Producto Involucrado -->
+                <ui:include src="ProductoInvolucrado.xhtml"/>                
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+

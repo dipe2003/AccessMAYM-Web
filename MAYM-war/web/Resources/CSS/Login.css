@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 02/10/2016, 10:15:19 PM
+    Author     : dipe2
+*/
+
+section {
+    background: rgba(149, 69, 69, 0.1);
+    width:99%;
+    margin-top: 15em;
+    position: absolute;
+}
+.contenedor {
+    padding: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    width: 25vw;                
+    border: 1px solid #002966;
+    background:  #99c2ff;
+    text-align: center;
+}
+div label {
+    width: 90%;
+    font-size: 1.25em;
+    text-align: left;
+    font-family: sans-serif, verdana;
+    font-weight: bold;
+}
+
+input {
+    font-size: 1em;
+    background:  #e6f0ff;
+    border-color: #0c7cf2;
+    border: 0.1em solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 90%;
+}
+
+select {
+    font-size: 1em;
+    background:  #e6f0ff;
+    border-color: #0c7cf2;
+    border: 0.1em solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 90%; 
+    text-align: center;
+}
+
+select:focus {
+    border: 2px solid #55a4f9;
+    box-shadow: 1px 1px #55a4f9
+}
+
+input:focus {
+    border: 2px solid #55a4f9;
+    box-shadow: 1px 1px #55a4f9
+}
+
+button {
+    font-size: 1.2em;
+    height: 4vh;
+    width: 90%;
+    background: #0c7cf2;
+    color: white;
+}
+button:hover {
+    box-shadow: 5px 5px 10px 5px #55a4f9;
+    cursor: pointer;
+}
+button:hover::before{
+    content: "<< ";
+}
+button:hover::after{
+    content: " >>";
+}

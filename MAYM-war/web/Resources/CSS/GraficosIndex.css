@@ -1,0 +1,20 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16/05/2017, 07:34:00 AM
+    Author     : dperez
+*/
+
+.contenedor-5050{
+    width:98%;
+    display: inline-flex;
+}
+
+.contenedor-50{
+    width:50%; 
+    height:30%;
+    padding: .5% .5% .5% .5%;
+}

@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Codificaciones</div>
+                <div class="panel-body">
+                    Aqui se listan todas las Codificaciones registradas.
+                    Pueden crearse, modificarse y elminarse (solo Administrador) cuando no esten en uso.
+                </div>                  
+            </div>                 
+        </div>
+        <h:form id="form_codificaciones" >
+            <div class="container-fluid" style="padding: 1%">
+                <c:choose>
+                    <c:when test="#{empty codificaciones.listaCodificaciones}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                        <div class="btn-group" >
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{codificaciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="btn-group">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{codificaciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                  
+                        </div>
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Codificacion</th>
+                                    <th>Descripcion</th>
+                                    <th>Aplica a #{codificaciones.empresaLogueada.descripcionEmpresa}</th>
+                                    <th></th>
+                                </tr>
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{codificaciones.listaCodificaciones}" var="codificacion">
+                                    <tr>
+                                        <td>
+                                            #{codificacion.nombre}
+                                        </td>
+                                        <td>
+                                            #{codificacion.descripcion}
+                                        </td>
+                                        <td>
+                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
+                                                Aplica
+                                            </c:if>
+                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
+                                                No Aplica
+                                            </c:if>
+                                        </td>
+                                        <td>                                            
+                                            <div class="btn-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.id)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="panel_modal_editar" />
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="btn-group">
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                                    <c:if test="#{codificacion.accionesConCodificacion.size() == 0}">
+                                                        <c:choose>
+                                                            <c:when test="#{codificacion.empresasCodificacion.size() == 0}">
+                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
+                                                                    <span class="glyphicon glyphicon-trash"> </span>
+                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
+                                                                </h:commandLink>
+                                                            </c:when>
+                                                            <c:when test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id) and codificacion.empresasCodificacion.size() == 1}">
+                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
+                                                                    <span class="glyphicon glyphicon-trash"> </span>
+                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
+                                                                </h:commandLink>
+                                                            </c:when>
+                                                        </c:choose>     
+                                                    </c:if>
+                                                </c:if>
+                                            </div>                                                
+                                        </td>
+                                        <h:panelGroup id="panel_mensajes_tabla">
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_eliminar_#{codificacion.id}" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </tr>                                        
+                                </c:forEach>
+                            </tbody>
+                        </table>  
+                        <c:if test="#{codificaciones.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{codificaciones.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{codificaciones.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="Codificaciones.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <!-- Modal Nueva Codificacion -->
+            <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Codificacion</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_codificacion">Nombre</label></strong>
+                                    <h:inputText id="nombre_nueva_codificacion" class="form-control" value="#{codificaciones.nombreCodificacion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de codificacion" p:placeholder="Nombre de Codificacion." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="descripcion_nueva_codificacion">Descripcion</label></strong>
+                                    <h:inputText id="descripcion_nueva_codificacion" class="form-control" value="#{codificaciones.descripcionCodificacion}"
+                                                 required="true" requiredMessage="Se debe ingresar descripcion de codificacion" p:placeholder="Descripcion de Codificacion." />
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_nueva_codificacion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="descripcion_nueva_codificacion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_nueva_codificacion" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_nueva_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{codificaciones.nuevaCodificacion()}" >
+                                            <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            
+            <!-- Modal Editar Codificacion -->
+            <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_editar">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Codificacion</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_codificacion">Nombre</label></strong>
+                                    <h:inputText id="nombre_codificacion" class="form-control" value="#{codificaciones.nombreCodificacion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de codificacion" p:placeholder="Nombre de Codificacion." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="descripcion_codificacion">Descripcion</label></strong>
+                                    <h:inputText id="descripcion_codificacion" class="form-control" value="#{codificaciones.descripcionCodificacion}"
+                                                 required="true" requiredMessage="Se debe ingresar descripcion de codificacion" p:placeholder="Descripcion de Codificacion." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="aplica_empresa">Aplica a Empresa</label></strong>
+                                    <c:if test="#{codificaciones.contieneAcciones == true}">
+                                        <div class="alert alert-info">
+                                            <strong>Info!</strong> No se puede modificar porque ya existen acciones codificadas.
+                                        </div>
+                                    </c:if>
+                                    <c:if test="#{codificaciones.contieneAcciones == false}">
+                                        <h:selectOneRadio value="#{codificaciones.aplicaEmpresa}" >
+                                            <f:selectItem itemLabel="Aplica" itemValue="true"/>
+                                            <f:selectItem itemLabel="No Aplica" itemValue="false" />                                            
+                                        </h:selectOneRadio>
+                                    </c:if>
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_editar">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_codificacion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="descripcion_codificacion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_editar_codificacion" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_editar_codificacion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{codificaciones.editarCodificacion()}" >
+                                            <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </h:form>
+        
+    </ui:define>
+</ui:composition>

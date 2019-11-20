@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>M.A.Y.M. - Web Administration Tool</title>
+    </h:head>
+    <h:body>
+        Selecciona tu Empresa
+        <h:form id="frmIngreso">
+            <label>Empresa</label>
+            <h:inputText id="inputUsuario" value="#{ingresoUsuario.usuarioSeleccionado}"  >
+                <f:ajax execute="@this" event="change" listener="#{ingresoUsuario.ComprobarUsuario(ingresoUsuario.usuarioSeleccionado)}" render="mensaje" />
+            </h:inputText>
+            
+            
+            <label>Usuario</label>
+            <input type="text"></input>
+            <input type="password"></input>
+            
+            <br/>
+            
+            <h:inputText id="nombreEmpresa" value="#{ingresoUsuario.nombreEmpresa}" />            
+        
+
+            <h:commandButton action="#{ingresoUsuario.CrearBaseDatos()}" value="Crear Empresa" />
+            
+            <h:panelGroup id="mensaje">
+                <h:message for="inputUsuario"/>
+            </h:panelGroup>
+            
+        </h:form>
+    </h:body>
+</html>
+

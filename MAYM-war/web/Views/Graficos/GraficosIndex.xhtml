@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <script>
+            $(document).ready(function() {
+                var ctx = $("#chartestado");
+                var chartestado = new Chart(ctx , {
+                    type:'bar',
+                    data: {
+                        labels: ['Cerradas', 'Pendientes', 'Desestimadas', 'En Proceso Implemetacion' , 'En Proceso Verificacion'],
+                        datasets: [{
+                                label:'Total',
+                                data:[#{graficosIndex.accionesCerradas}, #{graficosIndex.accionesPendientes}, #{graficosIndex.accionesDesestimadas}, #{graficosIndex.accionesProcesoImp}, #{graficosIndex.accionesProcesoVerif}],
+                                backgroundColor:['green', 
+                                    'red', 
+                                    'black',
+                                    'chocolate',
+                                    'yellow'
+                                ],
+                                borderWidth: 1
+                            }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                    ticks: {
+                                        beginAtZero:true
+                                    }
+                                }]
+                        }
+                        
+                    }                         
+                }); 
+                var ctxTipo = $("#chartTipos");
+                var chartTipos = new Chart(ctxTipo , {
+                    type:'pie',
+                    data: {
+                        labels: ['Correctivas', 'Mejoras'],
+                        datasets: [{
+                                data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionesMejora}],
+                                backgroundColor:['green', 
+                                    'red'
+                                ],
+                                borderWidth: 1
+                            }]
+                    }                        
+                }); 
+            }); 
+        </script>
+        <div class="container-fluid" style="padding: 1%">
+            <h:form id="form_graficos_index">
+                
+                <div class="row">                    
+                    <div class="col-sm-6">
+                        <fieldset><legend>Total de Acciones</legend>
+                            <div style="height:10vh; width:50vw">
+                                <canvas id="chartTipos"  ></canvas>   
+                            </div>                            
+                        </fieldset>
+                    </div>
+                    <div class="col-sm-6">
+                        <fieldset><legend>Estado de Acciones</legend>
+                            <div style="height:40vh; width:50vw">
+                                <canvas id="chartestado"  ></canvas>
+                            </div>                            
+                        </fieldset>
+                    </div>
+                </div>
+                
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

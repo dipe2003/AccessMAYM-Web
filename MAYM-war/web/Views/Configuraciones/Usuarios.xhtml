@@ -1,0 +1,471 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Usuarios</div>
+                <div class="panel-body">
+                    Aqui se listan todos los Usuarios registrados.
+                    Pueden crearse, modificarse y elminarse cuando no esten en uso.
+                </div>                  
+            </div>                 
+        </div>
+        <h:form id="form_usuarios" >
+            <div class="container-fluid" style="padding: 1%">
+                <c:choose>
+                    <c:when test="#{empty usuarios.listaUsuarios}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                        <div class="btn-group" >
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{usuarios.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nuevo</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="btn-group">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{usuarios.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nuevo</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                  
+                        </div>
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Numero</th> 
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Area</th>
+                                    <th>Recibe Alertas</th>
+                                    <th>Permiso</th>
+                                    <th>Fecha de Baja</th>
+                                    <th></th>
+                                </tr>
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{usuarios.listaUsuarios}" var="usuario">
+                                    <c:if test="#{usuario.empresaUsuario.id == usuarios.empresaLogueada.id}">
+                                        <tr>
+                                            <td>
+                                                #{usuario.id}
+                                            </td>
+                                            <td>
+                                                #{usuario.apellido} #{usuario.nombre}
+                                            </td>
+                                            <td>
+                                                #{usuario.correo}
+                                            </td>
+                                            <td>
+                                                #{usuario.areaSectorUsuario.nombre}
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="#{usuario.recibeAlertas == true}">
+                                                        Si
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        No
+                                                    </c:otherwise>
+                                                </c:choose> 
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="#{usuario.permisoUsuario == 'ADMINISTRADOR'}">
+                                                        #{usuario.permisoUsuario.descripcion}
+                                                    </c:when>
+                                                    <c:when test="#{usuario.permisoUsuario == 'DATOS'}">
+                                                        #{usuario.permisoUsuario.descripcion}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        #{usuario.permisoUsuario.descripcion}
+                                                    </c:otherwise>
+                                                </c:choose> 
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="#{usuario.fechaBaja != null}">
+                                                        #{usuario.fechaBaja}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ---
+                                                    </c:otherwise>
+                                                </c:choose> 
+                                            </td>
+                                            <td>                                            
+                                                <div class="btn-group">
+                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.id)}">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                        <f:ajax delay="100" render="panel_modal_editar" />
+                                                    </h:commandLink>
+                                                </div>
+                                                <c:if test="#{usuario.fechaBaja == null}">
+                                                    <div class="btn-group">
+                                                        <h:commandLink id="btn_baja_#{usuario.id}" class="btn btn-default" title="Dar de baja al Usuario (No se Elimina)" >
+                                                            <span class="glyphicon glyphicon-remove" ></span>
+                                                            <f:ajax event="click" listener="#{usuarios.darDeBajaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </c:if>
+                                                <c:if test="#{usuario.fechaBaja != null}">
+                                                    <div class="btn-group">
+                                                        <h:commandLink id="btn_alta_#{usuario.id}" class="btn btn-default" title="Dar de alta al Usuario." >
+                                                            <span class="glyphicon glyphicon-ok"  ></span>
+                                                            <f:ajax event="click" listener="#{usuarios.darDeAltaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </c:if>
+                                                <div class="btn-group">
+                                                    <c:if test="#{usuario.comprobaciones.size() == 0 and usuario.medidasResponsableImplementacion.size() == 0 and sesionUsuario.usuarioLogueado.id != usuario.id}">
+                                                        <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
+                                                        </h:commandLink>   
+                                                    </c:if>
+                                                </div>                                                
+                                            </td>
+                                            <h:panelGroup id="panel_mensajes_tabla">
+                                                <div class="form-group-sm">
+                                                    <h:message for="btn_eliminar_#{usuario.id}" class="msj_error"/>
+                                                </div>
+                                                <div class="form-group-sm">
+                                                    <h:message for="btn_baja_#{usuario.id}" class="msj_error"/>
+                                                </div>
+                                                <div class="form-group-sm">
+                                                    <h:message for="btn_alta_#{usuario.id}" class="msj_error"/>
+                                                </div>
+                                            </h:panelGroup>
+                                        </tr>  
+                                    </c:if>
+                                </c:forEach>
+                            </tbody>
+                        </table>                         
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <!-- Modal Nuevo Usuario -->
+            <div id="modal_Nueva" class="modal fade" style="padding-top: 10%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Usuario</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="numero_nuevo_usuario">Numero</label></strong>
+                                    <h:inputText id="numero_nuevo_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
+                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario." p:placeholder="Numero (unico) de Usuario" >
+                                        <f:ajax delay="100" execute="@this" event="change" listener="#{usuarios.comprobarNumeroNuevoOperario()}" render="panel_mensajes_modal_nuevo" />
+                                    </h:inputText>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="nombre_nuevo_usuario">Nombre</label></strong>
+                                            <h:inputText id="nombre_nuevo_usuario" class="form-control" value="#{usuarios.nombre}" 
+                                                         required="true" requiredMessage="Se debe ingresar nombre de Usuario" p:placeholder="Nombre de usuario." />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="apellido_nuevo_usuario">Apellido</label></strong>
+                                            <h:inputText id="apellido_nuevo_usuario" class="form-control" value="#{usuarios.apellido}"
+                                                         required="true" requiredMessage="Se debe ingresar al Apellido" p:placeholder="Apellido del Usuario" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="correo_nuevo_usuario">Correo</label></strong>
+                                            <h:inputText id="correo_nuevo_usuario" class="form-control" value="#{usuarios.correoElectronico}"
+                                                         required="true" requiredMessage="Se debe ingresar correo electronico" p:placeholder="Correo electronico" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="area_nuevo_usuario">Area / Sector:</label></strong>
+                                            <h:selectOneMenu id="area_nuevo_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono area">
+                                                <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaAreas}" var="area">
+                                                    <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
+                                </div>                                
+                                
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="password_nuevo_usuario">Contraseña</label></strong>
+                                            <h:inputSecret id="password_nuevo_usuario" class="form-control" value="#{usuarios.password}"
+                                                           required="true" requiredMessage="Se debe ingresar un Password" p:placeholder="Ingresar Password."  />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="repetir_password_nuevo_usuario">Repetir Contraseña</label></strong>
+                                            <h:inputSecret id="repetir_password_nuevo_usuario" class="form-control" value="#{usuarios.passwordConfirmacion}"
+                                                           required="true" requiredMessage="Se debe re ingresar el password" p:placeholder="Repetir Password." />
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                
+                                <div class="form-group">
+                                    <strong><label for="permiso_nuevo_usuario">Permiso</label></strong>
+                                    <h:selectOneRadio class="form-control" value="#{usuarios.permisoSeleccionado}" >
+                                        <c:forEach items="#{usuarios.permisosUsuario}" var="nombre_permiso">
+                                            <div class="radio">
+                                                <f:selectItem itemLabel="#{nombre_permiso.descripcion}" itemValue="#{nombre_permiso}" />
+                                            </div>
+                                        </c:forEach>
+                                    </h:selectOneRadio>
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_nuevo">
+                                    <div class="form-group-sm">
+                                        <h:message for="numero_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="apellido_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="correo_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="area_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="password_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="repetir_password_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_nuevo_usuario" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.nuevoUsuario()}" >
+                                            <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            
+            <!-- Modal Editar Usuario -->
+            <div id="modal_Editar" class="modal fade" style="padding-top: 10%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_editar">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Usuario</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="numero_editar_usuario">Numero</label></strong>
+                                    <h:inputText id="numero_editar_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
+                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario" p:placeholder="Numero (unico) de Usuario" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="nombre_editar_usuario">Nombre</label></strong>
+                                            <h:inputText id="nombre_editar_usuario" class="form-control" value="#{usuarios.nombre}" 
+                                                         required="true" requiredMessage="Se debe ingresar nombre de Usuario" p:placeholder="Nombre de usuario." />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="apellido_editar_usuario">Apellido</label></strong>
+                                            <h:inputText id="apellido_editar_usuario" class="form-control" value="#{usuarios.apellido}"
+                                                         required="true" requiredMessage="Se debe ingresar al Apellido" p:placeholder="Apellido del Usuario" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="correo_editar_usuario">Correo</label></strong>
+                                            <h:inputText id="correo_editar_usuario" class="form-control" value="#{usuarios.correoElectronico}"
+                                                         required="true" requiredMessage="Se debe ingresar correo electronico" p:placeholder="Correo electronico" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="area_editar_usuario">Area / Sector:</label></strong>
+                                            <h:selectOneMenu id="area_editar_usuario" class="form-control" value="#{usuarios.areaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono area">
+                                                <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaAreas}" var="area">
+                                                    <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
+                                </div>
+                                
+                                <h:panelGroup id="panel_cambiar_password">
+                                    <c:if test="#{usuarios.cambiarPassword == false}">
+                                        <div class="form-group">
+                                            <h:commandLink class="btn btn-warning" action="#{usuarios.setCambiarPassword(true)}">
+                                                <span class="glyphicon glyphicon-lock"> </span> Cambiar Contraseña
+                                                <f:ajax delay="100" render="panel_cambiar_password" />
+                                            </h:commandLink>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="#{usuarios.cambiarPassword == true}">
+                                        <div class="form-group">
+                                            <h:commandLink class="btn btn-warning" action="#{usuarios.setCambiarPassword(false)}">
+                                                <span class="glyphicon glyphicon-lock"></span> Cancelar Cambiar Contraseña
+                                                <f:ajax delay="100" render="panel_cambiar_password" />
+                                            </h:commandLink>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <strong><label for="nuevo_password_editar_usuario">Nueva Contraseña</label></strong>
+                                                    <h:inputSecret id="nuevo_password_editar_usuario" class="form-control" value="#{usuarios.passwordNuevo}"
+                                                                   required="true" requiredMessage="Se debe re ingresar el password" p:placeholder="Nuevo Password." />
+                                                </div>
+                                            </div>                                    
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <strong><label for="repetir_password_editar_usuario">Repetir Contraseña</label></strong>
+                                                    <h:inputSecret id="repetir_password_editar_usuario" class="form-control" value="#{usuarios.passwordConfirmacion}"
+                                                                   required="true" requiredMessage="Se debe re ingresar el password" p:placeholder="Repetir Password." />
+                                                </div>
+                                            </div>                                    
+                                        </div>
+                                        <h:panelGroup id="panel_mensajes_password">                                            
+                                            <div class="form-group-sm">
+                                                <h:message for="password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="nuevo_password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="repetir_password_editar_usuario" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_password_usuario" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                        <div class="form-group">
+                                            <h:commandLink id="btn_password_usuario" class="btn btn-warning" action="#{usuarios.cambiarPassword()}" >
+                                                <span class="glyphicon glyphicon-floppy-save"></span> Cambiar
+                                                <f:ajax execute="password_editar_usuario nuevo_password_editar_usuario repetir_password_editar_usuario" />
+                                                <f:ajax delay="100"  render="panel_cambiar_password panel_mensajes_password" />
+                                            </h:commandLink>
+                                        </div>
+                                    </c:if>
+                                </h:panelGroup>
+                                
+                                <div class="form-group">
+                                    <strong><label for="permiso_editar_usuario">Permiso</label></strong>
+                                    <h:selectOneRadio class="form-control" value="#{usuarios.permisoSeleccionado}" >
+                                        <c:forEach items="#{usuarios.permisosUsuario}" var="nombre_permiso">
+                                            <div class="radio">
+                                                <f:selectItem itemLabel="#{nombre_permiso.descripcion}" itemValue="#{nombre_permiso}" />
+                                            </div>
+                                        </c:forEach>
+                                    </h:selectOneRadio>
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_editar">
+                                    <div class="form-group-sm">
+                                        <h:message for="numero_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="apellido_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="correo_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="area_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="password_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="nuevo_password_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="repetir_password_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_editar_usuario" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_editar_usuario" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{usuarios.editarUsuario()}" >
+                                            <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            <c:if test="#{usuarios.cantidadPaginas > 1}">
+                <div class="container-fluid text-center" style="padding: 1%">
+                    <ul class="pagination">
+                        <c:forEach begin="1" end="#{usuarios.cantidadPaginas}" step="1" varStatus="numero" >
+                            <c:choose>
+                                <c:when test="#{usuarios.paginaActual == numero.count}" >
+                                    <li class="active"><a>#{numero.count}</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><h:link value="#{numero.count}" outcome="Usuarios.xhtml?pagina=#{numero.count}"/>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </ul>                
+                </div>
+            </c:if>
+        </h:form>
+        
+    </ui:define>
+</ui:composition>

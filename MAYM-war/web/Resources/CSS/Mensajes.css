@@ -1,0 +1,27 @@
+.msj_info, .msj_warning, .msj_error {
+    font-family:sans-serif; 
+    font-size:13px;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:8px 8px 8px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    display: flex
+    /*width: 100%;*/
+}
+.msj_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url(../Images/Info_icon.png);
+}
+
+.msj_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url(../Images/Attention.png);
+}
+.msj_error {
+    color: #FFF;
+    background-color: #D8000C;
+    background-image: url(../Images/Error.png);
+}

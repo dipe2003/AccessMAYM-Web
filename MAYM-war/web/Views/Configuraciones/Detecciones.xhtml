@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Detecciones</div>
+                <div class="panel-body">
+                    Aqui se listan todas las Detecciones registradas.
+                    Pueden crearse, modificarse y elminarse (solo Administrador) cuando no esten en uso.
+                </div>                  
+            </div>                 
+        </div>        
+        <h:form id="form_detecciones" >
+            <div class="container-fluid" style="padding: 1%">                
+                <c:choose>
+                    <c:when test="#{empty detecciones.listaDetecciones}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                        <div class="btn-group" >
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                           
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="btn-group">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                              
+                        </div>
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Deteccion</th>
+                                    <th>Tipo</th>
+                                    <th></th>
+                                </tr>                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{detecciones.listaDetecciones}" var="deteccion">
+                                    <tr>
+                                        <td>
+                                            #{deteccion.nombre}
+                                        </td>
+                                        <td>
+                                            #{deteccion.tipo.descripcion}
+                                        </td>
+                                        <td>                                            
+                                            <div class="btn-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(deteccion.id)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="panel_modal_editar" />
+                                                </h:commandLink>                                               
+                                            </div>
+                                            <div class="btn-group">
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                                    <c:if test="#{deteccion.accionesDetectadas.size() == 0 and deteccion.fortalezasDetectadas.size() == 0 }">
+                                                        <h:commandLink id="btn_eliminar_#{deteccion.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(deteccion.id)}"/>
+                                                        </h:commandLink>  
+                                                    </c:if>
+                                                </c:if>
+                                            </div>                                                
+                                        </td>
+                                        <h:panelGroup id="panel_mensajes_tabla">
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_eliminar_#{deteccion.id}" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </tr>                                        
+                                </c:forEach>
+                            </tbody>
+                        </table>    
+                        <c:if test="#{detecciones.cantidadPaginas > 1}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" end="#{detecciones.cantidadPaginas}" step="1" varStatus="numero" >
+                                        <c:choose>
+                                            <c:when test="#{detecciones.paginaActual == numero.count}" >
+                                                <li class="active"><a>#{numero.count}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li><h:link value="#{numero.count}" outcome="Detecciones.xhtml?pagina=#{numero.count}"/>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>                
+                            </div>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <!-- Modal Nueva Deteccion -->
+            <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Deteccion</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_deteccion">Nombre</label></strong>
+                                    <h:inputText id="nombre_nueva_deteccion" class="form-control" value="#{detecciones.nombreDeteccion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="tipo_nueva_deteccion">Tipo</label></strong>                                 
+                                    <h:selectOneRadio id="tipo_nueva_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
+                                        <c:forEach items="#{detecciones.tiposDeteccion}" var="tipo">
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>                                      
+                                    </h:selectOneRadio>  
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_nueva_deteccion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="tipo_nueva_deteccion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_nueva_deteccion" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_nueva_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{detecciones.nuevaDeteccion()}" >
+                                            <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            
+            <!-- Modal Editar Deteccion -->
+            <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_editar">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Deteccion</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_deteccion">Nombre</label></strong>
+                                    <h:inputText id="nombre_deteccion" class="form-control" value="#{detecciones.nombreDeteccion}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de Deteccion" p:placeholder="Nombre de Deteccion." />
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="tipo_deteccion">Tipo de Deteccion</label></strong>                                    
+                                    <h:selectOneRadio id="tipo_deteccion" value="#{detecciones.tipoDeDeteccionSeleccionada}" >
+                                        <c:forEach items="#{detecciones.tiposDeteccion}" var="tipo">
+                                            <div class="radio" >
+                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                            </div>
+                                        </c:forEach>                                               
+                                    </h:selectOneRadio>                                    
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_editar">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_deteccion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="tipo_deteccion" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_editar_deteccion" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_editar_deteccion" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{detecciones.editarDeteccion()}" >
+                                            <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </h:form>        
+    </ui:define>
+</ui:composition>
