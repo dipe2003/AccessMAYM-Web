@@ -5,15 +5,15 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
 import com.dperez.maymweb.accion.comprobaciones.ResultadoComprobacion;
-import com.dperez.maymweb.accion.ManejadorAccion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.TipoDesvio;
-import com.dperez.maymweb.accion.acciones.Mejora;
-import com.dperez.maymweb.accion.acciones.Preventiva;
+import com.dperez.maymweb.acciones.ManejadorAccion;
+import com.dperez.maymweb.acciones.Correctiva;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.TipoDesvio;
+import com.dperez.maymweb.acciones.Mejora;
+import com.dperez.maymweb.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.accion.actividad.Actividad;
@@ -26,13 +26,13 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Responsable;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
 import java.util.List;
@@ -103,7 +103,7 @@ public class ControladorRegistro {
         Area area = mArea.GetArea(IdAreaSector);
         accion.setAreaSectorAccion(area);
         Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-        accion.setGeneradaPor(deteccion);
+        accion.setDeteccion(deteccion);
         // codificacion
         List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
         int existe = 0;
@@ -166,14 +166,15 @@ public class ControladorRegistro {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
-     * @param IdUsuarioResponsable
+     * @param IdResponsable
      * @param tipoActividad
      * @return -1 si no se creo.
      */
-    public int AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable, TipoActividad tipoActividad){
+    public int AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad tipoActividad){
         Accion accion = mAccion.GetAccion(IdAccion);
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsable);
-        Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, usuario, tipoActividad);
+        // @todo implementar manejador/controlador responsable 
+        Responsable resposable = mUsuario.GetUsuario(IdResponsable);
+        Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, resposable, tipoActividad);
         accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
         return actividad.getIdActividad();
@@ -203,9 +204,10 @@ public class ControladorRegistro {
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
     public int SetComprobacionImplementacion(Date FechaEstimada, int IdUsuarioResponsableImplementacion, int IdAccion){
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
+        // @todo agregar manejador/controlador para responsables
+        Responsable responsable = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
         Accion accion = mAccion.GetAccion(IdAccion);
-        Comprobacion comprobacion = accion.setComprobacionImplementacion(FechaEstimada, usuario);
+        Comprobacion comprobacion = accion.setComprobacionImplementacion(FechaEstimada, responsable);
         mAccion.crearComprobacion(comprobacion);
         return mAccion.ActualizarAccion(accion);
     }
@@ -218,9 +220,10 @@ public class ControladorRegistro {
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
     public int SetComprobacionEficacia(Date FechaEstimada, int IdUsuarioResponsableComprobacion, int IdAccion){
-        Usuario usuario = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
+        // @todo agregar manejador/controlador para responsables
+        Responsable responsable = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
         Accion accion = mAccion.GetAccion(IdAccion);
-        Comprobacion comprobacion = accion.setComprobacionEficacia(FechaEstimada, usuario);
+        Comprobacion comprobacion = accion.setComprobacionEficacia(FechaEstimada, responsable);
         mAccion.crearComprobacion(comprobacion);
         return mAccion.ActualizarAccion(accion);
     }
@@ -277,7 +280,7 @@ public class ControladorRegistro {
         Area area = mArea.GetArea(IdAreaSector);
         Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
         fortaleza.setAreaSectorFortaleza(area);
-        fortaleza.setGeneradaPor(deteccion);
+        fortaleza.setDeteccion(deteccion);
         fortaleza.setId(mFortaleza.CrearFortaleza(fortaleza));
         
         if(fortaleza.getId()== -1){

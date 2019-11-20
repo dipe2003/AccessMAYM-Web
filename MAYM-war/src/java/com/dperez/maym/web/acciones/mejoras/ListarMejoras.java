@@ -6,7 +6,7 @@
 package com.dperez.maym.web.acciones.mejoras;
 
 import com.dperez.maym.web.herramientas.Presentacion;
-import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;

@@ -5,12 +5,12 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.ManejadorAccion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.TipoDesvio;
-import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.ManejadorAccion;
+import com.dperez.maymweb.acciones.Correctiva;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.TipoDesvio;
+import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
@@ -27,7 +27,7 @@ import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.Responsable;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -88,9 +88,9 @@ public class ControladorEdicionRegistro {
             Area areaSector = mArea.GetArea(IdAreaSector);
             accion.setAreaSectorAccion(areaSector);
         }
-        if(accion.getGeneradaPor().getId()!=IdDeteccion){
+        if(accion.getDeteccion().getId()!=IdDeteccion){
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-            accion.setGeneradaPor(deteccion);
+            accion.setDeteccion(deteccion);
         }
         if(accion.getCodificacionAccion().getId()!=IdCodificacion){
             Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
@@ -214,7 +214,8 @@ public class ControladorEdicionRegistro {
         actividad.setDescripcion(Descripcion);
         actividad.setFechaEstimadaImplementacion(FechaEstimada);
         if(actividad.getResponsableImplementacion().getId() != IdResponsable){
-            Usuario responsable = mUsuario.GetUsuario(IdResponsable);
+            // @todo implementar manejador/controlador responsables
+            Responsable responsable = mUsuario.GetUsuario(IdResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
         return mActividad.ActualizarActividad(actividad);
@@ -257,9 +258,9 @@ public class ControladorEdicionRegistro {
             Area area = mArea.GetArea(IdAreaSector);
             fortaleza.setAreaSectorFortaleza(area);
         }
-        if(fortaleza.getGeneradaPor().getId() != IdDeteccion){
+        if(fortaleza.getDeteccion().getId() != IdDeteccion){
             Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-            fortaleza.setGeneradaPor(deteccion);
+            fortaleza.setDeteccion(deteccion);
         }
         fortaleza.setDescripcion(Descripcion);
         fortaleza.setFechaDeteccion(FechaDeteccion);

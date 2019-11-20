@@ -6,9 +6,9 @@
 package com.dperez.maym.web.acciones.correctivas;
 
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.TipoDesvio;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;

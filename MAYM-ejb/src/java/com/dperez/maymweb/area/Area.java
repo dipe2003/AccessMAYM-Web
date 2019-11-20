@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.area;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;

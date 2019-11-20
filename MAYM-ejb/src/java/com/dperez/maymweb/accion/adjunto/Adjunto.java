@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.accion.adjunto;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

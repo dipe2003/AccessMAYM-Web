@@ -5,7 +5,7 @@
 */
 package com.dperez.maym.web.acciones.filtros;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -103,9 +103,9 @@ public class DatosFiltros implements Serializable {
     public Map<String, Deteccion> ExtraerDetecciones(List<Accion> acciones){
         Map<String, Deteccion> detecciones = new HashMap<>();
         acciones.stream()
-                .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getGeneradaPor().getId()))))
+                .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getDeteccion().getId()))))
                 .forEachOrdered((accion) -> {
-            detecciones.put(String.valueOf(accion.getGeneradaPor().getId()), accion.getGeneradaPor());
+            detecciones.put(String.valueOf(accion.getDeteccion().getId()), accion.getDeteccion());
         });
         return new TreeMap<>(detecciones);
     }
@@ -118,7 +118,7 @@ public class DatosFiltros implements Serializable {
      */
     public List<Accion> FiltrarAccionesPorDeteccion(List<Accion> acciones, List<Integer> detecciones){
         return acciones.stream()
-                .filter((accion) -> (detecciones.contains(accion.getGeneradaPor().getId())))
+                .filter((accion) -> (detecciones.contains(accion.getDeteccion().getId())))
                 .sorted()
                 .collect(Collectors.toList());
     }

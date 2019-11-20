@@ -5,8 +5,8 @@
 */
 package com.dperez.maymweb.facades;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.TipoAccion;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;

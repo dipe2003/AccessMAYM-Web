@@ -3,10 +3,10 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.accion.acciones;
+package com.dperez.maymweb.acciones;
 
-import com.dperez.maymweb.accion.Accion;
-import static com.dperez.maymweb.accion.TipoAccion.PREVENTIVA;
+import com.dperez.maymweb.acciones.Accion;
+import static com.dperez.maymweb.acciones.TipoAccion.PREVENTIVA;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;

@@ -5,9 +5,9 @@
 */
 package com.dperez.maym.web.acciones.mejoras;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
-import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
@@ -131,7 +131,7 @@ public class VerMejora implements Serializable {
         if(IdAccion != 0){
             AccionSeleccionada = (Mejora) fLectura.GetAccion(IdAccion);
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
-            GeneradaPor = AccionSeleccionada.getGeneradaPor();
+            GeneradaPor = AccionSeleccionada.getDeteccion();
             AreaSector = AccionSeleccionada.getAreaSectorAccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();

@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.accion;
+package com.dperez.maymweb.acciones;
 
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.actividad.TipoActividad;
@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.estado.EnumEstado;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.Responsable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +60,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     private List<Actividad> Actividades;
     
     @ManyToOne
-    protected Deteccion GeneradaPor;
+    protected Deteccion Deteccion;
     
     @ManyToOne
     protected Area AreaSectorAccion;
@@ -102,7 +102,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     
     public List<Actividad> getActividades() {return Actividades;}
     
-    public Deteccion getGeneradaPor() {return this.GeneradaPor;}
+    public Deteccion getDeteccion() {return this.Deteccion;}
     
     public Area getAreaSectorAccion() {return this.AreaSectorAccion;}
     
@@ -136,15 +136,15 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         }
     }
     
-    public void setGeneradaPor(Deteccion GeneradaPor) {
-        if(GeneradaPor==null && this.GeneradaPor !=null){
-            this.GeneradaPor.getAccionesDetectadas().remove(this);
-            this.GeneradaPor = null;
+    public void setDeteccion(Deteccion Deteccion) {
+        if(Deteccion==null && this.Deteccion !=null){
+            this.Deteccion.getAccionesDetectadas().remove(this);
+            this.Deteccion = null;
         }else{
-            if(GeneradaPor != null){
-                this.GeneradaPor = GeneradaPor;
-                if(!GeneradaPor.getAccionesDetectadas().contains(this))
-                    GeneradaPor.addAccionDetectada(this);
+            if(Deteccion != null){
+                this.Deteccion = Deteccion;
+                if(!Deteccion.getAccionesDetectadas().contains(this))
+                    Deteccion.addAccionDetectada(this);
             }
         }
     }
@@ -175,15 +175,15 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         }
     }
     
-    public Comprobacion setComprobacionEficacia(Date FechaEstimada, Usuario ResponsableComprobacion) {
-        Comprobacion comprobacion = new Comprobacion(this.Id, FechaEstimada, ResponsableComprobacion, TipoComprobacion.EFICACIA);
+    public Comprobacion setComprobacionEficacia(Date FechaEstimada, Responsable ResponsableComprobacion) {
+        Comprobacion comprobacion = new Comprobacion(FechaEstimada, ResponsableComprobacion, TipoComprobacion.EFICACIA);
         comprobacion.setAccionComprobacion(this);
         ComprobacionEficacia = comprobacion;
         return comprobacion;
     }
     
-    public Comprobacion setComprobacionImplementacion(Date FechaEstimada, Usuario ResponsableComprobacion) {
-        Comprobacion comprobacion = new Comprobacion(this.Id, FechaEstimada, ResponsableComprobacion, TipoComprobacion.IMPLEMENTACION);
+    public Comprobacion setComprobacionImplementacion(Date FechaEstimada, Responsable ResponsableComprobacion) {
+        Comprobacion comprobacion = new Comprobacion(FechaEstimada, ResponsableComprobacion, TipoComprobacion.IMPLEMENTACION);
         comprobacion.setAccionComprobacion(this);
         ComprobacionImplementacion = comprobacion;
         return comprobacion;
@@ -215,7 +215,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     }
     
     // Actividades
-    public Actividad AddActividad(Date fechaEstimadaImplementacion, String descripcion, Usuario responsableImplementacion, TipoActividad tipoActividad) {
+    public Actividad AddActividad(Date fechaEstimadaImplementacion, String descripcion, Responsable responsableImplementacion, TipoActividad tipoActividad) {
         Actividad actividad = new Actividad(fechaEstimadaImplementacion, descripcion, responsableImplementacion, tipoActividad);
         this.Actividades.add(actividad);
         actividad.setAccionActividad(this);

@@ -10,11 +10,11 @@ import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
 import com.dperez.maymweb.herramientas.TipoEvento;
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.TipoDesvio;
+import com.dperez.maymweb.acciones.Correctiva;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.CORRECTIVA;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.PREVENTIVA;
@@ -285,8 +285,8 @@ public class EditarAccionCorrectiva implements Serializable {
             modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             TiposDeteccion = EnumTipoDeteccion.values();
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
-            TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
-            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
+            TipoDeDeteccionSeleccionada = AccionSeleccionada.getDeteccion().getTipo();
+            DeteccionSeleccionada = AccionSeleccionada.getDeteccion().getId();
             
             //  Tipo de desvios
             TiposDesvios = TipoDesvio.values();

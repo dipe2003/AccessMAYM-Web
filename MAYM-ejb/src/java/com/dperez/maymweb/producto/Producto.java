@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.producto;
 
-import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.acciones.Correctiva;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

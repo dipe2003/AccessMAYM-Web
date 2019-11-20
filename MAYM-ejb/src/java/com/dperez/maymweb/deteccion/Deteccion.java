@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ public class Deteccion implements Serializable, Comparable<Deteccion> {
     
     private EnumTipoDeteccion Tipo;
     
-    @OneToMany(mappedBy = "GeneradaPor")
+    @OneToMany(mappedBy = "Deteccion")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Accion> AccionesDetectadas;
     
-    @OneToMany(mappedBy= "GeneradaPor")
+    @OneToMany(mappedBy= "Deteccion")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Fortaleza> FortalezasDetectadas;
     
@@ -73,28 +73,28 @@ public class Deteccion implements Serializable, Comparable<Deteccion> {
     public void setAccionesDetectadas(List<Accion> AccionesDetectadas) {
         this.AccionesDetectadas = AccionesDetectadas;
         for(Accion acc:this.AccionesDetectadas){
-            acc.setGeneradaPor(this);
+            acc.setDeteccion(this);
         }
     }
 
     public void setFortalezasDetectadas(List<Fortaleza> FortalezasDetectadas) {
         this.FortalezasDetectadas = FortalezasDetectadas;
         for(Fortaleza fort: this.FortalezasDetectadas){
-            fort.setGeneradaPor(this);
+            fort.setDeteccion(this);
         }
     }    
     
     // Listas
     public void addAccionDetectada(Accion AccionDetectada){
         this.AccionesDetectadas.add(AccionDetectada);
-        if(AccionDetectada.getGeneradaPor() == null ||!AccionDetectada.getGeneradaPor().equals(this)) 
-            AccionDetectada.setGeneradaPor(this);
+        if(AccionDetectada.getDeteccion() == null ||!AccionDetectada.getDeteccion().equals(this)) 
+            AccionDetectada.setDeteccion(this);
     }
     
     public void removeAccionDetectada(Accion AccionDetectada){
         this.AccionesDetectadas.remove(AccionDetectada);
-        if(AccionDetectada.getGeneradaPor()!=null && AccionDetectada.getGeneradaPor().equals(this))
-            AccionDetectada.setGeneradaPor(null);
+        if(AccionDetectada.getDeteccion()!=null && AccionDetectada.getDeteccion().equals(this))
+            AccionDetectada.setDeteccion(null);
     }
     
     public void removeAccionDetectada(int IdAccionDetectada){
@@ -103,22 +103,22 @@ public class Deteccion implements Serializable, Comparable<Deteccion> {
             Accion a = it.next();
             if(a.getId()==IdAccionDetectada){
                 it.remove();
-                if(a.getGeneradaPor()!=null && a.getGeneradaPor().equals(this))
-                    a.setGeneradaPor(null);
+                if(a.getDeteccion()!=null && a.getDeteccion().equals(this))
+                    a.setDeteccion(null);
             }
         }
     }
     
     public void addFortalezaDetectada(Fortaleza FortalezaDetectada){
         this.FortalezasDetectadas.add(FortalezaDetectada);
-        if(FortalezaDetectada.getGeneradaPor() == null || !FortalezaDetectada.getGeneradaPor().equals(this))
-            FortalezaDetectada.setGeneradaPor(this);
+        if(FortalezaDetectada.getDeteccion() == null || !FortalezaDetectada.getDeteccion().equals(this))
+            FortalezaDetectada.setDeteccion(this);
     }
     
     public void removeFortalezaDetectada(Fortaleza FortalezaDetectada){
         this.FortalezasDetectadas.remove(FortalezaDetectada);
-        if(FortalezaDetectada.getGeneradaPor()!=null && FortalezaDetectada.getGeneradaPor().equals(this))
-            FortalezaDetectada.setGeneradaPor(null);
+        if(FortalezaDetectada.getDeteccion()!=null && FortalezaDetectada.getDeteccion().equals(this))
+            FortalezaDetectada.setDeteccion(null);
     }
     
     public void removeFortalezaDetectada(int IdFortalezaDetectada){
@@ -127,8 +127,8 @@ public class Deteccion implements Serializable, Comparable<Deteccion> {
             Fortaleza f = it.next();
             if(f.getId()==IdFortalezaDetectada){
                 it.remove();
-                if(f.getGeneradaPor()!=null && f.getGeneradaPor().equals(this))
-                    f.setGeneradaPor(null);
+                if(f.getDeteccion()!=null && f.getDeteccion().equals(this))
+                    f.setDeteccion(null);
             }
         }
     }

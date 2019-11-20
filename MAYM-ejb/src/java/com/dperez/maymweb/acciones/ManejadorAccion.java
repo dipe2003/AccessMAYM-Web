@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.accion;
+package com.dperez.maymweb.acciones;
 
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
 import java.util.List;

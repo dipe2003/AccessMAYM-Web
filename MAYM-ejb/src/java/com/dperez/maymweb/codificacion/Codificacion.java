@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.codificacion;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;

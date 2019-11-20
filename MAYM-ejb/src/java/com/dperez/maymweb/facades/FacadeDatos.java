@@ -5,9 +5,9 @@
 */
 package com.dperez.maymweb.facades;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.TipoDesvio;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.TipoActividad;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.accion.comprobaciones.TipoComprobacion;

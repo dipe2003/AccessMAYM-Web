@@ -5,8 +5,8 @@
 */
 package com.dperez.maym.web.acciones.mejoras;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;

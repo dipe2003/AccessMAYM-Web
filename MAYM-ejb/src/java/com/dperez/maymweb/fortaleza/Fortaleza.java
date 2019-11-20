@@ -32,7 +32,7 @@ public class Fortaleza implements Serializable, Comparable<Fortaleza> {
     private String Descripcion = new String();
     
     @ManyToOne
-    private Deteccion GeneradaPor;
+    private Deteccion Deteccion;
     
     @ManyToOne
     private Area AreaSectorFortaleza;
@@ -49,22 +49,22 @@ public class Fortaleza implements Serializable, Comparable<Fortaleza> {
     public int getId() {return Id;}
     public Date getFechaDeteccion() {return this.FechaDeteccion;}
     public String getDescripcion() {return this.Descripcion;}
-    public Deteccion getGeneradaPor() {return this.GeneradaPor;}
+    public Deteccion getDeteccion() {return this.Deteccion;}
     public Area getAreaSectorFortaleza() {return this.AreaSectorFortaleza;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
-    public void setGeneradaPor(Deteccion GeneradaPor) {
-        if(GeneradaPor == null && this.GeneradaPor != null){
-            this.GeneradaPor.getFortalezasDetectadas().remove(this);
-            this.GeneradaPor = null;
+    public void setDeteccion(Deteccion Deteccion) {
+        if(Deteccion == null && this.Deteccion != null){
+            this.Deteccion.getFortalezasDetectadas().remove(this);
+            this.Deteccion = null;
         }else{
-            if(GeneradaPor != null){
-                this.GeneradaPor = GeneradaPor;
-                if(!GeneradaPor.getFortalezasDetectadas().contains(this))
-                    GeneradaPor.addFortalezaDetectada(this);
+            if(Deteccion != null){
+                this.Deteccion = Deteccion;
+                if(!Deteccion.getFortalezasDetectadas().contains(this))
+                    Deteccion.addFortalezaDetectada(this);
             }
         }
     }

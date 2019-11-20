@@ -129,8 +129,8 @@ public class EditarFortaleza implements Serializable {
             //  Detecciones
             TiposDeteccion = EnumTipoDeteccion.values();
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
-            TipoDeDeteccionSeleccionada = FortalezaSeleccionada.getGeneradaPor().getTipo();
-            DeteccionSeleccionada = FortalezaSeleccionada.getGeneradaPor().getId();
+            TipoDeDeteccionSeleccionada = FortalezaSeleccionada.getDeteccion().getTipo();
+            DeteccionSeleccionada = FortalezaSeleccionada.getDeteccion().getId();
             
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();

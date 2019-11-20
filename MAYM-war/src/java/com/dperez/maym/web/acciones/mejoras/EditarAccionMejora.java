@@ -10,10 +10,10 @@ import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
 import com.dperez.maymweb.herramientas.TipoEvento;
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
-import com.dperez.maymweb.accion.TipoAccion;
-import com.dperez.maymweb.accion.acciones.Mejora;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
@@ -255,8 +255,8 @@ public class EditarAccionMejora implements Serializable {
             modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TiposDeteccion = EnumTipoDeteccion.values();
-            TipoDeDeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getTipo();
-            DeteccionSeleccionada = AccionSeleccionada.getGeneradaPor().getId();
+            TipoDeDeteccionSeleccionada = AccionSeleccionada.getDeteccion().getTipo();
+            DeteccionSeleccionada = AccionSeleccionada.getDeteccion().getId();
             
             // Actividades
             List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();

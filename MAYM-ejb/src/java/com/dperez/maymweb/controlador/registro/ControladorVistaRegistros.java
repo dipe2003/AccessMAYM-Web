@@ -5,9 +5,9 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.ManejadorAccion;
-import com.dperez.maymweb.accion.TipoAccion;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.ManejadorAccion;
+import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.area.ManejadorArea;
 import com.dperez.maymweb.codificacion.Codificacion;

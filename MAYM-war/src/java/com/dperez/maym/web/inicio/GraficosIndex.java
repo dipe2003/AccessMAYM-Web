@@ -5,7 +5,7 @@
 */
 package com.dperez.maym.web.inicio;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
 import java.util.List;

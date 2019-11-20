@@ -3,25 +3,24 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maymweb.accion.acciones;
+package com.dperez.maymweb.acciones;
 
 /**
  *
  * @author dperez
  */
-public enum TipoDesvio {
-    NC_CRITICA ("No Conformidad Critica"),
-    NC_MAYOR ("No Conformidad Mayor"),
-    NC_MENOR_OBS ("No Conformidad Menor/Observacion");
+public enum TipoAccion {
+    CORRECTIVA ("Accion Correctiva"),
+    PREVENTIVA ("Accion Preventiva"),
+    MEJORA ("Oportunidad de Mejora");
     
     private final String Descripcion;  
      
-    TipoDesvio(String descripcion){
+    TipoAccion(String descripcion){
         this.Descripcion = descripcion;
     }
     
     public String getDescripcion(){
         return this.Descripcion;
     }
-    
 }

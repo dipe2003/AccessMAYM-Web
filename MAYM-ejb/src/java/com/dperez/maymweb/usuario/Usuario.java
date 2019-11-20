@@ -5,26 +5,18 @@
 */
 package com.dperez.maymweb.usuario;
 
-import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
-import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -49,19 +41,13 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     
     @OneToOne(orphanRemoval = true, mappedBy = "UsuarioCredencial", cascade = CascadeType.PERSIST)
     private Credencial CredencialUsuario;
-    
-    @OneToMany(mappedBy = "ResponsableImplementacion")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Actividad> Actividades;
-    
-    @OneToMany(mappedBy = "Responsable")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Comprobacion> Comprobaciones;
+        
+    @ManyToOne
+    private Responsable Responsable;
     
     // Constructores
     public Usuario(){
-        this.Actividades = new ArrayList<>();
-        this.Comprobaciones = new ArrayList<>();
+                
     }
     public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas, EnumPermiso PermisoUsuario){
         this.Nombre = NombreUsuario;
@@ -69,8 +55,6 @@ public class Usuario implements Serializable, Comparable<Usuario> {
         this.Correo = CorreoUsuario;
         this.RecibeAlertas = RecibeAlertas;
         this.PermisoUsuario = PermisoUsuario;
-        this.Actividades = new ArrayList<>();
-        this.Comprobaciones = new ArrayList<>();
     }
     
     // Getters
@@ -87,9 +71,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     
     public Area getAreaSectorUsuario(){return this.AreaSectorUsuario;}
     
-    public List<Actividad> getActividades() {return Actividades;}
-    
-    public List<Comprobacion> getComprobaciones() {return Comprobaciones;}
+    public Responsable getResponsable() {return Responsable;}    
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -118,92 +100,17 @@ public class Usuario implements Serializable, Comparable<Usuario> {
                 AreaSectorUsuario.getUsuariosEnAreaSector().add(this);
             }
         }
-    }
+    }    
     
-    public void setActividades(List<Actividad> Actividades) {
-        this.Actividades = Actividades;
-        for(Actividad med: this.Actividades){
-            med.setResponsableImplementacion(this);
-        }
-    }
-    
-    public void setComprobaciones(List<Comprobacion> Comprobaciones) {
-        this.Comprobaciones = Comprobaciones;
-        for(Comprobacion comprobacion: this.Comprobaciones){
-            comprobacion.setResponsable(this);
-        }
-    }
-    
-    // Listas
-    public void AddActividad(Actividad actividad){
-        if(actividad != null){
-            this.Actividades.add(actividad);
-            if(actividad.getResponsableImplementacion() != null && !actividad.getResponsableImplementacion().equals(this))
-                actividad.setResponsableImplementacion(this);
-        }
-    }
-    
-    public void RemoveActividad(Actividad actividad){
-        if(actividad != null){
-            this.Actividades.remove(actividad);
-            if(actividad.getResponsableImplementacion() != null &&
-                    actividad.getResponsableImplementacion().equals(this))
-                actividad.setResponsableImplementacion(null);
-        }
-    }
-    
-    public void RemoveActividad(int actividad){
-        Iterator<Actividad> it = this.Actividades.iterator() ;
-        while(it.hasNext()){
-            Actividad m = it.next();
-            if(m.getIdActividad()== actividad){
-                it.remove();
-                if(m.getResponsableImplementacion()!=null && m.getResponsableImplementacion().equals(this))
-                    m.setResponsableImplementacion(null);
+    public void setResponsable(Responsable UsuarioResponsable) {
+        this.Responsable = UsuarioResponsable;
+        if(UsuarioResponsable != null){
+            if(!UsuarioResponsable.getUsuariosResponsables().contains(this)){
+                UsuarioResponsable.getUsuariosResponsables().add(this);
             }
         }
     }
-    
-    /**
-     * Devuelve la actividad indicada por su id.
-     * @param IdActividad
-     * @return Actividad, null si no se encuentra.
-     */
-    public Actividad GetActividad(int IdActividad){
-        return Actividades.stream()
-                .filter(actividad->actividad.getIdActividad() == IdActividad)
-                .findFirst()
-                .orElse(null);
-    }
-    
-    public void AddComprobacion(Comprobacion comprobacion){
-        if(comprobacion != null){
-            this.Comprobaciones.add(comprobacion);
-            if(comprobacion.getResponsable() != null && !comprobacion.getResponsable().equals(this))
-                comprobacion.setResponsable(this);
-        }
-    }
-    
-    public void RemoveComprobacion(Comprobacion comprobacion){
-        if(comprobacion != null){
-            this.Comprobaciones.remove(comprobacion);
-            if(comprobacion.getResponsable() != null && comprobacion.getResponsable().equals(this))
-                comprobacion.setResponsable(null);
-        }
-    }
-    
-    public void RemoveComprobacion(int IdComprobacion){
-        Iterator<Comprobacion> it = this.Comprobaciones.iterator();
-        while(it.hasNext()){
-            Comprobacion c = it.next();
-            if(c.getId() == IdComprobacion){
-                it.remove();
-                if(c.getResponsable() != null && c.getResponsable().equals(this))
-                    c.setResponsable(null);
-            }
-        }
-    }
-    
+          
     // Metodos
     /***
      * Devuelve el nombre completo del Usuario (Nombre+Apellido)

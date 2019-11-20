@@ -3,13 +3,13 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.dperez.maymweb.accion.acciones;
+package com.dperez.maymweb.acciones;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
 import java.util.List;
 
 import com.dperez.maymweb.producto.Producto;
-import static com.dperez.maymweb.accion.TipoAccion.CORRECTIVA;
+import static com.dperez.maymweb.acciones.TipoAccion.CORRECTIVA;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;

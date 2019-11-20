@@ -5,7 +5,8 @@
 */
 package com.dperez.maymweb.accion.actividad;
 
-import com.dperez.maymweb.accion.Accion;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.usuario.Responsable;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.Date;
@@ -39,11 +40,11 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     private Accion AccionActividad;
     
     @ManyToOne
-    private Usuario ResponsableImplementacion;
+    private Responsable ResponsableImplementacion;
     
     // Constructores
     public Actividad(){}
-    public Actividad(Date FechaEstimadaDeImplementacion, String Descripcion, Usuario ResponsableImplementacion, TipoActividad TipoActividad){
+    public Actividad(Date FechaEstimadaDeImplementacion, String Descripcion, Responsable ResponsableImplementacion, TipoActividad TipoActividad){
         this.FechaEstimadaImplementacion = FechaEstimadaDeImplementacion;
         this.Descripcion = Descripcion;
         this.TipoActividad = TipoActividad;
@@ -59,7 +60,7 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     
     public Accion getAccionActividad(){return this.AccionActividad;}
     
-    public Usuario getResponsableImplementacion() {return this.ResponsableImplementacion;}
+    public Responsable getResponsableImplementacion() {return this.ResponsableImplementacion;}
     
     // Setters
     public void setIdActividad(int IdActividad) {this.IdActividad = IdActividad;}
@@ -72,7 +73,7 @@ public class Actividad implements Serializable, Comparable<Actividad> {
         this.AccionActividad = AccionActividad;
     }
     
-    public void setResponsableImplementacion(Usuario ResponsableImplementacion) {
+    public void setResponsableImplementacion(Responsable ResponsableImplementacion) {
         if(ResponsableImplementacion == null && this.ResponsableImplementacion != null){
             this.ResponsableImplementacion.getActividades().remove(this);
             this.ResponsableImplementacion = null;

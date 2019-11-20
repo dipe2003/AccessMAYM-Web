@@ -5,8 +5,8 @@
 */
 package com.dperez.maym.web.acciones.correctivas;
 
-import com.dperez.maymweb.accion.Accion;
-import com.dperez.maymweb.accion.acciones.Correctiva;
+import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.producto.Producto;

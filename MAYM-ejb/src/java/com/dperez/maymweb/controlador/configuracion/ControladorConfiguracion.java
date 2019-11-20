@@ -186,10 +186,7 @@ public class ControladorConfiguracion {
      */
     public int EliminarUsuario(int IdUsuario) {
         Usuario usuario = mUsuario.GetUsuario(IdUsuario);
-        if(usuario.getComprobaciones().isEmpty() || usuario.getActividades().isEmpty()){
-            return mUsuario.BorrarUsuario(usuario);
-        }
-        return -1;
+        return mUsuario.BorrarUsuario(usuario);
     }
     
     /**
@@ -366,7 +363,7 @@ public class ControladorConfiguracion {
         return codificaciones.stream()
                 .anyMatch(codificacion->codificacion.getNombre().equalsIgnoreCase(NombreCodificacion));
     }
-       
+    
     /*
     DETECCION Y TIPO DE DETECCION
     */
