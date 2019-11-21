@@ -803,6 +803,7 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
     <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
+        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.FastInfoset-1.2.15.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.byte-buddy-1.10.2.jar}" todir="${build.classes.dir}"/>
@@ -821,9 +822,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.stax-ex-1.8.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.txw2-2.3.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
+        <basename file="${libs.javaee-endorsed-api-7.0.classpath}" property="manifest.libs.javaee-endorsed-api-7.0.classpath"/>
         <basename file="${file.reference.FastInfoset-1.2.15.jar}" property="manifest.file.reference.FastInfoset-1.2.15.jar"/>
         <basename file="${file.reference.antlr-2.7.7.jar}" property="manifest.file.reference.antlr-2.7.7.jar"/>
         <basename file="${file.reference.byte-buddy-1.10.2.jar}" property="manifest.file.reference.byte-buddy-1.10.2.jar"/>
@@ -842,31 +843,31 @@ exists or setup the property manually. For example like this:
         <basename file="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" property="manifest.file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar"/>
         <basename file="${file.reference.stax-ex-1.8.jar}" property="manifest.file.reference.stax-ex-1.8.jar"/>
         <basename file="${file.reference.txw2-2.3.1.jar}" property="manifest.file.reference.txw2-2.3.1.jar"/>
-        <basename file="${libs.javaee-endorsed-api-7.0.classpath}" property="manifest.libs.javaee-endorsed-api-7.0.classpath"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
             <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 jar-17 jar-18 jar-19 "/>
-            <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.FastInfoset-1.2.15.jar}"/>
-            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.antlr-2.7.7.jar}"/>
-            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.byte-buddy-1.10.2.jar}"/>
-            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.classmate-1.5.1.jar}"/>
-            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.dom4j-2.1.1.jar}"/>
-            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.hibernate-commons-annotations-5.1.0.Final.jar}"/>
-            <attribute name="jar-7-Extension-Name" value="${manifest.file.reference.hibernate-core-5.4.9.Final.jar}"/>
-            <attribute name="jar-8-Extension-Name" value="${manifest.file.reference.istack-commons-runtime-3.0.7.jar}"/>
-            <attribute name="jar-9-Extension-Name" value="${manifest.file.reference.jandex-2.1.1.Final.jar}"/>
-            <attribute name="jar-10-Extension-Name" value="${manifest.file.reference.javassist-3.24.0-GA.jar}"/>
-            <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.javax.activation-api-1.2.0.jar}"/>
-            <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.javax.persistence-api-2.2.jar}"/>
-            <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.jaxb-api-2.3.1.jar}"/>
-            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.jaxb-runtime-2.3.1.jar}"/>
-            <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.jboss-logging-3.3.2.Final.jar}"/>
-            <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}"/>
-            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.stax-ex-1.8.jar}"/>
-            <attribute name="jar-18-Extension-Name" value="${manifest.file.reference.txw2-2.3.1.jar}"/>
-            <attribute name="jar-19-Extension-Name" value="${manifest.libs.javaee-endorsed-api-7.0.classpath}"/>
+            <attribute name="jar-1-Extension-Name" value="${manifest.libs.javaee-endorsed-api-7.0.classpath}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.FastInfoset-1.2.15.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.antlr-2.7.7.jar}"/>
+            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.byte-buddy-1.10.2.jar}"/>
+            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.classmate-1.5.1.jar}"/>
+            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.dom4j-2.1.1.jar}"/>
+            <attribute name="jar-7-Extension-Name" value="${manifest.file.reference.hibernate-commons-annotations-5.1.0.Final.jar}"/>
+            <attribute name="jar-8-Extension-Name" value="${manifest.file.reference.hibernate-core-5.4.9.Final.jar}"/>
+            <attribute name="jar-9-Extension-Name" value="${manifest.file.reference.istack-commons-runtime-3.0.7.jar}"/>
+            <attribute name="jar-10-Extension-Name" value="${manifest.file.reference.jandex-2.1.1.Final.jar}"/>
+            <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.javassist-3.24.0-GA.jar}"/>
+            <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.javax.activation-api-1.2.0.jar}"/>
+            <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.javax.persistence-api-2.2.jar}"/>
+            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.jaxb-api-2.3.1.jar}"/>
+            <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.jaxb-runtime-2.3.1.jar}"/>
+            <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.jboss-logging-3.3.2.Final.jar}"/>
+            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}"/>
+            <attribute name="jar-18-Extension-Name" value="${manifest.file.reference.stax-ex-1.8.jar}"/>
+            <attribute name="jar-19-Extension-Name" value="${manifest.file.reference.txw2-2.3.1.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
+        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.FastInfoset-1.2.15.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.byte-buddy-1.10.2.jar}" todir="${dist.ear.dir}/lib"/>
@@ -885,7 +886,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.stax-ex-1.8.jar}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.txw2-2.3.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
