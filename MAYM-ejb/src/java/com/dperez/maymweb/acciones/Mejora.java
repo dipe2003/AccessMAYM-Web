@@ -5,7 +5,6 @@
 */
 package com.dperez.maymweb.acciones;
 
-import com.dperez.maymweb.acciones.Accion;
 import static com.dperez.maymweb.acciones.TipoAccion.PREVENTIVA;
 import java.io.Serializable;
 import java.util.Date;

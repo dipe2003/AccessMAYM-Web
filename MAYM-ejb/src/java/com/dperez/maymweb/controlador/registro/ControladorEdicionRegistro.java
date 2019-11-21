@@ -26,6 +26,7 @@ import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
+import com.dperez.maymweb.responsable.ManejadorResponsables;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Responsable;
 import java.util.Date;
@@ -56,7 +57,7 @@ public class ControladorEdicionRegistro {
     @Inject
     private ManejadorActividad mActividad;
     @Inject
-    private ManejadorUsuario mUsuario;
+    private ManejadorResponsables mResponsable;
     @Inject
     private ManejadorFortaleza mFortaleza;
     
@@ -214,8 +215,7 @@ public class ControladorEdicionRegistro {
         actividad.setDescripcion(Descripcion);
         actividad.setFechaEstimadaImplementacion(FechaEstimada);
         if(actividad.getResponsableImplementacion().getId() != IdResponsable){
-            // @todo implementar manejador/controlador responsables
-            Responsable responsable = mUsuario.GetUsuario(IdResponsable);
+            Responsable responsable = mResponsable.GetResponsable(IdResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
         return mActividad.ActualizarActividad(actividad);

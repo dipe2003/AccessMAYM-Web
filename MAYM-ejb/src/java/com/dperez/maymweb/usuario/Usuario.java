@@ -42,7 +42,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     @OneToOne(orphanRemoval = true, mappedBy = "UsuarioCredencial", cascade = CascadeType.PERSIST)
     private Credencial CredencialUsuario;
         
-    @ManyToOne
+    @OneToOne(orphanRemoval = true, mappedBy = "UsuarioResponsable", cascade = CascadeType.PERSIST)
     private Responsable Responsable;
     
     // Constructores
@@ -105,8 +105,8 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     public void setResponsable(Responsable UsuarioResponsable) {
         this.Responsable = UsuarioResponsable;
         if(UsuarioResponsable != null){
-            if(!UsuarioResponsable.getUsuariosResponsables().contains(this)){
-                UsuarioResponsable.getUsuariosResponsables().add(this);
+            if(UsuarioResponsable.getUsuarioResponsable()!= this){
+                UsuarioResponsable.setUsuarioResponsable(this);
             }
         }
     }

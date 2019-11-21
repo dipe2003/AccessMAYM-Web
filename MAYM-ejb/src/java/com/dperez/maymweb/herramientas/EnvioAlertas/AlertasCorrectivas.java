@@ -11,6 +11,8 @@ import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.herramientas.ControladorAlertas;
 import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.EventoAccion;
+import com.dperez.maymweb.herramientas.EventoActividad;
 import com.dperez.maymweb.herramientas.TipoEvento;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,15 +56,13 @@ public class AlertasCorrectivas implements Serializable, Runnable {
                     if(accion.getEstadoAccion() == EnumEstado.PROCESO_IMP){
                         if(accion.getComprobacionImplementacion().getFechaComprobacion() == null ||
                                 accion.getComprobacionImplementacion().getFechaEstimada().compareTo(Hoy)< 0){
-                            Evento evento = new Evento(TipoEvento.IMPLEMENTACION_ACCION, accion.getComprobacionImplementacion().getResponsable().getId(),
-                                    accion.getId(),0);
+                            Evento evento = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, accion);
                             cAlertas.EnviarAlerta(evento);
                         }
                     }else {
                         if(accion.getComprobacionEficacia().getFechaComprobacion() == null ||
                                 accion.getComprobacionEficacia().getFechaEstimada().compareTo(Hoy)< 0){
-                            Evento evento = new Evento(TipoEvento.VERIFICACION_EFICACIA, accion.getComprobacionImplementacion().getResponsable().getId(),
-                                    accion.getId(),0);
+                            Evento evento = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, accion);
                             cAlertas.EnviarAlerta(evento);
                         }
                     }
@@ -70,8 +70,7 @@ public class AlertasCorrectivas implements Serializable, Runnable {
                     List<Actividad> Actividades = ((Correctiva)accion).getActividades();
                     for(Actividad actividad: Actividades){
                         if(actividad.getFechaImplementacion() == null || actividad.getFechaEstimadaImplementacion().compareTo(Hoy)<0){
-                            Evento evento = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
-                                    accion.getId(),actividad.getIdActividad());
+                            Evento evento = new EventoActividad(actividad);
                             cAlertas.EnviarAlerta(evento);
                         }
                     }

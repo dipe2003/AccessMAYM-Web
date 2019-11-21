@@ -15,7 +15,6 @@ import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
-import com.dperez.maymweb.accion.actividad.ManejadorActividad;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.actividad.TipoActividad;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
@@ -26,14 +25,12 @@ import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
-import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.responsable.ManejadorResponsables;
 import com.dperez.maymweb.usuario.Responsable;
-import com.dperez.maymweb.usuario.Usuario;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -56,11 +53,7 @@ public class ControladorRegistro {
     @Inject
     private ManejadorDeteccion mDeteccion;
     @Inject
-    private ManejadorActividad mMedida;
-    @Inject
-    private ManejadorUsuario mUsuario;
-    @Inject
-    private ManejadorEmpresa mEmpresa;
+    private ManejadorResponsables mResponsable;
     @Inject
     private ManejadorFortaleza mFortaleza;
     @Inject
@@ -172,14 +165,12 @@ public class ControladorRegistro {
      */
     public int AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad tipoActividad){
         Accion accion = mAccion.GetAccion(IdAccion);
-        // @todo implementar manejador/controlador responsable 
-        Responsable resposable = mUsuario.GetUsuario(IdResponsable);
-        Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, resposable, tipoActividad);
+        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
+        Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, responsable, tipoActividad);
         accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
         return actividad.getIdActividad();
-    }
-    
+    }    
     
     /**
      * Setea la fecha de implementacion de la Actividad correctiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
@@ -194,18 +185,16 @@ public class ControladorRegistro {
         accion.CambiarEstado();
         return mAccion.ActualizarAccion(accion);
     }
-
     
     /**
      * Setea la comprobacion de implementacion estimada con responsable y fecha estimada. Actualiza la base de datos.
      * @param FechaEstimada
-     * @param IdUsuarioResponsableImplementacion
+     * @param IdResponsable
      * @param IdAccion
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
-    public int SetComprobacionImplementacion(Date FechaEstimada, int IdUsuarioResponsableImplementacion, int IdAccion){
-        // @todo agregar manejador/controlador para responsables
-        Responsable responsable = mUsuario.GetUsuario(IdUsuarioResponsableImplementacion);
+    public int SetComprobacionImplementacion(Date FechaEstimada, int IdResponsable, int IdAccion){
+        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
         Accion accion = mAccion.GetAccion(IdAccion);
         Comprobacion comprobacion = accion.setComprobacionImplementacion(FechaEstimada, responsable);
         mAccion.crearComprobacion(comprobacion);
@@ -215,13 +204,12 @@ public class ControladorRegistro {
     /**
      * Setea la comprobacion de eficacia estimada con responsable y fecha estimada. Actualiza la base de datos.
      * @param FechaEstimada
-     * @param IdUsuarioResponsableComprobacion
+     * @param IdResponsable
      * @param IdAccion
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
-    public int SetComprobacionEficacia(Date FechaEstimada, int IdUsuarioResponsableComprobacion, int IdAccion){
-        // @todo agregar manejador/controlador para responsables
-        Responsable responsable = mUsuario.GetUsuario(IdUsuarioResponsableComprobacion);
+    public int SetComprobacionEficacia(Date FechaEstimada, int IdResponsable, int IdAccion){
+        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
         Accion accion = mAccion.GetAccion(IdAccion);
         Comprobacion comprobacion = accion.setComprobacionEficacia(FechaEstimada, responsable);
         mAccion.crearComprobacion(comprobacion);

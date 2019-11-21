@@ -12,11 +12,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -33,9 +35,9 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     private int Id;
     private String NombreResponsable;
     
-    @OneToMany(mappedBy = "Responsable")
+    @OneToOne(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Usuario> UsuariosResponsables;
+    private Usuario UsuarioResponsable;
     
     @OneToMany(mappedBy = "Responsable")
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -57,7 +59,7 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     public int getId() {return Id;}
     public String getNombreResponsable() {return NombreResponsable;}
     
-    public List<Usuario> getUsuariosResponsables() {return UsuariosResponsables;}
+    public Usuario getUsuarioResponsable() {return UsuarioResponsable;}
     
     public List<Comprobacion> getComprobaciones() {return Comprobaciones;}
     
@@ -70,7 +72,7 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     public void setId(int Id) {this.Id = Id;}
     public void setNombreResponsable(String NombreResponsable) {this.NombreResponsable = NombreResponsable;}
     
-    public void setUsuariosResponsables(List<Usuario> UsuariosResponsables) {this.UsuariosResponsables = UsuariosResponsables;}
+    public void setUsuarioResponsable(Usuario UsuarioResponsable) {this.UsuarioResponsable = UsuarioResponsable;}    
     
     public void setComprobaciones(List<Comprobacion> Comprobaciones) {this.Comprobaciones = Comprobaciones;}
     
@@ -83,26 +85,7 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     
     /*
     Listas
-    */
-    public void AddUsuario(Usuario usuario){
-        if(usuario != null){
-            this.UsuariosResponsables.add(usuario);
-            if(usuario.getResponsable() != null && !usuario.getResponsable().equals(this))
-                usuario.setResponsable(this);
-        }
-    }
-    
-    public void RemoveUsuario(int idUsuario){
-        Iterator<Usuario> it = this.UsuariosResponsables.iterator() ;
-        while(it.hasNext()){
-            Usuario m = it.next();
-            if(m.getResponsable().Id == idUsuario){
-                it.remove();
-                if(m.getResponsable()!=null && m.getResponsable().equals(this))
-                    m.setResponsable(null);
-            }
-        }
-    }
+    */    
     
     public void AddComprobacion(Comprobacion comprobacion){
         if(comprobacion != null){

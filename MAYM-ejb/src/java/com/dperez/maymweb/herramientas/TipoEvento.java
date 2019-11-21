@@ -10,7 +10,6 @@ package com.dperez.maymweb.herramientas;
  * @author Diego
  */
 public enum TipoEvento{
-    IMPLEMENTACION_ACTIVIDAD ("Implementacion de Actividad"),
     IMPLEMENTACION_ACCION ("Implementacion de Accion"),
     VERIFICACION_EFICACIA ("Verificacion de Eficacia");
     

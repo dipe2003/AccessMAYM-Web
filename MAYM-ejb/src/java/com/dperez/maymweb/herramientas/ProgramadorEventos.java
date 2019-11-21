@@ -27,13 +27,13 @@ import javax.inject.Named;
  */
 @Named("scheduler")
 @Stateless
-public class ProgramadorEventos {    
+public class ProgramadorEventos {
     @Resource
     private TimerService timerService;
     
     @Inject
     private ControladorAlertas cAlertas;
-
+    
     /**
      * Retorna una lista de eventos programados.
      * @return
@@ -52,62 +52,41 @@ public class ProgramadorEventos {
         return timerList;
     }
     
-    /**
-     * Comprueba la existencia del evento programado.
-     * @param evento
-     * @return 
-     */
-    public boolean ExisteEvento(Evento evento){
-        Collection<Timer> timers = timerService.getTimers();
-        Iterator<Timer> it = timers.iterator();
-        Timer timer;
-        while(it.hasNext()){
-            timer = (Timer) it.next();
-            if (timer.getInfo() instanceof Evento) {
-                Evento e = (Evento) timer.getInfo();
-                if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    /**
-     * Remueve el evento programado.
-     * @param evento
-     * @return 
-     */
-    public boolean RemoverEvento(Evento evento){
-        Collection<Timer> timers = timerService.getTimers();
-        //List<Timer> timerList = new ArrayList<>();
-        Iterator<Timer> it = timers.iterator();
-        Timer timer;
-        while(it.hasNext()){
-            timer = (Timer) it.next();
-            if (timer.getInfo() instanceof Evento) {
-                Evento e = (Evento) timer.getInfo();
-                if(e.getIdUsuarioResponsable() == evento.getIdUsuarioResponsable() && e.getTipo().equals(evento.getTipo())){
-                    it.remove();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    
     /**
      * Remueve todos los eventos programados asociados la accion.
-     * @param IdAccion 
+     * @param IdActividad
      */
-    public void RemoverEventos(int IdAccion){
+    public void RemoverEventoActividad(int IdActividad){
         Collection<Timer> timers = timerService.getTimers();
         List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
         Timer timer;
         while(it.hasNext()){
             timer = (Timer) it.next();
-            if (timer.getInfo() instanceof Evento) {
-                Evento e = (Evento) timer.getInfo();
-                if(e.getIdAccion() == IdAccion){
+            if (timer.getInfo() instanceof EventoActividad) {
+                EventoActividad e = (EventoActividad) timer.getInfo();
+                if(e.getActividad().getIdActividad() == IdActividad){
+                    it.remove();
+                }
+            }
+        }
+    }
+    
+    /**
+     * Remueve todos los eventos programados asociados la accion.
+     * @param IdAccion
+     */
+    public void RemoverEventoAccion(int IdAccion){
+        Collection<Timer> timers = timerService.getTimers();
+        List<Timer> timerList = new ArrayList<>();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it.next();
+            if (timer.getInfo() instanceof EventoAccion) {
+                EventoAccion e = (EventoAccion) timer.getInfo();
+                if(e.getAccion().getId() == IdAccion){
                     it.remove();
                 }
             }
@@ -143,7 +122,7 @@ public class ProgramadorEventos {
      */
     public void ProgramarEvento(Date fecha, Evento evento){
         TimerConfig timerConfig = new TimerConfig(evento, true);
-        Timer timer = timerService.createSingleActionTimer(fecha, timerConfig);
+        timerService.createSingleActionTimer(fecha, timerConfig);
     }
     
     /**
@@ -153,10 +132,15 @@ public class ProgramadorEventos {
     @Timeout
     public void EjecucionEvento(Timer timer){
         // comprueba que sea un timer de evento
-        if (timer.getInfo() instanceof Evento) {
-            Evento evento = (Evento) timer.getInfo();
+        if (timer.getInfo() instanceof EventoAccion) {
+            EventoAccion evento = (EventoAccion) timer.getInfo();
             System.out.println("Ejecucion del evento.");
             System.out.println("Evento: " + evento.getTipo());
+            cAlertas.EnviarAlerta(evento);
+        }else if (timer.getInfo() instanceof EventoActividad) {
+            EventoActividad evento = (EventoActividad) timer.getInfo();
+            System.out.println("Ejecucion del evento.");
+            System.out.println("Evento Actividad: " + evento.getActividad().getDescripcion());
             cAlertas.EnviarAlerta(evento);
         }
     }

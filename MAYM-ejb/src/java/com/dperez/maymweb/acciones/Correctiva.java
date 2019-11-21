@@ -5,7 +5,6 @@
  */
 package com.dperez.maymweb.acciones;
 
-import com.dperez.maymweb.acciones.Accion;
 import java.util.List;
 
 import com.dperez.maymweb.producto.Producto;
