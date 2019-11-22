@@ -8,7 +8,6 @@ package com.dperez.maym.web.acciones.correctivas;
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
@@ -58,15 +57,13 @@ public class CrearAccionCorrectiva implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
+    private String Cliente;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
 
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-    
-    private TipoDesvio[] TiposDesvios;
-    private TipoDesvio TipoDesvioSeleccionado;
     
     private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
@@ -85,14 +82,13 @@ public class CrearAccionCorrectiva implements Serializable {
         }
     }
     public String getDescripcion() {return Descripcion;}
+
+    public String getCliente() {return Cliente;}
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
-    
-    public TipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
-    public TipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
     
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
@@ -112,14 +108,13 @@ public class CrearAccionCorrectiva implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+
+    public void setCliente(String Cliente) {this.Cliente = Cliente;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
-    
-    public void setTiposDesvios(TipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
-    public void setTipoDesvioSeleccionado(TipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
     public void setListaAreaSectores(Map<Integer, Area> ListaAreasSectores){this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
@@ -146,11 +141,7 @@ public class CrearAccionCorrectiva implements Serializable {
         TiposDeteccion = EnumTipoDeteccion.values();
         TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
         ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
-        
-        //  Tipo de desvios
-        TiposDesvios = TipoDesvio.values();
-        TipoDesvioSeleccionado = TipoDesvio.NC_MENOR_OBS;
-        
+
         // Areas Sectores
         ListaAreasSectores = new HashMap<>();
         List<Area> tmpAreas = fLectura.ListarAreasSectores();
@@ -178,7 +169,7 @@ public class CrearAccionCorrectiva implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(TipoAccion.CORRECTIVA, FechaDeteccion,
-                Descripcion, TipoDesvioSeleccionado, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
+                Descripcion, Cliente, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
         
         if(accion != null){
             if(productoInvolucrado.getListaProductosAfectados()!=null){

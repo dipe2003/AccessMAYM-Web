@@ -14,7 +14,6 @@ import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
 import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.CORRECTIVA;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.PREVENTIVA;
@@ -81,6 +80,7 @@ public class EditarAccionCorrectiva implements Serializable {
     private String strFechaDeteccion;
     private String Descripcion;
     private String AnalisisCausa;
+    private String Cliente;
     
     private String TituloAdjunto;
     private Map<Integer, Adjunto> MapAdjuntos;
@@ -90,9 +90,6 @@ public class EditarAccionCorrectiva implements Serializable {
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
     private Map<Integer, String> ListaDetecciones;
     private Integer DeteccionSeleccionada;
-    
-    private TipoDesvio[] TiposDesvios;
-    private TipoDesvio TipoDesvioSeleccionado;
     
     private Map<Integer, Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
@@ -131,6 +128,7 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
+    public String getCliente() {return Cliente;}
     
     public String getTituloAdjunto(){return this.TituloAdjunto;}
     public Part getArchivoAdjunto() {return ArchivoAdjunto;}
@@ -145,9 +143,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public Map<Integer, String> getListaDetecciones(){return this.ListaDetecciones;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
-    
-    public TipoDesvio[] getTiposDesvios(){return this.TiposDesvios;}
-    public TipoDesvio getTipoDesvioSeleccionado(){return this.TipoDesvioSeleccionado;}
     
     public Map<Integer, Area> getListaAreasSectores(){return this.ListaAreasSectores;}
     public Integer getAreaSectorAccionSeleccionada() {return AreaSectorAccionSeleccionada;}
@@ -197,6 +192,7 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
+    public void setCliente(String Cliente) {this.Cliente = Cliente;}
     
     public void setTituloAdjunto(String TituloAdjunto){this.TituloAdjunto = TituloAdjunto;}
     public void setArchivoAdjunto(Part ArchivoAdjunto) {this.ArchivoAdjunto = ArchivoAdjunto;}
@@ -209,9 +205,6 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     public void setListaDetecciones(Map<Integer, String> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
-    
-    public void setTiposDesvios(TipoDesvio[] TiposDesvios){this.TiposDesvios = TiposDesvios;}
-    public void setTipoDesvioSeleccionado(TipoDesvio TipoDesvioSeleccionado){this.TipoDesvioSeleccionado = TipoDesvioSeleccionado;}
     
     public void setListaAreasSectores(Map<Integer, Area> ListaAreasSectores) {this.ListaAreasSectores = ListaAreasSectores;}
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;}
@@ -289,10 +282,6 @@ public class EditarAccionCorrectiva implements Serializable {
             ListaDetecciones = new TreeMap<>(modalDetecciones.getListaDetecciones());
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getDeteccion().getTipo();
             DeteccionSeleccionada = AccionSeleccionada.getDeteccion().getId();
-            
-            //  Tipo de desvios
-            TiposDesvios = TipoDesvio.values();
-            TipoDesvioSeleccionado = ((Correctiva)AccionSeleccionada).getTipo();
             
             // Actividades: Medidas Correctivas y Preventivas
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getActividades();
@@ -453,7 +442,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public void editarAccion() throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
         // actualizar accion
-        if(fDatos.EditarAccion(IdAccionSeleccionada, TipoAccion.CORRECTIVA, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvioSeleccionado,
+        if(fDatos.EditarAccion(IdAccionSeleccionada, TipoAccion.CORRECTIVA, FechaDeteccion, Descripcion, AnalisisCausa, Cliente,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));

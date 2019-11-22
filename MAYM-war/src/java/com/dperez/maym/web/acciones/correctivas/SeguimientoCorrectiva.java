@@ -8,7 +8,6 @@ package com.dperez.maym.web.acciones.correctivas;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.ResultadoComprobacion;
 import com.dperez.maymweb.acciones.Correctiva;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.CORRECTIVA;
 import com.dperez.maymweb.empresa.Empresa;
@@ -48,9 +47,7 @@ public class SeguimientoCorrectiva implements Serializable {
     private FacadeDatos fDatos;
     @Inject
     private FacadeVerificador fVerif;
-    
-    private TipoDesvio TipoDesvio;
-    
+
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
     
@@ -77,8 +74,6 @@ public class SeguimientoCorrectiva implements Serializable {
     private Empresa EmpresaAccion;
     
     //  Getters
-    
-    public TipoDesvio getTipoDesvio() {return TipoDesvio;}
     
     public Map<Integer, Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
     public Map<Integer, Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
@@ -119,8 +114,6 @@ public class SeguimientoCorrectiva implements Serializable {
     public Empresa getEmpresaAccion() {return EmpresaAccion;}
     
     //  Setters
-    
-    public void setTipoDesvio(TipoDesvio TipoDesvio) {this.TipoDesvio = TipoDesvio;}
     
     public void setMedidasCorrectivas(Map<Integer, Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
@@ -284,7 +277,6 @@ public class SeguimientoCorrectiva implements Serializable {
                         .sorted()
                         .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
             }
-            TipoDesvio = ((Correctiva)AccionSeleccionada).getTipo();
             EstaImplementada = AccionSeleccionada.EstanImplementadasActividades();
 
             //  Resultado de comprobaciones
