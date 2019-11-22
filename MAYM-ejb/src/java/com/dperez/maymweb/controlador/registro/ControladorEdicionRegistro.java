@@ -9,7 +9,6 @@ import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.ManejadorAccion;
 import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
@@ -27,7 +26,6 @@ import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.producto.ManejadorProducto;
 import com.dperez.maymweb.producto.Producto;
 import com.dperez.maymweb.responsable.ManejadorResponsables;
-import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Responsable;
 import java.util.Date;
 import java.util.List;
@@ -69,19 +67,19 @@ public class ControladorEdicionRegistro {
     */
     
     /**
-     * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
+     * Edita una accion con los mismos parametros que se creo.Actualiza la base de datos.
      * @param IdAccion
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
      * @param AnalisisCausa
-     * @param TipoDesvio
+     * @param Cliente
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion
      * @return -1 si no se actualizo.
      */
-    public int EditarAccion(int IdAccion, TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, TipoDesvio TipoDesvio,
+    public int EditarAccion(int IdAccion, TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, String Cliente,
             int IdAreaSector, int IdDeteccion, int IdCodificacion){
         Accion accion = mAccion.GetAccion(IdAccion);
         //  Comprobar si hay cambio en el valor para "ahorrar" llamada a la base de datos.
@@ -100,7 +98,7 @@ public class ControladorEdicionRegistro {
         accion.setFechaDeteccion(FechaDeteccion);
         accion.setDescripcion(Descripcion);
         if(TipoAccion == TipoAccion.CORRECTIVA){
-            ((Correctiva)accion).setTipo(TipoDesvio);
+            if (!Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
         }
         accion.setAnalisisCausa(AnalisisCausa);
         return mAccion.ActualizarAccion(accion);

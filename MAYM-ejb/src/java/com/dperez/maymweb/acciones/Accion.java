@@ -47,6 +47,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     protected Date FechaDeteccion;
     protected String Descripcion  = new String();
     protected String AnalisisCausa = new String();
+    protected String ObsDesestimada = new String();
     protected EnumEstado EstadoAccion;
     protected TipoAccion TipoAccion;
     
@@ -94,6 +95,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public Date getFechaDeteccion() {return this.FechaDeteccion;}
     public String getDescripcion() {return this.Descripcion;}
     public String getAnalisisCausa() {return this.AnalisisCausa;}
+    public String getObsDesestimada() {return ObsDesestimada;}    
     public EnumEstado getEstadoAccion() {return EstadoAccion;}
     public TipoAccion getTipoAccion() {return TipoAccion;}
     
@@ -115,6 +117,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
+    public void setObsDesestimada(String ObsDesestimada) {this.ObsDesestimada = ObsDesestimada;}    
     public void setEstadoAccion(EnumEstado EstadoAccion) {this.EstadoAccion = EstadoAccion;}
     public void setTipoAccion(TipoAccion TipoAccion) {this.TipoAccion = TipoAccion;}
     

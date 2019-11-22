@@ -8,7 +8,6 @@ package com.dperez.maymweb.facades;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.TipoActividad;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
@@ -39,15 +38,15 @@ public class FacadeDatos {
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
-     * @param TipoDesvio Null cuando no corresponde
+     * @param Cliente
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdEmpresa
      * @return Null: si no se creo.
      */
-    public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, TipoDesvio TipoDesvio,
+    public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String Cliente,
             int IdAreaSector, int IdDeteccion, int IdEmpresa){
-        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, TipoDesvio, IdAreaSector, IdDeteccion);
+        return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, Cliente, IdAreaSector, IdDeteccion);
     }
     
     /**
@@ -153,9 +152,9 @@ public class FacadeDatos {
      * @param IdCodificacion
      * @return -1 si no se actualizo.
      */
-    public int EditarAccion(int IdAccion, TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, TipoDesvio TipoDesvio,
+    public int EditarAccion(int IdAccion, TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, String Cliente,
             int IdAreaSector, int IdDeteccion, int IdCodificacion){
-        return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, AnalisisCausa, TipoDesvio, IdAreaSector, IdDeteccion, IdCodificacion);
+        return cEdicion.EditarAccion(IdAccion, TipoAccion, FechaDeteccion, Descripcion, AnalisisCausa, Cliente, IdAreaSector, IdDeteccion, IdCodificacion);
     }
     
     /**

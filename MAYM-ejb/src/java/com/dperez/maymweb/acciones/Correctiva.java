@@ -24,8 +24,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 public class Correctiva extends Accion implements Serializable {
-    private TipoDesvio Tipo;
-
+    private String Cliente;
     @OneToMany(mappedBy = "AccionCorrectivaConProductoAfectado", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Producto> ProductosAfectados;
@@ -35,25 +34,23 @@ public class Correctiva extends Accion implements Serializable {
         this.ProductosAfectados = new ArrayList<>();
     }
 
-    public Correctiva(Date FechaDeteccion, String Descripcion, TipoDesvio TipoDesvio) {
+    public Correctiva(Date FechaDeteccion, String Descripcion) {
         super(FechaDeteccion, Descripcion, CORRECTIVA);
         this.ProductosAfectados = new ArrayList<>();
-        this.Tipo = TipoDesvio;
     }
 
-    //  Getters
-    public TipoDesvio getTipo() {
-        return this.Tipo;
-    }
-
+    /*
+        Getters
+    */
+    public String getCliente() {return Cliente;}
     public List<Producto> getProductosAfectados() {
         return this.ProductosAfectados;
     }
 
-    public void setTipo(TipoDesvio Tipo) {
-        this.Tipo = Tipo;
-    }
-
+    /*
+        Setters
+    */
+    public void setCliente(String Cliente) {this.Cliente = Cliente;}    
     public void setProductosAfectados(List<Producto> ProductosAfectados) {
         this.ProductosAfectados = ProductosAfectados;
         for (Producto prod : this.ProductosAfectados) {

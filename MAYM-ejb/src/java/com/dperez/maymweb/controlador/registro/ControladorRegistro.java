@@ -11,7 +11,6 @@ import com.dperez.maymweb.accion.comprobaciones.ResultadoComprobacion;
 import com.dperez.maymweb.acciones.ManejadorAccion;
 import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.acciones.Preventiva;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
@@ -65,23 +64,22 @@ public class ControladorRegistro {
     public ControladorRegistro(){}
     
     /**
-     * Crea una nueva accion en estado pendiente y la persiste en la base de datos.
-     * Se codifica automaticamente la accion como 'Sin Codificar'. Si la codificacon no existe se crea.
+     * Crea una nueva accion en estado pendiente y la persiste en la base de datos.Se codifica automaticamente la accion como 'Sin Codificar'.Si la codificacon no existe se crea.
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
-     * @param TipoDesvio Null cuando no corresponde
+     * @param Cliente
      * @param IdAreaSector
      * @param IdDeteccion
-     * @param IdEmpresa
      * @return Null: si no se creo.
      */
-    public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, TipoDesvio TipoDesvio,
+    public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String Cliente,
             int IdAreaSector, int IdDeteccion){
         Accion accion;
         switch(TipoAccion){
             case CORRECTIVA:
-                accion = new Correctiva(FechaDeteccion, Descripcion, TipoDesvio);
+                accion = new Correctiva(FechaDeteccion, Descripcion);
+                if (!Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
                 break;
                 
             case MEJORA:
