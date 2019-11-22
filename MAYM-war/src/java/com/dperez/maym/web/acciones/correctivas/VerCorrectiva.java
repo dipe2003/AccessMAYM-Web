@@ -15,7 +15,7 @@ import static com.dperez.maymweb.accion.actividad.TipoActividad.PREVENTIVA;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeVerificador;

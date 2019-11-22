@@ -13,7 +13,7 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import com.dperez.maymweb.usuario.EnumPermiso;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;

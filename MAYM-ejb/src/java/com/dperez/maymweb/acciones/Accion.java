@@ -21,7 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.estado.EnumEstado;
 import com.dperez.maymweb.usuario.Responsable;
 import java.io.Serializable;
 import java.util.ArrayList;

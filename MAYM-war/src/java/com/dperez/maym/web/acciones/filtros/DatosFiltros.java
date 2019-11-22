@@ -9,7 +9,7 @@ import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.acciones.EnumEstado;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;

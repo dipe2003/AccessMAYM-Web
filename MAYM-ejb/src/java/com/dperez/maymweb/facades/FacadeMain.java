@@ -7,7 +7,7 @@ package com.dperez.maymweb.facades;
 
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.usuario.Credencial;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import com.dperez.maymweb.usuario.EnumPermiso;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;

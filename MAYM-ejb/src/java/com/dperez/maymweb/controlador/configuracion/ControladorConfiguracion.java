@@ -18,7 +18,7 @@ import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import com.dperez.maymweb.usuario.EnumPermiso;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;

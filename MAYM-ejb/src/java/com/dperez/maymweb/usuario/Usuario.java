@@ -6,7 +6,6 @@
 package com.dperez.maymweb.usuario;
 
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;

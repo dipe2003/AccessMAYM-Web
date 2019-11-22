@@ -8,7 +8,7 @@ package com.dperez.maymweb.herramientas.EnvioAlertas;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
-import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.herramientas.ControladorAlertas;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.EventoAccion;

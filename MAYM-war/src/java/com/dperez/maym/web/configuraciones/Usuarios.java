@@ -13,7 +13,7 @@ import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.permiso.EnumPermiso;
+import com.dperez.maymweb.usuario.EnumPermiso;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;

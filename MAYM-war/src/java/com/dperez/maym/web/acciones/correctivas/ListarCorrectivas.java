@@ -11,7 +11,7 @@ import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maym.web.herramientas.Presentacion;

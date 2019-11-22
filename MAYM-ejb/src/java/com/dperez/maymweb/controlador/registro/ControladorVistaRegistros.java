@@ -16,7 +16,7 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.empresa.ManejadorEmpresa;
-import com.dperez.maymweb.estado.EnumEstado;
+import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
