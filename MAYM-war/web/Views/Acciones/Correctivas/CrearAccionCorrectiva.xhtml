@@ -79,15 +79,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <strong><label for="clasificacion">Clasificacion:</label></strong>                                    
-                                    <h:selectOneRadio id="clasificacion" value="#{crearAccionCorrectiva.tipoDesvioSeleccionado}">                                        
-                                        <c:forEach items="#{crearAccionCorrectiva.tiposDesvios}" var="tipo" >
-                                            <div class="radio" >
-                                                <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
-                                            </div>
-                                        </c:forEach>  
-                                        <f:ajax execute="@this"/>
-                                    </h:selectOneRadio>
+                                    <strong><label for="cliente">Cliente:</label></strong>                                    
+                                    <h:inputTextarea class="form-control" id="cliente" p:placeholder="Nombre del cliente" value="#{crearAccionCorrectiva.cliente}"/>
                                 </div> 
                             </div>
                         </div>
@@ -195,7 +188,7 @@
             <h:form id="form_accion_modal">
                 <!-- Modal Nueva Deteccion -->
                 <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>    
-               
+                
                 <!-- Panel de Producto Involucrado -->
                 <ui:include src="ProductoInvolucrado.xhtml"/>                
             </h:form>
