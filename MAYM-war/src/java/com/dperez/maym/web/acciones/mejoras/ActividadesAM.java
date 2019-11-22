@@ -13,8 +13,8 @@ import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.Evento;
+import com.dperez.maymweb.herramientas.EventoActividad;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
-import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -104,14 +104,14 @@ public class ActividadesAM implements Serializable {
      * @throws java.io.IOException
      */
     public void agregarActividad() throws IOException{
-        int idActividad = -1;
-        if((idActividad = fDatos.AgregarActividad(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
-                ResponsableActividad, MEJORA))<0){
+        Actividad actividad = null;
+        if((actividad = fDatos.AgregarActividad(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
+                ResponsableActividad, MEJORA))!= null){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // agregar el evento en el programador de tareas.
-            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableActividad, AccionSeleccionada.getId(), idActividad);
+            Evento eventoNuevo = new EventoActividad(actividad);
             pEventos.ProgramarEvento(FechaEstimadaImplementacionActividad, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
@@ -132,10 +132,9 @@ public class ActividadesAM implements Serializable {
         }else{
             // remover el evento del programador de tareas.
             Actividad actividad = AccionSeleccionada.GetActividad(IdActividadEditar);
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
-                    AccionSeleccionada.getId(), IdActividadEditar);
-            if (pEventos.ExisteEvento(eventoAccion)){
-                pEventos.RemoverEvento(eventoAccion);
+            Evento eventoActividad = new EventoActividad(actividad);
+            if (pEventos.ExisteEventoActividad(eventoActividad)){
+                pEventos.RemoverEventoActividad(eventoActividad);
             }
             // redirigir a la edicion de la accion de mejora.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
@@ -155,11 +154,10 @@ public class ActividadesAM implements Serializable {
         }else{
             // modificar evento
             Actividad actividad = AccionSeleccionada.GetActividad(IdActividadEditar);
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
-                    AccionSeleccionada.getId(), IdActividadEditar);
-            if (pEventos.ExisteEvento(eventoAccion)){
-                pEventos.RemoverEvento(eventoAccion);
-                Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, ResponsableActividad, AccionSeleccionada.getId(), IdActividadEditar);
+            Evento eventoActividad = new EventoActividad(actividad);
+            if (pEventos.ExisteEventoActividad(eventoActividad)){
+                pEventos.RemoverEventoActividad(eventoActividad);
+                Evento eventoNuevo = new EventoActividad(actividad);
                 pEventos.ProgramarEvento(FechaEstimadaImplementacionActividad, eventoNuevo);
             }
             // redirigir a la edicion de la accion correctiva.

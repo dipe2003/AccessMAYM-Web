@@ -52,12 +52,53 @@ public class ProgramadorEventos {
         return timerList;
     }
     
+    /**
+     * Comprueba la existencia del evento programado.
+     * @param evento
+     * @return 
+     */
+    public boolean ExisteEventoActividad(Evento evento){
+        Collection<Timer> timers = timerService.getTimers();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it.next();
+            if (timer.getInfo() instanceof EventoActividad) {
+                EventoActividad e = (EventoActividad) timer.getInfo();
+                if(((EventoActividad)evento).getActividad().getIdActividad() == e.getActividad().getIdActividad()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+        /**
+     * Comprueba la existencia del evento programado.
+     * @param evento
+     * @return 
+     */
+    public boolean ExisteEventoAccion(Evento evento){
+        Collection<Timer> timers = timerService.getTimers();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it.next();
+            if (timer.getInfo() instanceof EventoAccion) {
+                EventoAccion e = (EventoAccion) timer.getInfo();
+                if(((EventoAccion)evento).getAccion().getId() == e.getAccion().getId()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     
     /**
      * Remueve todos los eventos programados asociados la accion.
-     * @param IdActividad
+     * @param evento
      */
-    public void RemoverEventoActividad(int IdActividad){
+    public void RemoverEventoActividad(Evento evento){
         Collection<Timer> timers = timerService.getTimers();
         List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
@@ -66,7 +107,7 @@ public class ProgramadorEventos {
             timer = (Timer) it.next();
             if (timer.getInfo() instanceof EventoActividad) {
                 EventoActividad e = (EventoActividad) timer.getInfo();
-                if(e.getActividad().getIdActividad() == IdActividad){
+                if(e.getActividad().getIdActividad() == ((EventoActividad)evento).getActividad().getIdActividad()){
                     it.remove();
                 }
             }
@@ -75,9 +116,9 @@ public class ProgramadorEventos {
     
     /**
      * Remueve todos los eventos programados asociados la accion.
-     * @param IdAccion
+     * @param evento
      */
-    public void RemoverEventoAccion(int IdAccion){
+    public void RemoverEventoAccion(Evento evento){
         Collection<Timer> timers = timerService.getTimers();
         List<Timer> timerList = new ArrayList<>();
         Iterator<Timer> it = timers.iterator();
@@ -86,7 +127,32 @@ public class ProgramadorEventos {
             timer = (Timer) it.next();
             if (timer.getInfo() instanceof EventoAccion) {
                 EventoAccion e = (EventoAccion) timer.getInfo();
-                if(e.getAccion().getId() == IdAccion){
+                if(e.getAccion().getId() == ((EventoAccion)evento).getAccion().getId() && ((EventoAccion)evento).getTipo() == e.getTipo() ){
+                    it.remove();
+                }
+            }
+        }
+    }
+    
+     /**
+     * Remueve todos los eventos programados asociados la accion.
+     * @param Id 
+     */
+    public void RemoverEventos(int Id){
+        Collection<Timer> timers = timerService.getTimers();
+        List<Timer> timerList = new ArrayList<>();
+        Iterator<Timer> it = timers.iterator();
+        Timer timer;
+        while(it.hasNext()){
+            timer = (Timer) it.next();
+            if (timer.getInfo() instanceof EventoAccion) {
+                EventoAccion e = (EventoAccion) timer.getInfo();
+                if(e.getAccion().getId() == Id){
+                    it.remove();
+                }
+            }else if (timer.getInfo() instanceof EventoActividad){
+                EventoActividad e = (EventoActividad) timer.getInfo();
+                if(e.getActividad().getIdActividad()== Id){
                     it.remove();
                 }
             }

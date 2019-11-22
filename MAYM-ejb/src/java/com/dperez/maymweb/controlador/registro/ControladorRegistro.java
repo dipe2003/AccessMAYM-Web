@@ -161,15 +161,19 @@ public class ControladorRegistro {
      * @param Descripcion
      * @param IdResponsable
      * @param tipoActividad
-     * @return -1 si no se creo.
+     * @return null si no se creo.
      */
-    public int AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad tipoActividad){
+    public Actividad AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad tipoActividad){
         Accion accion = mAccion.GetAccion(IdAccion);
         Responsable responsable = mResponsable.GetResponsable(IdResponsable);
         Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, responsable, tipoActividad);
         accion.CambiarEstado();
         mAccion.ActualizarAccion(accion);
-        return actividad.getIdActividad();
+        if (actividad.getIdActividad() > 0){
+            return actividad;
+        }else{
+            return null;
+        }
     }    
     
     /**

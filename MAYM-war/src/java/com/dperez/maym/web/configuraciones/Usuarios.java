@@ -326,7 +326,7 @@ public class Usuarios implements Serializable {
             
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False
-            ContieneRegistros = !usrSeleccionado.getComprobaciones().isEmpty() || !usrSeleccionado.getActividades().isEmpty();
+            ContieneRegistros = !usrSeleccionado.getResponsable().getComprobaciones().isEmpty() || !usrSeleccionado.getResponsable().getActividades().isEmpty();
         }
     }
     

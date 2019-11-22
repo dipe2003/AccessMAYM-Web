@@ -27,6 +27,8 @@ import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.herramientas.EventoAccion;
+import com.dperez.maymweb.herramientas.EventoActividad;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -408,10 +410,9 @@ public class EditarAccionCorrectiva implements Serializable {
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
-                    AccionSeleccionada.getId(), IdActividad);
-            if (pEventos.ExisteEvento(eventoAccion)){
-                pEventos.RemoverEvento(eventoAccion);
+            Evento eventoActividad = new EventoActividad(actividad);
+            if (pEventos.ExisteEventoActividad(eventoActividad)){
+                pEventos.RemoverEventoActividad(eventoActividad);
             }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = ctx.getExternalContext().getRequestContextPath();
@@ -433,10 +434,9 @@ public class EditarAccionCorrectiva implements Serializable {
             ctx.renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACTIVIDAD, actividad.getResponsableImplementacion().getId(),
-                    AccionSeleccionada.getId(), IdActividad);
-            if (pEventos.ExisteEvento(eventoAccion)){
-                pEventos.RemoverEvento(eventoAccion);
+            Evento eventoActividad = new EventoActividad(actividad);
+            if (pEventos.ExisteEventoActividad(eventoActividad)){
+                pEventos.RemoverEventoActividad(eventoActividad);
             }
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = ctx.getExternalContext().getRequestContextPath();
@@ -466,17 +466,16 @@ public class EditarAccionCorrectiva implements Serializable {
                             || AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId() != this.ResponsableImplementacion){
                         fDatos.SetComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
                         // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
-                        Evento eventoAccion = new Evento(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada.getComprobacionImplementacion().getResponsable().getId(),
-                                IdAccionSeleccionada, 0);
-                        if (pEventos.ExisteEvento(eventoAccion)){
-                            pEventos.RemoverEvento(eventoAccion);
-                            Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACCION, ResponsableImplementacion, IdAccionSeleccionada, 0);
+                        Evento eventoAccion = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
+                        if (pEventos.ExisteEventoAccion(eventoAccion)){
+                            pEventos.RemoverEventoAccion(eventoAccion);
+                            Evento eventoNuevo = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
                             pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
                         }
                     }
                 }else{
                     fDatos.SetComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
-                    Evento eventoNuevo = new Evento(TipoEvento.IMPLEMENTACION_ACCION, ResponsableImplementacion, IdAccionSeleccionada, 0);
+                    Evento eventoNuevo = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
                     pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
                 }
                 if(AccionSeleccionada.getComprobacionEficacia()!= null){
@@ -485,17 +484,16 @@ public class EditarAccionCorrectiva implements Serializable {
                             || AccionSeleccionada.getComprobacionEficacia().getResponsable().getId() != this.ResponsableEficacia){
                         fDatos.SetVerificacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
                         // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
-                        Evento eventoAccion = new Evento(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada.getComprobacionEficacia().getResponsable().getId(),
-                                IdAccionSeleccionada, 0);
-                        if (pEventos.ExisteEvento(eventoAccion)){
-                            pEventos.RemoverEvento(eventoAccion);
-                            Evento eventoNuevo = new Evento(TipoEvento.VERIFICACION_EFICACIA, ResponsableEficacia, IdAccionSeleccionada, 0);
+                        Evento eventoAccion = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
+                        if (pEventos.ExisteEventoAccion(eventoAccion)){
+                            pEventos.RemoverEventoAccion(eventoAccion);
+                            Evento eventoNuevo = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
                             pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
                         }
                     }
                 }else{
                     fDatos.SetVerificacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
-                    Evento eventoNuevo = new Evento(TipoEvento.VERIFICACION_EFICACIA, ResponsableEficacia, IdAccionSeleccionada, 0);
+                    Evento eventoNuevo = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
                     pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
                 }
             }

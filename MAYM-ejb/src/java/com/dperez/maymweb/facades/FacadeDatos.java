@@ -5,12 +5,12 @@
 */
 package com.dperez.maymweb.facades;
 
+import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.acciones.TipoDesvio;
 import com.dperez.maymweb.accion.actividad.TipoActividad;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
-import com.dperez.maymweb.accion.comprobaciones.TipoComprobacion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import com.dperez.maymweb.fortaleza.Fortaleza;
@@ -78,11 +78,12 @@ public class FacadeDatos {
      * @param IdAccion
      * @param FechaEstimadaImplementacion
      * @param Descripcion
-     * @param IdUsuarioResponsable
-     * @return -1 si no se creo.
+     * @param IdResponsable
+     * @param TipoActividad
+     * @return null si no se creo.
      */
-    public int AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdUsuarioResponsable, TipoActividad TipoActividad){
-        return cReg.AgregarActividad(IdAccion, FechaEstimadaImplementacion, Descripcion, IdUsuarioResponsable, TipoActividad);
+    public Actividad AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad TipoActividad){
+        return cReg.AgregarActividad(IdAccion, FechaEstimadaImplementacion, Descripcion, IdResponsable, TipoActividad);
     }
     
     /**
