@@ -37,11 +37,13 @@ public class DatosFiltros implements Serializable {
      */
     public Date[] ExtraerFechas(List<Accion> acciones){
         Date[] fechas = new Date[2];
-        fechas[0]  = acciones.stream()
-                .sorted().max(Comparator.naturalOrder()).get().getFechaDeteccion();
-        fechas[1]  = acciones.stream()
-                .sorted()
-                .min(Comparator.naturalOrder()).get().getFechaDeteccion();
+        if (!acciones.isEmpty()){
+            fechas[0]  = acciones.stream()
+                    .sorted().max(Comparator.naturalOrder()).get().getFechaDeteccion();
+            fechas[1]  = acciones.stream()
+                    .sorted()
+                    .min(Comparator.naturalOrder()).get().getFechaDeteccion();
+        }
         return fechas;
     }
     
@@ -70,11 +72,13 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Area> ExtraerAreas(List<Accion> acciones){
         Map<String, Area> areas = new HashMap<>();
-        acciones.stream()
-                .filter((accion) -> !areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId())))
-                .forEach((accion)-> {
-                    areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
-                });
+        if(!acciones.isEmpty()){
+            acciones.stream()
+                    .filter((accion) -> !areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId())))
+                    .forEach((accion)-> {
+                        areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
+                    });
+        }
         return new TreeMap<>(areas);
     }
     
@@ -102,11 +106,13 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Deteccion> ExtraerDetecciones(List<Accion> acciones){
         Map<String, Deteccion> detecciones = new HashMap<>();
-        acciones.stream()
-                .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getDeteccion().getId()))))
-                .forEachOrdered((accion) -> {
-            detecciones.put(String.valueOf(accion.getDeteccion().getId()), accion.getDeteccion());
-        });
+        if(!acciones.isEmpty()){
+            acciones.stream()
+                    .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getDeteccion().getId()))))
+                    .forEachOrdered((accion) -> {
+                        detecciones.put(String.valueOf(accion.getDeteccion().getId()), accion.getDeteccion());
+                    });
+        }
         return new TreeMap<>(detecciones);
     }
     
@@ -134,11 +140,13 @@ public class DatosFiltros implements Serializable {
      */
     public Map<String, Codificacion> ExtraerCodificaciones(List<Accion> acciones){
         Map<String, Codificacion> codificaciones = new HashMap<>();
-        acciones.stream()
-                .filter((accion) -> (!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))))
-                .forEachOrdered((accion) -> {
-            codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
-        });
+        if(!acciones.isEmpty()){
+            acciones.stream()
+                    .filter((accion) -> (!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))))
+                    .forEachOrdered((accion) -> {
+                        codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
+                    });
+        }
         return new TreeMap<>(codificaciones);
     }
     
@@ -170,5 +178,5 @@ public class DatosFiltros implements Serializable {
                 .filter((accion) -> (estados.contains(accion.getEstadoAccion())))
                 .sorted()
                 .collect(Collectors.toList());
-    }    
+    }
 }
