@@ -51,7 +51,7 @@
                                             #{accion.areaSectorFortaleza.nombre}
                                         </td>
                                         <td>
-                                            #{accion.generadaPor.nombre}
+                                            #{accion.deteccion.nombre}
                                         </td>
                                         <td>
                                             #{accion.descripcion}
@@ -78,9 +78,9 @@
                         <c:if test="#{listarFortalezas.cantidadPaginas > 1}">
                             <div class="container-fluid text-center" style="padding: 1%">
                                 <ul class="pagination">
-                                    <c:forEach begin="1" end="#{areas.cantidadPaginas}" step="1" varStatus="numero" >
+                                    <c:forEach begin="1" end="#{listarFortalezas.cantidadPaginas}" step="1" varStatus="numero" >
                                         <c:choose>
-                                            <c:when test="#{areas.paginaActual == numero.count}" >
+                                            <c:when test="#{listarFortalezas.paginaActual == numero.count}" >
                                                 <li class="active"><a>#{numero.count}</a></li>
                                             </c:when>
                                             <c:otherwise>

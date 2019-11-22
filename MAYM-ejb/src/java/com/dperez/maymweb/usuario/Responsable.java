@@ -12,13 +12,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -35,7 +34,7 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     private int Id;
     private String NombreResponsable;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
     private Usuario UsuarioResponsable;
     

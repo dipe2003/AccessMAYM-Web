@@ -12,10 +12,13 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -41,7 +44,8 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     @OneToOne(orphanRemoval = true, mappedBy = "UsuarioCredencial", cascade = CascadeType.PERSIST)
     private Credencial CredencialUsuario;
         
-    @OneToOne(orphanRemoval = true, mappedBy = "UsuarioResponsable", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "UsuarioResponsable")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Responsable Responsable;
     
     // Constructores
