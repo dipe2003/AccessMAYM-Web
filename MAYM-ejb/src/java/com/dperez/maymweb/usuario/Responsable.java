@@ -35,7 +35,6 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     private String NombreResponsable;
     
     @ManyToOne
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Usuario UsuarioResponsable;
     
     @OneToMany(mappedBy = "Responsable")

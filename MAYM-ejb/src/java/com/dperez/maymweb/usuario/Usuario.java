@@ -9,6 +9,7 @@ import com.dperez.maymweb.area.Area;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -38,19 +39,19 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     
     @ManyToOne
     private Area AreaSectorUsuario;
-        
+    
     private EnumPermiso PermisoUsuario;
     
     @OneToOne(orphanRemoval = true, mappedBy = "UsuarioCredencial", cascade = CascadeType.PERSIST)
     private Credencial CredencialUsuario;
-        
+    
     @OneToMany(mappedBy = "UsuarioResponsable")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Responsable Responsable;
+    private List<Responsable> Responsables;
     
     // Constructores
     public Usuario(){
-                
+        
     }
     public Usuario(String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, boolean RecibeAlertas, EnumPermiso PermisoUsuario){
         this.Nombre = NombreUsuario;
@@ -74,7 +75,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     
     public Area getAreaSectorUsuario(){return this.AreaSectorUsuario;}
     
-    public Responsable getResponsable() {return Responsable;}    
+    public List<Responsable> getResponsables() {return Responsables;}
     
     // Setters
     public void setId(int Id) {this.Id = Id;}
@@ -103,17 +104,17 @@ public class Usuario implements Serializable, Comparable<Usuario> {
                 AreaSectorUsuario.getUsuariosEnAreaSector().add(this);
             }
         }
-    }    
+    }
     
-    public void setResponsable(Responsable UsuarioResponsable) {
-        this.Responsable = UsuarioResponsable;
-        if(UsuarioResponsable != null){
-            if(UsuarioResponsable.getUsuarioResponsable()!= this){
-                UsuarioResponsable.setUsuarioResponsable(this);
+    public void setResponsables(List<Responsable> Responsables) {
+        this.Responsables = Responsables;
+        if(Responsables != null){
+            for (Responsable responsable : this.Responsables) {
+                responsable.setUsuarioResponsable(this);
             }
         }
     }
-          
+    
     // Metodos
     /***
      * Devuelve el nombre completo del Usuario (Nombre+Apellido)
@@ -134,5 +135,18 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     @Override
     public int compareTo(Usuario OtroUsuario) {
         return this.Apellido.compareTo(OtroUsuario.Apellido);
+    }
+    
+    public boolean TieneResponsabilidadAsignada(){
+        boolean comprobacionAgisgnada = false;
+        for(Responsable responsable:Responsables){
+            comprobacionAgisgnada = responsable.getComprobaciones().stream().anyMatch(c->c.getResponsable().getUsuarioResponsable().getId()== this.Id);
+        }
+        
+        boolean implementacionAsignada = false;
+        for(Responsable responsable:Responsables){
+            implementacionAsignada = responsable.getActividades().stream().anyMatch(a->a.getResponsableImplementacion().getUsuarioResponsable().getId()==this.Id);
+        }
+        return comprobacionAgisgnada && implementacionAsignada == false;
     }
 }
