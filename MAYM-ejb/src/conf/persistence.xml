@@ -1,32 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="MAYM-Web-Datos" transaction-type="JTA">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+  <persistence-unit name="MAYM-ejbPU" transaction-type="JTA">
     <jta-data-source>java:/MaymAccess</jta-data-source>
-    <class>com.dperez.maymweb.area.Area</class>
-    <class>com.dperez.maymweb.codificacion.Codificacion</class>
-    <class>com.dperez.maymweb.fortaleza.Fortaleza</class>
-    <class>com.dperez.maymweb.producto.Producto</class>
-    <class>com.dperez.maymweb.usuario.Credencial</class>
-    <class>com.dperez.maymweb.usuario.Usuario</class>
-    <class>com.dperez.maymweb.accion.medida.medidas.ActividadMejora</class>
-    <class>com.dperez.maymweb.accion.medida.medidas.ActividadPreventiva</class>
-    <class>com.dperez.maymweb.accion.medida.medidas.MedidaCorrectiva</class>
-    <class>com.dperez.maymweb.accion.medida.medidas.MedidaPreventiva</class>
-    <class>com.dperez.maymweb.deteccion.Deteccion</class>
-    <class>com.dperez.maymweb.deteccion.TipoDeteccion</class>
-    <class>com.dperez.maymweb.empresa.Empresa</class>
-    <class>com.dperez.maymweb.acciones.acciones.Mejora</class>
-    <class>com.dperez.maymweb.acciones.acciones.Correctiva</class>
-    <class>com.dperez.maymweb.acciones.acciones.Preventiva</class>
-    <class>com.dperez.maymweb.acciones.adjunto.Adjunto</class>
-    <class>com.dperez.maymweb.acciones.Accion</class>
-    <class>com.dperez.maymweb.acciones.comprobaciones.Comprobacion</class>
-    <class>com.dperez.maymweb.acciones.actividad.Actividad</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
 </persistence>

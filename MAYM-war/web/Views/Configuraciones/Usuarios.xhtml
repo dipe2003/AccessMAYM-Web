@@ -57,98 +57,96 @@
                             
                             <tbody>
                                 <c:forEach items="#{usuarios.listaUsuarios}" var="usuario">
-                                    <c:if test="#{usuario.empresaUsuario.id == usuarios.empresaLogueada.id}">
-                                        <tr>
-                                            <td>
-                                                #{usuario.id}
-                                            </td>
-                                            <td>
-                                                #{usuario.apellido} #{usuario.nombre}
-                                            </td>
-                                            <td>
-                                                #{usuario.correo}
-                                            </td>
-                                            <td>
-                                                #{usuario.areaSectorUsuario.nombre}
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="#{usuario.recibeAlertas == true}">
-                                                        Si
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        No
-                                                    </c:otherwise>
-                                                </c:choose> 
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="#{usuario.permisoUsuario == 'ADMINISTRADOR'}">
-                                                        #{usuario.permisoUsuario.descripcion}
-                                                    </c:when>
-                                                    <c:when test="#{usuario.permisoUsuario == 'DATOS'}">
-                                                        #{usuario.permisoUsuario.descripcion}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        #{usuario.permisoUsuario.descripcion}
-                                                    </c:otherwise>
-                                                </c:choose> 
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="#{usuario.fechaBaja != null}">
-                                                        #{usuario.fechaBaja}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        ---
-                                                    </c:otherwise>
-                                                </c:choose> 
-                                            </td>
-                                            <td>                                            
+                                    <tr>
+                                        <td>
+                                            #{usuario.id}
+                                        </td>
+                                        <td>
+                                            #{usuario.apellido} #{usuario.nombre}
+                                        </td>
+                                        <td>
+                                            #{usuario.correo}
+                                        </td>
+                                        <td>
+                                            #{usuario.areaSectorUsuario.nombre}
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="#{usuario.recibeAlertas == true}">
+                                                    Si
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No
+                                                </c:otherwise>
+                                            </c:choose> 
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="#{usuario.permisoUsuario == 'ADMINISTRADOR'}">
+                                                    #{usuario.permisoUsuario.descripcion}
+                                                </c:when>
+                                                <c:when test="#{usuario.permisoUsuario == 'DATOS'}">
+                                                    #{usuario.permisoUsuario.descripcion}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    #{usuario.permisoUsuario.descripcion}
+                                                </c:otherwise>
+                                            </c:choose> 
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="#{usuario.fechaBaja != null}">
+                                                    #{usuario.fechaBaja}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ---
+                                                </c:otherwise>
+                                            </c:choose> 
+                                        </td>
+                                        <td>                                            
+                                            <div class="btn-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.id)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="panel_modal_editar" />
+                                                </h:commandLink>
+                                            </div>
+                                            <c:if test="#{usuario.fechaBaja == null}">
                                                 <div class="btn-group">
-                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.id)}">
-                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                        <f:ajax delay="100" render="panel_modal_editar" />
+                                                    <h:commandLink id="btn_baja_#{usuario.id}" class="btn btn-default" title="Dar de baja al Usuario (No se Elimina)" >
+                                                        <span class="glyphicon glyphicon-remove" ></span>
+                                                        <f:ajax event="click" listener="#{usuarios.darDeBajaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
                                                     </h:commandLink>
                                                 </div>
-                                                <c:if test="#{usuario.fechaBaja == null}">
-                                                    <div class="btn-group">
-                                                        <h:commandLink id="btn_baja_#{usuario.id}" class="btn btn-default" title="Dar de baja al Usuario (No se Elimina)" >
-                                                            <span class="glyphicon glyphicon-remove" ></span>
-                                                            <f:ajax event="click" listener="#{usuarios.darDeBajaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
-                                                        </h:commandLink>
-                                                    </div>
-                                                </c:if>
-                                                <c:if test="#{usuario.fechaBaja != null}">
-                                                    <div class="btn-group">
-                                                        <h:commandLink id="btn_alta_#{usuario.id}" class="btn btn-default" title="Dar de alta al Usuario." >
-                                                            <span class="glyphicon glyphicon-ok"  ></span>
-                                                            <f:ajax event="click" listener="#{usuarios.darDeAltaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
-                                                        </h:commandLink>
-                                                    </div>
-                                                </c:if>
+                                            </c:if>
+                                            <c:if test="#{usuario.fechaBaja != null}">
                                                 <div class="btn-group">
-                                                    <c:if test="#{usuario.comprobaciones.size() == 0 and usuario.medidasResponsableImplementacion.size() == 0 and sesionUsuario.usuarioLogueado.id != usuario.id}">
-                                                        <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
-                                                            <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
-                                                        </h:commandLink>   
-                                                    </c:if>
-                                                </div>                                                
-                                            </td>
-                                            <h:panelGroup id="panel_mensajes_tabla">
-                                                <div class="form-group-sm">
-                                                    <h:message for="btn_eliminar_#{usuario.id}" class="msj_error"/>
+                                                    <h:commandLink id="btn_alta_#{usuario.id}" class="btn btn-default" title="Dar de alta al Usuario." >
+                                                        <span class="glyphicon glyphicon-ok"  ></span>
+                                                        <f:ajax event="click" listener="#{usuarios.darDeAltaUsuario(usuario.id)}" render="panel_mensajes_tabla" />
+                                                    </h:commandLink>
                                                 </div>
-                                                <div class="form-group-sm">
-                                                    <h:message for="btn_baja_#{usuario.id}" class="msj_error"/>
-                                                </div>
-                                                <div class="form-group-sm">
-                                                    <h:message for="btn_alta_#{usuario.id}" class="msj_error"/>
-                                                </div>
-                                            </h:panelGroup>
-                                        </tr>  
-                                    </c:if>
+                                            </c:if>
+                                            <div class="btn-group">
+                                                <c:if test="#{usuario.tieneResponsabilidadAsignada == true and sesionUsuario.usuarioLogueado.id != usuario.id}">
+                                                    <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
+                                                        <span class="glyphicon glyphicon-trash"> </span>
+                                                        <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
+                                                    </h:commandLink>   
+                                                </c:if>
+                                            </div>                                                
+                                        </td>
+                                        <h:panelGroup id="panel_mensajes_tabla">
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_eliminar_#{usuario.id}" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_baja_#{usuario.id}" class="msj_error"/>
+                                            </div>
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_alta_#{usuario.id}" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
                         </table>                         

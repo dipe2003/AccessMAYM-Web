@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorResponsables {
-    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    @PersistenceContext(unitName = "MAYM-ejbPU")
     private EntityManager em;
     
     public ManejadorResponsables(){}

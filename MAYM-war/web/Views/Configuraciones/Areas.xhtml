@@ -45,7 +45,6 @@
                                 <tr>
                                     <th>Nombre Area / Sector</th>
                                     <th>Correo</th>
-                                    <th>Aplica a #{areas.empresaLogueada.descripcionEmpresa}</th>
                                     <th></th>
                                 </tr>
                                 
@@ -60,14 +59,6 @@
                                         <td>
                                             #{area.correo}
                                         </td>
-                                        <td>
-                                            <c:if test="#{area.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
-                                                Aplica
-                                            </c:if>
-                                            <c:if test="#{area.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
-                                                No Aplica
-                                            </c:if>
-                                        </td>
                                         <td>                                            
                                             <div class="btn-group">
                                                 <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{areas.cargarDatos(area.id)}">
@@ -78,22 +69,11 @@
                                             <div class="btn-group"> 
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                                     <c:if test="#{area.accionesEnAreaSector.size() == 0 and area.fortalezasEnAreaSector.size() ==0 and area.usuariosEnAreaSector.size() == 0}">
-                                                        <c:choose>
-                                                            <c:when test="#{area.empresasArea.size() == 0}">
-                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
-                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
-                                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
-                                                                </h:commandLink>
-                                                            </c:when>
-                                                            <c:when test="#{area.contieneEmpresa(areas.empresaLogueada.id) and area.empresasArea.size() == 1}">
-                                                                <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
-                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
-                                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
-                                                                </h:commandLink>
-                                                            </c:when>
-                                                        </c:choose>     
+                                                        <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
+                                                                       onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
+                                                        </h:commandLink>   
                                                     </c:if>
                                                 </c:if>
                                             </div>                                                

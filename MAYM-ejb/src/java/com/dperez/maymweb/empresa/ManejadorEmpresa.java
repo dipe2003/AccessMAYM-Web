@@ -24,7 +24,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorEmpresa  {
-    @PersistenceContext(unitName = "MAYM-Web-Datos")
+    @PersistenceContext(unitName = "MAYM-ejbPU")
     private EntityManager em;
     
     public int CrearEmpresa(Empresa empresa){

@@ -31,8 +31,6 @@ public class Areas implements Serializable {
     @Inject
     private FacadeLectura fLectura;
     
-    private Empresa EmpresaLogueada;
-    
     private Area AreaSeleccionada;
     
     private String NombreArea;
@@ -55,8 +53,7 @@ public class Areas implements Serializable {
     public String getNombreArea() {return NombreArea;}
     public String getCorreoArea() {return CorreoArea;}
     public List<Area> getListaAreas() {return ListaAreas;}
-    
-    public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
+
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
     
@@ -70,7 +67,6 @@ public class Areas implements Serializable {
     public void setCorreoArea(String CorreoArea) {this.CorreoArea = CorreoArea;}
     public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
     
-    public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
     public void setAplicaEmpresa(boolean AplicaEmpresa) {this.AplicaEmpresa = AplicaEmpresa;}
     public void setContieneAcciones(boolean ContieneAcciones) {this.ContieneAcciones = ContieneAcciones;}
     
@@ -83,7 +79,6 @@ public class Areas implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         PaginaActual = 1;
         try{
             PaginaActual = Integer.parseInt(request.getParameter("pagina"));

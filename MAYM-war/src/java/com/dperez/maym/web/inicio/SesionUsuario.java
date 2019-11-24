@@ -42,8 +42,7 @@ public class SesionUsuario implements Serializable {
     
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
-    
-    private Empresa EmpresaSeleccionada;
+
     private String NombreUsuario;
     private Map<Integer, Usuario> Usuarios;
     
@@ -64,14 +63,12 @@ public class SesionUsuario implements Serializable {
     //  Getters
     public String getUsuarioSeleccionado() {return UsuarioSeleccionado;}
     public void setPasswordUsuario(String PasswordUsuario) {this.PasswordUsuario = PasswordUsuario;}
-    public Empresa getEmpresaSeleccionada(){return this.EmpresaSeleccionada;}
     public String getNombreUsuario(){return this.NombreUsuario;}
     
     //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {this.UsuarioSeleccionado = UsuarioSeleccionado;}
     public String getPasswordUsuario() {return PasswordUsuario;}
     public void setNombreUsuario(String NombreUsuario){this.NombreUsuario = NombreUsuario;}
-    public void setEmpresaSeleccionada(Empresa EmpresaSeleccionada){this.EmpresaSeleccionada = EmpresaSeleccionada;}
     
     //  Metodos
     @PostConstruct
@@ -90,10 +87,8 @@ public class SesionUsuario implements Serializable {
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
             Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
             request.getSession().setAttribute("Usuario", usuario);
-            
-            request.getSession().setAttribute("Empresa", EmpresaSeleccionada);
+
             this.UsuarioLogueado = usuario;
-            this.EmpresaLogueado = EmpresaSeleccionada;
             
             this.PasswordUsuario = new String();
             context.getExternalContext().redirect(url);
