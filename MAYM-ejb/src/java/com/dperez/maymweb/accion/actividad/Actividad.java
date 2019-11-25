@@ -7,7 +7,6 @@ package com.dperez.maymweb.accion.actividad;
 
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.usuario.Responsable;
-import com.dperez.maymweb.usuario.Usuario;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,7 +34,7 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     private String Descripcion  = new String();
     private TipoActividad TipoActividad;
     
-    @OneToOne
+    @ManyToOne
     private Accion AccionActividad;
     
     @ManyToOne

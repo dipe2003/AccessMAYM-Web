@@ -55,7 +55,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     @LazyCollection(LazyCollectionOption.FALSE)
     protected List<Adjunto> Adjuntos;
     
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "AccionActividad", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Actividad> Actividades;
     

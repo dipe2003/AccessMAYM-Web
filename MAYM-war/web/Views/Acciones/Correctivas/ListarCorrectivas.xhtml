@@ -189,8 +189,7 @@
                                         <th style="width: 5%">Codificacion</th>
                                         <th style="width: 5%">Estado</th>
                                         <th style="width: 13%"></th>
-                                    </tr>
-                                    
+                                    </tr>                                    
                                 </thead>
                                 
                                 <tbody style="font-size: 11px">
@@ -203,7 +202,7 @@
                                                 #{accion.areaSectorAccion.nombre}
                                             </td>
                                             <td>
-                                                #{accion.generadaPor.nombre}
+                                                #{accion.deteccion.nombre}
                                             </td>
                                             <td>
                                                 #{accion.descripcion}
@@ -213,11 +212,13 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="#{not empty accion.medidasCorrectivas}">
-                                                        <c:forEach items="#{accion.medidasCorrectivas}" var="correctiva">
-                                                            <div class="form-group-sm">
-                                                                #{correctiva.descripcion}
-                                                            </div>
+                                                    <c:when test="#{not empty accion.actividades}">
+                                                        <c:forEach items="#{accion.actividades}" var="correctiva">
+                                                            <c:if test="#{correctiva.tipoActividad == 'CORRECTIVA'}">
+                                                                <div class="form-group-sm">
+                                                                    #{correctiva.descripcion}
+                                                                </div>
+                                                            </c:if>                                                            
                                                         </c:forEach>
                                                     </c:when>
                                                     <c:otherwise>
@@ -227,11 +228,13 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="#{not empty accion.medidasPreventivas}">
-                                                        <c:forEach items="#{accion.medidasPreventivas}" var="preventiva">
-                                                            <div class="form-group-sm">
-                                                                #{preventiva.descripcion}
-                                                            </div>
+                                                   <c:when test="#{not empty accion.actividades}">
+                                                        <c:forEach items="#{accion.actividades}" var="preventiva">
+                                                            <c:if test="#{preventiva.tipoActividad == 'PREVENTIVA'}">
+                                                                <div class="form-group-sm">
+                                                                    #{preventiva.descripcion}
+                                                                </div>
+                                                            </c:if>                                                            
                                                         </c:forEach>
                                                     </c:when>
                                                     <c:otherwise>

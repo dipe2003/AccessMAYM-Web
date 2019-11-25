@@ -460,7 +460,7 @@ public class EditarAccionMejora implements Serializable {
             pEventos.RemoverEventos(IdAccionSeleccionada);
             // Si la eliminacion se realizo correctamente redirige a lista de acciones.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/ListarMejoras.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?tipo=MEJORA");
         }
     }
 }

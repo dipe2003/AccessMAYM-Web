@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -170,12 +171,18 @@ public class ControladorVistaRegistros {
         return mUsuario.ListarUsuarios();
     }
     
+    /*
+        TODO descomentar luego de implementar Manejador
+    */
+    
     /**
      * Lista todas las empresas registradas.
      * @return
      */
+    
     public List<Empresa> ListarEmpresasRegistradas(){
-        return mEmpresa.ListarEmpresasRegistradas();
+        //return mEmpresa.ListarEmpresasRegistradas();
+        throw new NotImplementedException();
     }
     
     /**
@@ -184,9 +191,10 @@ public class ControladorVistaRegistros {
      * @return Retorne Null si no se encontro empresa.
      */
     public Empresa GetEmpresa(int IdEmpresa){
-        return mEmpresa.GetEmpresa(IdEmpresa);
+       // return mEmpresa.GetEmpresa(IdEmpresa);
+       throw new NotImplementedException();
     }
-    
+  
     /**
      * Devuelve la fortaleza indicada por su id
      * @param IdFortaleza

@@ -7,12 +7,6 @@ package com.dperez.maymweb.empresa;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 /**
@@ -20,13 +14,11 @@ import javax.persistence.TypedQuery;
  * @author Diego
  */
 
-@Named
-@Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ManejadorEmpresa  {
-    @PersistenceContext(unitName = "MAYM-ejbPU")
-    private EntityManager em;
-    
+    /*
+        TODO cambiar por acceso a archivo con datos de la empresa
+    */
+    /*
     public int CrearEmpresa(Empresa empresa){
         try{
             em.persist(empresa);
@@ -72,4 +64,5 @@ public class ManejadorEmpresa  {
         }
         return empresas;
     }
+*/
 }
