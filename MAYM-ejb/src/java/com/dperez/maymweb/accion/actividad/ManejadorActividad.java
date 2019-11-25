@@ -12,7 +12,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 

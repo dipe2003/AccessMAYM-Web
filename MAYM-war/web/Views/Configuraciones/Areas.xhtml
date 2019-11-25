@@ -160,20 +160,6 @@
                                     <h:inputText id="correo_area" class="form-control" value="#{areas.correoArea}"
                                                  required="true" requiredMessage="Se debe ingresar correo electronico del area o sector." p:placeholder="Correo electronico." />
                                 </div>
-                                <div class="form-group">
-                                    <strong><label for="aplica_empresa">Aplica a Empresa</label></strong>
-                                    <c:if test="#{areas.contieneAcciones == true}">
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No se puede modificar porque ya existen acciones generadas en esta area.
-                                        </div>
-                                    </c:if>
-                                    <c:if test="#{areas.contieneAcciones == false}">
-                                        <h:selectOneRadio value="#{areas.aplicaEmpresa}" >
-                                            <f:selectItem itemLabel="Aplica" itemValue="true"/>
-                                            <f:selectItem itemLabel="No Aplica" itemValue="false" />                                            
-                                        </h:selectOneRadio>
-                                    </c:if>
-                                </div>
                                 <h:panelGroup id="panel_mensajes_modal_editar">
                                     <div class="form-group-sm">
                                         <h:message for="nombre_area" class="msj_error"/>

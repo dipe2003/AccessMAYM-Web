@@ -32,9 +32,7 @@ public class Codificaciones implements Serializable {
     private FacadeAdministrador fAdmin;
     @Inject
     private FacadeLectura fLectura;
-    
-    private Empresa EmpresaLogueada;
-    
+
     private Codificacion CodificacionSeleccionada;
     
     private String NombreCodificacion;
@@ -54,10 +52,8 @@ public class Codificaciones implements Serializable {
     
     public String getNombreCodificacion() {return NombreCodificacion;}
     public String getDescripcionCodificacion() {return DescripcionCodificacion;}
-    public boolean isAplicaEmpresa() {return AplicaEmpresa;}
     public List<Codificacion> getListaCodificaciones() {return ListaCodificaciones;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
-    public Empresa getEmpresaLogueada(){return this.EmpresaLogueada;}
     
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
@@ -67,7 +63,6 @@ public class Codificaciones implements Serializable {
     
     public void setNombreCodificacion(String NombreCodificacion) {this.NombreCodificacion = NombreCodificacion;}
     public void setDescripcionCodificacion(String DescripcionCodificacion) {this.DescripcionCodificacion = DescripcionCodificacion;}
-    public void setAplicaEmpresa(boolean AplicaEmpresa) {this.AplicaEmpresa = AplicaEmpresa;}
     public void setListaCodificaciones(List<Codificacion> ListaCodificaciones) {this.ListaCodificaciones = ListaCodificaciones;}
     public void setContieneAcciones(boolean ContieneAcciones) {this.ContieneAcciones = ContieneAcciones;}
     
@@ -80,7 +75,6 @@ public class Codificaciones implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         
         PaginaActual = 1;
         try{

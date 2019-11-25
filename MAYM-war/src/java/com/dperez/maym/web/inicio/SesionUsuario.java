@@ -120,7 +120,7 @@ public class SesionUsuario implements Serializable {
             id = Integer.valueOf(UsuarioSeleccionado);
             if(id!=0 && facadeMain.ExisteUsuario(id)){
                 Usuario usuario = Usuarios.get(id);
-                NombreUsuario = usuario.GetNombreCompleto();
+                NombreUsuario = usuario.getNombreCompleto();
             }
         }catch(NumberFormatException ex){
             System.out.println("Error: " +ex.getLocalizedMessage());

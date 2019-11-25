@@ -7,7 +7,6 @@ package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;

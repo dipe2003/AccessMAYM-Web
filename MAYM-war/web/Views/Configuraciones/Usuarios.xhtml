@@ -127,12 +127,13 @@
                                                 </div>
                                             </c:if>
                                             <div class="btn-group">
-                                                <c:if test="#{usuario.tieneResponsabilidadAsignada == true and sesionUsuario.usuarioLogueado.id != usuario.id}">
+                                                <!-- TODO revisar metodo tiene responsabilidades -->
+                                                <!--<c:if test="#{usuario.tieneResponsabilidadAsignada() == true and sesionUsuario.usuarioLogueado.id != usuario.id}">-->
                                                     <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
                                                         <span class="glyphicon glyphicon-trash"> </span>
                                                         <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
                                                     </h:commandLink>   
-                                                </c:if>
+                                                <!--</c:if>-->
                                             </div>                                                
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">

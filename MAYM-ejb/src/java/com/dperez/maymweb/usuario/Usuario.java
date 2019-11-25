@@ -120,7 +120,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
      * Devuelve el nombre completo del Usuario (Nombre+Apellido)
      * @return
      */
-    public String GetNombreCompleto(){
+    public String getNombreCompleto(){
         return this.Nombre + " " + this.Apellido;
     }
     
@@ -128,7 +128,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
      * Comprueba si el usuario esta vigente.
      * @return True: el usuario esta vigente, de lo contrario retorna False.
      */
-    public boolean IsVigente(){
+    public boolean isVigente(){
         return this.FechaBaja == null;
     }
     
@@ -137,7 +137,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
         return this.Apellido.compareTo(OtroUsuario.Apellido);
     }
     
-    public boolean TieneResponsabilidadAsignada(){
+    public boolean tieneResponsabilidadAsignada(){
         boolean comprobacionAgisgnada = false;
         for(Responsable responsable:Responsables){
             comprobacionAgisgnada = responsable.getComprobaciones().stream().anyMatch(c->c.getResponsable().getUsuarioResponsable().getId()== this.Id);

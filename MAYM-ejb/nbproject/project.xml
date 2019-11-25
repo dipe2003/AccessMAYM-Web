@@ -5,7 +5,6 @@
         <data xmlns="http://www.netbeans.org/ns/j2ee-ejbjarproject/3">
             <name>MAYM-ejb</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
-            <included-library dirs="200">libs.javaee-endorsed-api-7.0.classpath</included-library>
             <included-library dirs="200">file.reference.FastInfoset-1.2.15.jar</included-library>
             <included-library dirs="200">file.reference.antlr-2.7.7.jar</included-library>
             <included-library dirs="200">file.reference.byte-buddy-1.10.2.jar</included-library>

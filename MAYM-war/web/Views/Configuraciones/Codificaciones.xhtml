@@ -45,7 +45,6 @@
                                 <tr>
                                     <th>Nombre Codificacion</th>
                                     <th>Descripcion</th>
-                                    <th>Aplica a #{codificaciones.empresaLogueada.descripcionEmpresa}</th>
                                     <th></th>
                                 </tr>
                                 
@@ -60,14 +59,6 @@
                                         <td>
                                             #{codificacion.descripcion}
                                         </td>
-                                        <td>
-                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== true}">
-                                                Aplica
-                                            </c:if>
-                                            <c:if test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id)== false}">
-                                                No Aplica
-                                            </c:if>
-                                        </td>
                                         <td>                                            
                                             <div class="btn-group">
                                                 <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.id)}">
@@ -78,22 +69,11 @@
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                                     <c:if test="#{codificacion.accionesConCodificacion.size() == 0}">
-                                                        <c:choose>
-                                                            <c:when test="#{codificacion.empresasCodificacion.size() == 0}">
-                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
-                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
-                                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
-                                                                </h:commandLink>
-                                                            </c:when>
-                                                            <c:when test="#{codificacion.contieneEmpresa(codificaciones.empresaLogueada.id) and codificacion.empresasCodificacion.size() == 1}">
-                                                                <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
-                                                                               onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
-                                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                                    <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
-                                                                </h:commandLink>
-                                                            </c:when>
-                                                        </c:choose>     
+                                                        <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                                       onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
+                                                        </h:commandLink>   
                                                     </c:if>
                                                 </c:if>
                                             </div>                                                
@@ -196,20 +176,6 @@
                                     <strong><label for="descripcion_codificacion">Descripcion</label></strong>
                                     <h:inputText id="descripcion_codificacion" class="form-control" value="#{codificaciones.descripcionCodificacion}"
                                                  required="true" requiredMessage="Se debe ingresar descripcion de codificacion" p:placeholder="Descripcion de Codificacion." />
-                                </div>
-                                <div class="form-group">
-                                    <strong><label for="aplica_empresa">Aplica a Empresa</label></strong>
-                                    <c:if test="#{codificaciones.contieneAcciones == true}">
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No se puede modificar porque ya existen acciones codificadas.
-                                        </div>
-                                    </c:if>
-                                    <c:if test="#{codificaciones.contieneAcciones == false}">
-                                        <h:selectOneRadio value="#{codificaciones.aplicaEmpresa}" >
-                                            <f:selectItem itemLabel="Aplica" itemValue="true"/>
-                                            <f:selectItem itemLabel="No Aplica" itemValue="false" />                                            
-                                        </h:selectOneRadio>
-                                    </c:if>
                                 </div>
                                 <h:panelGroup id="panel_mensajes_modal_editar">
                                     <div class="form-group-sm">
