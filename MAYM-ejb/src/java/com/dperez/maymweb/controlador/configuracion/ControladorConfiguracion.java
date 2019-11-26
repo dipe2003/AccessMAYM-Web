@@ -13,7 +13,6 @@ import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.usuario.ControladorSeguridad;
 import com.dperez.maymweb.usuario.Credencial;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
@@ -46,8 +45,6 @@ public class ControladorConfiguracion {
     private ManejadorUsuario mUsuario;
     @Inject
     private ControladorSeguridad cSeg;
-    @Inject
-    private ManejadorEmpresa mEmpresa;
 
     public ControladorConfiguracion() {
     }
@@ -56,8 +53,8 @@ public class ControladorConfiguracion {
     USUARIO
      */
     /**
-     * Crea un nuevo usuario y lo persiste en la base de datos. El usuario
-     * creado no recibe alertas.
+     * Crea un nuevo usuario y lo persiste en la base de datos.El usuario
+ creado no recibe alertas.
      *
      * @param IdUsuario
      * @param NombreUsuario
@@ -65,7 +62,6 @@ public class ControladorConfiguracion {
      * @param CorreoUsuario
      * @param Password
      * @param PermisoUsuario
-     * @param IdEmpresa
      * @param IdArea
      * @return null si no se creo.
      */

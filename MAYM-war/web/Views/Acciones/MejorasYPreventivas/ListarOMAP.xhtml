@@ -127,21 +127,21 @@
                                                             <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu" role="menu">
-                                                            <li><h:link value="Ver Accion" outcome="../Mejoras/VerAccionMejora.xhtml?id=#{accion.id}" />
+                                                            <li><h:link value="Ver Accion" outcome="VerOMAP.xhtml?id=#{accion.id}&amp;tipo=#{listarOMAP.tipoAccion}" />
                                                             </li>                                                    
-                                                            <li><h:link value="Editar Datos" outcome="../Mejoras/EditarAccionMejora.xhtml?id=#{accion.id}" />
+                                                            <li><h:link value="Editar Datos" outcome="EditarOMAP.xhtml?id=#{accion.id}&amp;tipo=#{listarOMAP.tipoAccion}" />
                                                             </li>
                                                             <c:if test="#{accion.estadoAccion != 'CERRADA'}">
-                                                                <li><h:link  value="Agregar Actividades" outcome="../Mejoras/ActividadesMejora.xhtml?id=#{accion.id}&amp;editar=0" />
+                                                                <li><h:link  value="Agregar Actividades" outcome="ActividadesOMAP.xhtml?id=#{accion.id}&amp;editar=0&amp;tipo=#{listarOMAP.tipoAccion}"  />
                                                                 </li> 
-                                                                <li><h:link value="Realizar Seguimiento" outcome="../Mejoras/SeguimientoMejora.xhtml?id=#{accion.id}" />
+                                                                <li><h:link value="Realizar Seguimiento" outcome="SeguimientoOMAP.xhtml?id=#{accion.id}&amp;tipo=#{listarOMAP.tipoAccion}" />
                                                                 </li>
                                                             </c:if>
                                                         </ul>
                                                     </div>
                                                 </c:when>
                                                 <c:otherwise>                                                    
-                                                    <h:link class="btn btn-primary" title="Ver Mejora" outcome="../Mejoras/VerAccionMejora.xhtml?id=#{accion.id}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
+                                                    <h:link class="btn btn-primary" title="Ver #{listarOMAP.tipoAccion.descripcion}" outcome="VerAccionOMAP.xhtml?id=#{accion.id}&amp;tipo=#{listarOMAP.tipoAccion}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

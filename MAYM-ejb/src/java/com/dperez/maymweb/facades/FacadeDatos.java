@@ -41,11 +41,10 @@ public class FacadeDatos {
      * @param Cliente
      * @param IdAreaSector
      * @param IdDeteccion
-     * @param IdEmpresa
      * @return Null: si no se creo.
      */
     public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String Cliente,
-            int IdAreaSector, int IdDeteccion, int IdEmpresa){
+            int IdAreaSector, int IdDeteccion){
         return cReg.NuevaAccion(TipoAccion, FechaDeteccion, Descripcion, Cliente, IdAreaSector, IdDeteccion);
     }
     

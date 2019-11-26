@@ -15,7 +15,6 @@ import com.dperez.maymweb.codificacion.ManejadorCodificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.deteccion.ManejadorDeteccion;
 import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.empresa.ManejadorEmpresa;
 import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
@@ -29,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+
 /**
  *
  * @author Diego
@@ -40,8 +40,6 @@ public class ControladorVistaRegistros {
     private ManejadorAccion mAccion;
     @Inject
     private ManejadorUsuario mUsuario;
-    @Inject
-    private ManejadorEmpresa mEmpresa;
     @Inject
     private ManejadorDeteccion mDeteccion;
     @Inject

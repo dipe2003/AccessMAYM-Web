@@ -11,9 +11,9 @@
     <ui:define name="page_content">
         <div class="container-fluid" style="padding: 1%">
             <div class="panel panel-info">
-                <div class="panel-heading">Crear Accion de Mejora</div>
+                <div class="panel-heading">Crear #{crearOMAP.tipoAccion.descripcion}</div>
                 <div class="panel-body">
-                    Aqui puedes crear una accion de Mejora. Todos los campos son obligatorios.
+                    Aqui puedes crear una #{crearOMAP.tipoAccion.descripcion}. Todos los campos son obligatorios.
                 </div>                  
             </div>          
         </div>
@@ -29,16 +29,16 @@
                                 <div class="form-group">
                                     <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
                                     <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion de la mejora." 
-                                                 value="#{crearAccionMejora.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
+                                                 value="#{crearOMAP.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <strong><label for="area">Area / Sector:</label></strong>
-                                    <h:selectOneMenu id="area" class="form-control" value="#{crearAccionMejora.areaSectorAccionSeleccionada}"
+                                    <h:selectOneMenu id="area" class="form-control" value="#{crearOMAP.areaSectorAccionSeleccionada}"
                                                      required="true" requiredMessage="No se selecciono area">
                                         <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
-                                        <c:forEach items="#{crearAccionMejora.listaAreasSectores}" var="area">
+                                        <c:forEach items="#{crearOMAP.listaAreasSectores}" var="area">
                                             <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
                                         </c:forEach>
                                     </h:selectOneMenu>
@@ -51,14 +51,14 @@
                                 <div class="form-group">
                                     <h:panelGroup id="panel_tipodeteccion">
                                         <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                        <h:selectOneRadio id="tipo_deteccion" value="#{crearAccionMejora.tipoDeDeteccionSeleccionada}" >
-                                            <c:forEach items="#{crearAccionMejora.tiposDeteccion}" var="tipo">
+                                        <h:selectOneRadio id="tipo_deteccion" value="#{crearOMAP.tipoDeDeteccionSeleccionada}" >
+                                            <c:forEach items="#{crearOMAP.tiposDeteccion}" var="tipo">
                                                 <div class="radio" >
                                                     <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
-                                            <f:ajax render="deteccion" listener="#{crearAccionMejora.actualizarDeteccion()}" onevent="indicador"/>
+                                            <f:ajax render="deteccion" listener="#{crearOMAP.actualizarDeteccion()}" onevent="indicador"/>
                                         </h:selectOneRadio>
                                     </h:panelGroup>
                                 </div> 
@@ -66,10 +66,10 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <strong><label for="deteccion">Generada Por:</label></strong>                                    
-                                    <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccionMejora.deteccionSeleccionada}" 
+                                    <h:selectOneMenu id="deteccion" class="form-control" value="#{crearOMAP.deteccionSeleccionada}" 
                                                      required="true" requiredMessage="No se selecciono Deteccion.">
                                         <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
-                                        <c:forEach items="#{crearAccionMejora.listaDetecciones}" var="deteccion">
+                                        <c:forEach items="#{crearOMAP.listaDetecciones}" var="deteccion">
                                             <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
                                         </c:forEach>
                                         <f:ajax execute="@this"/>
@@ -84,7 +84,7 @@
                         
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccionMejora.descripcion}" 
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearOMAP.descripcion}" 
                                              required="true" requiredMessage="No se ingreso descripcion."/>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h:commandButton id="crear_accion" class="btn btn-success" style="width: 99%" value="Guardar" >
-                            <f:ajax execute="deteccion descripcion fecha_deteccion area" event="click" listener="#{crearAccionMejora.crearAccion()}" onevent="indicador" render="panel_mensajes"/>
+                            <f:ajax execute="deteccion descripcion fecha_deteccion area" event="click" listener="#{crearOMAP.crearAccion()}" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
                     <div class="col-sm-6">

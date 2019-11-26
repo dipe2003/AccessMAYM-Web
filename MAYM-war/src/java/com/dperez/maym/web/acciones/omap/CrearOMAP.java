@@ -3,14 +3,13 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.acciones.mejoras;
+package com.dperez.maym.web.acciones.omap;
 
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -38,7 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
-public class CrearAccionMejora implements Serializable {
+public class CrearOMAP implements Serializable {
     @Inject
     private FacadeAdministrador fAdmin;
     @Inject
@@ -46,13 +45,12 @@ public class CrearAccionMejora implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     
-    private Empresa EmpresaLogueada;
-    
     private ModalDetecciones modalDetecciones;
     
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
+    private TipoAccion TipoAccion;
     
     private EnumTipoDeteccion[] TiposDeteccion;
     private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
@@ -73,6 +71,7 @@ public class CrearAccionMejora implements Serializable {
         }
     }
     public String getDescripcion() {return Descripcion;}
+    public TipoAccion getTipoAccion() {return TipoAccion;}    
     
     public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
@@ -94,6 +93,7 @@ public class CrearAccionMejora implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+    public void setTipoAccion(TipoAccion TipoAccion) {this.TipoAccion = TipoAccion;}
     
     public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
@@ -114,7 +114,7 @@ public class CrearAccionMejora implements Serializable {
         // Empresa
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
+        TipoAccion = TipoAccion.valueOf(request.getParameter("tipo"));
         
         //  Detecciones
         modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
@@ -145,15 +145,12 @@ public class CrearAccionMejora implements Serializable {
      * @throws java.io.IOException
      */
     public void crearAccion() throws IOException{
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
-        Accion accion = fDatos.NuevaAccion(TipoAccion.MEJORA, FechaDeteccion,
-                Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
+        Accion accion = fDatos.NuevaAccion(TipoAccion, FechaDeteccion,
+                Descripcion, null, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
         
         if(accion != null){
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?tipo=MEJORA");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?tipo="+TipoAccion);
         }else{
             FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion" ));
             FacesContext.getCurrentInstance().renderResponse();

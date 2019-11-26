@@ -42,7 +42,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Preventivas/CrearAccionPreventiva.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
                                 </c:if>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=PREVENTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
                             </ul>
@@ -51,7 +51,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Mejoras/CrearAccionMejora.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
                                 </c:if>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=MEJORA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
                             </ul>

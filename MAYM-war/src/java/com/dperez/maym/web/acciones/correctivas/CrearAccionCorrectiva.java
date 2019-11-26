@@ -52,8 +52,6 @@ public class CrearAccionCorrectiva implements Serializable {
     
     private ProductoInvolucrado productoInvolucrado;
     
-    private Empresa EmpresaLogueada;
-    
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
@@ -131,10 +129,7 @@ public class CrearAccionCorrectiva implements Serializable {
     public void init(){
         // Empresa
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
-        
-        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
         
         //  Detecciones
         modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
@@ -169,7 +164,7 @@ public class CrearAccionCorrectiva implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
         Accion accion = fDatos.NuevaAccion(TipoAccion.CORRECTIVA, FechaDeteccion,
-                Descripcion, Cliente, AreaSectorAccionSeleccionada, DeteccionSeleccionada, empresa.getId());
+                Descripcion, Cliente, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
         
         if(accion != null){
             if(productoInvolucrado.getListaProductosAfectados()!=null){

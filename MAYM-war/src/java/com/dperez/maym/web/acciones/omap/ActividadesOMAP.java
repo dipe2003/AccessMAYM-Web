@@ -3,13 +3,14 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package com.dperez.maym.web.acciones.mejoras;
+package com.dperez.maym.web.acciones.omap;
 
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.MEJORA;
-import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.acciones.Preventiva;
+import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.Evento;
@@ -41,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named
 @ViewScoped
-public class ActividadesAM implements Serializable {
+public class ActividadesOMAP implements Serializable {
     @Inject
     private FacadeDatos fDatos;
     @Inject
@@ -58,6 +59,7 @@ public class ActividadesAM implements Serializable {
     private String StrFechaEstimada;
     private String DescripcionActividad;
     private int ResponsableActividad;
+    private TipoAccion TipoAccion;
     
     //  Getters
     public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
@@ -72,6 +74,7 @@ public class ActividadesAM implements Serializable {
     }
     public String getDescripcionActividad() {return DescripcionActividad;}
     public int getResponsableActividad() {return ResponsableActividad;}
+    public TipoAccion getTipoAccion() {return TipoAccion;}
     
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     
@@ -91,6 +94,7 @@ public class ActividadesAM implements Serializable {
     }
     public void setDescripcionActividad(String DescripcionActividad) {this.DescripcionActividad = DescripcionActividad;}
     public void setResponsableActividad(int ResponsableActividad) {this.ResponsableActividad = ResponsableActividad;}
+    public void setTipoAccion(TipoAccion TipoAccion) {this.TipoAccion = TipoAccion;}
     
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
     
@@ -171,8 +175,9 @@ public class ActividadesAM implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        TipoAccion = TipoAccion.valueOf(request.getParameter("tipo"));
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
-        int idAccion = 0;        
+        int idAccion = 0;
         try{
             idAccion = Integer.parseInt(request.getParameter("id"));
             IdActividadEditar = Integer.parseInt(request.getParameter("editar"));
@@ -180,11 +185,11 @@ public class ActividadesAM implements Serializable {
             IdActividadEditar = 0;
         }
         if(idAccion != 0){
-            AccionSeleccionada = (Mejora) fLectura.GetAccion(idAccion);
+            AccionSeleccionada = fLectura.GetAccion(idAccion);
             if(IdActividadEditar > 0){
                 //  Actividades de Mejora
-                if(!((Mejora)AccionSeleccionada).getActividades().isEmpty()){
-                    List<Actividad> actividades = ((Mejora)AccionSeleccionada).getActividades();
+                if(!(AccionSeleccionada).getActividades().isEmpty()){
+                    List<Actividad> actividades = AccionSeleccionada.getActividades();
                     actividades.stream()
                             .filter(actividad -> actividad.getIdActividad() == IdActividadEditar)
                             .forEachOrdered(actividad -> {
@@ -197,14 +202,10 @@ public class ActividadesAM implements Serializable {
             
             //  Usuarios
             this.ListaUsuariosEmpresa = new HashMap<>();
-            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
-            if(empresa!=null) {
-                List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
-                ListaUsuariosEmpresa = tmpUsuarios.stream()
-                        .sorted()
-                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
-            }
+            List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
+            ListaUsuariosEmpresa = tmpUsuarios.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
         }
     }
 }
