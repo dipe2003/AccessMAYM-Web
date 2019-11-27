@@ -26,13 +26,13 @@
                             <div class="panel-body">   
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <h:outputText value="#{seguimientoCorrectiva.empresaAccion.nombreEmpresa}" />
+                                        <h:outputText value="Nombre Empresa" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="#{seguimientoCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                        <h:outputText value="Descripcion Empresa" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="Establecimiento #{seguimientoCorrectiva.empresaAccion.numeroEmpresa}" />
+                                        <h:outputText value="Establecimiento Nº xxx" />
                                     </div>                            
                                 </div>
                             </div> 
@@ -92,13 +92,13 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <strong><label id="tipo_deteccion">Tipo de Deteccion:</label></strong>
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.generadaPor.tipo}" />         
+                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.deteccion.tipo}" />         
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <strong><label id="deteccion">Generada por:</label></strong>
-                                    <h:outputText id="deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.generadaPor.nombre}" />         
+                                    <h:outputText id="deteccion" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.deteccion.nombre}" />         
                                 </div>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                                                 <tr>
                                                     <td>#{correctiva.value.descripcion}</td>
                                                     <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
-                                                    <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                    <td>#{correctiva.value.responsableImplementacion.nombreResponsable} #{correctiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                     <td>
                                                         <c:if test="#{correctiva.value.fechaImplementacion == null}" >
                                                             Sin Implementar
@@ -236,7 +236,7 @@
                                                 <tr>
                                                     <td>#{preventiva.value.descripcion}</td>
                                                     <td>#{preventiva.value.fechaEstimadaImplementacion}</td>
-                                                    <td>#{preventiva.value.responsableImplementacion.nombre} #{preventiva.value.responsableImplementacion.apellido}</td>
+                                                    <td>#{preventiva.value.responsableImplementacion.nombreResponsable} #{preventiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                     <td>
                                                         <c:if test="#{preventiva.value.fechaImplementacion == null}" >
                                                             Sin Implementar
@@ -302,7 +302,7 @@
                                                                 <strong>Info!</strong> No se ha definido Responsable de Comprobacion.
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.apellido}
+                                                                <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.nombreResponsable} #{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion.responsable.usuarioResponsable.nombreCompleto}
                                                             </c:otherwise>
                                                         </c:choose>                                                        
                                                     </div> 
@@ -393,7 +393,7 @@
                                                                 <strong>Info!</strong> No se ha definido Responsable de Verificacion.
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <strong>Info!</strong> Responsable de Verificacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.nombre} #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.apellido}
+                                                                <strong>Info!</strong> Responsable de Verificacion: #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.nombreResponsable} #{seguimientoCorrectiva.accionSeleccionada.comprobacionEficacia.responsable.usuarioResponsable.nombreCompleto}
                                                             </c:otherwise>
                                                         </c:choose>                                                        
                                                     </div>  

@@ -10,7 +10,6 @@ import com.dperez.maymweb.acciones.Correctiva;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.CORRECTIVA;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.PREVENTIVA;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.Evento;
@@ -54,7 +53,7 @@ public class ActividadesAC implements Serializable {
     private String TipoActividad;
     private int IdActividadEditar;
     
-    private Map<Integer, Usuario> ListaUsuariosEmpresa;
+    private Map<Integer, Usuario> ListaUsuarios;
     
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
     private String strFechaEstimadaCorrectiva;
@@ -72,7 +71,7 @@ public class ActividadesAC implements Serializable {
     
     public int getIdActividadEditar() {return IdActividadEditar;}
     
-    public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
+    public Map<Integer, Usuario> getListaUsuarios() {return ListaUsuarios;}
     public Date getFechaEstimadaImplementacionMedidaCorrectiva() {return FechaEstimadaImplementacionMedidaCorrectiva;}
     public String getStrFechaEstimadaCorrectiva(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -102,7 +101,7 @@ public class ActividadesAC implements Serializable {
     
     public void setIdActividadEditar(int IdActividadEditar) {this.IdActividadEditar = IdActividadEditar;}
     
-    public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
+    public void setListaUsuarios(Map<Integer, Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
     public void setFechaEstimadaImplementacionMedidaCorrectiva(Date FechaEstimadaImplementacionMedidaCorrectiva) {this.FechaEstimadaImplementacionMedidaCorrectiva = FechaEstimadaImplementacionMedidaCorrectiva;}
     public void setStrFechaEstimadaCorrectiva(String strFechaEstimadaCorrectiva) {
         Calendar cal = Calendar.getInstance();
@@ -311,15 +310,11 @@ public class ActividadesAC implements Serializable {
                 }
             }
             //  Usuarios
-            this.ListaUsuariosEmpresa = new HashMap<>();
-            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
-            if(empresa!=null) {
-                List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
-                ListaUsuariosEmpresa = tmpUsuarios.stream()
-                        .sorted()
-                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
-            }
+            this.ListaUsuarios = new HashMap<>();
+            List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
+            ListaUsuarios = tmpUsuarios.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
         }
     }
 }

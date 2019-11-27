@@ -10,7 +10,6 @@ import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -33,7 +32,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -161,8 +159,7 @@ public class CrearAccionCorrectiva implements Serializable {
      */
     public void crearAccionCorrectiva() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        Empresa empresa = (Empresa)request.getSession().getAttribute("Empresa");
+
         Accion accion = fDatos.NuevaAccion(TipoAccion.CORRECTIVA, FechaDeteccion,
                 Descripcion, Cliente, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
         

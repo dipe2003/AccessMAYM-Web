@@ -25,13 +25,13 @@
                             <div class="panel-body">   
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <h:outputText value="#{editarAccionCorrectiva.empresaAccion.nombreEmpresa}" />
+                                        <h:outputText value="Nombre Empresa" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="#{editarAccionCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                        <h:outputText value="Descripcion Empres" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="Establecimiento #{editarAccionCorrectiva.empresaAccion.numeroEmpresa}" />
+                                        <h:outputText value="Establecimiento Nº XXX" />
                                     </div>                            
                                 </div>
                             </div> 
@@ -259,7 +259,7 @@
                                             <tr>
                                                 <td>#{correctiva.value.descripcion}</td>
                                                 <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
-                                                <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                <td>#{correctiva.value.responsableImplementacion.nombreResponsable} #{correctiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                 <td>
                                                     <c:if test="#{correctiva.value.fechaImplementacion == null}" >
                                                         Sin Implementar
@@ -344,7 +344,7 @@
                                             <tr>
                                                 <td>#{preventiva.value.descripcion}</td>
                                                 <td>#{preventiva.value.fechaEstimadaImplementacion}</td>
-                                                <td>#{preventiva.value.responsableImplementacion.nombre} #{preventiva.value.responsableImplementacion.apellido}</td>
+                                                <td>#{preventiva.value.responsableImplementacion.nombreResponsable} #{preventiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                 <td>
                                                     <c:if test="#{preventiva.value.fechaImplementacion == null}" >
                                                         Sin Implementar
@@ -445,7 +445,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar responsable." >
                                                                     <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombreCompleto}" itemValue="#{usuario.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -500,7 +500,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar un responsable." >
                                                                     <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombreCompleto}" itemValue="#{usuario.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>

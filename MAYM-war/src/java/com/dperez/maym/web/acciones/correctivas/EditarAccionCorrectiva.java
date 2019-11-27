@@ -70,8 +70,7 @@ public class EditarAccionCorrectiva implements Serializable {
     
     private int IdAccionSeleccionada;
     private Accion AccionSeleccionada;
-    private Empresa EmpresaLogueada;
-    
+
     private Empresa EmpresaAccion;
     
     private ModalDetecciones modalDetecciones;
@@ -251,9 +250,7 @@ public class EditarAccionCorrectiva implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         ListaProductosAfectados = new HashMap<>();
-        // Empresa
-        EmpresaLogueada = (Empresa) request.getSession().getAttribute("Empresa");
-        // recuperar el id para llenar datos de la accion correctiva y el resto de las propiedades.
+
         IdAccionSeleccionada = 0;
         try{
             IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));

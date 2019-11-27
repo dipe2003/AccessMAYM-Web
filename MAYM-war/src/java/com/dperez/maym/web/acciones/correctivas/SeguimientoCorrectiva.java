@@ -47,7 +47,7 @@ public class SeguimientoCorrectiva implements Serializable {
     private FacadeDatos fDatos;
     @Inject
     private FacadeVerificador fVerif;
-
+    
     private Map<Integer, Actividad> MedidasCorrectivas;
     private Map<Integer, Actividad> MedidasPreventivas;
     
@@ -71,7 +71,6 @@ public class SeguimientoCorrectiva implements Serializable {
     
     private boolean EstaImplementada;
     
-    private Empresa EmpresaAccion;
     
     //  Getters
     
@@ -110,8 +109,6 @@ public class SeguimientoCorrectiva implements Serializable {
     
     public Map<Integer, Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
-    
-    public Empresa getEmpresaAccion() {return EmpresaAccion;}
     
     //  Setters
     
@@ -253,7 +250,7 @@ public class SeguimientoCorrectiva implements Serializable {
             List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getActividades().stream()
                     .filter(a->a.getTipoActividad() == CORRECTIVA)
                     .collect(Collectors.toList());
-                    
+            
             MedidasCorrectivas = new HashMap<>();
             MedidasCorrectivas = actividades.stream()
                     .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
@@ -269,16 +266,13 @@ public class SeguimientoCorrectiva implements Serializable {
             
             //  Usuarios
             this.ListaUsuarios = new HashMap<>();
-            Empresa empresa = (Empresa) request.getSession().getAttribute("Empresa");
-            // llenar lista de usuarios para responsables de implementacion que no se hayan dado de baja.
-            if(empresa!=null) {
-                List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
-                ListaUsuarios = tmpUsuarios.stream()
-                        .sorted()
-                        .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
-            }
+            List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
+            ListaUsuarios = tmpUsuarios.stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
+            
             EstaImplementada = AccionSeleccionada.EstanImplementadasActividades();
-
+            
             //  Resultado de comprobaciones
             Comprobaciones = ResultadoComprobacion.values();
             if(AccionSeleccionada.getComprobacionImplementacion()==null || AccionSeleccionada.getComprobacionImplementacion().getFechaComprobacion() == null){
@@ -295,7 +289,7 @@ public class SeguimientoCorrectiva implements Serializable {
                 ComprobacionSeleccionadaEficacia = AccionSeleccionada.getComprobacionEficacia().getResultado();
                 ObservacionesEficacia = AccionSeleccionada.getComprobacionEficacia().getObservaciones();
                 FechaComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia().getFechaComprobacion();
-            }            
-        }        
-    }    
+            }
+        }
+    }
 }

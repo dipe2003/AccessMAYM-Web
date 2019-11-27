@@ -25,13 +25,13 @@
                             <div class="panel-body">   
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <h:outputText value="#{verCorrectiva.empresaAccion.nombreEmpresa}" />
+                                        <h:outputText value="Nombre Empresa" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="#{verCorrectiva.empresaAccion.descripcionEmpresa}" />
+                                        <h:outputText value="Descripcion Empresa" />
                                     </div>
                                     <div class="col-sm-4">
-                                        <h:outputText value="Establecimiento #{verCorrectiva.empresaAccion.numeroEmpresa}" />
+                                        <h:outputText value="Establecimiento Nº XXX" />
                                     </div>                            
                                 </div>
                             </div> 
@@ -186,7 +186,7 @@
                                                     <tr>
                                                         <td>#{correctiva.value.descripcion}</td>
                                                         <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
-                                                        <td>#{correctiva.value.responsableImplementacion.nombre} #{correctiva.value.responsableImplementacion.apellido}</td>
+                                                        <td>#{correctiva.value.responsableImplementacion.nombreResponsable} #{correctiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                         <td>
                                                             <c:if test="#{correctiva.value.fechaImplementacion == null}" >
                                                                 Sin Implementar
@@ -232,7 +232,7 @@
                                                     <tr>
                                                         <td>#{preventivas.value.descripcion}</td>
                                                         <td>#{preventivas.value.fechaEstimadaImplementacion}</td>
-                                                        <td>#{preventivas.value.responsableImplementacion.nombre} #{preventivas.value.responsableImplementacion.apellido}</td>
+                                                        <td>#{preventivas.value.responsableImplementacion.nombreResponsable} #{preventivas.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                         <td>
                                                             <c:if test="#{preventivas.value.fechaImplementacion == null}" >
                                                                 Sin Implementar
@@ -283,7 +283,7 @@
                                                         <c:when test="#{verCorrectiva.comprobacionImplementacion.fechaEstimada != null and 
                                                                         verCorrectiva.comprobacionImplementacion.fechaComprobacion == null}">
                                                             <td>#{verCorrectiva.comprobacionImplementacion.fechaEstimada}</td>
-                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombre} #{verCorrectiva.comprobacionImplementacion.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombreResponsable} #{verCorrectiva.comprobacionImplementacion.responsable.usuarioResponsable.nombreCompleto}</td>
                                                             <td> Sin Comprobar </td>
                                                             <td> Sin Comprobar </td>
                                                             <td> Sin Comprobar </td>
@@ -291,7 +291,7 @@
                                                         <c:when test="#{verCorrectiva.comprobacionImplementacion.fechaEstimada != null and 
                                                                         verCorrectiva.comprobacionImplementacion.fechaComprobacion != null}">
                                                             <td>#{verCorrectiva.comprobacionImplementacion.fechaEstimada}</td>
-                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombre} #{verCorrectiva.comprobacionImplementacion.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionImplementacion.responsable.nombreResponsable} #{verCorrectiva.comprobacionImplementacion.responsable.usuarioResponsable.nombreCompleto}</td>
                                                             <td>#{verCorrectiva.comprobacionImplementacion.fechaComprobacion}</td>
                                                             <td>#{verCorrectiva.comprobacionImplementacion.resultado}</td>
                                                             <td>#{verCorrectiva.comprobacionImplementacion.observaciones}</td>
@@ -334,7 +334,7 @@
                                                         <c:when test="#{verCorrectiva.comprobacionEficacia.fechaEstimada != null and 
                                                                         verCorrectiva.comprobacionEficacia.fechaComprobacion == null}">
                                                             <td>#{verCorrectiva.comprobacionEficacia.fechaEstimada}</td>
-                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombre} #{verCorrectiva.comprobacionEficacia.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombreResponsable} #{verCorrectiva.comprobacionEficacia.responsable.usuarioResponsable.nombreCompleto}</td>
                                                             <td> Sin Comprobar </td>
                                                             <td> Sin Comprobar </td>
                                                             <td> Sin Comprobar </td>
@@ -342,7 +342,7 @@
                                                         <c:when test="#{verCorrectiva.comprobacionEficacia.fechaEstimada != null and 
                                                                         verCorrectiva.comprobacionEficacia.fechaComprobacion != null}">
                                                             <td>#{verCorrectiva.comprobacionEficacia.fechaEstimada}</td>
-                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombre} #{verCorrectiva.comprobacionEficacia.responsable.apellido}</td>
+                                                            <td>#{verCorrectiva.comprobacionEficacia.responsable.nombreResponsable} #{verCorrectiva.comprobacionEficacia.responsable.usuarioResponsable.nombreCompleto}</td>
                                                             <td>#{verCorrectiva.comprobacionEficacia.fechaComprobacion}</td>
                                                             <td>#{verCorrectiva.comprobacionEficacia.resultado}</td>
                                                             <td>#{verCorrectiva.comprobacionEficacia.observaciones}</td>

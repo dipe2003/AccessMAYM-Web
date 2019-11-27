@@ -75,8 +75,6 @@ public class VerCorrectiva implements Serializable {
     
     private Accion AccionSeleccionada;
     
-    private Empresa EmpresaAccion;
-    
     private EnumEstado Estado;
     
     //  Getters
@@ -103,7 +101,6 @@ public class VerCorrectiva implements Serializable {
     public String getObservacionesComprobacion() {return ObservacionesComprobacion;}
     public Date getFechaComprobacion() {return FechaComprobacion;}
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
-    public Empresa getEmpresaAccion(){return this.EmpresaAccion;}
     public EnumEstado getEstado() {return Estado;}
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
@@ -133,7 +130,6 @@ public class VerCorrectiva implements Serializable {
     public void setObservacionesComprobacion(String ObservacionesComprobacion) {this.ObservacionesComprobacion = ObservacionesComprobacion;}
     public void setFechaComprobacion(Date FechaComprobacion) {this.FechaComprobacion = FechaComprobacion;}
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
-    public void setEmpresaAccion(Empresa EmpresaAccion){this.EmpresaAccion = EmpresaAccion;}
     public void setEstado(EnumEstado Estado) {this.Estado = Estado;}
     public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
     public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
