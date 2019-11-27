@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="Comprobaciones")
 public class Comprobacion implements Serializable{
-    @Id@GeneratedValue(strategy = GenerationType.AUTO)
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
     @Temporal(TemporalType.DATE)
     private Date FechaEstimada;
@@ -37,7 +38,12 @@ public class Comprobacion implements Serializable{
     private TipoComprobacion TipoComprobacion;
     
     @OneToOne
+    @JoinColumn(name = "AccionComprobacion_Id")
     private Accion AccionComprobacion;
+    
+    @OneToOne
+    @JoinColumn(name = "AccionVerificacion_Id")
+    private Accion AccionVerificacion;
     
     @ManyToOne
     private Responsable Responsable;
@@ -64,6 +70,7 @@ public class Comprobacion implements Serializable{
     public TipoComprobacion getTipoComprobacion() {return TipoComprobacion;}    
     
     public Accion getAccionComprobacion() {return AccionComprobacion;}
+    public Accion getAccionVerificacion() {return AccionVerificacion;}
     
     //  Setters
     
@@ -75,8 +82,7 @@ public class Comprobacion implements Serializable{
     public void setFechaEstimada(Date FechaEstimada) {this.FechaEstimada = FechaEstimada;}
     public void setTipoComprobacion(TipoComprobacion TipoComprobacion) {this.TipoComprobacion = TipoComprobacion;}
     
-    public void setAccionComprobacion(Accion AccionComprobacion) {
-        this.AccionComprobacion = AccionComprobacion;        
-    }
-       
+    public void setAccionComprobacion(Accion AccionComprobacion) {this.AccionComprobacion = AccionComprobacion;}
+    public void setAccionVerificacion(Accion AccionVerificacion) {this.AccionVerificacion = AccionVerificacion;}
+    
 }
