@@ -110,27 +110,12 @@
                         </div>
                         
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="form-group">
                                     <strong><label for="codificacion_correctiva">Codificacion</label></strong>
                                     <h:outputText id="codificacion_correctiva" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <strong><label for="clasificacion">Clasificacion: </label></strong>
-                                    <c:choose>
-                                        <c:when test="#{seguimientoCorrectiva.tipoDesvio == 'NC_MENOR_OBS' }">
-                                            <h:outputText id="clasificacion" class="form-control" value="Menor/Observacion" />
-                                        </c:when>
-                                        <c:when test="#{seguimientoCorrectiva.tipoDesvio == 'NC_MAYOR' }">
-                                            <h:outputText id="clasificacion" class="form-control" value="Mayor" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <h:outputText id="clasificacion" class="form-control" value="Critica" />
-                                        </c:otherwise>
-                                    </c:choose> 
-                                </div>
                             </div>                            
                         </div>
                     </div>

@@ -13,7 +13,6 @@ import static com.dperez.maymweb.accion.actividad.TipoActividad.CORRECTIVA;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.PREVENTIVA;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -156,20 +155,17 @@ public class VerCorrectiva implements Serializable {
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
             Cliente = ((Correctiva)AccionSeleccionada).getCliente();
-            List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getActividades().stream()
-                    .filter(a->a.getTipoActividad() == CORRECTIVA)
+            List<Actividad> actividades = AccionSeleccionada.getActividades().stream()                    
                     .collect(Collectors.toList());
             
             MedidasCorrectivas = new HashMap<>();
             MedidasCorrectivas = actividades.stream()
+                    .filter(a->a.getTipoActividad() == CORRECTIVA)
                     .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
-            actividades.clear();
-            
-            actividades = ((Correctiva)AccionSeleccionada).getActividades().stream()
-                    .filter(a->a.getTipoActividad() == PREVENTIVA)
-                    .collect(Collectors.toList());
+
             MedidasPreventivas = new HashMap<>();
             MedidasPreventivas = actividades.stream()
+                    .filter(a->a.getTipoActividad() == PREVENTIVA)
                     .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
             
             ListaProductos = new ArrayList<>();

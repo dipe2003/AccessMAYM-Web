@@ -281,16 +281,15 @@ public class EditarAccionCorrectiva implements Serializable {
             DeteccionSeleccionada = AccionSeleccionada.getDeteccion().getId();
             
             // Actividades: Medidas Correctivas y Preventivas
-            List<Actividad> actividades = ((Correctiva)AccionSeleccionada).getActividades();
-            MedidasCorrectivas = MedidasCorrectivas = actividades.stream()
+            List<Actividad> actividades = AccionSeleccionada.getActividades();
+            MedidasCorrectivas =  actividades.stream()
                     .filter(a->a.getTipoActividad() == CORRECTIVA)
                     .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
-            
-            actividades.clear();
-            actividades = ((Correctiva)AccionSeleccionada).getActividades();
+
             MedidasPreventivas = actividades.stream()
                     .filter(a->a.getTipoActividad() == PREVENTIVA)
-                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));            
+                    .collect(Collectors.toMap(Actividad::getIdActividad, actividad->actividad));
+            
             // Areas Sectores
             ListaAreasSectores = new HashMap<>();
             List<Area> tmpAreas = fLectura.ListarAreasSectores();
