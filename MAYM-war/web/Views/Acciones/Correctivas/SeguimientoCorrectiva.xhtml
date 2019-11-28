@@ -116,10 +116,9 @@
                                     <h:outputText id="codificacion_correctiva" class="form-control" value="#{seguimientoCorrectiva.accionSeleccionada.codificacionAccion.nombre}" />
                                 </div>
                             </div>
-                            </div>                            
-                        </div>
+                        </div>                            
                     </div>
-                </div> 
+                </div>
                 
                 <h:panelGroup id="panel_medidas_correctivas">
                     <div class="panel panel-primary">
@@ -128,62 +127,62 @@
                             <c:choose>
                                 <c:when test="#{not empty seguimientoCorrectiva.medidasCorrectivas}">
                                     <div class="table-responsive-sm">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Descripcion:</th>
-                                                <th>Fecha Estimada:</th>
-                                                <th>Responsable Implementacion:</th>
-                                                <th>Implementacion:</th>
-                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
-                                                    <th></th>
-                                                </c:if>
-                                                
-                                            </tr>                                                
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="#{seguimientoCorrectiva.medidasCorrectivas}" var="correctiva" >
+                                        <table class="table table-hover table-striped">
+                                            <thead>
                                                 <tr>
-                                                    <td>#{correctiva.value.descripcion}</td>
-                                                    <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
-                                                    <td>#{correctiva.value.responsableImplementacion.nombreResponsable} #{correctiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                    <td>
-                                                        <c:if test="#{correctiva.value.fechaImplementacion == null}" >
-                                                            Sin Implementar
-                                                        </c:if>
-                                                        <c:if test="#{correctiva.value.fechaImplementacion != null}" >
-                                                            #{correctiva.value.fechaImplementacion}
-                                                        </c:if>
-                                                    </td>
+                                                    <th>Descripcion:</th>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable Implementacion:</th>
+                                                    <th>Implementacion:</th>
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                        <th></th>
+                                                    </c:if>
                                                     
-                                                    <td>
-                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.value.fechaImplementacion == null}">
-                                                            <c:choose>
-                                                                <c:when test="#{correctiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
-                                                                    <div class="btn-group">                                                    
-                                                                        <h:commandButton class="btn btn-primary disabled" value="Comprobar" title="Solo lo puede comprobar el usuario responsable." />
-                                                                    </div>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <div class="btn-group">                                                    
-                                                                        <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaCorrectiva(correctiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                            <f:ajax render="panel_medidas_correctivas" />
-                                                                        </h:commandButton>                                                            
-                                                                    </div>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:if>
-                                                    </td>
-                                                    
-                                                </tr>   
-                                                <h:panelGroup >
-                                                    <div class="form-group-sm">
-                                                        <h:message for="btn_setFechaImplementacion_corr_#{correctiva.key}" class="msj_error"/>
-                                                    </div>
-                                                </h:panelGroup>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{seguimientoCorrectiva.medidasCorrectivas}" var="correctiva" >
+                                                    <tr>
+                                                        <td>#{correctiva.value.descripcion}</td>
+                                                        <td>#{correctiva.value.fechaEstimadaImplementacion}</td>
+                                                        <td>#{correctiva.value.responsableImplementacion.nombreResponsable} #{correctiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                        <td>
+                                                            <c:if test="#{correctiva.value.fechaImplementacion == null}" >
+                                                                Sin Implementar
+                                                            </c:if>
+                                                            <c:if test="#{correctiva.value.fechaImplementacion != null}" >
+                                                                #{correctiva.value.fechaImplementacion}
+                                                            </c:if>
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.value.fechaImplementacion == null}">
+                                                                <c:choose>
+                                                                    <c:when test="#{correctiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                                        <div class="btn-group">                                                    
+                                                                            <h:commandButton class="btn btn-primary disabled" value="Comprobar" title="Solo lo puede comprobar el usuario responsable." />
+                                                                        </div>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <div class="btn-group">                                                    
+                                                                            <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaCorrectiva(correctiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
+                                                                                <f:ajax render="panel_medidas_correctivas" />
+                                                                            </h:commandButton>                                                            
+                                                                        </div>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:if>
+                                                        </td>
+                                                        
+                                                    </tr>   
+                                                    <h:panelGroup >
+                                                        <div class="form-group-sm">
+                                                            <h:message for="btn_setFechaImplementacion_corr_#{correctiva.key}" class="msj_error"/>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
@@ -203,61 +202,61 @@
                             <c:choose>
                                 <c:when test="#{not empty seguimientoCorrectiva.medidasPreventivas}">
                                     <div class="table-responsive-sm">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Descripcion:</th>
-                                                <th>Fecha Estimada:</th>
-                                                <th>Responsable Implementacion:</th>
-                                                <th>Implementacion:</th>
-                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
-                                                    <th></th>
-                                                </c:if>
-                                                
-                                            </tr>                                                
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="#{seguimientoCorrectiva.medidasPreventivas}" var="preventiva" >
+                                        <table class="table table-hover table-striped">
+                                            <thead>
                                                 <tr>
-                                                    <td>#{preventiva.value.descripcion}</td>
-                                                    <td>#{preventiva.value.fechaEstimadaImplementacion}</td>
-                                                    <td>#{preventiva.value.responsableImplementacion.nombreResponsable} #{preventiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                    <td>
-                                                        <c:if test="#{preventiva.value.fechaImplementacion == null}" >
-                                                            Sin Implementar
-                                                        </c:if>
-                                                        <c:if test="#{preventiva.value.fechaImplementacion != null}" >
-                                                            #{preventiva.value.fechaImplementacion}
-                                                        </c:if>
-                                                    </td>
+                                                    <th>Descripcion:</th>
+                                                    <th>Fecha Estimada:</th>
+                                                    <th>Responsable Implementacion:</th>
+                                                    <th>Implementacion:</th>
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                        <th></th>
+                                                    </c:if>
                                                     
-                                                    <td>
-                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.value.fechaImplementacion == null}">
-                                                            <c:choose>
-                                                                <c:when test="#{preventiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
-                                                                    <div class="btn-group">                                                    
-                                                                        <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
-                                                                    </div>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <div class="btn-group">                                                    
-                                                                        <h:commandButton id="btn_setFechaImplementacion_#{preventiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaPreventiva(preventiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                            <f:ajax render="panel_medidas_preventivas" />
-                                                                        </h:commandButton>                                                            
-                                                                    </div>
-                                                                </c:otherwise>
-                                                            </c:choose>                                                            
-                                                        </c:if>
-                                                    </td>                                                    
-                                                </tr> 
-                                                <h:panelGroup >
-                                                    <div class="form-group-sm">
-                                                        <h:message for="btn_setFechaImplementacion_prev_#{preventiva.key}" class="msj_error"/>
-                                                    </div>
-                                                </h:panelGroup>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                                </tr>                                                
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="#{seguimientoCorrectiva.medidasPreventivas}" var="preventiva" >
+                                                    <tr>
+                                                        <td>#{preventiva.value.descripcion}</td>
+                                                        <td>#{preventiva.value.fechaEstimadaImplementacion}</td>
+                                                        <td>#{preventiva.value.responsableImplementacion.nombreResponsable} #{preventiva.value.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                        <td>
+                                                            <c:if test="#{preventiva.value.fechaImplementacion == null}" >
+                                                                Sin Implementar
+                                                            </c:if>
+                                                            <c:if test="#{preventiva.value.fechaImplementacion != null}" >
+                                                                #{preventiva.value.fechaImplementacion}
+                                                            </c:if>
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.value.fechaImplementacion == null}">
+                                                                <c:choose>
+                                                                    <c:when test="#{preventiva.value.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                                        <div class="btn-group">                                                    
+                                                                            <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
+                                                                        </div>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <div class="btn-group">                                                    
+                                                                            <h:commandButton id="btn_setFechaImplementacion_#{preventiva.key}" action="#{seguimientoCorrectiva.setFechaImplementacionMedidaPreventiva(preventiva.key)}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
+                                                                                <f:ajax render="panel_medidas_preventivas" />
+                                                                            </h:commandButton>                                                            
+                                                                        </div>
+                                                                    </c:otherwise>
+                                                                </c:choose>                                                            
+                                                            </c:if>
+                                                        </td>                                                    
+                                                    </tr> 
+                                                    <h:panelGroup >
+                                                        <div class="form-group-sm">
+                                                            <h:message for="btn_setFechaImplementacion_prev_#{preventiva.key}" class="msj_error"/>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
@@ -344,17 +343,21 @@
                                             </div>
                                         </c:when>
                                         <!-- CASO 3: esta implementada y Se comprobo la implementacion. -->
+                                        
                                         <c:when test="#{seguimientoCorrectiva.accionSeleccionada.comprobacionImplementacion != null and
                                                         seguimientoCorrectiva.estaImplementada == true}">
                                             Se comprobo la implementacion el dia #{seguimientoCorrectiva.fechaComprobacionImplementacion} con resultado
-                                            <c:if test="#{seguimientoCorrectiva.comprobacionSeleccionadaImplementacion == 'CORRECTA'}">
-                                                Correcto
-                                            </c:if>
-                                            <c:otherwise>
-                                                Incorrecto
-                                            </c:otherwise>
-                                            Observaciones: #{seguimientoCorrectiva.observacionesImplementacion}
+                                            <c:choose>
+                                                <c:when  test="#{seguimientoCorrectiva.comprobacionSeleccionadaImplementacion == 'CORRECTA'}">
+                                                    Correcto
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Incorrecto
+                                                </c:otherwise>
+                                                Observaciones: #{seguimientoCorrectiva.observacionesImplementacion}
+                                            </c:choose>
                                         </c:when> 
+                                        
                                     </c:choose>
                                 </h:panelGroup>
                             </div>
