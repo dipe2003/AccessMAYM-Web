@@ -17,6 +17,7 @@
                     <h1 style="color: #FFF"><abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1> 
                 </div>
             </div>
+            
         </div>
         <nav class="navbar navbar-inverse" style="background-color: #000000" >
             <div class="navbar-header">
@@ -26,17 +27,6 @@
                     <span class="icon-bar"></span>                        
                 </button>
                 <a class="navbar-brand" href="#{facesContext.externalContext.requestContextPath}/index.xhtml"><span class="glyphicon glyphicon-home"></span> Inicio</a>
-                <h:form enctype="multipart/form-data">
-                    <div class="form-group">
-                        <strong><label for="id">Buscar Id:</label></strong>
-                        <h:inputText id="buscarId" class="form-control" p:placeholder="Id Accion" 
-                                     value="#{datosFiltros.idAccionBuscada}" required="true" requiredMessage="No se ingreso id"/>
-                        <h:commandButton id="btnSearch" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarId()}">
-                            <f:ajax execute="@form" render="myNavbar" onevent="indicador" />
-                        </h:commandButton>
-                    </div>
-                    
-                </h:form>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar" >
                 <ul class="nav navbar-nav">
@@ -75,6 +65,18 @@
                             </c:if>
                             <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
                         </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Buscar<span class="glyphicon glyphicon-search"></span></a>
+                        <div class="dropdown-menu">
+                            <h:form id="formBuscar" class="form container-fluid">
+                                <div class="form-group" ><label for="buscarid">Buscar</label>
+                                    <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
+                                </div>
+                                <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarId()}">
+                                    <f:ajax execute="@form" onevent="indicador" />
+                                </h:commandButton>
+                            </h:form>
+                        </div>
                     </li>
                     <c:if test="#{sesionUsuario.usuarioLogueado != null}">
                         <li class="dropdown">
@@ -142,6 +144,6 @@
                     </c:choose>
                 </ul>
             </div>
-        </nav>         
+        </nav>
     </ui:composition>
 </html>

@@ -407,7 +407,11 @@ public class ListarCorrectivas implements Serializable{
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        int id = Integer.parseInt(request.getParameter("buscarid"));
+        int id = 0;
+        try{
+            id = Integer.parseInt(request.getParameter("buscarid"));
+        }catch(NumberFormatException ex){}
+                
         // Paginacion
         PaginaActual = 1;
         try{
@@ -420,9 +424,7 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
         if (id > 0){
-            ListaCompletaAcciones = ListaCompletaAcciones.stream()
-                    .filter(a->a.getId() == id)
-                    .collect(Collectors.toList());
+            ListaAcciones = (List<Correctiva>)filtrarPorId(ListaCompletaAcciones, id);
         }
         
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
@@ -441,5 +443,11 @@ public class ListarCorrectivas implements Serializable{
         ResetListasEstado();
         
         ResetListasCodificacion();
+    }
+    
+    private List<Correctiva> filtrarPorId(List<Correctiva> acciones, int id){
+        return acciones.stream()
+                .filter(a->a.getId() == id)
+                .collect(Collectors.toList());
     }
 }

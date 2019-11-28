@@ -63,7 +63,11 @@ public class ListarOMAP implements Serializable{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         TipoAccion = TipoAccion.valueOf(request.getParameter("tipo"));
-        int id = Integer.parseInt(request.getParameter("buscarid"));
+        int id = 0;
+        try{
+            id = Integer.parseInt(request.getParameter("buscarid"));
+        }catch(NumberFormatException ex){}
+                
         // Paginacion
         PaginaActual = 1;
         try{
@@ -75,16 +79,14 @@ public class ListarOMAP implements Serializable{
         // llenar la lista de acciones
         ListaAcciones = new ArrayList<>();
         if(TipoAccion == TipoAccion.MEJORA){
-            ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();
+            ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();            
         }else{
             ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesPreventivas();
         }
         // llenar la lista de acciones
      
         if (id > 0){
-            ListaCompletaAcciones = ListaCompletaAcciones.stream()
-                    .filter(a->a.getId() == id)
-                    .collect(Collectors.toList());
+            ListaAcciones = filtrarPorId(ListaCompletaAcciones, id);
         }
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         
@@ -92,6 +94,12 @@ public class ListarOMAP implements Serializable{
         //cargarPagina(PaginaActual);
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
         ListaAcciones.stream().sorted();
+    }
+    
+    private List<Accion> filtrarPorId(List<Accion> acciones, int id){
+        return acciones.stream()
+                .filter(a->a.getId() == id)
+                .collect(Collectors.toList());
     }
     
 }

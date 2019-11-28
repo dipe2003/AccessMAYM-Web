@@ -51,9 +51,9 @@ public class DatosFiltros implements Serializable {
         if (accion != null) {
             TipoAccion tipo = accion.getTipoAccion();
             if (tipo == TipoAccion.CORRECTIVA){
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?buscarid="+idAccionBuscada);
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?buscarid="+idAccionBuscada+"&amp;tipo="+tipo);
             }else{
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?buscarid="+idAccionBuscada);
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?buscarid="+idAccionBuscada+"&amp;tipo="+tipo);
             }
         }
         FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/index.xhtml");
