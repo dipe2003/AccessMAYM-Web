@@ -13,6 +13,7 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -62,6 +63,7 @@ public class ListarOMAP implements Serializable{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         TipoAccion = TipoAccion.valueOf(request.getParameter("tipo"));
+        int id = Integer.parseInt(request.getParameter("buscarid"));
         // Paginacion
         PaginaActual = 1;
         try{
@@ -76,6 +78,13 @@ public class ListarOMAP implements Serializable{
             ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();
         }else{
             ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesPreventivas();
+        }
+        // llenar la lista de acciones
+     
+        if (id > 0){
+            ListaCompletaAcciones = ListaCompletaAcciones.stream()
+                    .filter(a->a.getId() == id)
+                    .collect(Collectors.toList());
         }
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         

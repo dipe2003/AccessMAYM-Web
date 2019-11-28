@@ -10,6 +10,9 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.acciones.EnumEstado;
+import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.facades.FacadeLectura;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
@@ -18,14 +21,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author dipe2
  */
-
+@ViewScoped
+@Named
 public class DatosFiltros implements Serializable {
     
+    @Inject
+    private FacadeLectura fLectura;
+    
+    private int idAccionBuscada;
+
+    public int getIdAccionBuscada() {return idAccionBuscada;}
+    public void setIdAccionBuscada(int idAccionBuscada) {this.idAccionBuscada = idAccionBuscada;}  
+    
+    //**********************************************************************
+    // Metodos de buscar Id
+    //**********************************************************************
+    public void buscarId() throws IOException{
+        String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        Accion accion = fLectura.ListarAcciones().stream().filter(a->a.getId() == idAccionBuscada).findFirst().get();
+        if (accion != null) {
+            TipoAccion tipo = accion.getTipoAccion();
+            if (tipo == TipoAccion.CORRECTIVA){
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?buscarid="+idAccionBuscada);
+            }else{
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?buscarid="+idAccionBuscada);
+            }
+        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/index.xhtml");
+    }
     //**********************************************************************
     // Metodos de filtro de Fechas
     //**********************************************************************

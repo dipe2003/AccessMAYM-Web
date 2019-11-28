@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -406,7 +407,7 @@ public class ListarCorrectivas implements Serializable{
         // recuperar Empresa para filtrar las acciones
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        
+        int id = Integer.parseInt(request.getParameter("buscarid"));
         // Paginacion
         PaginaActual = 1;
         try{
@@ -418,6 +419,11 @@ public class ListarCorrectivas implements Serializable{
         // llenar la lista de acciones
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
+        if (id > 0){
+            ListaCompletaAcciones = ListaCompletaAcciones.stream()
+                    .filter(a->a.getId() == id)
+                    .collect(Collectors.toList());
+        }
         
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         

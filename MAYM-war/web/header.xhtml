@@ -19,118 +19,129 @@
             </div>
         </div>
         <nav class="navbar navbar-inverse" style="background-color: #000000" >
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>                        
-                    </button>
-                    <a class="navbar-brand" href="#{facesContext.externalContext.requestContextPath}/index.xhtml"><span class="glyphicon glyphicon-home"></span> Inicio</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar" >
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/CrearAccionCorrectiva.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                                </c:if>
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                                </c:if>
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=PREVENTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                                </c:if>
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=MEJORA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/CrearFortaleza.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                                </c:if>
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                            </ul>
-                        </li>
-                        <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Configuracion<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Codificaciones.xhtml?pagina=1">Codificaciones</a></li>
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml?pagina=1">Detecciones</a></li>
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml?pagina=1">Areas / Sectores</a></li>
-                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}" >
-                                        <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml?pagina=1">Usuarios</a></li>
-                                    </c:if>
-                                </ul>
-                            </li>
-                        </c:if>
-                    </ul>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="#{facesContext.externalContext.requestContextPath}/index.xhtml"><span class="glyphicon glyphicon-home"></span> Inicio</a>
+                <h:form enctype="multipart/form-data">
+                    <div class="form-group">
+                        <strong><label for="id">Buscar Id:</label></strong>
+                        <h:inputText id="buscarId" class="form-control" p:placeholder="Id Accion" 
+                                     value="#{datosFiltros.idAccionBuscada}" required="true" requiredMessage="No se ingreso id"/>
+                        <h:commandButton id="btnSearch" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarId()}">
+                            <f:ajax execute="@form" render="myNavbar" onevent="indicador" />
+                        </h:commandButton>
+                    </div>
                     
-                    <ul class="nav navbar-nav navbar-right">
-                        <c:choose>
-                            <c:when test="#{sesionUsuario.usuarioLogueado != null}">
-                                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">#{sesionUsuario.usuarioLogueado.nombre} #{sesionUsuario.usuarioLogueado.apellido} <span class="glyphicon glyphicon-user"></span></a>
-                                    <div class="dropdown-menu">
-                                        <h:form id="formlout" class="form container-fluid">                                                
-                                            <h:commandLink id="btnLogout" class="btn btn-block" action="#{sesionUsuario.logout()}">
-                                                <span class="glyphicon glyphicon-log-out"></span> Salir
-                                                <f:ajax execute="@form" render="myNavbar" />
-                                            </h:commandLink>
-                                            <h:commandLink id="btnEditarPerfil" class="btn btn-block" >
-                                                <span class="glyphicon glyphicon-edit"></span>Editar Perfil
-                                                <f:ajax execute="@form" render="myNavbar" />
-                                            </h:commandLink>
-                                        </h:form>
-                                    </div>
-                                </li>
-                            </c:when>
-                            <c:otherwise>
-                                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Iniciar Sesion <span class="glyphicon glyphicon-log-in"></span></a>
-                                    <div class="dropdown-menu">
-                                        <h:form id="formlogin" class="form container-fluid">
-                                            <div class="form-group">
-                                                <label for="usr">Operario:</label>
-                                                <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{sesionUsuario.usuarioSeleccionado}">
-                                                    <f:ajax event="change" execute="@this" listener="#{sesionUsuario.comprobarIdUsuario()}" 
-                                                            render="panel_datos_usuario" onevent="indicador" />
-                                                </h:inputText>
-                                                <h:panelGroup id="panel_datos_usuario">
-                                                    <c:if test="#{not empty sesionUsuario.nombreUsuario}">
-                                                        <h:inputText class="msj_info" value="#{sesionUsuario.nombreUsuario}" readonly="true"/>
-                                                    </c:if>
-                                                </h:panelGroup>
-                                            </div>
-                                            <div class="form-group" >
-                                                <label for="pwd">Contraseña:</label>
-                                                <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{sesionUsuario.passwordUsuario}"/>
-                                                <h:panelGroup id="panel_mensaje_password">
-                                                    <h:message for="pwd" class="msj_error" />
-                                                </h:panelGroup>
-                                            </div>
-                                            <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{sesionUsuario.ingresar()}">
-                                                <f:ajax execute="@form" render="panel_mensaje_password myNavbar" onevent="indicador" />
-                                            </h:commandButton>
-                                        </h:form>
-                                    </div>
-                                </li>
-                            </c:otherwise>                            
-                        </c:choose>
-                    </ul>
-                </div>
+                </h:form>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar" >
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/CrearAccionCorrectiva.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                            </c:if>
+                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                            </c:if>
+                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=PREVENTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/CrearOMAP.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                            </c:if>
+                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=MEJORA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/CrearFortaleza.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                            </c:if>
+                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                        </ul>
+                    </li>
+                    <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Configuracion<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Codificaciones.xhtml?pagina=1">Codificaciones</a></li>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml?pagina=1">Detecciones</a></li>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml?pagina=1">Areas / Sectores</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}" >
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml?pagina=1">Usuarios</a></li>
+                                </c:if>
+                            </ul>
+                        </li>
+                    </c:if>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right">
+                    <c:choose>
+                        <c:when test="#{sesionUsuario.usuarioLogueado != null}">
+                            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">#{sesionUsuario.usuarioLogueado.nombre} #{sesionUsuario.usuarioLogueado.apellido} <span class="glyphicon glyphicon-user"></span></a>
+                                <div class="dropdown-menu">
+                                    <h:form id="formlout" class="form container-fluid">                                                
+                                        <h:commandLink id="btnLogout" class="btn btn-block" action="#{sesionUsuario.logout()}">
+                                            <span class="glyphicon glyphicon-log-out"></span> Salir
+                                            <f:ajax execute="@form" render="myNavbar" />
+                                        </h:commandLink>
+                                        <h:commandLink id="btnEditarPerfil" class="btn btn-block" >
+                                            <span class="glyphicon glyphicon-edit"></span>Editar Perfil
+                                            <f:ajax execute="@form" render="myNavbar" />
+                                        </h:commandLink>
+                                    </h:form>
+                                </div>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Iniciar Sesion <span class="glyphicon glyphicon-log-in"></span></a>
+                                <div class="dropdown-menu">
+                                    <h:form id="formlogin" class="form container-fluid">
+                                        <div class="form-group">
+                                            <label for="usr">Operario:</label>
+                                            <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{sesionUsuario.usuarioSeleccionado}">
+                                                <f:ajax event="change" execute="@this" listener="#{sesionUsuario.comprobarIdUsuario()}" 
+                                                        render="panel_datos_usuario" onevent="indicador" />
+                                            </h:inputText>
+                                            <h:panelGroup id="panel_datos_usuario">
+                                                <c:if test="#{not empty sesionUsuario.nombreUsuario}">
+                                                    <h:inputText class="msj_info" value="#{sesionUsuario.nombreUsuario}" readonly="true"/>
+                                                </c:if>
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="form-group" >
+                                            <label for="pwd">Contraseña:</label>
+                                            <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{sesionUsuario.passwordUsuario}"/>
+                                            <h:panelGroup id="panel_mensaje_password">
+                                                <h:message for="pwd" class="msj_error" />
+                                            </h:panelGroup>
+                                        </div>
+                                        <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{sesionUsuario.ingresar()}">
+                                            <f:ajax execute="@form" render="panel_mensaje_password myNavbar" onevent="indicador" />
+                                        </h:commandButton>
+                                    </h:form>
+                                </div>
+                            </li>
+                        </c:otherwise>                            
+                    </c:choose>
+                </ul>
+            </div>
         </nav>         
     </ui:composition>
 </html>
