@@ -73,7 +73,7 @@
                                     <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
                                 </div>
                                 <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarId()}">
-                                    <f:ajax execute="@form" onevent="indicador" />
+                                    <f:ajax execute="formBuscar" onevent="indicador" />
                                 </h:commandButton>
                             </h:form>
                         </div>

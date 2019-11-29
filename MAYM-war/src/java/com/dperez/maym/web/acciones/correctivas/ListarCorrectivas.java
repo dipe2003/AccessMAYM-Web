@@ -420,11 +420,13 @@ public class ListarCorrectivas implements Serializable{
             System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
         }
         
-        // llenar la lista de acciones
+        // llenar la lista de acciones dependiendo si se esta filtrando por Id
         ListaAcciones = new ArrayList<>();
-        ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
+        ListaCompletaAcciones = new ArrayList<>();
         if (id > 0){
-            ListaAcciones = (List<Correctiva>)filtrarPorId(ListaCompletaAcciones, id);
+            ListaCompletaAcciones.add((Correctiva)fLectura.GetAccion(id));
+        }else{        
+            ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
         }
         
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
@@ -444,10 +446,4 @@ public class ListarCorrectivas implements Serializable{
         
         ResetListasCodificacion();
     }
-    
-    private List<Correctiva> filtrarPorId(List<Correctiva> acciones, int id){
-        return acciones.stream()
-                .filter(a->a.getId() == id)
-                .collect(Collectors.toList());
-    }
-}
+   }

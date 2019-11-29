@@ -52,7 +52,7 @@ public class ListarOMAP implements Serializable{
     
     //  Setters
     public void setListaAcciones(List<Accion> ListaAcciones) {this.ListaAcciones = ListaAcciones;}
-    public void setTipoAccion(TipoAccion TipoAccion) {this.TipoAccion = TipoAccion;}    
+    public void setTipoAccion(TipoAccion TipoAccion) {this.TipoAccion = TipoAccion;}
     
     // Metodos
     
@@ -67,7 +67,7 @@ public class ListarOMAP implements Serializable{
         try{
             id = Integer.parseInt(request.getParameter("buscarid"));
         }catch(NumberFormatException ex){}
-                
+        
         // Paginacion
         PaginaActual = 1;
         try{
@@ -78,28 +78,24 @@ public class ListarOMAP implements Serializable{
         
         // llenar la lista de acciones
         ListaAcciones = new ArrayList<>();
-        if(TipoAccion == TipoAccion.MEJORA){
-            ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();            
-        }else{
-            ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesPreventivas();
-        }
-        // llenar la lista de acciones
-     
+        ListaCompletaAcciones = new ArrayList<>();
+        
         if (id > 0){
-            ListaAcciones = filtrarPorId(ListaCompletaAcciones, id);
+            ListaAcciones.add(fLectura.GetAccion(id));
+        }else{
+            if(TipoAccion == TipoAccion.MEJORA){
+                ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();
+            }else{
+                ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesPreventivas();
+            }
         }
+        
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
         //cargarPagina(PaginaActual);
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
         ListaAcciones.stream().sorted();
-    }
-    
-    private List<Accion> filtrarPorId(List<Accion> acciones, int id){
-        return acciones.stream()
-                .filter(a->a.getId() == id)
-                .collect(Collectors.toList());
     }
     
 }

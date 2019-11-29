@@ -10,7 +10,6 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.acciones.EnumEstado;
-import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
@@ -38,25 +37,32 @@ public class DatosFiltros implements Serializable {
     private FacadeLectura fLectura;
     
     private int idAccionBuscada;
-
+    
     public int getIdAccionBuscada() {return idAccionBuscada;}
-    public void setIdAccionBuscada(int idAccionBuscada) {this.idAccionBuscada = idAccionBuscada;}  
+    public void setIdAccionBuscada(int idAccionBuscada) {this.idAccionBuscada = idAccionBuscada;}
     
     //**********************************************************************
     // Metodos de buscar Id
     //**********************************************************************
     public void buscarId() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        Accion accion = fLectura.ListarAcciones().stream().filter(a->a.getId() == idAccionBuscada).findFirst().get();
+        Accion accion = fLectura.GetAccion(idAccionBuscada);
         if (accion != null) {
-            TipoAccion tipo = accion.getTipoAccion();
-            if (tipo == TipoAccion.CORRECTIVA){
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?buscarid="+idAccionBuscada+"&amp;tipo="+tipo);
-            }else{
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?buscarid="+idAccionBuscada+"&amp;tipo="+tipo);
+            switch(accion.getTipoAccion()){
+                case CORRECTIVA:
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&amp;tipo=CORRECTIVA&amp;buscarid="+idAccionBuscada);
+                    break;
+                    
+                case PREVENTIVA:
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=PREVENTIVA&amp;buscarid="+idAccionBuscada);
+                    break;
+                    
+                default:
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=MEJORA&amp;buscarid="+idAccionBuscada);
+                    break;
             }
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/index.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/index.xhtml");
     }
     //**********************************************************************
     // Metodos de filtro de Fechas
