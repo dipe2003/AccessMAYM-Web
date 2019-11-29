@@ -10,6 +10,7 @@ import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.acciones.EnumEstado;
+import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
@@ -47,22 +48,16 @@ public class DatosFiltros implements Serializable {
     public void buscarId() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         Accion accion = fLectura.GetAccion(idAccionBuscada);
+        TipoAccion tipoDefault = TipoAccion.CORRECTIVA;
         if (accion != null) {
-            switch(accion.getTipoAccion()){
-                case CORRECTIVA:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&amp;tipo=CORRECTIVA&amp;buscarid="+idAccionBuscada);
-                    break;
-                    
-                case PREVENTIVA:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=PREVENTIVA&amp;buscarid="+idAccionBuscada);
-                    break;
-                    
-                default:
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&amp;tipo=MEJORA&amp;buscarid="+idAccionBuscada);
-                    break;
-            }
+            tipoDefault = accion.getTipoAccion();
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/index.xhtml");
+        if(tipoDefault == TipoAccion.CORRECTIVA){
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
+        }else{
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
+        }
+        
     }
     //**********************************************************************
     // Metodos de filtro de Fechas

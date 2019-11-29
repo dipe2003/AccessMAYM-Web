@@ -424,7 +424,10 @@ public class ListarCorrectivas implements Serializable{
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = new ArrayList<>();
         if (id > 0){
-            ListaCompletaAcciones.add((Correctiva)fLectura.GetAccion(id));
+            Accion accion = fLectura.GetAccion(id);
+            if (accion != null){
+                ListaCompletaAcciones.add((Correctiva)accion);
+            }
         }else{        
             ListaCompletaAcciones = (List<Correctiva>)(List<?>)fLectura.ListarAccionesCorrectivas();
         }

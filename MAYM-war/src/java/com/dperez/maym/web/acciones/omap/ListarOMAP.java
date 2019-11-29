@@ -81,7 +81,10 @@ public class ListarOMAP implements Serializable{
         ListaCompletaAcciones = new ArrayList<>();
         
         if (id > 0){
-            ListaAcciones.add(fLectura.GetAccion(id));
+            Accion accion = fLectura.GetAccion(id);
+            if (accion != null){
+                ListaCompletaAcciones.add(accion);
+            }
         }else{
             if(TipoAccion == TipoAccion.MEJORA){
                 ListaCompletaAcciones = (List<Accion>)(List<?>)fLectura.ListarAccionesMejoras();
