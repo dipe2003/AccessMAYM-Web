@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-11-2019 a las 11:34:51
+-- Tiempo de generación: 30-11-2019 a las 13:12:21
 -- Versión del servidor: 10.0.17-MariaDB
 -- Versión de PHP: 5.5.30
 
@@ -830,10 +830,14 @@ INSERT INTO `acciones` (`DTYPE`, `Id`, `AnalisisCausa`, `Descripcion`, `EstadoAc
 INSERT INTO `acciones` (`DTYPE`, `Id`, `AnalisisCausa`, `Descripcion`, `EstadoAccion`, `FechaDeteccion`, `ObsDesestimada`, `TipoAccion`, `Cliente`, `AreaSectorAccion_Id`, `CodificacionAccion_Id`, `ComprobacionEficacia_Id`, `ComprobacionImplementacion_Id`, `Deteccion_Id`) VALUES
 ('Correctiva', 796, '', 'En sector mondonguería limpia y cuarteo, se encuentran equipos/instalaciones reparados con soldadura no sanitarias para el uso definido del equipo/instalacion. Una mesa de empaque de mondongo, un pase del riel de ingreso a cámara de mondongos, un soporte ', 0, '2019-11-05', '', 0, NULL, 4, 27, NULL, NULL, 7),
 ('Correctiva', 797, 'Luego de analizadas las fotos y comentarios enviados se concluye que:\r\nEl material extraño correspone a restos de guantes de nitrilo.\r\nPelos en el producto final, son desvíos operativos de faena, que no fueron detectados en las inspecciones finales de pro', 'La grasa presenta buen aspecto, sin embargo, se observó la presencia de aproximadamente 10 pelos en el bloque evaluado, asimismo se encontró un pedazo de material extraño que se presume podría ser un trozo de guante.', 2, '2019-11-08', '', 0, NULL, 37, 2, 1464, 1465, 5),
-('Correctiva', 798, '', 'Pintura de pared descascarada en zona de ingreso de cuartos a desosado.', 0, '2019-11-19', '', 0, NULL, 25, 22, NULL, NULL, 3),
+('Correctiva', 798, '', 'Pintura de pared descascarada en zona de ingreso de cuartos a desosado.', 0, '2019-11-19', '', 0, NULL, 25, 22, 1470, 1466, 3),
 ('Correctiva', 799, '', 'Falta tapa de ductos eléctricos en depósito de polietileno de desosado.', 0, '2019-11-19', '', 0, NULL, 25, 22, NULL, NULL, 3),
 ('Correctiva', 800, '', 'Soportes de balanzas con resto de grasa', 0, '2019-11-19', '', 0, NULL, 25, 25, NULL, NULL, 3),
-('Correctiva', 801, '', 'Óxido incipiente en techo de área de salida de cajas de desosado.', 0, '2019-11-19', '', 0, NULL, 25, 25, NULL, NULL, 3);
+('Correctiva', 801, '', 'Óxido incipiente en techo de área de salida de cajas de desosado.', 0, '2019-11-19', '', 0, NULL, 25, 25, NULL, NULL, 3),
+('Correctiva', 802, 'EN: After reviewing the photographs received we think that the 3 pieces of blue plastic correspond to pieces of gloves and/or the bag that are used for this production.\r\nES: Luego de revisar las fotos recibidas pensamos que los 3 pedazos de plastico azul ', 'EN: 3pcs blue hard  plastics was found in the bone eliminator  during production use.  \r\nES: Se encontraron 3 piezas de plástico duro azul en el eliminador de hueso durante el uso de producción.', 1, '2019-11-26', '', 0, NULL, 25, 2, 1471, 1467, 5),
+('Correctiva', 803, 'Luego de comprobar funcionamiento correcto de la bomba se verifica orientación de picos y estado de los mismos, se concluye que no se realizó correctamente el chequeo preoperativo.', 'Se detectó durante monitoreo SSOP operativo el incorrecto lavado de mesa de vísceras (borde final sobre lado derecho no quedan correctamente lavadas).', 1, '2019-10-07', '', 0, NULL, 20, 3, 1472, 1468, 18),
+('Correctiva', 804, 'Este objeto proviene del ganado y se origina en el campo del proveedor.\r\nEste es un desvío reiterado', 'Detección positiva en detector de metales en una caja de producto Falda con destino China.', 1, '2019-11-28', '', 0, NULL, 28, 2, 1473, 1469, 14),
+('Correctiva', 805, '', 'Se observa en entrada de cuartos a desosado cañería identificada como entrada de aire con pérdidas repetidas y constantes de agua.', 0, '2019-10-28', '', 0, NULL, 25, 18, NULL, NULL, 6);
 
 -- --------------------------------------------------------
 
@@ -843,7 +847,7 @@ INSERT INTO `acciones` (`DTYPE`, `Id`, `AnalisisCausa`, `Descripcion`, `EstadoAc
 
 CREATE TABLE `actividades` (
   `IdActividad` int(11) NOT NULL,
-  `Descripcion` varchar(255) COLLATE utf16_spanish2_ci DEFAULT NULL,
+  `Descripcion` text COLLATE utf16_spanish2_ci,
   `FechaEstimadaImplementacion` date DEFAULT NULL,
   `FechaImplementacion` date DEFAULT NULL,
   `TipoActividad` int(11) DEFAULT NULL,
@@ -1721,7 +1725,7 @@ INSERT INTO `actividades` (`IdActividad`, `Descripcion`, `FechaEstimadaImplement
 (867, 'Discusión y asignacion de valor P (probabilidad), a la situacion Crisis con ganado, al revisar el plan de contingencia. Cambio en el criterio de registro.', '2019-03-21', '2019-02-21', 0, 636, 38),
 (868, 'Colocar bancos y mesas fijas en comedor principal', '2019-06-25', '2019-06-25', 0, 637, 2),
 (869, 'Se fabrican y colocan Bancos y mesas de material y acero noxidable en comedor principal', '2019-11-22', '2019-09-07', 0, 638, 2),
-(870, 'Modificar el listado de maquinaria crítica solo registrando el mantenimiento de los equipos que se realiza diariamente ya que éste no se encuentra en el programa, previniéndose así la introducción de inconsistencias entre el programa y el documento cuand', '2019-01-09', '2019-01-28', 0, 639, 2),
+(870, 'Modificar el listado de maquinaria crítica solo registrando el mantenimiento de los equipos que se realiza diariamente ya que éste no se encuentra en el programa, previniéndose así la introducción de inconsistencias entre el programa y el documento cuando se realizan modificaciones en dichas frecuencias o tareas.', '2019-01-09', '2019-01-28', 0, 639, 2),
 (871, 'Se colocan más cámaras de seguridad, teniendo en cuenta, sobre todo, el interior del cerco perimental y la revisación de bolsos a las salida de los turnos.', '2018-12-05', '2018-12-01', 0, 641, 1),
 (872, 'Mantenimiento y servicios anula la abertura de la puerta del cajón.', '2019-09-12', '2018-09-22', 0, 642, 68),
 (873, '29/08/2018: Muestreos para ensayos de ATP de  equipos e instalaciones donde se realizan las diferentes tareas del sector.\r\n29/08/2018: Muestreos para búsqueda de patógenos.\r\n01/04/19: se adjunta resultados de los muestreos de marzo', '2018-09-26', '2018-09-06', 0, 643, 23),
@@ -1823,7 +1827,7 @@ INSERT INTO `actividades` (`IdActividad`, `Descripcion`, `FechaEstimadaImplement
 (969, 'Se revisa la especificación correspondiente con los operarios y los productos que están actualmente en en producción para realizar los ajustes necesarios.', '2019-07-09', '2019-07-09', 0, 744, 28),
 (970, 'Se solicita registro termográfico del transporte.', '2019-06-11', '2019-06-11', 0, 627, 59),
 (971, 'Se da aviso a M&S en línea. Cambian el manómetro durante la media hora de faena.', '2019-07-11', '2019-07-11', 0, 745, 3),
-(972, 'Se define colocar nuevo manometro con gliserina para evitar daño por entrada de vapor o agua.', '2019-08-08', NULL, 0, 745, 19),
+(972, 'Se define colocar nuevo manometro con gliserina para evitar daño por entrada de vapor o agua.', '2019-08-08', '2019-08-23', 0, 745, 19),
 (973, 'Se coordina con diferntes turnos de limpieza y durante tres días consecutivos, se retiran todos los restos y pegotes de empaque de desosado y empaque de menudencias.', '2019-06-11', '2019-06-08', 0, 624, 21),
 (974, 'Supervisores de Desosado, trabajan con operarios afectados a dichas tareas para corregir malas prácticas.', '2019-07-11', '2019-06-05', 0, 624, 28),
 (975, 'Se analizan necesidades o cambios estructurales para solicitar a M&S como agregar algunos soportes para rollos de rótulos en sitios que faltaban.', '2019-08-18', '2019-10-02', 0, 624, 20),
@@ -1917,7 +1921,15 @@ INSERT INTO `actividades` (`IdActividad`, `Descripcion`, `FechaEstimadaImplement
 (1071, 'Se coloca nuevamente, quedando la misma en optimas condiciones', '2019-10-09', '2019-10-10', 0, 788, 72),
 (1073, 'se retira y se coloca nueva baldosa', '2019-10-08', '2019-10-11', 0, 784, 70),
 (1074, 'se pinto todo el techo de la camara quedando el mismo de forma uniforme', '2019-06-20', NULL, 0, 620, 72),
-(1075, 'Se recupera dihozocalo con el manteniemiento adecuado', '2019-10-29', '2019-11-01', 0, 785, 72);
+(1075, 'Se recupera dihozocalo con el manteniemiento adecuado', '2019-10-29', '2019-11-01', 0, 785, 72),
+(1076, 'Se informará a los operarios involucrados en la producción de este producto del reclamo recibido.\r\nOperators involved in the production of this product will be informed of the claim received.', '2019-11-27', '2019-11-27', 0, 802, 28),
+(1077, 'Supervisores verificarán las correctas buenas practicas de manufactura de empaque del producto y de recambio de guantes ante roturas.\r\nSupervisors will verify the correct good manufacturing practices of product packaging and replacement of gloves when bro', '2019-11-27', '2019-11-27', 0, 802, 28),
+(1078, 'Se retienen las menudencias que pasaron por mesa de vísceras desde el monitoreo anterior hasta el final de faena. Se realiza muestreo microbilógico.', '2019-10-07', '2019-10-07', 0, 803, 29),
+(1079, 'Se coordina reparación de mesa de vísceras para el final de faena.', '2019-10-07', '2019-10-07', 0, 803, 63),
+(1080, 'Supervisor de mantenimiento en línea realiza el chequeo con los operarios durante el resto de la semana.', '2019-10-07', '2019-10-07', 0, 803, 63),
+(1081, 'Se identifica y retuvo la cajas afectada, fue enviada a desosado para su reinspección, encontrándose una bala que fue removida.', '2019-11-28', '2019-11-27', 0, 804, 12),
+(1082, 'Se continua con el envío de la carta corporativa de hacienda para proveedores informando la importancia de las buenas prácticas y la preocupación de la planta por estos hallazgos ya que\r\nno pueden implementarse medidas que prevengan estas apariciones.', '2019-11-29', NULL, 0, 804, 11),
+(1083, 'SE raspo y se pinto nuevamente', '2019-11-21', '2019-11-22', 0, 798, 70);
 
 -- --------------------------------------------------------
 
@@ -3531,7 +3543,15 @@ INSERT INTO `comprobaciones` (`Id`, `FechaComprobacion`, `FechaEstimada`, `Obser
 (1462, NULL, '2020-03-31', '', 2, 0, NULL, 794, 38),
 (1463, NULL, '2019-10-24', '', 0, 1, 794, NULL, 24),
 (1464, NULL, '2019-12-27', '', 2, 0, NULL, 797, 20),
-(1465, '2019-11-11', '2019-11-15', 'Se revisan durante ambos turnos el cumplimiento de las operativas.', 0, 1, 797, NULL, 28);
+(1465, '2019-11-11', '2019-11-15', 'Se revisan durante ambos turnos el cumplimiento de las operativas.', 0, 1, 797, NULL, 28),
+(1466, '2019-11-28', '2019-11-23', '', 1, 1, 798, NULL, 19),
+(1467, NULL, '2019-11-28', '', 2, 1, 802, NULL, 28),
+(1468, NULL, '2019-10-11', '', 2, 1, 803, NULL, 19),
+(1469, NULL, '2019-11-29', '', 2, 1, 804, NULL, 49),
+(1470, '0000-00-00', '2019-12-12', '', 5, 0, NULL, 798, 28),
+(1471, '0000-00-00', '2020-01-28', '', 5, 0, NULL, 802, 20),
+(1472, '0000-00-00', '2019-11-07', '', 5, 0, NULL, 803, 29),
+(1473, '0000-00-00', '2020-01-29', '', 5, 0, NULL, 804, 26);
 
 -- --------------------------------------------------------
 
@@ -3702,16 +3722,16 @@ CREATE TABLE `hibernate_sequence` (
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(1),
-(1),
-(1),
-(1),
-(1),
-(1),
-(1),
-(1),
-(1),
-(1);
+(2),
+(2),
+(2),
+(2),
+(2),
+(2),
+(2),
+(2),
+(2),
+(2);
 
 -- --------------------------------------------------------
 
@@ -3858,7 +3878,10 @@ INSERT INTO `productos` (`Id`, `Datos`, `Nombre`, `AccionCorrectivaConProductoAf
 (134, '03/06/2019 - 17/06/2019', 'VTA 133074 BODY FAT', 757),
 (136, '12/07/2019', 'Bife Angosto (cantidad 23.47 kg)', 777),
 (137, '02/07/2019', 'TRIMG 85 CL ( ECO)', 794),
-(138, '03/06/2019', 'Body Fat', 797);
+(138, '03/06/2019', 'Body Fat', 797),
+(139, '26/06/2019', 'Trimming 75CL (20 cajas)', 802),
+(140, 'F.F.: 07/10/19', 'Menduencias', 803),
+(141, '43790', 'Falda con hueso (China)', 804);
 
 -- --------------------------------------------------------
 
@@ -4108,7 +4131,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `comprobaciones`
 --
 ALTER TABLE `comprobaciones`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1466;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1474;
 
 --
 -- Restricciones para tablas volcadas

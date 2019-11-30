@@ -53,9 +53,11 @@ public class DatosFiltros implements Serializable {
             tipoDefault = accion.getTipoAccion();
         }
         if(tipoDefault == TipoAccion.CORRECTIVA){
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
         }else{
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
         }
         
     }
