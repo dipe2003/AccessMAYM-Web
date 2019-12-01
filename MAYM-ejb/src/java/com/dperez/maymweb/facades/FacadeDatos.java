@@ -139,13 +139,13 @@ public class FacadeDatos {
         return cEdicion.RemoverArchivoAdjunto(IdAccion, IdAdjunto);
     }
     /**
-     * Edita una accion con los mismos parametros que se creo. Actualiza la base de datos.
+     * Edita una accion con los mismos parametros que se creo.Actualiza la base de datos.
      * @param IdAccion
      * @param TipoAccion
      * @param FechaDeteccion
      * @param Descripcion
      * @param AnalisisCausa
-     * @param TipoDesvio
+     * @param Cliente
      * @param IdAreaSector
      * @param IdDeteccion
      * @param IdCodificacion

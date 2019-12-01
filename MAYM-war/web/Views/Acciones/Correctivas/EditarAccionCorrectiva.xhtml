@@ -135,7 +135,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <strong><label for="cliente">Cliente:</label></strong>                                    
-                                    <h:inputTextarea class="form-control" id="cliente" p:placeholder="Nombre del cliente" value="#{crearAccionCorrectiva.cliente}"/>
+                                    <h:inputTextarea class="form-control" id="cliente" p:placeholder="Nombre del cliente" value="#{editarAccionCorrectiva.cliente}"/>
                                 </div>
                             </div>
                         </div>
@@ -636,7 +636,7 @@
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
                             <f:ajax execute="analisis_causa descripcion fecha_deteccion area codificacion deteccion clasificacion
                                     fecha_estimada_comprobacion_implementacion responsable_comprobacion_implementacion 
-                                    fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes
+                                    fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia cliente" event="click" listener="#{editarAccionCorrectiva.editarAccion()}" onevent="indicador" render="panel_mensajes
                                     panel_mensajes_implementacion panel_mensajes_eficacia"/>
                         </h:commandButton>
                     </div>

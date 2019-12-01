@@ -20,7 +20,6 @@ import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
 import com.dperez.maymweb.usuario.Usuario;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.Stateless;
@@ -116,19 +115,14 @@ public class ControladorVistaRegistros {
     /**
      * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
      * @param SoloVigente True: si no fueron dados de baja (FechaBaja == null).
-     * @param IdEmpresa -1 para todas las empresas.
      * @return Lista de Usuarios.
      */
     public List<Usuario> GetUsuarios(boolean SoloVigente){
         List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
-        Iterator it = lstUsuarios.iterator();
-        while(it.hasNext()){
-            Usuario usr = (Usuario) it.next();
-            if(SoloVigente){
-                if(usr.getFechaBaja() != null){
-                    it.remove();
-                }
-            }
+        if(SoloVigente == true){
+            return lstUsuarios.stream()
+                    .filter(u->u.getFechaBaja() == null)
+                    .collect(Collectors.toList());
         }
         return lstUsuarios;
     }
@@ -144,7 +138,6 @@ public class ControladorVistaRegistros {
     
     /**
      * Devuelve las codificaciones.
-     * @param IdEmpresa -1 para todas las empresas
      * @return Lista de codificaciones.
      */
     public List<Codificacion> GetCodificaciones(){
@@ -153,7 +146,6 @@ public class ControladorVistaRegistros {
     
     /**
      * Devuelve una todas las areas de una empresa.
-     * @param IdEmpresa -1 para todas las empresas
      * @return lista de areas.
      */
     public List<Area> GetAreas(){
@@ -162,7 +154,6 @@ public class ControladorVistaRegistros {
     
     /**
      * Lista todos los usuarios de la empresa seleccionada por id.
-     * @param IdEmpresa
      * @return
      */
     public List<Usuario> ListarUsuarios(){
@@ -204,7 +195,6 @@ public class ControladorVistaRegistros {
     
     /**
      * Lista todas las fortalezas registradas
-     * @param IdEmpresa -1 para todas las empresas
      * @return
      */
     public List<Fortaleza> ListarFortalezas(){

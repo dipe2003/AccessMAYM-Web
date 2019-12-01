@@ -98,7 +98,7 @@ public class ControladorEdicionRegistro {
         accion.setFechaDeteccion(FechaDeteccion);
         accion.setDescripcion(Descripcion);
         if(TipoAccion == TipoAccion.CORRECTIVA){
-            if (!Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
+            if (Cliente != null && !Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
         }
         accion.setAnalisisCausa(AnalisisCausa);
         return mAccion.ActualizarAccion(accion);

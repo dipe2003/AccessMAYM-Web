@@ -41,7 +41,6 @@ public class FacadeLectura  {
     /**
      * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
      * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
-     * @param IdEmpresa -1 para todas las empresas.
      * @return Lista de Usuarios.
      */
     public List<Usuario> GetUsuarios(boolean Vigente){
