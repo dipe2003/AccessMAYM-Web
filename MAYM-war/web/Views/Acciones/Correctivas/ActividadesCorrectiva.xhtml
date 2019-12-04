@@ -35,8 +35,8 @@
                                     <h:selectOneMenu id="responsable_correctiva" class="form-control" value="#{actividadesAC.responsableMedidaCorrectiva}"
                                                      required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
                                         <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
-                                        <c:forEach items="#{actividadesAC.listaUsuarios}" var="entry">
-                                            <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                        <c:forEach items="#{actividadesAC.listaResponsables}" var="responsable">
+                                            <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                         </c:forEach>
                                     </h:selectOneMenu>
                                 </div>
@@ -102,8 +102,8 @@
                                     <h:selectOneMenu id="responsable_preventiva" class="form-control" value="#{actividadesAC.responsableMedidaPreventiva}"
                                                      required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
                                         <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
-                                        <c:forEach items="#{actividadesAC.listaUsuarios}" var="entry">
-                                            <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                        <c:forEach items="#{actividadesAC.listaResponsables}" var="responsable">
+                                            <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                         </c:forEach>
                                     </h:selectOneMenu>
                                 </div>

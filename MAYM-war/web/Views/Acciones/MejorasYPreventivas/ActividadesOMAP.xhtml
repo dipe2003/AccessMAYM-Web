@@ -28,8 +28,8 @@
                             <h:selectOneMenu id="responsable_actividad" class="form-control" value="#{actividadesOMAP.responsableActividad}"
                                              required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
                                 <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
-                                <c:forEach items="#{actividadesOMAP.listaUsuariosEmpresa}" var="entry">
-                                    <f:selectItem itemLabel="#{entry.value.areaSectorUsuario.nombre} | #{entry.value.nombre} #{entry.value.apellido}" itemValue="#{entry.key}" />
+                                <c:forEach items="#{actividadesOMAP.listaResponsables}" var="responsable">
+                                    <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                 </c:forEach>
                             </h:selectOneMenu>
                         </div>

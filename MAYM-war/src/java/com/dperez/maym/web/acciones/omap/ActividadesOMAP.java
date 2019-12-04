@@ -6,16 +6,16 @@
 package com.dperez.maym.web.acciones.omap;
 
 import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
+import com.dperez.maymweb.accion.actividad.TipoActividad;
 import static com.dperez.maymweb.accion.actividad.TipoActividad.MEJORA;
-import com.dperez.maymweb.acciones.Preventiva;
 import com.dperez.maymweb.acciones.TipoAccion;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.EventoActividad;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maymweb.usuario.Responsable;
 import com.dperez.maymweb.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -51,9 +51,9 @@ public class ActividadesOMAP implements Serializable {
     private ProgramadorEventos pEventos;
     
     private Accion AccionSeleccionada;
-    private int IdActividadEditar;
+    private int IdActividadEditar;    
     
-    private Map<Integer, Usuario> ListaUsuariosEmpresa;
+    private List<Responsable> ListaResponsables;
     
     private Date FechaEstimadaImplementacionActividad;
     private String StrFechaEstimada;
@@ -62,7 +62,9 @@ public class ActividadesOMAP implements Serializable {
     private TipoAccion TipoAccion;
     
     //  Getters
-    public Map<Integer, Usuario> getListaUsuariosEmpresa() {return ListaUsuariosEmpresa;}
+    
+    public List<Responsable> getListaResponsables() {return ListaResponsables;}
+
     public Date getFechaEstimadaImplementacionActividad() {return FechaEstimadaImplementacionActividad;}
     public String getStrFechaEstimada(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -81,8 +83,12 @@ public class ActividadesOMAP implements Serializable {
     public int getIdActividadEditar() {return IdActividadEditar;}
     
     //  Setters
-    public void setListaUsuariosEmpresa(Map<Integer, Usuario> ListaUsuariosEmpresa) {this.ListaUsuariosEmpresa = ListaUsuariosEmpresa;}
-    public void setFechaEstimadaImplementacionActividad(Date FechaEstimadaImplementacionActividad) {this.FechaEstimadaImplementacionActividad = FechaEstimadaImplementacionActividad;}
+    
+    public void setListaResponsables(List<Responsable> ListaResponsables) {this.ListaResponsables = ListaResponsables;}
+
+    public void setFechaEstimadaImplementacionActividad(Date FechaEstimadaImplementacionActividad) {
+        this.FechaEstimadaImplementacionActividad = FechaEstimadaImplementacionActividad;
+    }
     public void setStrFechaEstimada(String StrFechaEstimada) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -109,8 +115,12 @@ public class ActividadesOMAP implements Serializable {
      */
     public void agregarActividad() throws IOException{
         Actividad actividad = null;
+        TipoActividad tipo = TipoActividad.MEJORA;
+        if(TipoAccion == TipoAccion.PREVENTIVA){
+            tipo = TipoActividad.PREVENTIVA;
+        }
         if((actividad = fDatos.AgregarActividad(AccionSeleccionada.getId(), FechaEstimadaImplementacionActividad, DescripcionActividad,
-                ResponsableActividad, MEJORA))!= null){
+                ResponsableActividad, tipo))!= null){
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar Actividad", "No se pudo agregar Actividad" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
@@ -119,7 +129,7 @@ public class ActividadesOMAP implements Serializable {
             pEventos.ProgramarEvento(FechaEstimadaImplementacionActividad, eventoNuevo);
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/EditarOMAP.xhtml?id="+AccionSeleccionada.getId()+"&tipo="+TipoAccion);
         }
     }
     
@@ -142,7 +152,7 @@ public class ActividadesOMAP implements Serializable {
             }
             // redirigir a la edicion de la accion de mejora.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/EditarOMAP.xhtml?id="+AccionSeleccionada.getId()+"&tipo="+TipoAccion);
         }
     }
     
@@ -166,7 +176,7 @@ public class ActividadesOMAP implements Serializable {
             }
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Mejoras/EditarAccionMejora.xhtml?id="+AccionSeleccionada.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/MejorasYPreventivas/EditarOMAP.xhtml?id="+AccionSeleccionada.getId()+"&tipo="+TipoAccion);
         }
     }
     
@@ -200,12 +210,8 @@ public class ActividadesOMAP implements Serializable {
                 }
             }
             
-            //  Usuarios
-            this.ListaUsuariosEmpresa = new HashMap<>();
-            List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
-            ListaUsuariosEmpresa = tmpUsuarios.stream()
-                    .sorted()
-                    .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
+            // Responsables
+            ListaResponsables = fLectura.ListarResponsables(true);
         }
     }
 }

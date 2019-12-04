@@ -15,17 +15,14 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.EventoActividad;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.Responsable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -53,7 +50,7 @@ public class ActividadesAC implements Serializable {
     private String TipoActividad;
     private int IdActividadEditar;
     
-    private Map<Integer, Usuario> ListaUsuarios;
+    private List<Responsable> ListaResponsables;
     
     private Date FechaEstimadaImplementacionMedidaCorrectiva;
     private String strFechaEstimadaCorrectiva;
@@ -70,8 +67,9 @@ public class ActividadesAC implements Serializable {
     public Accion getAccionSeleccionada() {return AccionSeleccionada;}
     
     public int getIdActividadEditar() {return IdActividadEditar;}
+
+    public List<Responsable> getListaResponsables() {return ListaResponsables;}
     
-    public Map<Integer, Usuario> getListaUsuarios() {return ListaUsuarios;}
     public Date getFechaEstimadaImplementacionMedidaCorrectiva() {return FechaEstimadaImplementacionMedidaCorrectiva;}
     public String getStrFechaEstimadaCorrectiva(){
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -100,8 +98,9 @@ public class ActividadesAC implements Serializable {
     public void setAccionSeleccionada(Accion AccionSeleccionada) {this.AccionSeleccionada = AccionSeleccionada;}
     
     public void setIdActividadEditar(int IdActividadEditar) {this.IdActividadEditar = IdActividadEditar;}
+
+    public void setListaResponsables(List<Responsable> ListaResponsables) {this.ListaResponsables = ListaResponsables;}
     
-    public void setListaUsuarios(Map<Integer, Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
     public void setFechaEstimadaImplementacionMedidaCorrectiva(Date FechaEstimadaImplementacionMedidaCorrectiva) {this.FechaEstimadaImplementacionMedidaCorrectiva = FechaEstimadaImplementacionMedidaCorrectiva;}
     public void setStrFechaEstimadaCorrectiva(String strFechaEstimadaCorrectiva) {
         Calendar cal = Calendar.getInstance();
@@ -310,11 +309,7 @@ public class ActividadesAC implements Serializable {
                 }
             }
             //  Usuarios
-            this.ListaUsuarios = new HashMap<>();
-            List<Usuario> tmpUsuarios = fLectura.GetUsuarios(true);
-            ListaUsuarios = tmpUsuarios.stream()
-                    .sorted()
-                    .collect(Collectors.toMap(Usuario::getId, usuario->usuario));
+            ListaResponsables = fLectura.ListarResponsables(true);
         }
     }
 }
