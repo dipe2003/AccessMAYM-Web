@@ -28,7 +28,7 @@ import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.EventoAccion;
 import com.dperez.maymweb.herramientas.EventoActividad;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.Responsable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -102,7 +102,6 @@ public class EditarAccionCorrectiva implements Serializable {
     private Map<Integer, Actividad> MedidasPreventivas;
     
     //comprobaciones
-    private List<Usuario> ListaUsuarios;
     private int ResponsableImplementacion;
     private int ResponsableEficacia;
     private Date FechaEstimadaImplementacion;
@@ -112,6 +111,9 @@ public class EditarAccionCorrectiva implements Serializable {
     
     private Comprobacion ComprobacionImplementacion;
     private Comprobacion ComprobacionEficacia;
+    
+    private List<Responsable> ListaResponsables;
+    private int ResponsableSeleccionado;
     
     //  Getters
     public Accion getAccionSeleccionada(){return AccionSeleccionada;}
@@ -153,7 +155,6 @@ public class EditarAccionCorrectiva implements Serializable {
     
     //comprobaciones
     
-    public List<Usuario> getListaUsuarios() {return ListaUsuarios;}
     public int getResponsableImplementacion() {return ResponsableImplementacion;}
     public int getResponsableEficacia() {return ResponsableEficacia;}
     public Date getFechaEstimadaImplementacion() {return FechaEstimadaImplementacion;}
@@ -176,6 +177,8 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
+
+    public List<Responsable> getListaResponsables() {return ListaResponsables;}    
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -214,7 +217,7 @@ public class EditarAccionCorrectiva implements Serializable {
     public void setMedidasPreventivas(Map<Integer, Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     
     // comprobaciones
-    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
+
     public void setResponsableEficacia(int ResponsableEficacia) {this.ResponsableEficacia = ResponsableEficacia;}
     public void setResponsableImplementacion(int ResponsableImplementacion) {this.ResponsableImplementacion = ResponsableImplementacion;}
     public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
@@ -239,6 +242,8 @@ public class EditarAccionCorrectiva implements Serializable {
     }
     public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
     public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
+
+    public void setListaResponsables(List<Responsable> ListaResponsables) {this.ListaResponsables = ListaResponsables;}   
     
     //  Metodos
     
@@ -302,8 +307,8 @@ public class EditarAccionCorrectiva implements Serializable {
             actualizarListaAdjuntos();
             
             // Comprobaciones
-            // llenar la lista de usuarios de la empresa que no se hayan dado de baja.
-            ListaUsuarios = fLectura.GetUsuarios(true);
+            //  Llenar los responsables
+            ListaResponsables = fLectura.ListarResponsables(true);           
             
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();

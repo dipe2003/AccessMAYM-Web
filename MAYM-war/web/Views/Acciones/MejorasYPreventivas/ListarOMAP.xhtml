@@ -159,7 +159,7 @@
                                                 <li class="active"><a>#{numero.count}</a></li>
                                             </c:when>
                                             <c:otherwise>
-                                                <li><h:link value="#{numero.count}" outcome="ListarOMAP.xhtml?pagina=#{numero.count}"/>
+                                                <li><h:link value="#{numero.count}" outcome="ListarOMAP.xhtml?pagina=#{numero.count}&amp;tipo=#{listarOMAP.tipoAccion}"/>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>

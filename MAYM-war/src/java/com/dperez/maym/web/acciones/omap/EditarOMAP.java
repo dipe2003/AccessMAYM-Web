@@ -13,21 +13,18 @@ import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.acciones.Accion;
 import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
 import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.Mejora;
 import com.dperez.maymweb.accion.actividad.Actividad;
 import com.dperez.maymweb.accion.adjunto.Adjunto;
 import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
-import com.dperez.maymweb.acciones.Preventiva;
 import com.dperez.maymweb.area.Area;
 import com.dperez.maymweb.codificacion.Codificacion;
 import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.EventoAccion;
 import com.dperez.maymweb.herramientas.EventoActividad;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.usuario.Responsable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -96,7 +93,7 @@ public class EditarOMAP implements Serializable {
     private Map<Integer, Actividad> ListaActividades;
     
     //comprobaciones
-    private List<Usuario> ListaUsuarios;
+
     private int ResponsableImplementacion;
     private int ResponsableEficacia;
     private Date FechaEstimadaImplementacion;
@@ -106,6 +103,8 @@ public class EditarOMAP implements Serializable {
     
     private Comprobacion ComprobacionImplementacion;
     private Comprobacion ComprobacionEficacia;
+    
+    private List<Responsable> ListaResponsables;
     
     //  Getters
     public int getIdAccionSeleccionada(){return IdAccionSeleccionada;}
@@ -142,7 +141,6 @@ public class EditarOMAP implements Serializable {
     
     //comprobaciones
     
-    public List<Usuario> getListaUsuarios() {return ListaUsuarios;}
     public int getResponsableImplementacion() {return ResponsableImplementacion;}
     public int getResponsableEficacia() {return ResponsableEficacia;}
     public Date getFechaEstimadaImplementacion() {return FechaEstimadaImplementacion;}
@@ -165,6 +163,8 @@ public class EditarOMAP implements Serializable {
     }
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
+
+    public List<Responsable> getListaResponsables() {return ListaResponsables;}    
     
     //  Setters
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {this.IdAccionSeleccionada = IdAccionSeleccionada;}
@@ -200,7 +200,6 @@ public class EditarOMAP implements Serializable {
     public void setListaActividades(Map<Integer, Actividad> ListaActividades) {this.ListaActividades = ListaActividades;}
     
     // comprobaciones
-    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
     public void setResponsableEficacia(int ResponsableEficacia) {this.ResponsableEficacia = ResponsableEficacia;}
     public void setResponsableImplementacion(int ResponsableImplementacion) {this.ResponsableImplementacion = ResponsableImplementacion;}
     public void setFechaEstimadaImplementacion(Date FechaEstimadaImplementacion) {this.FechaEstimadaImplementacion = FechaEstimadaImplementacion;}
@@ -225,6 +224,8 @@ public class EditarOMAP implements Serializable {
     }
     public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
     public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
+
+    public void setListaResponsables(List<Responsable> ListaResponsables) {this.ListaResponsables = ListaResponsables;}    
     
     //  Metodos
     
@@ -278,8 +279,8 @@ public class EditarOMAP implements Serializable {
             actualizarListaAdjuntos();
             
             // Comprobaciones
-            // llena la lista con los usuarios que no se hayan dado de baja.
-            ListaUsuarios = fLectura.GetUsuarios(true);
+            // llena la lista con los responsables
+            ListaResponsables = fLectura.ListarResponsables(true);
             
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();

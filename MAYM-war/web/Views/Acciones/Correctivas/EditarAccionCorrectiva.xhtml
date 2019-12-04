@@ -444,8 +444,8 @@
                                                                 <h:selectOneMenu id="responsable_comprobacion_implementacion" class="form-control" value="#{editarAccionCorrectiva.responsableImplementacion}" 
                                                                                  required="true" requiredMessage="Se debe seleccionar responsable." >
                                                                     <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
-                                                                    <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombreCompleto}" itemValue="#{usuario.id}" />
+                                                                    <c:forEach items="#{editarAccionCorrectiva.listaResponsables}" var="responsable">
+                                                                        <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -499,8 +499,8 @@
                                                                 <h:selectOneMenu id="responsable_comprobacion_eficacia" class="form-control" value="#{editarAccionCorrectiva.responsableEficacia}" 
                                                                                  required="true" requiredMessage="Se debe seleccionar un responsable." >
                                                                     <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
-                                                                    <c:forEach items="#{editarAccionCorrectiva.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.areaSectorUsuario.nombre} | #{usuario.nombreCompleto}" itemValue="#{usuario.id}" />
+                                                                    <c:forEach items="#{editarAccionCorrectiva.listaResponsables}" var="responsable">
+                                                                        <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>

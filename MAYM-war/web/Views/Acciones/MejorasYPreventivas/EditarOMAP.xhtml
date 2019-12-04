@@ -276,8 +276,8 @@
                                                                 <h:selectOneMenu id="responsable_comprobacion_implementacion" class="form-control" value="#{editarOMAP.responsableImplementacion}" 
                                                                                  required="true" requiredMessage="Se debe seleccionar responsable." >
                                                                     <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
-                                                                    <c:forEach items="#{editarOMAP.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                    <c:forEach items="#{editarOMAP.listaResponsables}" var="responsable">
+                                                                        <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -331,8 +331,8 @@
                                                                 <h:selectOneMenu id="responsable_comprobacion_eficacia" class="form-control" value="#{editarOMAP.responsableEficacia}" 
                                                                                  required="true" requiredMessage="Se debe seleccionar un responsable." >
                                                                     <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
-                                                                    <c:forEach items="#{editarOMAP.listaUsuarios}" var="usuario">
-                                                                        <f:selectItem itemLabel="#{usuario.nombre} #{usuario.apellido}" itemValue="#{usuario.id}" />
+                                                                    <c:forEach items="#{editarOMAP.listaResponsables}" var="responsable">
+                                                                        <f:selectItem itemLabel="#{responsable.nombreResponsable} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaSectorUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>

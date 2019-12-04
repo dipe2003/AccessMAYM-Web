@@ -18,7 +18,9 @@ import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.acciones.EnumEstado;
 import com.dperez.maymweb.fortaleza.Fortaleza;
 import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
+import com.dperez.maymweb.responsable.ManejadorResponsables;
 import com.dperez.maymweb.usuario.ManejadorUsuario;
+import com.dperez.maymweb.usuario.Responsable;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +49,7 @@ public class ControladorVistaRegistros {
     private ManejadorArea mArea;
     @Inject
     private ManejadorFortaleza mFortaleza;
+    @Inject ManejadorResponsables mResponsables;
     
     //  Constructores
     public ControladorVistaRegistros(){}
@@ -199,6 +202,19 @@ public class ControladorVistaRegistros {
      */
     public List<Fortaleza> ListarFortalezas(){
         return mFortaleza.ListarFortalezas();
+    }
+    
+    /*
+        Responsables
+    */
+    public List<Responsable> ListarResponsables(boolean soloVigentes){
+        List<Responsable> responsables = mResponsables.ListarResponsables();
+        if(soloVigentes){
+            responsables = responsables.stream()
+                    .filter(r->r.getUsuarioResponsable().isVigente() == true)
+                    .collect(Collectors.toList());
+        }
+        return responsables;
     }
     
 }

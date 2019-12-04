@@ -13,6 +13,7 @@ import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
 import com.dperez.maymweb.deteccion.Deteccion;
 import com.dperez.maymweb.empresa.Empresa;
 import com.dperez.maymweb.fortaleza.Fortaleza;
+import com.dperez.maymweb.usuario.Responsable;
 import com.dperez.maymweb.usuario.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -61,7 +62,6 @@ public class FacadeLectura  {
     
     /**
      * Devuelve las codificaciones.
-     * @param IdEmpresa -1 para todas las empresas
      * @return Lista de codificaciones.
      */
     public List<Codificacion> ListarCodificaciones(){
@@ -70,7 +70,6 @@ public class FacadeLectura  {
     
     /**
      * Devuelve una todas las areas de una empresa.
-     * @param IdEmpresa -1 para todas las empresas
      * @return lista de areas.
      */
     public List<Area> ListarAreasSectores(){
@@ -98,10 +97,17 @@ public class FacadeLectura  {
     
     /**
      * Lista todas las fortalezas registradas
-     * @param IdEmpresa -1 para todas las empresas
      * @return
      */
     public List<Fortaleza> ListarFortalezas(){
         return cVista.ListarFortalezas();
+    }
+    
+    /*
+        Responsables
+    */
+    
+    public List<Responsable> ListarResponsables(boolean soloVigentes){
+        return cVista.ListarResponsables(soloVigentes);
     }
 }
