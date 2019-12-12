@@ -50,6 +50,7 @@
                                     <th>Recibe Alertas</th>
                                     <th>Permiso</th>
                                     <th>Fecha de Baja</th>
+                                    <th>Responsabilidad</th>
                                     <th></th>
                                 </tr>
                                 
@@ -102,6 +103,11 @@
                                                     ---
                                                 </c:otherwise>
                                             </c:choose> 
+                                        </td>
+                                        <td>
+                                            <c:forEach items="#{usuario.responsables}" var="responsable">
+                                               #{responsable.nombreResponsable} 
+                                            </c:forEach>
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
