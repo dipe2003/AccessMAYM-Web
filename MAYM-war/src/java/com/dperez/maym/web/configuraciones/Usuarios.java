@@ -7,13 +7,12 @@ package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maym.web.inicio.SesionUsuario;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
-import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.EnumPermiso;
+import com.dperez.maymweb.modelo.usuario.Usuario;
+import com.dperez.maymweb.modelo.usuario.EnumPermiso;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,17 +32,14 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Usuarios implements Serializable {
-    @Inject
+
     private FacadeAdministrador fAdmin;
-    @Inject
     private FacadeLectura fLectura;
-    @Inject
     private FacadeMain fMain;
+    
     @Inject
     private SesionUsuario sesion;
-    
-    private Empresa EmpresaLogueada;
-    
+        
     private int IdUsuarioSeleccionado;
     
     private boolean ContieneRegistros;
@@ -74,7 +70,6 @@ public class Usuarios implements Serializable {
     private List<Usuario> ListaCompletaUsuarios;
     
     //  Getters
-    public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
     public boolean isContieneRegistros() {return ContieneRegistros;}
     public String getCorreoElectronico() {return CorreoElectronico;}
     public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}
@@ -94,8 +89,6 @@ public class Usuarios implements Serializable {
     
     public List<Area> getListaAreas() {return ListaAreas;}
     public int getAreaSeleccionada() {return AreaSeleccionada;}
-    
-    public void setEmpresaLogueada(Empresa EmpresaLogueada) {this.EmpresaLogueada = EmpresaLogueada;}
     
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
@@ -130,9 +123,12 @@ public class Usuarios implements Serializable {
      */
     @PostConstruct
     public void init(){
+        fLectura = new FacadeLectura();
+        fAdmin = new FacadeAdministrador();
+        fMain = new FacadeMain();
+        
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         
         this.PermisoSeleccionado  = EnumPermiso.DATOS;
         
@@ -145,7 +141,7 @@ public class Usuarios implements Serializable {
         }
         
         ListaUsuarios = new ArrayList<>();
-        ListaCompletaUsuarios = fLectura.GetUsuarios(false);
+        ListaCompletaUsuarios = fLectura.listarUsuarios(false);
         
         PermisosUsuario = EnumPermiso.values();
         // llenar la lista con todas las areas registradas.
@@ -158,7 +154,7 @@ public class Usuarios implements Serializable {
         //Areas
         ListaAreas =  new ArrayList<>();
         // llenar la lista de areas con todas las areas registradas.
-        List<Area> tmpAreas = fLectura.ListarAreasSectores();
+        List<Area> tmpAreas = fLectura.listarAreas();
         Collections.sort(tmpAreas);
         ListaAreas = tmpAreas.stream()
                 .sorted()
@@ -174,7 +170,7 @@ public class Usuarios implements Serializable {
     public void nuevoUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         if(Password.equals(PasswordConfirmacion)){
-            if((fAdmin.NuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
+            if((fAdmin.nuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
                     PermisoSeleccionado, AreaSeleccionada))!=null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
             }else{
@@ -239,7 +235,7 @@ public class Usuarios implements Serializable {
      */
     public void eliminarUsuario(int IdUsuarioSeleccionado) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if(fAdmin.EliminarUsuario(IdUsuarioSeleccionado)!=-1){
+        if(fAdmin.eliminarUsuario(IdUsuarioSeleccionado)!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
         }else{
             context.addMessage("form_usuarios:btn_eliminar_usuario_"+IdUsuarioSeleccionado, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el usuario", "No se pudo eliminar el usuario" ));
@@ -254,7 +250,7 @@ public class Usuarios implements Serializable {
      */
     public void darDeBajaUsuario(int IdUsuario) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if(fAdmin.DarDeBajaUsuario(IdUsuario)== -1){
+        if(fAdmin.darDeBajaUsuario(IdUsuario)== -1){
             context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de baja el usuario", "No se pudo dar de baja el usuario" ));
             context.renderResponse();
         }else{
@@ -268,7 +264,7 @@ public class Usuarios implements Serializable {
      */
     public void darDeAltaUsuario(int IdUsuario) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if(fAdmin.DarDeAltaUsuario(IdUsuario)== -1){
+        if(fAdmin.darDeAltaUsuario(IdUsuario)== -1){
             context.addMessage("form_usuarios:btn_baja_"+IdUsuario, new FacesMessage(SEVERITY_ERROR, "No se pudo dar de alta el usuario", "No se pudo dar de alta el usuario" ));
             context.renderResponse();
         }else{
@@ -322,7 +318,7 @@ public class Usuarios implements Serializable {
             this.CambiarPassword = false;
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
-            this.AreaSeleccionada = usrSeleccionado.getAreaSectorUsuario().getId();
+            this.AreaSeleccionada = usrSeleccionado.getAreaUsuario().getId();
             
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False

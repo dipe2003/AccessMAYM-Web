@@ -5,278 +5,225 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.accion.comprobaciones.Comprobacion;
-import com.dperez.maymweb.accion.comprobaciones.ResultadoComprobacion;
-import com.dperez.maymweb.acciones.ManejadorAccion;
-import com.dperez.maymweb.acciones.Correctiva;
-import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.Mejora;
-import com.dperez.maymweb.acciones.Preventiva;
-import com.dperez.maymweb.accion.adjunto.Adjunto;
-import com.dperez.maymweb.accion.actividad.Actividad;
-import com.dperez.maymweb.accion.actividad.TipoActividad;
-import com.dperez.maymweb.accion.adjunto.EnumTipoAdjunto;
-import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.area.ManejadorArea;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.codificacion.ManejadorCodificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.fortaleza.Fortaleza;
-import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
-import com.dperez.maymweb.producto.ManejadorProducto;
-import com.dperez.maymweb.producto.Producto;
-import com.dperez.maymweb.responsable.ManejadorResponsables;
-import com.dperez.maymweb.usuario.Responsable;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.comprobaciones.ResultadoComprobacion;
+import com.dperez.maymweb.modelo.acciones.Correctiva;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
+import com.dperez.maymweb.modelo.acciones.Mejora;
+import com.dperez.maymweb.modelo.acciones.Preventiva;
+import com.dperez.maymweb.modelo.acciones.adjunto.Adjunto;
+import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
+import com.dperez.maymweb.modelo.acciones.actividad.TipoActividad;
+import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
+import com.dperez.maymweb.modelo.producto.Producto;
+import com.dperez.maymweb.modelo.usuario.Responsable;
+import com.dperez.maymweb.persistencia.FabricaRepositorio;
+import com.dperez.maymweb.persistencia.RepositorioPersistencia;
 import java.util.Date;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
-@Named
-@Stateless
 public class ControladorRegistro {
-    @Inject
-    private ManejadorAccion mAccion;
-    @Inject
-    private ManejadorArea mArea;
-    @Inject
-    private ManejadorAdjunto mAdjunto;
-    @Inject
-    private ManejadorDeteccion mDeteccion;
-    @Inject
-    private ManejadorResponsables mResponsable;
-    @Inject
-    private ManejadorFortaleza mFortaleza;
-    @Inject
-    private ManejadorCodificacion mCodificacion;
-    @Inject
-    private ManejadorProducto mProducto;
+    
+    private final RepositorioPersistencia<Accion> repoAccion;
+    private final RepositorioPersistencia<Area> repoArea;
+    private final RepositorioPersistencia<Deteccion> repoDeteccion;
+    private final RepositorioPersistencia<Responsable> repoResponsable;
+    private final RepositorioPersistencia<Fortaleza> repoFortalezas;
+    
+    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
     
     //  Constructores
-    public ControladorRegistro(){}
+    public ControladorRegistro(){
+        repoAccion = fabricaRepositorio.getRespositorioAcciones();
+        repoArea = fabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
+        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
+        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
+    }
     
     /**
      * Crea una nueva accion en estado pendiente y la persiste en la base de datos.Se codifica automaticamente la accion como 'Sin Codificar'.Si la codificacon no existe se crea.
-     * @param TipoAccion
-     * @param FechaDeteccion
-     * @param Descripcion
-     * @param Cliente
-     * @param IdAreaSector
-     * @param IdDeteccion
+     * @param tipo
+     * @param fechaDeteccion
+     * @param descripcion
+     * @param idArea
+     * @param idDeteccion
      * @return Null: si no se creo.
      */
-    public Accion NuevaAccion(TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String Cliente,
-            int IdAreaSector, int IdDeteccion){
+    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, int idArea, int idDeteccion){
+        Area area = repoArea.find(idArea);
+        Deteccion deteccion = repoDeteccion.find(idDeteccion);
+        
         Accion accion;
-        switch(TipoAccion){
-            case CORRECTIVA:
-                accion = new Correctiva(FechaDeteccion, Descripcion);
-                if (!Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
-                break;
-                
-            case MEJORA:
-                accion = new Mejora(FechaDeteccion, Descripcion);
-                break;
-                
-            default:
-                accion = new Preventiva(FechaDeteccion, Descripcion);
-                break;
+        switch(tipo){
+            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, area, deteccion);
+            
+            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, area, deteccion);
+            
+            default -> accion = new Preventiva(fechaDeteccion , descripcion, area, deteccion);
         }
         
-        Area area = mArea.GetArea(IdAreaSector);
-        accion.setAreaSectorAccion(area);
-        Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-        accion.setDeteccion(deteccion);
-        // codificacion
-        List<Codificacion> codificaciones = mCodificacion.ListarCodificaciones();
-        int existe = 0;
-        existe = codificaciones.stream()
-                .filter(codificacion -> codificacion.getNombre().equalsIgnoreCase("Sin Codificar"))
-                .findFirst()
-                .get().getId();
-        if(existe==0){
-            Codificacion codificacion = new Codificacion("Sin Codificar", "No se ha asignado codificacion aun.");
-            codificacion.setId(mCodificacion.CrearCodificacion(codificacion));
-            accion.setCodificacionAccion(codificacion);
-        }else{
-            Codificacion codificacion = mCodificacion.GetCodificacion(existe);
-            accion.setCodificacionAccion(codificacion);
-        }
-        accion.setId(mAccion.CrearAccion(accion));
-        
-        if(accion.getId()!=-1){
-            return accion;
-        }else{
-            return null;
-        }
+        return repoAccion.create(accion);
     }
     
     /**
      * Crea el/los productos involucrados en el desvio, los agrega a la accion correctiva y actualiza la base de datos.
-     * @param AccionCorrectiva
-     * @param NombreProducto
-     * @param DatosProducto
+     * @param idAccion
+     * @param nombreProducto
+     * @param datosProducto
      * @return -1 si no se creo.
      */
-    public int AgregarProductoInvolucrado(int AccionCorrectiva, String NombreProducto, String DatosProducto){
-        Correctiva correctiva = (Correctiva) mAccion.GetAccion(AccionCorrectiva);
-        Producto producto = correctiva.addProductoAfectado(NombreProducto, DatosProducto);
-        if(mProducto.CrearProducto(producto)!=-1){
-            return mAccion.ActualizarAccion(correctiva);
-        }
-        return -1;
+    public int agregarProductoInvolucrado(int idAccion, String nombreProducto, String datosProducto){
+        Accion accion =  repoAccion.find(idAccion);
+        Producto producto = accion.crearProducto(nombreProducto, datosProducto);
+        repoAccion.update(accion);
+        return producto.getId();
     }
     
     /**
      * Crea el/los adjuntos, los agrega a la accion y actualiza la base de datos.
-     * @param IdAccion
-     * @param TituloAdjunto
-     * @param UbicacionAdjunto
-     * @param TipoAdjunto
+     * @param idAccion
+     * @param tituloAdjunto
+     * @param ubicacionAdjunto
+     * @param tipo
      * @return -1 si no se creo.
      */
-    public int AgregarArchivoAdjunto(int IdAccion, String TituloAdjunto, String UbicacionAdjunto, EnumTipoAdjunto TipoAdjunto){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Adjunto adjunto = new Adjunto(TituloAdjunto, UbicacionAdjunto, TipoAdjunto);
-        if(mAdjunto.CrearAdjunto(adjunto)!=-1){
-            accion.AddAdjunto(adjunto);
-        }
-        return mAccion.ActualizarAccion(accion);
+    public int agregarArchivoAdjunto(int idAccion, String tituloAdjunto, String ubicacionAdjunto, TipoAdjunto tipo){
+        Accion accion = repoAccion.find(idAccion);
+        Adjunto adjunto = accion.crearAdjunto(tituloAdjunto, ubicacionAdjunto, tipo);
+        repoAccion.update(accion);
+        return adjunto.getIda();
     }
     
     /**
      * Crea una nueva actividad de mejora, la persiste en la base de datos y se asocia a la mejora.
-     * @param IdAccion
-     * @param FechaEstimadaImplementacion
-     * @param Descripcion
-     * @param IdResponsable
+     * @param idAccion
+     * @param fechaEstimadaImplementacion
+     * @param descripcion
+     * @param idResponsable
      * @param tipoActividad
      * @return null si no se creo.
      */
-    public Actividad AgregarActividad(int IdAccion, Date FechaEstimadaImplementacion, String Descripcion, int IdResponsable, TipoActividad tipoActividad){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
-        Actividad actividad =  accion.AddActividad(FechaEstimadaImplementacion, Descripcion, responsable, tipoActividad);
-        accion.CambiarEstado();
-        mAccion.ActualizarAccion(accion);
-        if (actividad.getIdActividad() > 0){
+    public Actividad agregarActividad(int idAccion, Date fechaEstimadaImplementacion, String descripcion, int idResponsable, TipoActividad tipoActividad){
+        Accion accion = repoAccion.find(idAccion);
+        Responsable responsable = repoResponsable.find(idResponsable);
+        Actividad actividad =  accion.crearActividad(fechaEstimadaImplementacion, descripcion, responsable, tipoActividad);
+        accion.cambiarEstado();
+        repoAccion.update(accion);
+        if (actividad.getId() > 0){
             return actividad;
         }else{
             return null;
         }
-    }    
+    }
     
     /**
      * Setea la fecha de implementacion de la Actividad correctiva, cambia el estado de la accion (si corresponde) y persiste los cambios en la base de deatos.
-     * @param FechaImplementacion
-     * @param IdActividad
-     * @param IdAccion
+     * @param fechaImplementacion
+     * @param idActividad
+     * @param idAccion
      * @return -1 si no se pudo actualizar.
      */
-    public int SetFechaImplementacionActividad(Date FechaImplementacion, int IdActividad, int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.SetFechaImplementacionActividad(IdActividad, FechaImplementacion);
-        accion.CambiarEstado();
-        return mAccion.ActualizarAccion(accion);
+    public int setFechaImplementacionActividad(Date fechaImplementacion, int idActividad, int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.setFechaImplementacionActividad(idActividad, fechaImplementacion);
+        accion.cambiarEstado();
+        repoAccion.update(accion);
+        return 1;
     }
     
     /**
      * Setea la comprobacion de implementacion estimada con responsable y fecha estimada. Actualiza la base de datos.
-     * @param FechaEstimada
-     * @param IdResponsable
-     * @param IdAccion
+     * @param fechaEstimada
+     * @param idResponsable
+     * @param idAccion
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
-    public int SetComprobacionImplementacion(Date FechaEstimada, int IdResponsable, int IdAccion){
-        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Comprobacion comprobacion = accion.setComprobacionImplementacion(FechaEstimada, responsable);
-        mAccion.crearComprobacion(comprobacion);
-        return mAccion.ActualizarAccion(accion);
+    public int setComprobacionImplementacion(Date fechaEstimada, int idResponsable, int idAccion){
+        Responsable responsable = repoResponsable.find(idResponsable);
+        Accion accion = repoAccion.find(idAccion);
+        accion.crearComprobacionImplementacion(fechaEstimada, responsable);
+        repoAccion.update(accion);
+        return 1;
+        // TODO: no crear si ya existe.
     }
     
     /**
      * Setea la comprobacion de eficacia estimada con responsable y fecha estimada. Actualiza la base de datos.
-     * @param FechaEstimada
-     * @param IdResponsable
-     * @param IdAccion
+     * @param fechaEstimada
+     * @param idResponsable
+     * @param idAccion
      * @return -1 si no se actualizo. IdAccion si correcto.
      */
-    public int SetComprobacionEficacia(Date FechaEstimada, int IdResponsable, int IdAccion){
-        Responsable responsable = mResponsable.GetResponsable(IdResponsable);
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Comprobacion comprobacion = accion.setComprobacionEficacia(FechaEstimada, responsable);
-        mAccion.crearComprobacion(comprobacion);
-        return mAccion.ActualizarAccion(accion);
+    public int setComprobacionEficacia(Date fechaEstimada, int idResponsable, int idAccion){
+        Responsable responsable = repoResponsable.find(idResponsable);
+        Accion accion = repoAccion.find(idAccion);
+        accion.crearComprobacionEficacia(fechaEstimada, responsable);
+        repoAccion.update(accion);
+        return 1;
+        // TODO: no crear si ya existe.
     }
     
     /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
      * PRE: la accion debe tener comprobacion != null (seteada fecha estimada de comprobacion de implementacion)
-     * @param FechaComprobacionImplementacion
-     * @param ComentariosImplementacion
-     * @param Comprobacion
-     * @param IdAccion
+     * @param fecha
+     * @param observaciones
+     * @param resultado
+     * @param idAccion
      * @return -1 si no se actualizo
      */
-    public int ComprobarImplementacionAccion(Date FechaComprobacionImplementacion, String ComentariosImplementacion, ResultadoComprobacion Comprobacion,
-            int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.getComprobacionImplementacion().setFechaComprobacion(FechaComprobacionImplementacion);
-        accion.getComprobacionImplementacion().setObservaciones(ComentariosImplementacion);
-        accion.getComprobacionImplementacion().setResultado(Comprobacion);
-        accion.CambiarEstado();
-        return mAccion.ActualizarAccion(accion);
+    public int comprobarImplementacion(Date fecha, String observaciones, ResultadoComprobacion resultado, int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.getComprobacionImplementacion().setFechaComprobacion(fecha);
+        accion.getComprobacionImplementacion().setObservaciones(observaciones);
+        accion.getComprobacionImplementacion().setResultadoComprobacion(resultado);
+        accion.cambiarEstado();
+        repoAccion.update(accion);
+        return 1;
     }
     
     /**
      * Setea la verificacion de eficacia de la accion, deja en estado cerrado y actualiza la base de datos.
-     * @param FechaVerificacionEficacia
-     * @param ComentariosVerificacion
-     * @param Comprobacion
-     * @param IdAccion
+     * @param fecha
+     * @param observaciones
+     * @param resultado
+     * @param idAccion
      * @return -1 si no se actualizo
      */
-    public int VerificarEficaciaAccion(Date FechaVerificacionEficacia, String ComentariosVerificacion, ResultadoComprobacion Comprobacion,
-            int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.getComprobacionEficacia().setFechaComprobacion(FechaVerificacionEficacia);
-        accion.getComprobacionEficacia().setObservaciones(ComentariosVerificacion);
-        accion.getComprobacionEficacia().setResultado(Comprobacion);
-        accion.CambiarEstado();
-        return mAccion.ActualizarAccion(accion);
+    public int verificarEficacia(Date fecha, String observaciones, ResultadoComprobacion resultado, int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.getComprobacionEficacia().setFechaComprobacion(fecha);
+        accion.getComprobacionEficacia().setObservaciones(observaciones);
+        accion.getComprobacionEficacia().setResultadoComprobacion(resultado);
+        accion.cambiarEstado();
+        repoAccion.update(accion);
+        return 1;
     }
     
     /**
      * Crea una nueva fortaleza y la persiste en la base de datos
-     * @param FechaDeteccion
-     * @param Descripcion
-     * @param IdDeteccion
-     * @param IdAreaSector
-     * @param IdEmpresa
+     * @param fechaDeteccion
+     * @param descripcion
+     * @param idDeteccion
+     * @param idAreaSector
      * @return Null: si no se creo.
      */
-    public Fortaleza NuevaFortaleza(Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector){
-        Fortaleza fortaleza = new Fortaleza(FechaDeteccion, Descripcion);
+    public Fortaleza nuevaFortaleza(Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector){
+        Area area = repoArea.find(idAreaSector);
+        Deteccion deteccion = repoDeteccion.find(idDeteccion);
+        Fortaleza fortaleza = new Fortaleza(fechaDeteccion, descripcion, area, deteccion);
         
-        Area area = mArea.GetArea(IdAreaSector);
-        Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-        fortaleza.setAreaSectorFortaleza(area);
-        fortaleza.setDeteccion(deteccion);
-        fortaleza.setId(mFortaleza.CrearFortaleza(fortaleza));
-        
-        if(fortaleza.getId()== -1){
-            return null;
-        }
-        return fortaleza;
+        repoFortalezas.create(fortaleza);
+        if(fortaleza.getId() > 0)
+            return fortaleza;
+        return null;
     }
     
 }

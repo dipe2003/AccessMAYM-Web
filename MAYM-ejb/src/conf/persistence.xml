@@ -2,7 +2,25 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="MAYM-ejbPU" transaction-type="JTA">
     <jta-data-source>java:/MaymAccess</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>com.dperez.maymweb.modelo.acciones.Accion</class>
+    <class>com.dperez.maymweb.modelo.acciones.Correctiva</class>
+    <class>com.dperez.maymweb.modelo.acciones.Mejora</class>
+    <class>com.dperez.maymweb.modelo.acciones.Preventiva</class>
+    <class>com.dperez.maymweb.modelo.acciones.actividad.Actividad</class>
+    <class>com.dperez.maymweb.modelo.acciones.adjunto.Adjunto</class>
+    <class>com.dperez.maymweb.modelo.acciones.comprobaciones.Comprobacion</class>
+    <class>com.dperez.maymweb.modelo.acciones.comprobaciones.Eficacia</class>
+    <class>com.dperez.maymweb.modelo.acciones.comprobaciones.Implementacion</class>
+    <class>com.dperez.maymweb.modelo.area.Area</class>
+    <class>com.dperez.maymweb.modelo.codificacion.Codificacion</class>
+    <class>com.dperez.maymweb.modelo.deteccion.Deteccion</class>
+    <class>com.dperez.maymweb.modelo.fortaleza.Fortaleza</class>
+    <class>com.dperez.maymweb.modelo.producto.Producto</class>
+    <class>com.dperez.maymweb.modelo.usuario.Credencial</class>
+    <class>com.dperez.maymweb.modelo.usuario.Responsable</class>
+    <class>com.dperez.maymweb.modelo.usuario.Usuario</class>
+    <class>com.dperez.maymweb.modelo.responsabilidad.Responsabilidad</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
     </properties>
   </persistence-unit>

@@ -68,7 +68,7 @@
                                             </div>
                                             <div class="btn-group"> 
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{area.accionesEnAreaSector.size() == 0 and area.fortalezasEnAreaSector.size() ==0 and area.usuariosEnAreaSector.size() == 0}">
+                                                    <c:if test="#{area.accionesArea.size() == 0 and area.fortalezasArea.size() ==0 and area.usuariosArea.size() == 0}">
                                                         <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
                                                                        onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
@@ -97,7 +97,7 @@
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header" style="background-color: gray; color: white;">
-                                <h4 class="modal-title">Aree</h4>
+                                <h4 class="modal-title">Area</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
@@ -153,7 +153,7 @@
                                 <div class="form-group">
                                     <strong><label for="nombre_area">Nombre</label></strong>
                                     <h:inputText id="nombre_area" class="form-control" value="#{areas.nombreArea}" 
-                                                 required="true" requiredMessage="Se debe ingresar nombre de codificacion" p:placeholder="Nombre de Codificacion." />
+                                                 required="true" requiredMessage="Se debe ingresar nombre" p:placeholder="Nombre." />
                                 </div>
                                 <div class="form-group">
                                     <strong><label for="correo_area">Correo electronico</label></strong>

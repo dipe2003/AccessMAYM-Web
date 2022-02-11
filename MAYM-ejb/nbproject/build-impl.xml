@@ -141,7 +141,7 @@ is divided into following sections:
         <property name="javadoc.encoding.used" value="${source.encoding}"/>
         <property name="includes" value="**"/>
         <property name="excludes" value=""/>
-        <path id="endorsed.classpath.path" path="${endorsed.classpath}"/>
+        <path id="" path="${endorsed.classpath}"/>
         <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
             <and>
                 <isset property="endorsed.classpath"/>
@@ -522,8 +522,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <formatter type="brief" usefile="false"/>
                     <formatter type="xml"/>
                     <jvmarg value="-ea"/>
-                    <jvmarg line="${debug-args-line}"/>
-                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <jvmarg value="-agentlib:jdwp=transport=${debug-transport},address=${jpda.address}"/>
                     <customize/>
                 </junit>
             </sequential>
@@ -555,8 +554,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <formatter type="xml"/>
                     <jvmarg value="-ea"/>
                     <jvmarg line="${run.jvmargs.ide}"/>
-                    <jvmarg line="${debug-args-line}"/>
-                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <jvmarg value="-agentlib:jdwp=transport=${debug-transport},address=${jpda.address}"/>
                     <customize/>
                 </junit>
             </sequential>
@@ -707,18 +705,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         </macrodef>
     </target>
     <target name="-init-debug-args">
-        <property name="version-output" value="java version &quot;${ant.java.version}"/>
-        <condition property="have-jdk-older-than-1.4">
-            <or>
-                <contains string="${version-output}" substring="java version &quot;1.0"/>
-                <contains string="${version-output}" substring="java version &quot;1.1"/>
-                <contains string="${version-output}" substring="java version &quot;1.2"/>
-                <contains string="${version-output}" substring="java version &quot;1.3"/>
-            </or>
-        </condition>
-        <condition else="-Xdebug" property="debug-args-line" value="-Xdebug -Xnoagent -Djava.compiler=none">
-            <istrue value="${have-jdk-older-than-1.4}"/>
-        </condition>
         <condition else="dt_socket" property="debug-transport-by-os" value="dt_shmem">
             <os family="windows"/>
         </condition>
@@ -734,8 +720,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <element name="customize" optional="true"/>
             <sequential>
                 <java classname="@{classname}" fork="true">
-                    <jvmarg line="${debug-args-line}"/>
-                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <jvmarg value="-agentlib:jdwp=transport=${debug-transport},address=${jpda.address}"/>
                     <jvmarg line="${runmain.jvmargs}"/>
                     <classpath>
                         <path path="@{classpath}"/>
@@ -818,89 +803,25 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
     <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
-        <copyfiles files="${file.reference.FastInfoset-1.2.15.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.byte-buddy-1.10.2.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.classmate-1.5.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.dom4j-2.1.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.hibernate-commons-annotations-5.1.0.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.hibernate-core-5.4.9.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.istack-commons-runtime-3.0.7.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jandex-2.1.1.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.javassist-3.24.0-GA.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.javax.activation-api-1.2.0.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.javax.persistence-api-2.2.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jaxb-api-2.3.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jaxb-runtime-2.3.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jboss-logging-3.3.2.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.stax-ex-1.8.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${file.reference.txw2-2.3.1.jar}" todir="${build.classes.dir}"/>
-        <copyfiles files="${libs.javaee-api-7.0.classpath}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.hibernate-commons-annotations-5.1.2.Final.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.hibernate-core-5.4.25.Final.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
-        <basename file="${file.reference.FastInfoset-1.2.15.jar}" property="manifest.file.reference.FastInfoset-1.2.15.jar"/>
-        <basename file="${file.reference.antlr-2.7.7.jar}" property="manifest.file.reference.antlr-2.7.7.jar"/>
-        <basename file="${file.reference.byte-buddy-1.10.2.jar}" property="manifest.file.reference.byte-buddy-1.10.2.jar"/>
-        <basename file="${file.reference.classmate-1.5.1.jar}" property="manifest.file.reference.classmate-1.5.1.jar"/>
-        <basename file="${file.reference.dom4j-2.1.1.jar}" property="manifest.file.reference.dom4j-2.1.1.jar"/>
-        <basename file="${file.reference.hibernate-commons-annotations-5.1.0.Final.jar}" property="manifest.file.reference.hibernate-commons-annotations-5.1.0.Final.jar"/>
-        <basename file="${file.reference.hibernate-core-5.4.9.Final.jar}" property="manifest.file.reference.hibernate-core-5.4.9.Final.jar"/>
-        <basename file="${file.reference.istack-commons-runtime-3.0.7.jar}" property="manifest.file.reference.istack-commons-runtime-3.0.7.jar"/>
-        <basename file="${file.reference.jandex-2.1.1.Final.jar}" property="manifest.file.reference.jandex-2.1.1.Final.jar"/>
-        <basename file="${file.reference.javassist-3.24.0-GA.jar}" property="manifest.file.reference.javassist-3.24.0-GA.jar"/>
-        <basename file="${file.reference.javax.activation-api-1.2.0.jar}" property="manifest.file.reference.javax.activation-api-1.2.0.jar"/>
-        <basename file="${file.reference.javax.persistence-api-2.2.jar}" property="manifest.file.reference.javax.persistence-api-2.2.jar"/>
-        <basename file="${file.reference.jaxb-api-2.3.1.jar}" property="manifest.file.reference.jaxb-api-2.3.1.jar"/>
-        <basename file="${file.reference.jaxb-runtime-2.3.1.jar}" property="manifest.file.reference.jaxb-runtime-2.3.1.jar"/>
-        <basename file="${file.reference.jboss-logging-3.3.2.Final.jar}" property="manifest.file.reference.jboss-logging-3.3.2.Final.jar"/>
-        <basename file="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" property="manifest.file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar"/>
-        <basename file="${file.reference.stax-ex-1.8.jar}" property="manifest.file.reference.stax-ex-1.8.jar"/>
-        <basename file="${file.reference.txw2-2.3.1.jar}" property="manifest.file.reference.txw2-2.3.1.jar"/>
-        <basename file="${libs.javaee-api-7.0.classpath}" property="manifest.libs.javaee-api-7.0.classpath"/>
+        <basename file="${file.reference.hibernate-commons-annotations-5.1.2.Final.jar}" property="manifest.file.reference.hibernate-commons-annotations-5.1.2.Final.jar"/>
+        <basename file="${file.reference.hibernate-core-5.4.25.Final.jar}" property="manifest.file.reference.hibernate-core-5.4.25.Final.jar"/>
+        <basename file="${libs.javaee-endorsed-api-7.0.classpath}" property="manifest.libs.javaee-endorsed-api-7.0.classpath"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 jar-17 jar-18 jar-19 "/>
-            <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.FastInfoset-1.2.15.jar}"/>
-            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.antlr-2.7.7.jar}"/>
-            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.byte-buddy-1.10.2.jar}"/>
-            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.classmate-1.5.1.jar}"/>
-            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.dom4j-2.1.1.jar}"/>
-            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.hibernate-commons-annotations-5.1.0.Final.jar}"/>
-            <attribute name="jar-7-Extension-Name" value="${manifest.file.reference.hibernate-core-5.4.9.Final.jar}"/>
-            <attribute name="jar-8-Extension-Name" value="${manifest.file.reference.istack-commons-runtime-3.0.7.jar}"/>
-            <attribute name="jar-9-Extension-Name" value="${manifest.file.reference.jandex-2.1.1.Final.jar}"/>
-            <attribute name="jar-10-Extension-Name" value="${manifest.file.reference.javassist-3.24.0-GA.jar}"/>
-            <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.javax.activation-api-1.2.0.jar}"/>
-            <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.javax.persistence-api-2.2.jar}"/>
-            <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.jaxb-api-2.3.1.jar}"/>
-            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.jaxb-runtime-2.3.1.jar}"/>
-            <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.jboss-logging-3.3.2.Final.jar}"/>
-            <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}"/>
-            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.stax-ex-1.8.jar}"/>
-            <attribute name="jar-18-Extension-Name" value="${manifest.file.reference.txw2-2.3.1.jar}"/>
-            <attribute name="jar-19-Extension-Name" value="${manifest.libs.javaee-api-7.0.classpath}"/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 "/>
+            <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.hibernate-commons-annotations-5.1.2.Final.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.hibernate-core-5.4.25.Final.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.libs.javaee-endorsed-api-7.0.classpath}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
-        <copyfiles files="${file.reference.FastInfoset-1.2.15.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.byte-buddy-1.10.2.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.classmate-1.5.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.dom4j-2.1.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.hibernate-commons-annotations-5.1.0.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.hibernate-core-5.4.9.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.istack-commons-runtime-3.0.7.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jandex-2.1.1.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.javassist-3.24.0-GA.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.javax.activation-api-1.2.0.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.javax.persistence-api-2.2.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jaxb-api-2.3.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jaxb-runtime-2.3.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jboss-logging-3.3.2.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jboss-transaction-api_1.2_spec-1.1.1.Final.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.stax-ex-1.8.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.txw2-2.3.1.jar}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${libs.javaee-api-7.0.classpath}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.hibernate-commons-annotations-5.1.2.Final.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.hibernate-core-5.4.25.Final.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.javaee-endorsed-api-7.0.classpath}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
@@ -1276,6 +1197,7 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init,compile-test,-debug-start-debugger-test,-debug-start-debuggee-test" name="debug-test"/>
     <target depends="init,compile-test-single,-debug-start-debugger-test,-debug-start-debuggee-test-method" name="debug-test-method"/>
+    <target depends="debug-test-method" name="debug-single-method"/>
     <target depends="init,-pre-debug-fix,compile-test-single" if="netbeans.home" name="-do-debug-fix-test">
         <ejbjarproject1:nbjpdareload dir="${build.test.classes.dir}"/>
     </target>

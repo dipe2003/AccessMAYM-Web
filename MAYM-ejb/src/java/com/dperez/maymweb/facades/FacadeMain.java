@@ -6,24 +6,21 @@
 package com.dperez.maymweb.facades;
 
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
-import com.dperez.maymweb.usuario.Credencial;
-import com.dperez.maymweb.usuario.EnumPermiso;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.dperez.maymweb.modelo.usuario.Credencial;
+import com.dperez.maymweb.modelo.usuario.EnumPermiso;
 
 /**
  *
  * @author Diego
  */
-@Named
-@Stateless
 public class FacadeMain {
-    @Inject
-    private ControladorConfiguracion cConfig;
+
+    private final ControladorConfiguracion cConfig;
     
     //  Constructores
-    public FacadeMain(){}
+    public FacadeMain(){
+        cConfig = new ControladorConfiguracion();
+    }
     
     // Metodos genericos independientes del nivel de permiso del usuario.
     /**
@@ -40,7 +37,7 @@ public class FacadeMain {
      */
     public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
             EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea){
-        return cConfig.CambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea);
+        return cConfig.cambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea);
     }
     
     /**
@@ -50,7 +47,7 @@ public class FacadeMain {
      * @return True si es valido | Fales si no es valido.
      */
     public boolean ComprobarValidezPassword(int IdUsuario, String Password){
-        return cConfig.ComprobarValidezPassword(IdUsuario, Password);
+        return cConfig.comprobarValidezPassword(IdUsuario, Password);
     }
     
     /**
@@ -62,7 +59,7 @@ public class FacadeMain {
      * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
      */
     public Credencial CambiarCredencialUsuario(int IdUsuario, String OldPassword, String NewPassword){
-        return cConfig.CambiarCredencialUsuario(IdUsuario, OldPassword, NewPassword);
+        return cConfig.cambiarCredencialUsuario(IdUsuario, OldPassword, NewPassword);
     }
     
     /**
@@ -73,7 +70,7 @@ public class FacadeMain {
      * @return Retorna la credencial del usuario actualizada. Retorna Null si no se pudo actualizar.
      */
     public Credencial ResetCredencialUsuario(int IdUsuario, String NewPassword){
-       return cConfig.ResetCredencialUsuario(IdUsuario, NewPassword);
+       return cConfig.resetCredencialUsuario(IdUsuario, NewPassword);
     }
     
     /**
@@ -82,17 +79,7 @@ public class FacadeMain {
      * @return
      */
     public boolean ExisteUsuario(int IdUsuario){
-        return cConfig.ExisteUsuario(IdUsuario);
+        return cConfig.existeUsuario(IdUsuario);
     }
-    
-    /**
-     * Comprueba si existe la empresa especificada por su nombre;
-     * @param IdEmpresa
-     * @return
-     */
-    public boolean ExisteEmpresa(int IdEmpresa){
-        return cConfig.ExisteEmpresa(IdEmpresa);
-    }
-    
     
 }

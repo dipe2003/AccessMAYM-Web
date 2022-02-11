@@ -65,7 +65,7 @@ public class ProgramadorEventos {
             timer = (Timer) it.next();
             if (timer.getInfo() instanceof EventoActividad) {
                 EventoActividad e = (EventoActividad) timer.getInfo();
-                if(((EventoActividad)evento).getActividad().getIdActividad() == e.getActividad().getIdActividad()){
+                if(((EventoActividad)evento).getActividad().getId() == e.getActividad().getId()){
                     return true;
                 }
             }
@@ -107,7 +107,7 @@ public class ProgramadorEventos {
             timer = (Timer) it.next();
             if (timer.getInfo() instanceof EventoActividad) {
                 EventoActividad e = (EventoActividad) timer.getInfo();
-                if(e.getActividad().getIdActividad() == ((EventoActividad)evento).getActividad().getIdActividad()){
+                if(e.getActividad().getId() == ((EventoActividad)evento).getActividad().getId()){
                     it.remove();
                 }
             }
@@ -152,7 +152,7 @@ public class ProgramadorEventos {
                 }
             }else if (timer.getInfo() instanceof EventoActividad){
                 EventoActividad e = (EventoActividad) timer.getInfo();
-                if(e.getActividad().getIdActividad()== Id){
+                if(e.getActividad().getId()== Id){
                     it.remove();
                 }
             }

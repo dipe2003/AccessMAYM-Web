@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Properties;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
@@ -27,6 +28,15 @@ public class IOPropiedades implements Serializable{
     private final String homeDir = System.getProperty("user.home");
     private final String separator = System.getProperty("file.separator");
     private String directorio;
+    
+    public String getDirectorio(){
+        return  directorio;
+    }
+    
+    @PostConstruct
+    public void init(){
+        directorio = homeDir+separator+"MAYMWEB"+separator+"Configuracion"+separator;
+    }
 
     /**
      * Guarda el valor de la propiedad especificado.
@@ -35,7 +45,6 @@ public class IOPropiedades implements Serializable{
      * @return Retorna <b>True</b> si se guardo, de lo contrario <b>False</b?>
      */
     public boolean setPropiedad(String NombrePropiedad, String ValorPropiedad){
-        directorio = "MAYMWEB"+separator+"Configuracion"+separator;
         
         Properties prop = new Properties();
         OutputStream output = null;
@@ -69,7 +78,6 @@ public class IOPropiedades implements Serializable{
      * @return Retorna la propiedad si se encontro, de lo contrario devuelve un String vacio.
      */
     public String getPropiedad(String NombrePropiedad){
-        directorio = "MAYMWEB"+separator+"Configuracion"+separator;
         
         Properties prop = new Properties();
         InputStream input = null;

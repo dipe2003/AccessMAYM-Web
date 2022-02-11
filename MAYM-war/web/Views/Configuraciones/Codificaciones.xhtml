@@ -68,7 +68,7 @@
                                             </div>
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{codificacion.accionesConCodificacion.size() == 0}">
+                                                    <c:if test="#{codificacion.accionesCodificacion.size() == 0}">
                                                         <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
                                                                        onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>

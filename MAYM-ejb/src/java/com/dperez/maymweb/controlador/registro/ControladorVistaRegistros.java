@@ -5,129 +5,121 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.acciones.ManejadorAccion;
-import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.area.ManejadorArea;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.codificacion.ManejadorCodificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.acciones.EnumEstado;
-import com.dperez.maymweb.fortaleza.Fortaleza;
-import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
-import com.dperez.maymweb.responsable.ManejadorResponsables;
-import com.dperez.maymweb.usuario.ManejadorUsuario;
-import com.dperez.maymweb.usuario.Responsable;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
+import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
+import com.dperez.maymweb.modelo.usuario.Responsable;
+import com.dperez.maymweb.modelo.usuario.Usuario;
+import com.dperez.maymweb.persistencia.FabricaRepositorio;
+import com.dperez.maymweb.persistencia.RepositorioPersistencia;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 /**
  *
  * @author Diego
  */
-@Named
-@Stateless
-public class ControladorVistaRegistros {
-    @Inject
-    private ManejadorAccion mAccion;
-    @Inject
-    private ManejadorUsuario mUsuario;
-    @Inject
-    private ManejadorDeteccion mDeteccion;
-    @Inject
-    private ManejadorCodificacion mCodificaciones;
-    @Inject
-    private ManejadorArea mArea;
-    @Inject
-    private ManejadorFortaleza mFortaleza;
-    @Inject ManejadorResponsables mResponsables;
+public class ControladorVistaRegistros implements Serializable{
+    
+    private  final RepositorioPersistencia<Accion> repoAccion;
+    private  final RepositorioPersistencia<Area> repoArea;
+    private  final RepositorioPersistencia<Deteccion> repoDeteccion;
+    private  final RepositorioPersistencia<Codificacion> repoCodificacion;
+    private  final RepositorioPersistencia<Responsable> repoResponsable;
+    private  final RepositorioPersistencia<Usuario> repoUsuario;
+    private  final RepositorioPersistencia<Fortaleza> repoFortalezas;
+    private final RepositorioPersistencia<Responsabilidad> repoResponsabilidades;
+    
+    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
     
     //  Constructores
-    public ControladorVistaRegistros(){}
+    public ControladorVistaRegistros(){
+        repoAccion = fabricaRepositorio.getRespositorioAcciones();
+        repoArea = fabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
+        repoCodificacion = fabricaRepositorio.getRepositorioCodificaciones();
+        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
+        repoUsuario = fabricaRepositorio.getRepositorioUsuarios();
+        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
+        repoResponsabilidades = fabricaRepositorio.getRepositorioResponsabilidades();
+    }
     
     /**
      * Devuelve una lista con todas las acciones registradas que se encuentran en el estado especificado.
      * Si EstadoAccion es null se devuelven todas las acciones registradas.
-     * @param EstadoAccion
+     * @param estado
      * @return
      */
-    public List<Accion> ListarAccionesSegunEstado(EnumEstado EstadoAccion){
-        List<Accion> acciones;
-        acciones = mAccion.ListarAcciones();
-        if(EstadoAccion!=null){
-            acciones = acciones.stream()
-                    .filter(accion -> accion.getEstadoAccion() == EstadoAccion)
+    public List<Accion> listarAcciones(Estado estado){
+        if(estado!=null){
+            return repoAccion.findAll().stream()
+                    .filter(accion -> accion.getEstadoDeAccion() == estado)
                     .collect(Collectors.toList());
         }
-        return acciones;
+        return repoAccion.findAll();
     }
     
     /**
      * Devuelve una lista con todas las acciones del tipo especificado registradas que se encuentran en el estado indicado.
      * Si EstadoAccion es null se devuelven todas las acciones registradas del tipo indicado.
      * Si EstadoAccion es null y TipoAccion es null se devuelven todas las accines registradas.
-     * @param EstadoAccion
-     * @param TipoAccion
+     * @param estado
+     * @param tipo
      * @return
      */
-    public List<Accion> ListarAccionesSegunEstado(EnumEstado EstadoAccion, TipoAccion TipoAccion){
-        List<Accion> acciones;
-        acciones = mAccion.ListarAcciones();
-        if(EstadoAccion!=null && TipoAccion !=null){
-            acciones = acciones.stream()
-                    .filter(accion -> accion.getEstadoAccion() == EstadoAccion && accion.getClass().getName().equals(TipoAccion.toString()))
+    public List<Accion> listarAcciones(Estado estado, TipoAccion tipo){
+        if(estado!=null && tipo !=null){
+            return repoAccion.findAll().stream()
+                    .filter(accion -> accion.getEstadoDeAccion() == estado && accion.getClass().getName().equals(tipo.toString()))
                     .collect(Collectors.toList());
         }else{
-            if(EstadoAccion == null && TipoAccion != null){
-                acciones = acciones.stream()
-                        .filter(accion -> accion.getClass().getSimpleName().equalsIgnoreCase(TipoAccion.toString()))
+            if(estado == null && tipo != null){
+                return repoAccion.findAll().stream()
+                        .filter(accion -> accion.getClass().getSimpleName().equalsIgnoreCase(tipo.toString()))
                         .collect(Collectors.toList());
             }
         }
-        return acciones;
+        return repoAccion.findAll();
     }
     
     
     /**
      * Devuelve la accion indicada por su id
-     * @param IdAccion
+     * @param idAccion
      * @return
      */
-    public Accion GetAccion(int IdAccion){
-        return mAccion.GetAccion(IdAccion);
+    public Accion getAccion(int idAccion){
+        return repoAccion.find(idAccion);
     }
     
     /**
      * Devuelve el usuario especificado por su id
-     * @param IdUsuario
+     * @param idUsuario
      * @return Null si no existe el usuario.
      */
-    public Usuario GetUsuario(int IdUsuario){
-        return mUsuario.GetUsuario(IdUsuario);
+    public Usuario getUsuario(int idUsuario){
+        return repoUsuario.find(idUsuario);
     }
     
     /**
      * Devuelve los usuarios de la empresa especificada segun su fecha de baja.
-     * @param SoloVigente True: si no fueron dados de baja (FechaBaja == null).
+     * @param soloVigentes True: si no fueron dados de baja (FechaBaja == null).
      * @return Lista de Usuarios.
      */
-    public List<Usuario> GetUsuarios(boolean SoloVigente){
-        List<Usuario> lstUsuarios = mUsuario.ListarUsuarios();
-        if(SoloVigente == true){
-            return lstUsuarios.stream()
+    public List<Usuario> listarUsuarios(boolean soloVigentes){
+        if(soloVigentes == true){
+            return repoUsuario.findAll().stream()
                     .filter(u->u.getFechaBaja() == null)
                     .collect(Collectors.toList());
         }
-        return lstUsuarios;
+        return repoUsuario.findAll();
     }
     
     
@@ -135,86 +127,72 @@ public class ControladorVistaRegistros {
      * Devuelve una lista de detecciones.
      * @return
      */
-    public List<Deteccion> GetDetecciones(){
-        return mDeteccion.ListarDetecciones();
+    public List<Deteccion> listarDetecciones(){
+        return repoDeteccion.findAll();
     }
     
     /**
      * Devuelve las codificaciones.
      * @return Lista de codificaciones.
      */
-    public List<Codificacion> GetCodificaciones(){
-        return mCodificaciones.ListarCodificaciones();
+    public List<Codificacion> listarCodificaciones(){
+        return repoCodificacion.findAll();
     }
     
     /**
      * Devuelve una todas las areas de una empresa.
      * @return lista de areas.
      */
-    public List<Area> GetAreas(){
-        return mArea.ListarAreas();
+    public List<Area> listarAreas(){
+        return repoArea.findAll();
     }
     
     /**
      * Lista todos los usuarios de la empresa seleccionada por id.
      * @return
      */
-    public List<Usuario> ListarUsuarios(){
-        return mUsuario.ListarUsuarios();
+    public List<Usuario> listarUsuarios(){
+        return repoUsuario.findAll();
     }
     
     /*
-        TODO descomentar luego de implementar Manejador
+    TODO descomentar luego de implementar Manejador
     */
     
-    /**
-     * Lista todas las empresas registradas.
-     * @return
-     */
     
-    public List<Empresa> ListarEmpresasRegistradas(){
-        //return mEmpresa.ListarEmpresasRegistradas();
-        throw new NotImplementedException();
-    }
     
-    /**
-     * Devuelve la empresa indicada por su id.
-     * @param IdEmpresa
-     * @return Retorne Null si no se encontro empresa.
-     */
-    public Empresa GetEmpresa(int IdEmpresa){
-       // return mEmpresa.GetEmpresa(IdEmpresa);
-       throw new NotImplementedException();
-    }
-  
     /**
      * Devuelve la fortaleza indicada por su id
-     * @param IdFortaleza
+     * @param idFortaleza
      * @return Retorna null si no se encontro fortaleza.
      */
-    public Fortaleza GetFortaleza(int IdFortaleza){
-        return mFortaleza.GetFortaleza(IdFortaleza);
+    public Fortaleza getFortaleza(int idFortaleza){
+        return repoFortalezas.find(idFortaleza);
     }
     
     /**
      * Lista todas las fortalezas registradas
      * @return
      */
-    public List<Fortaleza> ListarFortalezas(){
-        return mFortaleza.ListarFortalezas();
+    public List<Fortaleza> listarFortalezas(){
+        return repoFortalezas.findAll();
     }
     
     /*
-        Responsables
+    Responsabilidades
     */
-    public List<Responsable> ListarResponsables(boolean soloVigentes){
-        List<Responsable> responsables = mResponsables.ListarResponsables();
+    public List<Responsabilidad> listarResponsabilidades(){
+        return repoResponsabilidades.findAll();
+    }
+    /*
+    Responsables
+    */
+    public List<Responsable> listarResponsables(boolean soloVigentes){
         if(soloVigentes){
-            responsables = responsables.stream()
+            return repoResponsable.findAll().stream()
                     .filter(r->r.getUsuarioResponsable().isVigente() == true)
                     .collect(Collectors.toList());
         }
-        return responsables;
+        return repoResponsable.findAll();
     }
-    
 }

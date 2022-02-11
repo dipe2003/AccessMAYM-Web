@@ -5,10 +5,10 @@
 */
 package com.dperez.maymweb.herramientas.EnvioAlertas;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.acciones.Mejora;
-import com.dperez.maymweb.accion.actividad.Actividad;
-import com.dperez.maymweb.acciones.EnumEstado;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.Mejora;
+import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
+import com.dperez.maymweb.modelo.acciones.Estado;
 import com.dperez.maymweb.herramientas.ControladorAlertas;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.EventoAccion;
@@ -44,14 +44,14 @@ public class AlertasMejoras implements Runnable {
      * las fechas de implementacion y envia las alertas.
      * @param AccionesMejora
      */
-    private void EnviarAlertasMejora(){
+    private void enviarAlertasMejora(){
         Date Hoy = new Date();
         for(Accion accion: AccionesMejora){
-            if(accion.getEstadoAccion() != EnumEstado.CERRADA && accion.getEstadoAccion() != EnumEstado.DESESTIMADA && 
+            if(accion.getEstadoDeAccion() != Estado.CERRADA && accion.getEstadoDeAccion() != Estado.DESESTIMADA && 
                     accion.getComprobacionImplementacion() != null && accion.getComprobacionEficacia() != null){
                 // Primero Si esta implementada
-                if(accion.EstanImplementadasActividades()){
-                    if(accion.getEstadoAccion() == EnumEstado.PROCESO_IMP){
+                if(accion.estaImplementadaAlgunaActividad()){
+                    if(accion.getEstadoDeAccion() == Estado.PROCESO_IMP){
                         if(accion.getComprobacionImplementacion().getFechaComprobacion() == null ||
                                 accion.getComprobacionImplementacion().getFechaEstimada().compareTo(Hoy)< 0){
                             Evento evento = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, accion);
@@ -65,7 +65,7 @@ public class AlertasMejoras implements Runnable {
                         }
                     }
                 }else{
-                    List<Actividad> Actividades = ((Mejora)accion).getActividades();
+                    List<Actividad> Actividades = accion.getActividadesDeAccion();
                     for(Actividad actividad: Actividades){
                         if(actividad.getFechaImplementacion() == null && actividad.getFechaEstimadaImplementacion().compareTo(Hoy)<0){
                             Evento evento = new EventoActividad(actividad);
@@ -78,7 +78,7 @@ public class AlertasMejoras implements Runnable {
     }
     @Override
     public void run() {
-        EnviarAlertasMejora();
+        enviarAlertasMejora();
     }
     
 }

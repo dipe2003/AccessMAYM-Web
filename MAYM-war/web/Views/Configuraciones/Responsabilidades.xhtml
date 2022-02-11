@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Responsabilidades</div>
+                <div class="panel-body">
+                    Aqui se listan todas Responsabilidades registradas.
+                    Pueden crearse, modificarse y elminarse (solo Administrador) cuando no esten en uso.
+                </div>                  
+            </div>                 
+        </div>
+        <h:form id="form_responsabilidades" >
+            <div class="container-fluid" style="padding: 1%">
+                <c:choose>
+                    <c:when test="#{empty responsabilidades.listaResponsabilidades}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> No hay registros para listar.
+                        </div>
+                        <div class="btn-group" >
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{responsabilidades.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                 
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="btn-group">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{responsabilidades.cargarDatos(-1)}">
+                                <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                <f:ajax delay="100" render="panel_modal" />
+                            </h:commandLink>                                                  
+                        </div>
+                        <table class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Responsabilidad</th>
+                                    <th>Usuarios</th>
+                                    <th></th>
+                                </tr>
+                                
+                            </thead>
+                            
+                            <tbody>
+                                <c:forEach items="#{responsabilidades.listaResponsabilidades}" var="responsabilidad">
+                                    <tr>
+                                        <td>
+                                            #{responsabilidad.nombre}
+                                        </td>
+                                        <td>
+                                            <c:forEach items="#{responsabilidad.responsables}" var="responsable">
+                                                #{responsable.usuarioResponsable.nombreCompleto}
+                                            </c:forEach>
+                                        </td>
+                                        <td>                                            
+                                            <div class="btn-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{responsabilidades.cargarDatos(responsabilidad.id)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="panel_modal_editar" />
+                                                </h:commandLink>                                                   
+                                            </div>
+                                            <div class="btn-group"> 
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                                    <c:if test="#{area.accionesArea.size() == 0 and area.fortalezasArea.size() ==0 and area.usuariosArea.size() == 0}">
+                                                        <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{responsabilidades.cargarDatos(-1)}"
+                                                                       onclick="if (! confirm('Seguro que va a eliminar esta REsponsabilidad? ')) return false" >
+                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                            <f:ajax event="click" listener="#{responsabilidades.eliminarResponsabilidad(responsabilidad.id)}"/>
+                                                        </h:commandLink>   
+                                                    </c:if>
+                                                </c:if>
+                                            </div>                                                
+                                        </td>
+                                        <h:panelGroup id="panel_mensajes_tabla">
+                                            <div class="form-group-sm">
+                                                <h:message for="btn_eliminar_#{responsabilidad.id}" class="msj_error"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </tr>                                        
+                                </c:forEach>
+                            </tbody>
+                        </table>                         
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <!-- Modal Nueva Area -->
+            <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Responsabilidad</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_nueva_responsabilidad">Nombre</label></strong>
+                                    <h:inputText id="nombre_nueva_responsabilidad" class="form-control" value="#{responsabilidades.nombre}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre" p:placeholder="Nombre." />
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_nueva_responsabilidad" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_nueva_responsabilidad" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_nueva_area" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{responsabilidades.nuevaResponsabilidad()}" >
+                                            <f:ajax execute="panel_modal" delay="100" render="panel_mensajes_modal panel_modal" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            
+            <!-- Modal Editar Area -->
+            <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_editar">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Responsabilidad</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_responsabilidad">Nombre</label></strong>
+                                    <h:inputText id="nombre_area" class="form-control" value="#{responsabilidades.nombre}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre" p:placeholder="Nombre." />
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_editar">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_responsabilidad" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_editar_responsabilidad" class="msj_error"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <h:commandButton id="btn_editar_responsabilidad" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{responsabilidades.editarResponsabilidad()}" >
+                                            <f:ajax execute="panel_modal_editar" delay="100" render="panel_mensajes_modal_editar panel_modal_editar" />
+                                        </h:commandButton>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            <c:if test="#{responsabilidades.cantidadPaginas > 1}">
+                <div class="container-fluid text-center" style="padding: 1%">
+                    <ul class="pagination">
+                        <c:forEach begin="1" end="#{responsabilidades.cantidadPaginas}" step="1" varStatus="numero" >
+                            <c:choose>
+                                <c:when test="#{responsabilidades.paginaActual == numero.count}" >
+                                    <li class="active"><a>#{numero.count}</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><h:link value="#{numero.count}" outcome="Responsabilidades.xhtml?pagina=#{numero.count}"/>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </ul>                
+                </div>
+            </c:if>
+        </h:form>
+        
+    </ui:define>
+</ui:composition>

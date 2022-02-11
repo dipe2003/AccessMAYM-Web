@@ -5,28 +5,25 @@
 */
 package com.dperez.maymweb.facades;
 
-import com.dperez.maymweb.accion.comprobaciones.ResultadoComprobacion;
+import com.dperez.maymweb.modelo.acciones.comprobaciones.ResultadoComprobacion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
 import com.dperez.maymweb.controlador.registro.ControladorRegistro;
 import java.util.Date;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Contiene los metodos exclusivos para el permiso de verificador ademas de el ingreso de datos.
  * @author Diego
  */
-@Named
-@Stateless
 public class FacadeVerificador {
-    @Inject
-    private ControladorRegistro cReg;
-    @Inject
-    private ControladorEdicionRegistro cEdicion;
+
+    private final ControladorRegistro cReg;
+    private final ControladorEdicionRegistro cEdicion;
     
     //  Constructores
-    public FacadeVerificador(){}
+    public FacadeVerificador(){
+        cReg = new ControladorRegistro();
+        cEdicion = new ControladorEdicionRegistro();
+    }
     
     /**
      * Setea la comprobacion de implementacion de la accion, cambia el estado segun corresponda y actualiza la base de datos.
@@ -38,7 +35,7 @@ public class FacadeVerificador {
      */
     public int SetComprobacionImplementacionAccion(Date FechaComprobacionImplementacion, String ComentariosImplementacion, ResultadoComprobacion Comprobacion,
             int IdAccion){
-        return cReg.ComprobarImplementacionAccion(FechaComprobacionImplementacion, ComentariosImplementacion, Comprobacion, IdAccion);
+        return cReg.comprobarImplementacion(FechaComprobacionImplementacion, ComentariosImplementacion, Comprobacion, IdAccion);
     }
     
     /**
@@ -51,7 +48,7 @@ public class FacadeVerificador {
      */
     public int SetVerificacionEficaciaAccion(Date FechaVerificacionEficacia, String ComentariosVerificacion, ResultadoComprobacion Comprobacion,
             int IdAccion){
-        return cReg.VerificarEficaciaAccion(FechaVerificacionEficacia, ComentariosVerificacion, Comprobacion, IdAccion);
+        return cReg.verificarEficacia(FechaVerificacionEficacia, ComentariosVerificacion, Comprobacion, IdAccion);
     }
     
     /**
@@ -61,7 +58,7 @@ public class FacadeVerificador {
      * @return
      */
     public int DesestimarAccion(String Observaciones, int IdAccion){
-        return cEdicion.DesestimarAccion(Observaciones, IdAccion);
+        return cEdicion.desestimarAccion(Observaciones, IdAccion);
     }
         
 }

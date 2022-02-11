@@ -39,7 +39,7 @@
                                                      required="true" requiredMessage="No se selecciono area">
                                         <f:selectItem itemLabel="-- Seleccionar Area ---"  itemDisabled="true"  noSelectionOption="true"  />
                                         <c:forEach items="#{crearFortaleza.listaAreasSectores}" var="area">
-                                            <f:selectItem itemLabel="#{area.value.nombre}" itemValue="#{area.value.id}" />
+                                            <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
                                         </c:forEach>
                                     </h:selectOneMenu>
                                 </div>
@@ -70,7 +70,7 @@
                                                      required="true" requiredMessage="No se selecciono Deteccion.">
                                         <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
                                         <c:forEach items="#{crearFortaleza.listaDetecciones}" var="deteccion">
-                                            <f:selectItem itemLabel="#{deteccion.value}" itemValue="#{deteccion.key}" />
+                                            <f:selectItem itemLabel="#{deteccion.nombre}" itemValue="#{deteccion.id}" />
                                         </c:forEach>
                                         <f:ajax execute="@this"/>
                                     </h:selectOneMenu>                                    

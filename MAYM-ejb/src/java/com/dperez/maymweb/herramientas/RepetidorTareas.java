@@ -18,10 +18,14 @@ import javax.inject.Inject;
  */
 @Stateless
 public class RepetidorTareas {
-    @Inject
+ 
     private FacadeLectura fLectura;
     @Inject
     private ControladorAlertas cAlertas;
+    
+    public RepetidorTareas(){
+        fLectura = new FacadeLectura();
+    }
     
     // cada 15 dias, los domingos, todos los meses, todos los años, a la hora 4:00 0s
     @Schedule(dayOfWeek = "Sun", month = "*", hour = "4", dayOfMonth = "15", year = "*", minute = "0", second = "0")
@@ -30,9 +34,9 @@ public class RepetidorTareas {
     //@Schedule(month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "0/2", second = "0")
     public void RenviarAlertasEventos() {
         // Acciones Correctivas
-        Thread tCorrectivas = new Thread(new AlertasCorrectivas(fLectura.ListarAccionesCorrectivas(), cAlertas) );
+        Thread tCorrectivas = new Thread(new AlertasCorrectivas(fLectura.listarAccionesCorrectivas(), cAlertas) );
         // Acciones de Mejora
-        Thread tMejoras = new Thread(new AlertasMejoras(fLectura.ListarAccionesMejoras(), cAlertas));
+        Thread tMejoras = new Thread(new AlertasMejoras(fLectura.listarAccionesMejoras(), cAlertas));
         
         tCorrectivas.start();       
         tMejoras.start();

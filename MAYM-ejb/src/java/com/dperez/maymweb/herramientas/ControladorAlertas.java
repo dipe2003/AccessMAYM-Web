@@ -5,7 +5,7 @@
 */
 package com.dperez.maymweb.herramientas;
 
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 
@@ -39,20 +39,20 @@ public class ControladorAlertas implements Serializable{
         String asunto = "M.A.Y.M. - Plazo Cumplido";
         String mensaje = "";
         if(evento.getTipo() == TipoEvento.IMPLEMENTACION_ACCION){
-            usuario = evento.getAccion().getComprobacionImplementacion().getResponsable().getUsuarioResponsable();
+            usuario = evento.getAccion().getComprobacionImplementacion().getResponsableComprobacion().getUsuarioResponsable();
             // si el usuario se dio de baja o no recibe alertas el destinatario sera el sector.
             if(usuario.getFechaBaja() != null || !usuario.isRecibeAlertas()){
-                to = usuario.getAreaSectorUsuario().getCorreo();
+                to = usuario.getAreaUsuario().getCorreo();
             }else{
                 to = usuario.getCorreo();
             }
             mensaje = "<h2 style='color:brown;font-family: sans-serif'> Se cumplio el plazo para la comprobar la implementacion de la Accion con Id " + evento.getAccion().getId() + ":</h2>";
             mensaje = mensaje + "<p style='color:chocolate;font-family: sans-serif'> "+ evento.getAccion().getDescripcion() +" </p>";
         }else{
-            usuario = evento.getAccion().getComprobacionEficacia().getResponsable().getUsuarioResponsable();
+            usuario = evento.getAccion().getComprobacionEficacia().getResponsableComprobacion().getUsuarioResponsable();
             // si el usuario se dio de baja o no recibe alertas el destinatario sera el sector.
             if(usuario.getFechaBaja() != null || !usuario.isRecibeAlertas()){
-                to = usuario.getAreaSectorUsuario().getCorreo();
+                to = usuario.getAreaUsuario().getCorreo();
             }else{
                 to = usuario.getCorreo();
             }
@@ -73,7 +73,7 @@ public class ControladorAlertas implements Serializable{
         usuario = evento.getActividad().getResponsableImplementacion().getUsuarioResponsable();
         // si el usuario se dio de baja o no recibe alertas el destinatario sera el sector.
         if(usuario.getFechaBaja() != null || !usuario.isRecibeAlertas()){
-            to = usuario.getAreaSectorUsuario().getCorreo();
+            to = usuario.getAreaUsuario().getCorreo();
         }else{
             to = usuario.getCorreo();
         }

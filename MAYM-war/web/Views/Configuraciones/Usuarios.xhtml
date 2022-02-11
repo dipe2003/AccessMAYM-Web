@@ -69,7 +69,7 @@
                                             #{usuario.correo}
                                         </td>
                                         <td>
-                                            #{usuario.areaSectorUsuario.nombre}
+                                            #{usuario.areaUsuario.nombre}
                                         </td>
                                         <td>
                                             <c:choose>
@@ -105,8 +105,8 @@
                                             </c:choose> 
                                         </td>
                                         <td>
-                                            <c:forEach items="#{usuario.responsables}" var="responsable">
-                                               #{responsable.nombreResponsable} 
+                                            <c:forEach items="#{usuario.responsablesUsuario}" var="responsable">
+                                               #{responsable.nombre} 
                                             </c:forEach>
                                         </td>
                                         <td>                                            

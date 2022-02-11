@@ -5,13 +5,12 @@
 */
 package com.dperez.maym.web.inicio;
 
-import com.dperez.maymweb.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 
@@ -22,10 +21,8 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class GraficosIndex implements Serializable{
-    @Inject
+
     private FacadeLectura fLectura;
-    
-    private int IdEmpresa;
     
     // Valores para grafico Estados
     private int TotalAcciones;
@@ -75,26 +72,17 @@ public class GraficosIndex implements Serializable{
     // Metodos
     @PostConstruct
     public void init(){
+        fLectura = new FacadeLectura();
         // llenar los valores de estado.
-        List<Accion> lstAcciones = fLectura.ListarAcciones();
+        List<Accion> lstAcciones = fLectura.listarAcciones();
         TotalAcciones = lstAcciones.size();
         for(Accion accion:lstAcciones){
-            switch(accion.getEstadoAccion()){
-                case CERRADA:
-                    AccionesCerradas++;                    
-                    break;
-                case DESESTIMADA:
-                    AccionesDesestimadas++;
-                    break;
-                case PENDIENTE:
-                    AccionesPendientes++;
-                    break;
-                case PROCESO_IMP:
-                    AccionesProcesoImp++;
-                    break;
-                case PROCESO_VER:
-                    AccionesProcesoVerif++;
-                    break;
+            switch(accion.getEstadoDeAccion()){
+                case CERRADA -> AccionesCerradas++;
+                case DESESTIMADA -> AccionesDesestimadas++;
+                case PENDIENTE -> AccionesPendientes++;
+                case PROCESO_IMP -> AccionesProcesoImp++;
+                case PROCESO_VER -> AccionesProcesoVerif++;
             }
             contarAccion(accion);
         }
@@ -106,17 +94,9 @@ public class GraficosIndex implements Serializable{
      */
     private void contarAccion(Accion accion){
         switch(accion.getClass().getSimpleName()){
-            case "Correctiva":
-                AccionesCorrectivas++;
-                break;
-                
-            case "Preventiva":
-                AccionPreventivas++;
-                break;
-                
-            case "Mejora":
-                AccionesMejora++;
-                break;
+            case "Correctiva" -> AccionesCorrectivas++;                
+            case "Preventiva" -> AccionPreventivas++;                
+            case "Mejora" -> AccionesMejora++;
         }
     }
 }

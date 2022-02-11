@@ -6,7 +6,7 @@
 package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.herramientas.Presentacion;
-import com.dperez.maymweb.area.Area;
+import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
@@ -18,16 +18,14 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
 public class Areas implements Serializable {
-    @Inject
-    private FacadeAdministrador fAdmin;
-    @Inject
+
+    private FacadeAdministrador fAdmin;   
     private FacadeLectura fLectura;
     
     private Area AreaSeleccionada;
@@ -76,6 +74,9 @@ public class Areas implements Serializable {
      */
     @PostConstruct
     public void init(){
+        fLectura = new FacadeLectura();
+        fAdmin = new FacadeAdministrador();
+        
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         PaginaActual = 1;
@@ -86,7 +87,7 @@ public class Areas implements Serializable {
         }
         //  Areas
         ListaAreas = new ArrayList<>();
-        ListaCompletaAreas = fLectura.ListarAreasSectores();
+        ListaCompletaAreas = fLectura.listarAreas();
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAreas.size(), MAX_ITEMS);
@@ -109,7 +110,7 @@ public class Areas implements Serializable {
             context.renderResponse();
         }else{
             Area area;
-            if((area = fAdmin.NuevaArea(NombreArea, CorreoArea)) != null){
+            if((area = fAdmin.nuevaArea(NombreArea, CorreoArea)) != null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina=1");
             }else{
                 context.addMessage("form_areas:btn_nueva_area", new FacesMessage(SEVERITY_ERROR, "No se pudo crear el area", "No se pudo crear el area" ));
@@ -126,7 +127,7 @@ public class Areas implements Serializable {
      */
     public void editarArea() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fAdmin.EditarArea(IdAreaSeleccionada, NombreArea, CorreoArea))!=-1){
+        if((fAdmin.editarArea(IdAreaSeleccionada, NombreArea, CorreoArea))!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_areas:btn_editar_area", new FacesMessage(SEVERITY_ERROR, "No se pudo editar el area", "No se pudo editar el area" ));
@@ -144,7 +145,7 @@ public class Areas implements Serializable {
     public void eliminarArea(int IdAreaSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
-        if(fAdmin.EliminarArea(IdAreaSeleccionada)!=-1){
+        if(fAdmin.eliminarArea(IdAreaSeleccionada)!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Areas.xhtml?pagina=1");
         }else{
             context.addMessage("form_areas:btn_eliminar_"+IdAreaSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar el Area", "No se pudo eliminar el Area" ));

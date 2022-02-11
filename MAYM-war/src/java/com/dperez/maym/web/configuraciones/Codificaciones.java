@@ -6,8 +6,7 @@
 package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.herramientas.Presentacion;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,9 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Codificaciones implements Serializable {
-    @Inject
-    private FacadeAdministrador fAdmin;
-    @Inject
+
+    private FacadeAdministrador fAdmin; 
     private FacadeLectura fLectura;
 
     private Codificacion CodificacionSeleccionada;
@@ -38,7 +35,6 @@ public class Codificaciones implements Serializable {
     private String NombreCodificacion;
     private String DescripcionCodificacion;
     private int IdCodificacionSeleccionada;
-    private boolean AplicaEmpresa;
     private boolean ContieneAcciones;
     private List<Codificacion> ListaCodificaciones;
     
@@ -73,6 +69,9 @@ public class Codificaciones implements Serializable {
      */
     @PostConstruct
     public void init(){
+        fLectura = new FacadeLectura();
+        fAdmin = new FacadeAdministrador();
+        
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         
@@ -84,7 +83,7 @@ public class Codificaciones implements Serializable {
         }
         //  Areas
         ListaCodificaciones = new ArrayList<>();
-        ListaCompletaCodificaciones = fLectura.ListarCodificaciones();
+        ListaCompletaCodificaciones = fLectura.listarCodificaciones();
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaCodificaciones.size(), MAX_ITEMS);
@@ -106,7 +105,7 @@ public class Codificaciones implements Serializable {
             context.renderResponse();
         }else{
             Codificacion cod;
-            if((cod = fAdmin.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
+            if((cod = fAdmin.nuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Codificacion", "No se pudo crear la Codificacion" ));
@@ -123,7 +122,7 @@ public class Codificaciones implements Serializable {
      */
     public void editarCodificacion() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fAdmin.EditarCodificacion(IdCodificacionSeleccionada, NombreCodificacion, DescripcionCodificacion))!=-1){
+        if((fAdmin.editarCodificacion(IdCodificacionSeleccionada, NombreCodificacion, DescripcionCodificacion))!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_codificaciones:btn_editar_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la codificacion", "No se pudo editar la codificacion" ));
@@ -150,7 +149,7 @@ public class Codificaciones implements Serializable {
     public void eliminarCodificacion(int IdCodificacionSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
-            if(fAdmin.EliminarCodificacion(IdCodificacionSeleccionada)!=-1){
+            if(fAdmin.eliminarCodificacion(IdCodificacionSeleccionada)!=-1){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));

@@ -5,12 +5,12 @@
 */
 package com.dperez.maym.web.acciones.filtros;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.acciones.EnumEstado;
-import com.dperez.maymweb.acciones.TipoAccion;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -34,13 +33,20 @@ import javax.inject.Named;
 @Named
 public class DatosFiltros implements Serializable {
     
-    @Inject
     private FacadeLectura fLectura;
     
     private int idAccionBuscada;
     
     public int getIdAccionBuscada() {return idAccionBuscada;}
     public void setIdAccionBuscada(int idAccionBuscada) {this.idAccionBuscada = idAccionBuscada;}
+    
+    public DatosFiltros(){
+        fLectura = new FacadeLectura();
+    }
+    
+    public void init(){
+        fLectura = new FacadeLectura();
+    }
     
     //**********************************************************************
     // Metodos de buscar Id
@@ -50,15 +56,10 @@ public class DatosFiltros implements Serializable {
         Accion accion = fLectura.GetAccion(idAccionBuscada);
         TipoAccion tipoDefault = TipoAccion.CORRECTIVA;
         if (accion != null) {
-            tipoDefault = accion.getTipoAccion();
-        }
-        if(tipoDefault == TipoAccion.CORRECTIVA){
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
-        }else{
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(url+"/Views/Acciones/MejorasYPreventivas/ListarOMAP.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
-        }
+            tipoDefault = TipoAccion.valueOf(accion.getClass().getSimpleName().toUpperCase());
+        }        
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(url+"/Views/Acciones/General/ListarAcciones.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);       
         
     }
     //**********************************************************************
@@ -109,9 +110,9 @@ public class DatosFiltros implements Serializable {
         Map<String, Area> areas = new HashMap<>();
         if(!acciones.isEmpty()){
             acciones.stream()
-                    .filter((accion) -> !areas.containsKey(String.valueOf(accion.getAreaSectorAccion().getId())))
+                    .filter((accion) -> !areas.containsKey(String.valueOf(accion.getAreaAccion().getId())))
                     .forEach((accion)-> {
-                        areas.put(String.valueOf(accion.getAreaSectorAccion().getId()), accion.getAreaSectorAccion());
+                        areas.put(String.valueOf(accion.getAreaAccion().getId()), accion.getAreaAccion());
                     });
         }
         return new TreeMap<>(areas);
@@ -125,7 +126,7 @@ public class DatosFiltros implements Serializable {
      */
     public List<Accion> FiltrarAccionesPorArea(List<Accion> acciones, List<Integer> areas){
         return  acciones.stream()
-                .filter((accion)-> (areas.contains(accion.getAreaSectorAccion().getId())))
+                .filter((accion)-> (areas.contains(accion.getAreaAccion().getId())))
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -143,9 +144,9 @@ public class DatosFiltros implements Serializable {
         Map<String, Deteccion> detecciones = new HashMap<>();
         if(!acciones.isEmpty()){
             acciones.stream()
-                    .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getDeteccion().getId()))))
+                    .filter((accion) -> (!detecciones.containsKey(String.valueOf(accion.getDeteccionAccion().getId()))))
                     .forEachOrdered((accion) -> {
-                        detecciones.put(String.valueOf(accion.getDeteccion().getId()), accion.getDeteccion());
+                        detecciones.put(String.valueOf(accion.getDeteccionAccion().getId()), accion.getDeteccionAccion());
                     });
         }
         return new TreeMap<>(detecciones);
@@ -159,7 +160,7 @@ public class DatosFiltros implements Serializable {
      */
     public List<Accion> FiltrarAccionesPorDeteccion(List<Accion> acciones, List<Integer> detecciones){
         return acciones.stream()
-                .filter((accion) -> (detecciones.contains(accion.getDeteccion().getId())))
+                .filter((accion) -> (detecciones.contains(accion.getDeteccionAccion().getId())))
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -177,7 +178,7 @@ public class DatosFiltros implements Serializable {
         Map<String, Codificacion> codificaciones = new HashMap<>();
         if(!acciones.isEmpty()){
             acciones.stream()
-                    .filter((accion) -> (!codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId()))))
+                    .filter((accion) -> accion.getCodificacionAccion() != null && !codificaciones.containsKey(String.valueOf(accion.getCodificacionAccion().getId())))
                     .forEachOrdered((accion) -> {
                         codificaciones.put(String.valueOf(accion.getCodificacionAccion().getId()), accion.getCodificacionAccion());
                     });
@@ -208,9 +209,9 @@ public class DatosFiltros implements Serializable {
      * @param estados
      * @return
      */
-    public List<Accion> FiltrarAccionesPorEstado(List<Accion> acciones, List<EnumEstado> estados){
+    public List<Accion> FiltrarAccionesPorEstado(List<Accion> acciones, List<Estado> estados){
         return acciones.stream()
-                .filter((accion) -> (estados.contains(accion.getEstadoAccion())))
+                .filter((accion) -> (estados.contains(accion.getEstadoDeAccion())))
                 .sorted()
                 .collect(Collectors.toList());
     }

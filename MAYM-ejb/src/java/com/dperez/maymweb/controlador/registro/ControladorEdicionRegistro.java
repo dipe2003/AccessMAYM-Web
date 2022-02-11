@@ -5,62 +5,43 @@
 */
 package com.dperez.maymweb.controlador.registro;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.acciones.ManejadorAccion;
-import com.dperez.maymweb.acciones.Correctiva;
-import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.acciones.Mejora;
-import com.dperez.maymweb.accion.actividad.Actividad;
-import com.dperez.maymweb.accion.adjunto.Adjunto;
-import com.dperez.maymweb.accion.adjunto.ManejadorAdjunto;
-import com.dperez.maymweb.accion.actividad.ManejadorActividad;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.area.ManejadorArea;
-import com.dperez.maymweb.codificacion.Codificacion;
-import com.dperez.maymweb.codificacion.ManejadorCodificacion;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.ManejadorDeteccion;
-import com.dperez.maymweb.acciones.EnumEstado;
-import com.dperez.maymweb.fortaleza.Fortaleza;
-import com.dperez.maymweb.fortaleza.ManejadorFortaleza;
-import com.dperez.maymweb.producto.ManejadorProducto;
-import com.dperez.maymweb.producto.Producto;
-import com.dperez.maymweb.responsable.ManejadorResponsables;
-import com.dperez.maymweb.usuario.Responsable;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
+import com.dperez.maymweb.modelo.producto.Producto;
+import com.dperez.maymweb.modelo.usuario.Responsable;
+import com.dperez.maymweb.persistencia.FabricaRepositorio;
+import com.dperez.maymweb.persistencia.RepositorioPersistencia;
 import java.util.Date;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
-@Named
-@Stateless
 public class ControladorEdicionRegistro {
-    @Inject
-    private ManejadorAccion mAccion;
-    @Inject
-    private ManejadorArea mArea;
-    @Inject
-    private ManejadorDeteccion mDeteccion;
-    @Inject
-    private ManejadorCodificacion mCodificacion;
-    @Inject
-    private ManejadorProducto mProducto;
-    @Inject
-    private ManejadorAdjunto mAdjunto;
-    @Inject
-    private ManejadorActividad mActividad;
-    @Inject
-    private ManejadorResponsables mResponsable;
-    @Inject
-    private ManejadorFortaleza mFortaleza;
+    
+    private final RepositorioPersistencia<Accion> repoAccion;
+    private final RepositorioPersistencia<Area> repoArea;
+    private final RepositorioPersistencia<Deteccion> repoDeteccion;
+    private final RepositorioPersistencia<Codificacion> repoCodificacion;
+    private final RepositorioPersistencia<Responsable> repoResponsable;
+    private final RepositorioPersistencia<Fortaleza> repoFortalezas;
+    
+    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
     
     //  Constructores
-    public ControladorEdicionRegistro(){}
+    public ControladorEdicionRegistro(){
+        repoAccion = fabricaRepositorio.getRespositorioAcciones();
+        repoArea = fabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
+        repoCodificacion = fabricaRepositorio.getRepositorioCodificaciones();
+        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
+        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
+    }
     
     /*
     ACCION
@@ -68,155 +49,137 @@ public class ControladorEdicionRegistro {
     
     /**
      * Edita una accion con los mismos parametros que se creo.Actualiza la base de datos.
-     * @param IdAccion
-     * @param TipoAccion
-     * @param FechaDeteccion
-     * @param Descripcion
-     * @param AnalisisCausa
-     * @param Cliente
-     * @param IdAreaSector
-     * @param IdDeteccion
-     * @param IdCodificacion
+     * @param idAccion
+     * @param fechaDeteccion
+     * @param descripcion
+     * @param analisisCausa
+     * @param idAreaSector
+     * @param idDeteccion
+     * @param idCodificacion
      * @return -1 si no se actualizo.
      */
-    public int EditarAccion(int IdAccion, TipoAccion TipoAccion, Date FechaDeteccion, String Descripcion, String AnalisisCausa, String Cliente,
-            int IdAreaSector, int IdDeteccion, int IdCodificacion){
-        Accion accion = mAccion.GetAccion(IdAccion);
+    public int editarAccion(int idAccion, Date fechaDeteccion, String descripcion, String analisisCausa,
+            int idAreaSector, int idDeteccion, int idCodificacion){
+        Accion accion = repoAccion.find(idAccion);
         //  Comprobar si hay cambio en el valor para "ahorrar" llamada a la base de datos.
-        if(accion.getAreaSectorAccion().getId()!=IdAreaSector){
-            Area areaSector = mArea.GetArea(IdAreaSector);
-            accion.setAreaSectorAccion(areaSector);
+        if(accion.getAreaAccion().getId()!=idAreaSector){
+            Area areaSector = repoArea.find(idAreaSector);
+            accion.setAreaAccion(areaSector);
         }
-        if(accion.getDeteccion().getId()!=IdDeteccion){
-            Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-            accion.setDeteccion(deteccion);
+        if(accion.getDeteccionAccion().getId()!=idDeteccion){
+            Deteccion deteccion = repoDeteccion.find(idDeteccion);
+            accion.setDeteccionAccion(deteccion);
         }
-        if(accion.getCodificacionAccion().getId()!=IdCodificacion){
-            Codificacion codificacion = mCodificacion.GetCodificacion(IdCodificacion);
+        if(accion.getCodificacionAccion() == null || accion.getCodificacionAccion()!=null &&  accion.getCodificacionAccion().getId()!=idCodificacion){
+            Codificacion codificacion = repoCodificacion.find(idCodificacion);
             accion.setCodificacionAccion(codificacion);
         }
-        accion.setFechaDeteccion(FechaDeteccion);
-        accion.setDescripcion(Descripcion);
-        if(TipoAccion == TipoAccion.CORRECTIVA){
-            if (Cliente != null && !Cliente.isEmpty()) ((Correctiva)accion).setCliente(Cliente);
-        }
-        accion.setAnalisisCausa(AnalisisCausa);
-        return mAccion.ActualizarAccion(accion);
+        accion.setFechaDeteccion(fechaDeteccion);
+        accion.setDescripcion(descripcion);
+        
+        accion.setAnalisisCausa(analisisCausa);
+        return repoAccion.update(accion).getId();
     }
     
     /**
      * Elimina la accion seleccionada.
-     * @param IdAccion
+     * @param idAccion
      * @return return Retorna -1 si no se elimino. Retorna el id de la accion eliminada.
      */
-    public int EliminarAccion(int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        return mAccion.BorrarAccion(accion);
+    public int eliminarAccion(int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        repoAccion.delete(accion);
+        return 1;
     }
     
     /**
      * Setea el analisis de causa de la desviacion y actualiza la base de datos.
-     * @param AnalisisDeCausa
-     * @param IdAccion
+     * @param analisisDeCausa
+     * @param idAccion
      * @return -1 si no se actualizo.
      */
-    public int SetAnalisisDeCausa(String AnalisisDeCausa, int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.setAnalisisCausa(AnalisisDeCausa);
-        return mAccion.ActualizarAccion(accion);
+    public int setAnalisisDeCausa(String analisisDeCausa, int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.setAnalisisCausa(analisisDeCausa);
+        return repoAccion.update(accion).getId();
     }
     
     /**
      * Setea el estado de la accion como desestimada y actualiza la base de datos.
-     * @param Observaciones
-     * @param IdAccion
+     * @param observaciones
+     * @param idAccion
      * @return
      */
-    public int DesestimarAccion(String Observaciones, int IdAccion){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.setEstadoAccion(EnumEstado.DESESTIMADA);
-        return mAccion.ActualizarAccion(accion);
+    public int desestimarAccion(String observaciones, int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.setEstadoDeAccion(Estado.DESESTIMADA);
+        return repoAccion.update(accion).getId();
     }
     
     /**
      * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
      * Elimina el producto de la base de datos.
-     * @param IdAccionCorrectiva
-     * @param NombreProducto
+     * @param idAccion
+     * @param idProducto
      * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
      */
-    public int RemoverProductoInvolucrado(int IdAccionCorrectiva, String NombreProducto){
-        Accion accion = mAccion.GetAccion(IdAccionCorrectiva);
-        int IdProducto =0;
-        List<Producto> productos = ((Correctiva)accion).getProductosAfectados();
-        IdProducto = productos.stream()
-                .filter(producto -> producto.getNombre().equalsIgnoreCase(NombreProducto))
-                .findFirst()
-                .get().getId();
-        ((Correctiva)accion).removeProductoAfectado(IdProducto);
-        int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){
-            Producto producto = mProducto.GetProducto(IdProducto);
-            mProducto.BorrarProducto(producto);
-        }
-        return res;
+    public int removerProductoInvolucrado(int idAccion, int idProducto){
+        Accion accion = repoAccion.find(idAccion);
+        accion.removeProducto(idProducto);
+        repoAccion.update(accion);
+        return 1;
     }
     
     /**
      * Remueve el archivo adjunto de la accion seleccionada y actualiza la base de datos.
      * Elimina el adjunto de la base de datos.
-     * @param IdAccion
-     * @param IdAdjunto
+     * @param idAccion
+     * @param idAdjunto
      * @return Retorna -1 si no se actualizo. Retorna IdAccion si se actualizo.
      */
-    public int RemoverArchivoAdjunto(int IdAccion, int IdAdjunto){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        accion.RemoveAdjunto(IdAdjunto);
-        int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){
-            Adjunto adjunto = mAdjunto.GetAdjunto(IdAdjunto);
-            mAdjunto.BorrarAdjunto(adjunto);
-        }
-        return res;
+    public int removerArchivoAdjunto(int idAccion, int idAdjunto){
+        Accion accion = repoAccion.find(idAccion);
+        accion.removeAdjunto(idAdjunto);
+        repoAccion.update(accion);
+        return 1;
     }
     
     /**
-     * Remueve la actividad de mejora de la accion de mejora seleccionada y actualiza la base de datos.
-     * Elimina la actividad de mejora de la base de datos.
-     * @param IdAccion
-     * @param IdActividad
+     * Remueve la actividad de la accion seleccionada y actualiza la base de datos.
+     * Elimina la actividad de la base de datos.
+     * @param idAccion
+     * @param idActividad
      * @return Retorna -1 si se actualizo. Retorna el IdAccion si no se elimino.
      */
-    public int RemoverActividad(int IdAccion, int IdActividad){
-        Accion accion = mAccion.GetAccion(IdAccion);
-        Actividad actividad = mActividad.GetActividad(IdActividad);
-        accion.RemoveActividad(actividad);
-
-        ((Mejora)accion).CambiarEstado();
-        int res = mAccion.ActualizarAccion(accion);
-        if(res!=-1){
-           res = mActividad.BorrarActividad(actividad);
-        }
-        return res;
-    }   
+    public int removerActividad(int idAccion, int idActividad){
+        Accion accion = repoAccion.find(idAccion);
+        Actividad actividad = accion.findActividad(idActividad);
+        accion.removeActividad(actividad);
+        
+        accion.cambiarEstado();
+        repoAccion.update(accion);
+        return 1;
+    }
     
     /**
      * Actualiza la actividad en la base de datos.
-     * @param IdActividad
-     * @param IdResponsable
-     * @param FechaEstimada
-     * @param Descripcion
+     * @param idAccion
+     * @param idActividad
+     * @param idResponsable
+     * @param fechaEstimada
+     * @param descripcion
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
-    public int EditarActividad(int IdActividad, int IdResponsable, Date FechaEstimada, String Descripcion){
-        Actividad actividad = mActividad.GetActividad(IdActividad);
-        actividad.setDescripcion(Descripcion);
-        actividad.setFechaEstimadaImplementacion(FechaEstimada);
-        if(actividad.getResponsableImplementacion().getId() != IdResponsable){
-            Responsable responsable = mResponsable.GetResponsable(IdResponsable);
+    public int editarActividad(int idAccion, int idActividad, int idResponsable, Date fechaEstimada, String descripcion){
+        Accion accion = repoAccion.find(idAccion);
+        Actividad actividad = accion.findActividad(idActividad);
+        actividad.setDescripcion(descripcion);
+        actividad.setFechaEstimadaImplementacion(fechaEstimada);
+        if(actividad.getResponsableImplementacion().getId() != idResponsable){
+            Responsable responsable = repoResponsable.find(idResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
-        return mActividad.ActualizarActividad(actividad);
+        return repoAccion.update(accion).getId();
     }
     
     /*
@@ -225,16 +188,18 @@ public class ControladorEdicionRegistro {
     
     /**
      * Cambia los valores de Producto y actualiza la base de datos.
-     * @param IdProducto
-     * @param NombreProducto
-     * @param DatosProducto
+     * @param idAccion
+     * @param idProducto
+     * @param nombreProducto
+     * @param datosProducto
      * @return Retorna -1 si no se actualizo. Retorna el IdProducto si se actualizo.
      */
-    public int EditarProducto(int IdProducto, String NombreProducto, String DatosProducto){
-        Producto producto = mProducto.GetProducto(IdProducto);
-        producto.setDatos(DatosProducto);
-        producto.setNombre(NombreProducto);
-        return mProducto.ActualizarProducto(producto);
+    public int editarProducto(int idAccion, int idProducto, String nombreProducto, String datosProducto){
+        Accion accion = repoAccion.find(idAccion);
+        Producto producto = accion.findProducto(idProducto);
+        producto.setDatos(datosProducto);
+        producto.setNombre(nombreProducto);
+        return repoAccion.update(accion).getId();
     }
     
     /*
@@ -243,35 +208,36 @@ public class ControladorEdicionRegistro {
     
     /**
      * Actualiza la fortaleza especificada por su id en la base de datos.
-     * @param IdFortaleza
-     * @param FechaDeteccion
-     * @param Descripcion
-     * @param IdDeteccion
-     * @param IdAreaSector
+     * @param idFortaleza
+     * @param fechaDeteccion
+     * @param descripcion
+     * @param idDeteccion
+     * @param idAreaSector
      * @return Retorna el id de la fortaleza si se actualizo, de lo contrario retorna -1.
      */
-    public int EditarFortaleza(int IdFortaleza, Date FechaDeteccion, String Descripcion, int IdDeteccion, int IdAreaSector){
-        Fortaleza fortaleza = mFortaleza.GetFortaleza(IdFortaleza);
-        if(fortaleza.getAreaSectorFortaleza().getId() != IdAreaSector){
-            Area area = mArea.GetArea(IdAreaSector);
-            fortaleza.setAreaSectorFortaleza(area);
+    public int editarFortaleza(int idFortaleza, Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector){
+        Fortaleza fortaleza = repoFortalezas.find(idFortaleza);
+        if(fortaleza.getAreaFortaleza().getId() != idAreaSector){
+            Area area = repoArea.find(idAreaSector);
+            fortaleza.setAreaFortaleza(area);
         }
-        if(fortaleza.getDeteccion().getId() != IdDeteccion){
-            Deteccion deteccion = mDeteccion.GetDeteccion(IdDeteccion);
-            fortaleza.setDeteccion(deteccion);
+        if(fortaleza.getDeteccionFortaleza().getId() != idDeteccion){
+            Deteccion deteccion = repoDeteccion.find(idDeteccion);
+            fortaleza.setDeteccionFortaleza(deteccion);
         }
-        fortaleza.setDescripcion(Descripcion);
-        fortaleza.setFechaDeteccion(FechaDeteccion);
-        return mFortaleza.ActualizarFortaleza(fortaleza);
+        fortaleza.setDescripcion(descripcion);
+        fortaleza.setFechaDeteccion(fechaDeteccion);
+        return repoFortalezas.update(fortaleza).getId();
     }
     
     /**
      * Se elimina la fortaleza indicada de la base de datos.
-     * @param IdFortaleza
+     * @param idFortaleza
      * @return Retorna el id de la fortaleza si se elimino, de lo contrario retorna -1.
      */
-    public int EliminarFortaleza(int IdFortaleza){
-        Fortaleza fortaleza = mFortaleza.GetFortaleza(IdFortaleza);
-        return mFortaleza.BorrarFortaleza(fortaleza);
+    public int eliminarFortaleza(int idFortaleza){
+        Fortaleza fortaleza = repoFortalezas.find(idFortaleza);
+        repoFortalezas.delete(fortaleza);
+        return 1;
     }
 }

@@ -5,38 +5,37 @@
 */
 package com.dperez.maymweb.facades;
 
-import com.dperez.maymweb.acciones.Accion;
-import com.dperez.maymweb.acciones.TipoAccion;
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.registro.ControladorVistaRegistros;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.fortaleza.Fortaleza;
-import com.dperez.maymweb.usuario.Responsable;
-import com.dperez.maymweb.usuario.Usuario;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
+import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
+import com.dperez.maymweb.modelo.usuario.Responsable;
+import com.dperez.maymweb.modelo.usuario.Usuario;
+import java.io.Serializable;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author Diego
  */
-@Named
-@Stateless
-public class FacadeLectura  {
+public class FacadeLectura implements Serializable {
+ 
+    private final ControladorVistaRegistros cVista;
     
-    @Inject
-    private ControladorVistaRegistros cVista;
+    public FacadeLectura(){
+        cVista = new ControladorVistaRegistros();
+    }
     
     public Accion GetAccion(int IdAccion){
-        return cVista.GetAccion(IdAccion);
+        return cVista.getAccion(IdAccion);
     }
     
     public Usuario GetUsuario(int IdUsuario){
-        return cVista.GetUsuario(IdUsuario);
+        return cVista.getUsuario(IdUsuario);
     }
     
     /**
@@ -44,70 +43,70 @@ public class FacadeLectura  {
      * @param Vigente True: si no fueron dados de baja (FechaBaja == null).
      * @return Lista de Usuarios.
      */
-    public List<Usuario> GetUsuarios(boolean Vigente){
-        return cVista.GetUsuarios(Vigente);
+    public List<Usuario> listarUsuarios(boolean Vigente){
+        return cVista.listarUsuarios(Vigente);
     }
     
-    public List<Empresa> ListaEmpresasRegistradas(){
-        return cVista.ListarEmpresasRegistradas();
-    }
-    
-    public Empresa GetEmpresa(int IdEmpresa){
-        return cVista.GetEmpresa(IdEmpresa);
-    }
-    
-    public List<Deteccion> ListarDetecciones(){
-        return cVista.GetDetecciones();
+    public List<Deteccion> listarDetecciones(){
+        return cVista.listarDetecciones();
     }
     
     /**
      * Devuelve las codificaciones.
      * @return Lista de codificaciones.
      */
-    public List<Codificacion> ListarCodificaciones(){
-        return cVista.GetCodificaciones();
+    public List<Codificacion> listarCodificaciones(){
+        return cVista.listarCodificaciones();
     }
     
     /**
      * Devuelve una todas las areas de una empresa.
      * @return lista de areas.
      */
-    public List<Area> ListarAreasSectores(){
-        return cVista.GetAreas();
+    public List<Area> listarAreas(){
+        return cVista.listarAreas();
     }
 
-    public List<Accion> ListarAccionesCorrectivas(){
-        return cVista.ListarAccionesSegunEstado(null, TipoAccion.CORRECTIVA);
+    public List<Accion> listarAccionesCorrectivas(){
+        return cVista.listarAcciones(null, TipoAccion.CORRECTIVA);
     }
-    public List<Accion> ListarAccionesMejoras(){
-        return cVista.ListarAccionesSegunEstado(null, TipoAccion.MEJORA);
-    }
-    
-    public List<Accion> ListarAccionesPreventivas(){
-        return cVista.ListarAccionesSegunEstado(null, TipoAccion.PREVENTIVA);
+    public List<Accion> listarAccionesMejoras(){
+        return cVista.listarAcciones(null, TipoAccion.MEJORA);
     }
     
-    public List<Accion> ListarAcciones(){
-        return cVista.ListarAccionesSegunEstado(null);
+    public List<Accion> listarAccionesPreventivas(){
+        return cVista.listarAcciones(null, TipoAccion.PREVENTIVA);
     }
     
-    public Fortaleza GetFotaleza(int IdFortaleza){
-        return cVista.GetFortaleza(IdFortaleza);
+    public List<Accion> listarAcciones(){
+        return cVista.listarAcciones(null);
+    }
+    
+    public Fortaleza getFortaleza(int IdFortaleza){
+        return cVista.getFortaleza(IdFortaleza);
     }
     
     /**
      * Lista todas las fortalezas registradas
      * @return
      */
-    public List<Fortaleza> ListarFortalezas(){
-        return cVista.ListarFortalezas();
+    public List<Fortaleza> listarFortalezas(){
+        return cVista.listarFortalezas();
     }
+    
+    /*
+        Responsabilidades
+    */
+    
+    public List<Responsabilidad> listarResponsabilidades(){
+        return cVista.listarResponsabilidades();
+    } 
     
     /*
         Responsables
     */
     
-    public List<Responsable> ListarResponsables(boolean soloVigentes){
-        return cVista.ListarResponsables(soloVigentes);
+    public List<Responsable> listarResponsables(boolean soloVigentes){
+        return cVista.listarResponsables(soloVigentes);
     }
 }

@@ -6,9 +6,8 @@
 package com.dperez.maym.web.configuraciones;
 
 import com.dperez.maym.web.herramientas.Presentacion;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,12 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Detecciones implements Serializable {
-    @Inject
-    private FacadeAdministrador fAdmin;
-    @Inject
+
+    private FacadeAdministrador fAdmin;  
     private FacadeLectura fLectura;
-    
-    private Empresa EmpresaLogueada;
     
     private int IdDeteccionSeleccionada;
     private String NombreDeteccion;
@@ -42,8 +37,8 @@ public class Detecciones implements Serializable {
     
     private boolean ContieneAcciones;
     
-    private EnumTipoDeteccion[] TiposDeteccion;
-    private EnumTipoDeteccion TipoDeDeteccionSeleccionada;
+    private TipoDeteccion[] TiposDeteccion;
+    private TipoDeteccion TipoDeDeteccionSeleccionada;
     
     // Pagination
     private static final int MAX_ITEMS = 10;
@@ -56,10 +51,8 @@ public class Detecciones implements Serializable {
     public List<Deteccion> getListaDetecciones() {return ListaDetecciones;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
     
-    public EnumTipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
-    public EnumTipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public Empresa getEmpresaLogueada() {return EmpresaLogueada;}
-    
+    public TipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
+    public TipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
@@ -67,8 +60,8 @@ public class Detecciones implements Serializable {
     //  Setters
     public void setNombreDeteccion(String NombreDeteccion) {this.NombreDeteccion = NombreDeteccion;}
     public void setListaDetecciones(List<Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
-    public void setTipoDeDeteccionSeleccionada(EnumTipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
-    public void setTiposDeteccion(EnumTipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
+    public void setTipoDeDeteccionSeleccionada(TipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
+    public void setTiposDeteccion(TipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
     
     //  Metodos
     
@@ -77,9 +70,11 @@ public class Detecciones implements Serializable {
      */
     @PostConstruct
     public void init(){
+        fLectura = new FacadeLectura();
+        fAdmin = new FacadeAdministrador();
+        
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        EmpresaLogueada = (Empresa)request.getSession().getAttribute("Empresa");
         
         PaginaActual = 1;
         try{
@@ -89,12 +84,12 @@ public class Detecciones implements Serializable {
         }
         //  Areas
         ListaDetecciones = new ArrayList<>();
-        ListaCompletaDetecciones = fLectura.ListarDetecciones();
+        ListaCompletaDetecciones = fLectura.listarDetecciones();
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaDetecciones.size(), MAX_ITEMS);
         
-        TiposDeteccion =  EnumTipoDeteccion.values();
+        TiposDeteccion =  TipoDeteccion.values();
         // llenar la lista con todas las areas registradas.
         ListaDetecciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaDetecciones);
         ListaDetecciones.stream().sorted();
@@ -113,7 +108,7 @@ public class Detecciones implements Serializable {
             context.addMessage("form_detecciones:btn_nueva_deteccion", new FacesMessage(SEVERITY_ERROR, "Ya existe una deteccion con ese nombre", "Ya existe una deteccion con ese nombre" ));
             context.renderResponse();
         }else{
-            if((fAdmin.NuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada)) != null){
+            if((fAdmin.nuevaDeteccion(NombreDeteccion, TipoDeDeteccionSeleccionada)) != null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_detecciones:btn_nueva_deteccion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Deteccion", "No se pudo crear la Deteccion" ));
@@ -130,7 +125,7 @@ public class Detecciones implements Serializable {
      */
     public void editarDeteccion() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fAdmin.EditarDeteccion(IdDeteccionSeleccionada, NombreDeteccion, TipoDeDeteccionSeleccionada))!=-1){
+        if((fAdmin.editarDeteccion(IdDeteccionSeleccionada, NombreDeteccion, TipoDeDeteccionSeleccionada))!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml?pagina="+PaginaActual);
         }else{
             context.addMessage("form_detecciones:btn_editar_deteccion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la deteccion", "No se pudo editar la deteccion" ));
@@ -146,7 +141,7 @@ public class Detecciones implements Serializable {
      */
     public void eliminarDeteccion(int IdDeteccionSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if(fAdmin.EliminarDeteccion(IdDeteccionSeleccionada)!=-1){
+        if(fAdmin.eliminarDeteccion(IdDeteccionSeleccionada)!=-1){
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Detecciones.xhtml?pagina=1");
         }else{
             context.addMessage("form_detecciones:btn_eliminar_deteccion_"+IdDeteccionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la deteccion", "No se pudo eliminar la deteccion" ));
@@ -161,7 +156,7 @@ public class Detecciones implements Serializable {
     public void cargarDatos(int IdDeteccion){
         if(IdDeteccion < 0 ){
             this.NombreDeteccion = new String();
-            this.TipoDeDeteccionSeleccionada = EnumTipoDeteccion.INTERNA;
+            this.TipoDeDeteccionSeleccionada = TipoDeteccion.INTERNA;
             this.IdDeteccionSeleccionada = -1;
         }else{
             Deteccion deteccionSeleccionada = ListaDetecciones.stream()
@@ -170,12 +165,12 @@ public class Detecciones implements Serializable {
                     .orElse(null);
             
             this.NombreDeteccion = deteccionSeleccionada.getNombre();
-            this.TipoDeDeteccionSeleccionada = deteccionSeleccionada.getTipo();
+            this.TipoDeDeteccionSeleccionada = deteccionSeleccionada.getTipoDeDeteccion();
             this.IdDeteccionSeleccionada = IdDeteccion;
             
             // verifica que no tenga acciones con deteccion seleccioada
             // al encontrar la primer accion que pertenezca a la deteccion y empresa ContieneAcciones = true
-            ContieneAcciones = !deteccionSeleccionada.getAccionesDetectadas().isEmpty();
+            ContieneAcciones = !deteccionSeleccionada.getAccionesDeteccion().isEmpty();
         }
     }
     

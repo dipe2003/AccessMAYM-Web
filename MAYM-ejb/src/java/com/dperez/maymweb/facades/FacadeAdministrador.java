@@ -5,61 +5,41 @@
 */
 package com.dperez.maymweb.facades;
 
-import com.dperez.maymweb.area.Area;
-import com.dperez.maymweb.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.controlador.configuracion.ControladorConfiguracion;
 import com.dperez.maymweb.controlador.registro.ControladorEdicionRegistro;
-import com.dperez.maymweb.deteccion.Deteccion;
-import com.dperez.maymweb.deteccion.EnumTipoDeteccion;
-import com.dperez.maymweb.empresa.Empresa;
-import com.dperez.maymweb.usuario.Usuario;
-import com.dperez.maymweb.usuario.EnumPermiso;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
+import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
+import com.dperez.maymweb.modelo.usuario.Usuario;
+import com.dperez.maymweb.modelo.usuario.EnumPermiso;
+import com.dperez.maymweb.modelo.usuario.Responsable;
 
 /**
  * Facade con los medotos para el manejo solo de las clases que seran parte de la configuracion de la aplicacion.
  * No genera/edita registros.
  * @author Diego
  */
-@Named
-@Stateless
 public class FacadeAdministrador  {
-    @Inject
-    private ControladorConfiguracion cConfig;
-    @Inject
-    private ControladorEdicionRegistro cEdicion;
+    private final ControladorConfiguracion cConfig;
+    private final ControladorEdicionRegistro cEdicion;
     
     //  Constructores
-    public FacadeAdministrador(){}
-    
-    /**
-     * Crea una empresa y la persiste en la base de datos.
-     * @param Id
-     * @param NombreEmpresa
-     * @param DireccionEmpresa
-     * @param TelefonoEmpresa
-     * @param CorreoEmpresa
-     * @param FaxEmpresa
-     * @param Descripcion
-     * @param NumeroEmpresa
-     * @return Null si no se creo la empresa.
-     */
-    public Empresa NuevaEmpresa(int Id, String NombreEmpresa, String DireccionEmpresa, String TelefonoEmpresa, String CorreoEmpresa,
-            String FaxEmpresa, String Descripcion, String NumeroEmpresa){
-        return cConfig.NuevaEmpresa(Id, NombreEmpresa, DireccionEmpresa, TelefonoEmpresa, CorreoEmpresa, FaxEmpresa, Descripcion, NumeroEmpresa);
+    public FacadeAdministrador(){
+        cConfig = new ControladorConfiguracion();
+        cEdicion = new ControladorEdicionRegistro();
     }
     
-    /***
+   /***
      * Crea una nueva area/sector y la persiste en la base de datos.
      * Se verifica si existe el nombre del area en la base de datos.
      * @param NombreArea
      * @param CorreoArea
      * @return null si no se creo.
      */
-    public Area NuevaArea(String NombreArea, String CorreoArea){
-        return cConfig.NuevaArea(NombreArea, CorreoArea);
+    public Area nuevaArea(String NombreArea, String CorreoArea){
+        return cConfig.nuevaArea(NombreArea, CorreoArea);
     }
     
     /**
@@ -70,8 +50,8 @@ public class FacadeAdministrador  {
      * @param CorreoArea
      * @return Retorna -1 si no se actualizo. Retorna el IdArea si se actualizo.
      */
-    public int EditarArea(int IdArea, String NombreArea, String CorreoArea){
-        return cConfig.EditarArea(IdArea, NombreArea, CorreoArea);
+    public int editarArea(int IdArea, String NombreArea, String CorreoArea){
+        return cConfig.editarArea(IdArea, NombreArea, CorreoArea);
     }
     
     /**
@@ -79,11 +59,10 @@ public class FacadeAdministrador  {
      * Actualiza la relaciones Empesa.
      * Se comprueba que no tenga acciones y fortalezas relacionadas.
      * @param IdArea
-     * @param IdEmpresa
      * @return Retorna el id del area si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarArea(int IdArea){
-        return cConfig.EliminarArea(IdArea);
+    public int eliminarArea(int IdArea){
+        return cConfig.eliminarArea(IdArea);
     }
     
     /***
@@ -92,8 +71,8 @@ public class FacadeAdministrador  {
      * @param DescripcionCodificacion
      * @return null si no se creo.
      */
-    public Codificacion NuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
-        return cConfig.NuevaCodificacion(NombreCodificacion, DescripcionCodificacion);
+    public Codificacion nuevaCodificacion(String NombreCodificacion, String DescripcionCodificacion){
+        return cConfig.nuevaCodificacion(NombreCodificacion, DescripcionCodificacion);
     }
     
     /**
@@ -104,21 +83,19 @@ public class FacadeAdministrador  {
      * @param DescripcionCodificacion
      * @return Retorna -1 si no se actualizo. Retorna el IdCodificacion si se actualizo.
      */
-    public int EditarCodificacion(int IdCodificacion, String NombreCodificacion, String DescripcionCodificacion){
-        return cConfig.EditarCodificacion(IdCodificacion, NombreCodificacion, DescripcionCodificacion);
+    public int editarCodificacion(int IdCodificacion, String NombreCodificacion, String DescripcionCodificacion){
+        return cConfig.editarCodificacion(IdCodificacion, NombreCodificacion, DescripcionCodificacion);
     }
     
     /**
      * Elimina la codificacion de la base de datos.
      * PRE: se debe comprobar que existe a una unica empresa.
-     * Solo se elimina si pertenece a una unica empresa.
      * Se comprueba que no tenga acciones relacionadas.
      * @param IdCodificacion
-     * @param IdEmpresa
      * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarCodificacion(int IdCodificacion){
-        return cConfig.EliminarCodificacion(IdCodificacion);
+    public int eliminarCodificacion(int IdCodificacion){
+        return cConfig.eliminarCodificacion(IdCodificacion);
     }
     
     /***
@@ -127,8 +104,8 @@ public class FacadeAdministrador  {
      * @param tipoDeteccion
      * @return null si no se creo.
      */
-    public Deteccion NuevaDeteccion(String NombreDeteccion, EnumTipoDeteccion tipoDeteccion){
-        return cConfig.NuevaDeteccion(NombreDeteccion, tipoDeteccion);
+    public Deteccion nuevaDeteccion(String NombreDeteccion, TipoDeteccion tipoDeteccion){
+        return cConfig.nuevaDeteccion(NombreDeteccion, tipoDeteccion);
     }
     
     /**
@@ -139,8 +116,8 @@ public class FacadeAdministrador  {
      * @param TipoDeteccion
      * @return Retorna -1 si no se actualizo. Retorna el IdDeteccion si se actualizo.
      */
-    public int EditarDeteccion(int IdDteccion, String NombreDeteccion, EnumTipoDeteccion TipoDeteccion){
-        return cConfig.EditarDeteccion(IdDteccion, NombreDeteccion, TipoDeteccion);
+    public int editarDeteccion(int IdDteccion, String NombreDeteccion, TipoDeteccion TipoDeteccion){
+        return cConfig.editarDeteccion(IdDteccion, NombreDeteccion, TipoDeteccion);
     }
     
     /**
@@ -149,8 +126,8 @@ public class FacadeAdministrador  {
      * @param IdDeteccion
      * @return Retorna el id de la deteccion si se elimino. Retorna -1 si no se elimino.
      */
-    public int EliminarDeteccion(int IdDeteccion){
-        return cConfig.EliminarDeteccion(IdDeteccion);
+    public int eliminarDeteccion(int IdDeteccion){
+        return cConfig.eliminarDeteccion(IdDeteccion);
     }
     
     /**
@@ -161,13 +138,12 @@ public class FacadeAdministrador  {
      * @param CorreoUsuario
      * @param Password
      * @param PermisoUsuario
-     * @param IdEmpresa
      * @param IdArea
      * @return null si no se creo.
      */
-    public Usuario NuevoUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, 
+    public Usuario nuevoUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario, String Password, 
             EnumPermiso PermisoUsuario, int IdArea){
-        return cConfig.NuevoUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdArea);
+        return cConfig.nuevoUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, Password, PermisoUsuario, IdArea);
     }
     
     /**
@@ -175,8 +151,8 @@ public class FacadeAdministrador  {
      * @param IdUsuario
      * @return
      */
-    public boolean ExisteUsuario(int IdUsuario){
-        return cConfig.ExisteUsuario(IdUsuario);
+    public boolean existeUsuario(int IdUsuario){
+        return cConfig.existeUsuario(IdUsuario);
     }
     
     /**
@@ -185,8 +161,8 @@ public class FacadeAdministrador  {
      * @param IdUsuario
      * @return Retorna <b>Tur</b> si se elimina, <b>False</b> de lo contrario.
      */
-    public int EliminarUsuario(int IdUsuario) {
-        return cConfig.EliminarUsuario(IdUsuario);
+    public int eliminarUsuario(int IdUsuario) {
+        return cConfig.eliminarUsuario(IdUsuario);
     }
     
     /**
@@ -194,8 +170,8 @@ public class FacadeAdministrador  {
      * @param IdUsuario
      * @return 
      */
-    public int DarDeBajaUsuario(int IdUsuario){
-        return cConfig.CambiarEstadoUsuario(IdUsuario, false);
+    public int darDeBajaUsuario(int IdUsuario){
+        return cConfig.cambiarEstadoUsuario(IdUsuario, false);
     }
     
     /**
@@ -203,26 +179,18 @@ public class FacadeAdministrador  {
      * @param IdUsuario
      * @return 
      */
-    public int DarDeAltaUsuario(int IdUsuario){
-        return cConfig.CambiarEstadoUsuario(IdUsuario, true);
+    public int darDeAltaUsuario(int IdUsuario){
+        return cConfig.cambiarEstadoUsuario(IdUsuario, true);
     }
     
-    /**
-     * Comprueba si existe la empresa especificada por su nombre;
-     * @param IdEmpresa
-     * @return
-     */
-    public boolean ExisteEmpresa(int IdEmpresa){
-        return cConfig.ExisteEmpresa(IdEmpresa);
-    }
-    
+   
     /**
      * Elimina la accion seleccionada.
      * @param IdAccion
      * @return return Retorna -1 si no se elimino. Retorna el id de la accion eliminada.
      */
-    public int EliminarAccion(int IdAccion){
-        return cEdicion.EliminarAccion(IdAccion);
+    public int eliminarAccion(int IdAccion){
+        return cEdicion.eliminarAccion(IdAccion);
     }
     
     /**
@@ -230,9 +198,36 @@ public class FacadeAdministrador  {
      * @param IdFortaleza
      * @return Retorna el id de la fortaleza si se elimino, de lo contrario retorna -1.
      */
-    public int EliminarFortaleza(int IdFortaleza){
-        return cEdicion.EliminarFortaleza(IdFortaleza);
+    public int eliminarFortaleza(int IdFortaleza){
+        return cEdicion.eliminarFortaleza(IdFortaleza);
     }
     
+    public Responsabilidad nuevaResponsabilidad(String nombre){
+        return cConfig.crearResponsabilidad(nombre);
+    }
+    
+    public int editarResponsabilidad(int idResponsabilidad, String nombreNuevo){
+        return cConfig.editarResponsabilidad(idResponsabilidad, nombreNuevo);
+    }
+    
+    public Responsable nuevoResponsable(int idResponsabilidad, int idUsuario){
+        return cConfig.crearResponsable(idResponsabilidad, idUsuario);
+    }
+    
+    public int darBajaResponsable(int idResponsabilidad, int idResponsable){
+        return cConfig.darBajaResponsable(idResponsabilidad, idResponsable);
+    }
+    
+    public int eliminarResponsable(int idResponsable){
+        return cConfig.eliminarResponsable(idResponsable);
+    }
+
+    public int eliminarResponsabilidad(int idResponsabilidadSeleccionada) {
+         return cConfig.eliminarResponsabilidad(idResponsabilidadSeleccionada);
+    }
+
+    public int editarResponsable(int id, String nombre) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

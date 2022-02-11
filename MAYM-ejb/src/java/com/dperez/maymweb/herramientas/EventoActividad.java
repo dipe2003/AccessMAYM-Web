@@ -6,7 +6,7 @@
 
 package com.dperez.maymweb.herramientas;
 
-import com.dperez.maymweb.accion.actividad.Actividad;
+import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
 import java.io.Serializable;
 
 /**
