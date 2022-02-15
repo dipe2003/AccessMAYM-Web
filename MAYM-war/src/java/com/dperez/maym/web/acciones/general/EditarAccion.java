@@ -7,6 +7,7 @@ package com.dperez.maym.web.acciones.general;
 
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maym.web.herramientas.CargarArchivo;
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.herramientas.Evento;
 import com.dperez.maymweb.herramientas.ProgramadorEventos;
 import com.dperez.maymweb.herramientas.TipoEvento;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,6 +66,8 @@ public class EditarAccion implements Serializable {
     private CargarArchivo cArchivo;
     @Inject
     private ProgramadorEventos pEventos;
+    @Inject
+    private SesionUsuario sesion;
     
     //<editor-fold desc="Atributos">
     private int IdAccionSeleccionada;
@@ -360,16 +364,12 @@ public class EditarAccion implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, "Nombre Empresa");
+        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombre());
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
             String extension = datosAdjunto[1];
-            List<String> tipos = new ArrayList<>();
-            tipos.add("jpeg");
-            tipos.add("jpg");
-            tipos.add("png");
-            tipos.add("gif");
+            List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = TipoAdjunto.DOCUMENTO;
             }

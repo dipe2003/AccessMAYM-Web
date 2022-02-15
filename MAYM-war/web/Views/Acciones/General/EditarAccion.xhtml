@@ -255,7 +255,7 @@
                                                         <tr>
                                                             <td>#{correctiva.descripcion}</td>
                                                             <td>#{correctiva.fechaEstimadaImplementacion}</td>
-                                                            <td>#{correctiva.responsableImplementacion.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                            <td>#{correctiva.responsableImplementacion.responsabilidadResponsable.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                             <td>
                                                                 <c:if test="#{correctiva.fechaImplementacion == null}" >
                                                                     Sin Implementar
@@ -340,7 +340,7 @@
                                                             <tr>
                                                                 <td>#{preventiva.descripcion}</td>
                                                                 <td>#{preventiva.fechaEstimadaImplementacion}</td>
-                                                                <td>#{preventiva.responsableImplementacion.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>#{preventiva.responsableImplementacion.responsabilidadResponsable.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{preventiva.fechaImplementacion == null}" >
                                                                         Sin Implementar
@@ -437,7 +437,7 @@
                                                             <tr>
                                                                 <td>#{actividad.descripcion}</td>
                                                                 <td>#{actividad.fechaEstimadaImplementacion}</td>
-                                                                <td>#{actividad.responsableImplementacion.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>#{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{actividad.fechaImplementacion == null}" >
                                                                         Sin Implementar
@@ -540,7 +540,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar responsable." >
                                                                     <f:selectItem  itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccion.listaResponsables}" var="responsable">
-                                                                        <f:selectItem itemLabel="#{responsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
+                                                                        <f:selectItem itemLabel="#{responsable.responsabilidadResponsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -595,7 +595,7 @@
                                                                                  required="true" requiredMessage="Se debe seleccionar un responsable." >
                                                                     <f:selectItem itemLabel="--- Seleccionar Responsable ---" noSelectionOption="true" itemDisabled="false" />
                                                                     <c:forEach items="#{editarAccion.listaResponsables}" var="responsable">
-                                                                        <f:selectItem itemLabel="#{responsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
+                                                                        <f:selectItem itemLabel="#{responsable.responsabilidadResponsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
                                                                     </c:forEach>
                                                                 </h:selectOneMenu>
                                                             </div>
@@ -665,7 +665,7 @@
                                                                 <td>#{adjunto.value.titulo}</td>
                                                                 <td>
                                                                     <c:choose>
-                                                                        <c:when test="#{adjunto.value.tipoAdjunto == 'IMAGEN'}" >
+                                                                        <c:when test="#{adjunto.value.tipoDeAdjunto == 'IMAGEN'}" >
                                                                             <a href="#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
                                                                         </c:when>
                                                                         <c:otherwise>
@@ -777,9 +777,9 @@
                                 <div class="form-group">
                                     <c:if test="#{not empty editarAccion.tituloAdjunto}">
                                         <div class="form-group">
-                                            <h:inputFile value="#{editarAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                            <h:inputFile  value="#{editarAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
                                                 <f:ajax event="change" listener="#{editarAccion.setArchivoAdjunto(editarAccion.archivoAdjunto)}" />
-                                                <f:ajax event="change" listener="#{editarAccion.agregarAdjunto()}" render="form_accion:panel_lista_adjuntos panel_modal_adjunto" onevent="indicador"/>
+                                                <f:ajax event="change" listener="#{editarAccion.agregarAdjunto()}" render="form_accion:panel_lista_adjuntos form_accion_modal:panel_modal_adjunto" onevent="indicador"/>
                                             </h:inputFile>
                                         </div>
                                     </c:if>
@@ -787,7 +787,7 @@
                             </div>
                             <div class="modal-footer">
                                 <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" >
-                                    <f:ajax render="panel_modal_adjunto" />
+                                    <f:ajax render="panel_modal_adjunto panel_lista_adjuntos" />
                                 </h:commandButton>
                             </div>
                         </div>
