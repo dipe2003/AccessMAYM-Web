@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -32,14 +33,14 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Usuarios implements Serializable {
-
+    
     private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
     private FacadeMain fMain;
     
     @Inject
     private SesionUsuario sesion;
-        
+    
     private int IdUsuarioSeleccionado;
     
     private boolean ContieneRegistros;
@@ -141,7 +142,9 @@ public class Usuarios implements Serializable {
         }
         
         ListaUsuarios = new ArrayList<>();
-        ListaCompletaUsuarios = fLectura.listarUsuarios(false);
+        ListaCompletaUsuarios = fLectura.listarUsuarios(false).stream()
+                .sorted(Comparator.comparing((Usuario u)->u.getNombre()))
+                .collect(Collectors.toList());
         
         PermisosUsuario = EnumPermiso.values();
         // llenar la lista con todas las areas registradas.
@@ -160,8 +163,8 @@ public class Usuarios implements Serializable {
                 .sorted()
                 .collect(Collectors.toList());
     }
-   
-     
+    
+    
     /**
      * Crea nuevo usuario con el permiso seleccionado.
      * Muestra un mensaje de errror si no se creo, se agrega el usuario a la empres logueada y redirige a la misma pagina para ver los resultados.

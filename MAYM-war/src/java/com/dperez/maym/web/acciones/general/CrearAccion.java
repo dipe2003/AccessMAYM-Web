@@ -52,7 +52,7 @@ public class CrearAccion implements Serializable {
     private String strFechaDeteccion;
     private String Descripcion;
     
-    private TipoDeteccion[] TiposDeteccion;
+    private TipoDeteccion[] tiposDeteccion;
     private TipoDeteccion TipoDeDeteccionSeleccionada;
     
     private List<Deteccion> ListaDetecciones;
@@ -80,7 +80,7 @@ public class CrearAccion implements Serializable {
     public TipoAccion getTipoDeAccion() {return tipoDeAccion;}
     
     public TipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
-    public TipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
+    public TipoDeteccion[] getTiposDeteccion(){return this.tiposDeteccion;}
     public List<Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
@@ -106,7 +106,7 @@ public class CrearAccion implements Serializable {
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {this.tipoDeAccion = tipoDeAccion;}
     
     public void setTipoDeDeteccionSeleccionada(TipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
-    public void setTiposDeteccion(TipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
+    public void setTiposDeteccion(TipoDeteccion[] tiposDeteccion){this.tiposDeteccion = tiposDeteccion;}
     public void setListaDetecciones(List<Deteccion> ListaDetecciones){this.ListaDetecciones = ListaDetecciones;}
     public void setDeteccionSeleccionada(Integer DeteccionSeleccionada){this.DeteccionSeleccionada = DeteccionSeleccionada;}
     
@@ -139,7 +139,7 @@ public class CrearAccion implements Serializable {
         
         //  Detecciones
         modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
-        TiposDeteccion = TipoDeteccion.values();
+        tiposDeteccion = TipoDeteccion.values();
         TipoDeDeteccionSeleccionada = TipoDeteccion.INTERNA;
         ListaDetecciones = modalDetecciones.getListaDetecciones();
         
@@ -153,6 +153,8 @@ public class CrearAccion implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
+        modalDetecciones.setTipoDeDeteccionSeleccionada(TipoDeDeteccionSeleccionada);
+        modalDetecciones.actualizarDeteccion();
         ListaDetecciones = modalDetecciones.getListaDetecciones();
     }
     

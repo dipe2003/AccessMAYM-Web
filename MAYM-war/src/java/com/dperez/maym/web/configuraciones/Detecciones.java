@@ -13,7 +13,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -27,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Detecciones implements Serializable {
-
-    private FacadeAdministrador fAdmin;  
+    
+    private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
     
     private int IdDeteccionSeleccionada;
@@ -84,7 +86,9 @@ public class Detecciones implements Serializable {
         }
         //  Areas
         ListaDetecciones = new ArrayList<>();
-        ListaCompletaDetecciones = fLectura.listarDetecciones();
+        ListaCompletaDetecciones = fLectura.listarDetecciones().stream()
+                .sorted(Comparator.comparing((Deteccion d)->d.getNombre()))
+                .collect(Collectors.toList());
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaDetecciones.size(), MAX_ITEMS);
@@ -95,7 +99,7 @@ public class Detecciones implements Serializable {
         ListaDetecciones.stream().sorted();
     }
     
-   
+    
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
@@ -183,5 +187,5 @@ public class Detecciones implements Serializable {
     private boolean comprobarNombreDeteccion(String NombreDeteccion){
         return ListaDetecciones.stream()
                 .anyMatch(deteccion->deteccion.getNombre().equalsIgnoreCase(NombreDeteccion));
-    }    
+    }
 }

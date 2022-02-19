@@ -68,15 +68,5 @@ public class RepositorioPersistencia<T> implements IRepositorioPersistencia<T> {
         }
         return t;
     }
-    
-    @Override
-    public void finalize() throws Throwable{
-        try {
-            if(entityManager.isOpen())
-                entityManager.close();
-        } finally {
-            super.finalize();
-        }
-    }
 
 }

@@ -3,9 +3,7 @@ package com.dperez.maym.web.herramientas;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.faces.bean.SessionScoped;
@@ -19,8 +17,8 @@ import org.apache.commons.io.FilenameUtils;
 @SessionScoped
 public class CargarArchivo implements Serializable{
     
-    private String homeDir = System.getProperty("user.home");
-    private String separator = System.getProperty("file.separator");
+    private final String homeDir = System.getProperty("user.home");
+    private final String separator = System.getProperty("file.separator");
     
     public CargarArchivo() {}
     

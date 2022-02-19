@@ -15,40 +15,38 @@ import javax.persistence.Persistence;
 
 public class FabricaRepositorio {
     
-    public RepositorioPersistencia<Usuario> getRepositorioUsuarios() {
-        return new RepositorioPersistencia<>(Usuario.class, getEntityManager());
+    static final EntityManager entityManager = Persistence.createEntityManagerFactory("MAYM-ejbPU").createEntityManager();
+    
+    public static RepositorioPersistencia<Usuario> getRepositorioUsuarios() {
+        return new RepositorioPersistencia<>(Usuario.class, entityManager);
     }
     
-    public RepositorioPersistencia<Codificacion> getRepositorioCodificaciones() {
-        return new RepositorioPersistencia<>(Codificacion.class, getEntityManager());
+    public static RepositorioPersistencia<Codificacion> getRepositorioCodificaciones() {
+        return new RepositorioPersistencia<>(Codificacion.class, entityManager);
     }
     
-    public RepositorioPersistencia<Area> getRepositorioAreas() {
-        return new RepositorioPersistencia<>(Area.class, getEntityManager());
+    public static RepositorioPersistencia<Area> getRepositorioAreas() {
+        return new RepositorioPersistencia<>(Area.class,entityManager);
     }
     
-    public RepositorioPersistencia<Deteccion> getRepositorioDetecciones() {
-        return new RepositorioPersistencia<>(Deteccion.class, getEntityManager());
+    public static RepositorioPersistencia<Deteccion> getRepositorioDetecciones() {
+        return new RepositorioPersistencia<>(Deteccion.class,entityManager);
     }
     
-    public RepositorioPersistencia<Responsable> getRepositorioResponsables() {
-        return new RepositorioPersistencia<>(Responsable.class, getEntityManager());
+    public static RepositorioPersistencia<Responsable> getRepositorioResponsables() {
+        return new RepositorioPersistencia<>(Responsable.class, entityManager);
     }
     
-    public RepositorioPersistencia<Responsabilidad> getRepositorioResponsabilidades(){
-        return new RepositorioPersistencia<>(Responsabilidad.class, getEntityManager());
+    public static RepositorioPersistencia<Responsabilidad> getRepositorioResponsabilidades(){
+        return new RepositorioPersistencia<>(Responsabilidad.class, entityManager);
     }
     
-    public RepositorioPersistencia<Accion> getRespositorioAcciones(){
-        return new RepositorioPersistencia<>(Accion.class, getEntityManager());
+    public static RepositorioPersistencia<Accion> getRespositorioAcciones(){
+        return new RepositorioPersistencia<>(Accion.class, entityManager);
     }
     
-    public RepositorioPersistencia<Fortaleza> getRepositorioFortalezas(){
-        return new RepositorioPersistencia<>(Fortaleza.class, getEntityManager());
-    }
-        
-    private EntityManager getEntityManager() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("MAYM-ejbPU");
-        return emf.createEntityManager();
-    }
+    public static RepositorioPersistencia<Fortaleza> getRepositorioFortalezas(){
+        return new RepositorioPersistencia<>(Fortaleza.class, entityManager);
+    }       
+  
 }

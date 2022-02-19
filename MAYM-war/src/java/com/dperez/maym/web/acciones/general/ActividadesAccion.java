@@ -20,8 +20,10 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
@@ -217,7 +219,9 @@ public class ActividadesAccion implements Serializable {
                 }
             }
             //  Usuarios
-            ListaResponsables = fLectura.listarResponsables(true);
+            ListaResponsables = fLectura.listarResponsables(true).stream()
+                    .sorted(Comparator.comparing((Responsable r)-> r.getResponsabilidadResponsable().getNombre()))
+                    .collect(Collectors.toList());                    
         }
     }
     

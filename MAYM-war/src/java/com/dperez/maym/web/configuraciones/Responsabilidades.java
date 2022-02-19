@@ -12,7 +12,9 @@ import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -75,7 +77,10 @@ public class Responsabilidades implements Serializable {
         }
         //  Areas
         listaResponsabilidades = new ArrayList<>();
-        listaCompletaResponsabilidades = fLectura.listarResponsabilidades();
+        listaCompletaResponsabilidades = fLectura.listarResponsabilidades().stream()
+                .sorted(Comparator.comparing((Responsabilidad r)->r.getNombre()))
+                .collect(Collectors.toList());
+                
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(listaCompletaResponsabilidades.size(), MAX_ITEMS);

@@ -39,7 +39,7 @@ public class ModalDetecciones implements Serializable {
     //  Getters
     public TipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
     public TipoDeteccion[] getTiposDeteccion(){return this.TiposDeteccion;}
-    public List<Deteccion> getListaDetecciones(){return this.ListaDetecciones;}
+    public List<Deteccion> getListaDetecciones(){return this.ListaDetecciones;    }
     public String getNombreNuevaDeteccion(){return this.NombreNuevaDeteccion;}
     public Integer getDeteccionSeleccionada(){return this.DeteccionSeleccionada;}
     
@@ -71,7 +71,8 @@ public class ModalDetecciones implements Serializable {
      */
     public void actualizarDeteccion(){
         this.ListaDetecciones.clear();
-        ListaDetecciones = fLectura.listarDetecciones().stream()                
+        ListaDetecciones = fLectura.listarDetecciones().stream()      
+                .filter((Deteccion d)-> d.getTipoDeDeteccion() == TipoDeDeteccionSeleccionada)
                 .sorted(Comparator.comparing(Deteccion::getNombre))
                 .collect(Collectors.toList());
     }

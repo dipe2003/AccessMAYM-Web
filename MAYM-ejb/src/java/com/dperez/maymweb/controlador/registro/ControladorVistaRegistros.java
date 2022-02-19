@@ -28,27 +28,25 @@ import java.util.stream.Collectors;
  */
 public class ControladorVistaRegistros implements Serializable{
     
-    private  final RepositorioPersistencia<Accion> repoAccion;
-    private  final RepositorioPersistencia<Area> repoArea;
-    private  final RepositorioPersistencia<Deteccion> repoDeteccion;
-    private  final RepositorioPersistencia<Codificacion> repoCodificacion;
-    private  final RepositorioPersistencia<Responsable> repoResponsable;
-    private  final RepositorioPersistencia<Usuario> repoUsuario;
-    private  final RepositorioPersistencia<Fortaleza> repoFortalezas;
+    private final RepositorioPersistencia<Accion> repoAccion;
+    private final RepositorioPersistencia<Area> repoArea;
+    private final RepositorioPersistencia<Deteccion> repoDeteccion;
+    private final RepositorioPersistencia<Codificacion> repoCodificacion;
+    private final RepositorioPersistencia<Responsable> repoResponsable;
+    private final RepositorioPersistencia<Usuario> repoUsuario;
+    private final RepositorioPersistencia<Fortaleza> repoFortalezas;
     private final RepositorioPersistencia<Responsabilidad> repoResponsabilidades;
-    
-    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
     
     //  Constructores
     public ControladorVistaRegistros(){
-        repoAccion = fabricaRepositorio.getRespositorioAcciones();
-        repoArea = fabricaRepositorio.getRepositorioAreas();
-        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
-        repoCodificacion = fabricaRepositorio.getRepositorioCodificaciones();
-        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
-        repoUsuario = fabricaRepositorio.getRepositorioUsuarios();
-        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
-        repoResponsabilidades = fabricaRepositorio.getRepositorioResponsabilidades();
+        repoAccion = FabricaRepositorio.getRespositorioAcciones();
+        repoArea = FabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = FabricaRepositorio.getRepositorioDetecciones();
+        repoCodificacion = FabricaRepositorio.getRepositorioCodificaciones();
+        repoResponsable = FabricaRepositorio.getRepositorioResponsables();
+        repoUsuario = FabricaRepositorio.getRepositorioUsuarios();
+        repoFortalezas = FabricaRepositorio.getRepositorioFortalezas();
+        repoResponsabilidades = FabricaRepositorio.getRepositorioResponsabilidades();
     }
     
     /**
@@ -155,11 +153,7 @@ public class ControladorVistaRegistros implements Serializable{
         return repoUsuario.findAll();
     }
     
-    /*
-    TODO descomentar luego de implementar Manejador
-    */
-    
-    
+   
     
     /**
      * Devuelve la fortaleza indicada por su id

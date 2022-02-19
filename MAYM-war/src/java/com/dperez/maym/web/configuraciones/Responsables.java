@@ -14,7 +14,9 @@ import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -95,7 +97,9 @@ public class Responsables implements Serializable {
         
         //  Responsables
         listaResponsables = new ArrayList<>();
-        listaCompletaResponsables = fLectura.listarResponsables(false);
+        listaCompletaResponsables = fLectura.listarResponsables(false).stream()
+                .sorted(Comparator.comparing((Responsable r)->r.getResponsabilidadResponsable().getNombre()))
+                .collect(Collectors.toList());
         listaUsuarios = fLectura.listarUsuarios(true);
                 
         // Paginas

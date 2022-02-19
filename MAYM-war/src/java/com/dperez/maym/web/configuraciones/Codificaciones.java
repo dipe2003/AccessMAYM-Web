@@ -12,7 +12,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -83,7 +85,9 @@ public class Codificaciones implements Serializable {
         }
         //  Areas
         ListaCodificaciones = new ArrayList<>();
-        ListaCompletaCodificaciones = fLectura.listarCodificaciones();
+        ListaCompletaCodificaciones = fLectura.listarCodificaciones().stream()
+                .sorted(Comparator.comparing((Codificacion c)->c.getNombre()))
+                .collect(Collectors.toList());
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaCodificaciones.size(), MAX_ITEMS);

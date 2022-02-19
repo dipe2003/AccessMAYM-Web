@@ -44,7 +44,7 @@
                                              required="true" requiredMessage="No se selecciono Responsable de Implementacion.">
                                 <f:selectItem itemLabel="--- Seleccionar Usuario ---" itemDisabled="true" noSelectionOption="true" />
                                 <c:forEach items="#{actividadesAccion.listaResponsables}" var="responsable">
-                                    <f:selectItem itemLabel="#{responsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
+                                    <f:selectItem itemLabel="#{responsable.responsabilidadResponsable.nombre} | #{responsable.usuarioResponsable.nombreCompleto} (#{responsable.usuarioResponsable.areaUsuario.nombre})" itemValue="#{responsable.id}" />
                                 </c:forEach>
                             </h:selectOneMenu>
                         </div>

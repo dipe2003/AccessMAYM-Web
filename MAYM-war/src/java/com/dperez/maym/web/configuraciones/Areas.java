@@ -12,7 +12,9 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -24,8 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class Areas implements Serializable {
-
-    private FacadeAdministrador fAdmin;   
+    
+    private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
     
     private Area AreaSeleccionada;
@@ -50,7 +52,7 @@ public class Areas implements Serializable {
     public String getNombreArea() {return NombreArea;}
     public String getCorreoArea() {return CorreoArea;}
     public List<Area> getListaAreas() {return ListaAreas;}
-
+    
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
     
@@ -87,7 +89,9 @@ public class Areas implements Serializable {
         }
         //  Areas
         ListaAreas = new ArrayList<>();
-        ListaCompletaAreas = fLectura.listarAreas();
+        ListaCompletaAreas = fLectura.listarAreas().stream()
+                .sorted(Comparator.comparing((Area a)->a.getNombre()))
+                .collect(Collectors.toList());
         
         // Paginas
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAreas.size(), MAX_ITEMS);

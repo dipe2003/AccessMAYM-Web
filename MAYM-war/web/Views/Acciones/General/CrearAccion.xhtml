@@ -55,7 +55,7 @@
                                                 </div>
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
-                                            <f:ajax render="deteccion" listener="#{crearAccion.actualizarDeteccion()}" onevent="indicador"/>
+                                            <f:ajax render="form_accion:deteccion panel_tipodeteccion" listener="#{crearAccion.actualizarDeteccion()}" onevent="indicador"/>
                                         </h:selectOneRadio>
                                     </h:panelGroup>
                                 </div> 
