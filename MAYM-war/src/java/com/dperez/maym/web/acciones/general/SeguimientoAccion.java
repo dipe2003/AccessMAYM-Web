@@ -207,7 +207,7 @@ public class SeguimientoAccion implements Serializable {
         }else{
             // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/General/SeguimientoAccion.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     
@@ -224,7 +224,7 @@ public class SeguimientoAccion implements Serializable {
         }else{
             // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/SeguimientoCorrectiva.xhtml?id="+AccionSeleccionada.getId());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/General/SeguimientoAccion.xhtml?id="+AccionSeleccionada.getId());
         }
     }
     

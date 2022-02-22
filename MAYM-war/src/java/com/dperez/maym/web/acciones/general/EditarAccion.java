@@ -57,7 +57,7 @@ import javax.servlet.http.Part;
 @ViewScoped
 @ManagedBean
 public class EditarAccion implements Serializable {
-
+    
     private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
     private FacadeDatos fDatos;
@@ -293,9 +293,11 @@ public class EditarAccion implements Serializable {
             //  Detecciones
             modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             TiposDeteccion = TipoDeteccion.values();
-            ListaDetecciones = modalDetecciones.getListaDetecciones();
+            
+            
             TipoDeDeteccionSeleccionada = AccionSeleccionada.getDeteccionAccion().getTipoDeDeteccion();
             DeteccionSeleccionada = AccionSeleccionada.getDeteccionAccion().getId();
+            actualizarDeteccion();
             
             // Actividades: Medidas Correctivas y Preventivas
             actividades = AccionSeleccionada.getActividadesDeAccion();
@@ -356,6 +358,8 @@ public class EditarAccion implements Serializable {
      * Actualiza la lista de detecciones segun la seleccion de tipo de deteccion.
      */
     public void actualizarDeteccion(){
+        modalDetecciones.setTipoDeDeteccionSeleccionada(TipoDeDeteccionSeleccionada);
+        modalDetecciones.actualizarDeteccion();
         ListaDetecciones = modalDetecciones.getListaDetecciones();
     }
     

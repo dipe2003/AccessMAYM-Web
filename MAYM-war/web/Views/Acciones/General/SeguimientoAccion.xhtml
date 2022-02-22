@@ -146,7 +146,7 @@
                                                             <tr>
                                                                 <td>#{correctiva.descripcion}</td>
                                                                 <td>#{correctiva.fechaEstimadaImplementacion}</td>
-                                                                <td>#{correctiva.responsableImplementacion.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>#{correctiva.responsableImplementacion.responsabilidadResponsable.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{correctiva.fechaImplementacion == null}" >
                                                                         Sin Implementar
@@ -159,7 +159,7 @@
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.fechaImplementacion == null}">
                                                                         <c:choose>
-                                                                            <c:when test="#{correctiva.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                                            <c:when test="#{correctiva.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
                                                                                     <h:commandButton class="btn btn-primary disabled" value="Comprobar" title="Solo lo puede comprobar el usuario responsable." />
                                                                                 </div>
@@ -219,7 +219,7 @@
                                                             <tr>
                                                                 <td>#{preventiva.descripcion}</td>
                                                                 <td>#{preventiva.fechaEstimadaImplementacion}</td>
-                                                                <td>#{preventiva.responsableImplementacion.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>#{preventiva.responsableImplementacion.responsabilidadResponsable.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{preventiva.fechaImplementacion == null}" >
                                                                         Sin Implementar
@@ -232,7 +232,7 @@
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
                                                                         <c:choose>
-                                                                            <c:when test="#{preventiva.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                                            <c:when test="#{preventiva.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
                                                                                     <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
                                                                                 </div>
@@ -294,7 +294,7 @@
                                                             <tr>
                                                                 <td>#{actividad.descripcion}</td>
                                                                 <td>#{actividad.fechaEstimadaImplementacion}</td>
-                                                                <td>#{actividad.responsableImplementacion.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{actividad.fechaImplementacion == null}" >
                                                                         Sin Implementar
@@ -307,7 +307,7 @@
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
                                                                         <c:choose>
-                                                                            <c:when test="#{actividad.responsableImplementacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                                            <c:when test="#{actividad.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
                                                                                     <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
                                                                                 </div>
@@ -356,14 +356,14 @@
                                         <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.fechaComprobacion == null and
                                                         seguimientoAccion.estaImplementada == true}">
                                             <c:choose>
-                                                <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                     <div class="alert alert-info">
                                                         <c:choose>
                                                             <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion == null}" >
                                                                 <strong>Info!</strong> No se ha definido Responsable de Comprobacion.
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.nombre} #{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}
+                                                                <strong>Info!</strong> Responsable de Comprobacion: #{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}
                                                             </c:otherwise>
                                                         </c:choose>                                                        
                                                     </div> 
@@ -451,14 +451,14 @@
                                                         seguimientoAccion.accionSeleccionada.comprobacionImplementacion.fechaComprobacion != null and
                                                         seguimientoAccion.estaImplementada == true}">
                                             <c:choose>
-                                                <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.id != sesionUsuario.usuarioLogueado.id}">
+                                                <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                     <div class="alert alert-info">
                                                         <c:choose>
                                                             <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion == null }">
                                                                 <strong>Info!</strong> No se ha definido Responsable de Verificacion.
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <strong>Info!</strong> Responsable de Verificacion: #{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.nombre} #{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}
+                                                                <strong>Info!</strong> Responsable de Verificacion: #{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{seguimientoAccion.accionSeleccionada.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}
                                                             </c:otherwise>
                                                         </c:choose>                                                        
                                                     </div>  

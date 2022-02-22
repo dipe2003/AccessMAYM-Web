@@ -236,7 +236,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         actividadesDeAccion.stream()
                 .filter(a -> a.getId() == idActividad)
                 .findFirst()
-                .get().setFechaEstimadaImplementacion(fechaImplementacion);
+                .get().setFechaImplementacion(fechaImplementacion);
     }
     
     public Actividad findActividad(int id) {
@@ -278,10 +278,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
                 // chequear implementacion de todas las actividades
                 boolean actividadesImp = estanImplementadasTodasActividades();
                 
-                if(actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()!= ResultadoComprobacion.NO_COMPROBADA){
+                if(this.comprobacionEficacia != null && actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()!= ResultadoComprobacion.NO_COMPROBADA){
                     this.estadoDeAccion = Estado.CERRADA;
                 }else{
-                    if(actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()== ResultadoComprobacion.NO_COMPROBADA){
+                    if(this.comprobacionEficacia != null  && actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()== ResultadoComprobacion.NO_COMPROBADA){
                         this.estadoDeAccion =  Estado.PROCESO_VER;
                     }else{
                         // chequear si existe al menos una actividad implementada
