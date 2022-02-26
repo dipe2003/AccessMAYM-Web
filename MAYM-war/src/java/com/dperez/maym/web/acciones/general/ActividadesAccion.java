@@ -145,7 +145,7 @@ public class ActividadesAccion implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // remover el evento del programador de tareas.
-            Actividad actividad = AccionSeleccionada.getActividad(IdActividadEditar);
+            Actividad actividad = AccionSeleccionada.findActividad(IdActividadEditar);
             Evento eventoActividad = new EventoActividad(actividad);
             if (pEventos.ExisteEventoActividad(eventoActividad)){
                 pEventos.RemoverEventoActividad(eventoActividad);
@@ -171,7 +171,7 @@ public class ActividadesAccion implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }else{
             // modificar evento
-            Actividad actividad = AccionSeleccionada.getActividad(IdActividadEditar);
+            Actividad actividad = AccionSeleccionada.findActividad(IdActividadEditar);
             Evento eventoActividad = new EventoActividad(actividad);
             if (pEventos.ExisteEventoActividad(eventoActividad)){
                 pEventos.RemoverEventoActividad(eventoActividad);

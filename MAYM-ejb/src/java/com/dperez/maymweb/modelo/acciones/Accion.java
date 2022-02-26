@@ -250,18 +250,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         return this.actividadesDeAccion.stream()
                 .anyMatch((Actividad a)-> a.getId()==id);
     }
-    
-    /**
-     * Comprueba si existe alguna actividad implementada en la lsita.
-     * @param actividades lista de actividades a comprobar
-     * @return
-     */
-    protected boolean existeAlgunaActividadImplementada(List<Actividad> actividades){
-        return actividades.stream()
-                .anyMatch(actividad->actividad.estaImplementada());
-    }
-    
-    
+   
     @Override
     public int compareTo(Accion OtraAccion) {
         return this.getFechaDeteccion().compareTo(OtraAccion.getFechaDeteccion());
@@ -305,19 +294,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
                 .allMatch((Actividad actividad)->actividad.estaImplementada());
     }
     
-    /**
-     * Devuelve la actividad especificada.
-     * @param IdActividad
-     * @return Null si no se encuentra.
-     */
-    public Actividad getActividad(int IdActividad) {
-        Actividad actividad = actividadesDeAccion.stream()
-                .filter(medida->medida.getId()== IdActividad)
-                .findFirst()
-                .orElse(null);
-        return actividad;
-    }
-    
+   
     /*
     * 	Productos
     */

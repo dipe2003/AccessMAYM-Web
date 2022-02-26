@@ -407,7 +407,7 @@ public class EditarAccion implements Serializable {
      */
     public void quitarActividad(int IdActividad) throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
-        Actividad actividad = AccionSeleccionada.getActividad(IdActividad);
+        Actividad actividad = AccionSeleccionada.findActividad(IdActividad);
         if(fDatos.removerActividad(IdAccionSeleccionada, IdActividad)==-1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));

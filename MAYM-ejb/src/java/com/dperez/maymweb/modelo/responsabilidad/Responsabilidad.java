@@ -28,7 +28,7 @@ public class Responsabilidad implements Serializable{
     private String nombre;
     
     @OneToMany(cascade = CascadeType.ALL)
-            List<Responsable> responsables;
+    private List<Responsable> responsables;
     
     public Responsabilidad(){
         this.responsables = new ArrayList<>();
