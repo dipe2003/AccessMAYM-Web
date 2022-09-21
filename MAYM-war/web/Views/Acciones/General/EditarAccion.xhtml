@@ -229,287 +229,102 @@
                     </div>
                 </div>
                 
-                <!-- Medidas Correctivas -->
+                <!-- Actividades -->
                 <div class="panel panel-primary">
-                    <c:choose>
-                        <c:when test="#{editarAccion.tipoDeAccion == 'CORRECTIVA'}">
-                            <div class="panel-heading">Medidas Correctivas / Correcciones:</div>
-                            <div class="panel-body">
-                                <c:choose>
-                                    <c:when test="#{not empty editarAccion.medidasCorrectivas}">
-                                        <div class="table-responsive-sm">
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 55%">Descripcion:</th>
-                                                        <th style="width: 5%">Fecha Estimada:</th>
-                                                        <th style="width: 15%">Responsable:</th>
-                                                        <th style="width: 5%">Implementacion:</th>
-                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
-                                                            <th style="width: 20%"></th>
-                                                        </c:if>                                             
-                                                    </tr>                                                
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach items="#{editarAccion.medidasCorrectivas}" var="correctiva" >
-                                                        <tr>
-                                                            <td>#{correctiva.descripcion}</td>
-                                                            <td>#{correctiva.fechaEstimadaImplementacion}</td>
-                                                            <td>#{correctiva.responsableImplementacion.responsabilidadResponsable.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                            <td>
-                                                                <c:if test="#{correctiva.fechaImplementacion == null}" >
-                                                                    Sin Implementar
-                                                                </c:if>
-                                                                <c:if test="#{correctiva.fechaImplementacion != null}" >
-                                                                    #{correctiva.fechaImplementacion}
-                                                                </c:if>
+                    <div class="panel-heading">Actividades:</div>
+                    <div class="panel-body">
+                        <c:choose>
+                            <c:when test="#{not empty editarAccion.actividades}">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%">Tipo:</th>
+                                                <th style="width: 50%">Descripcion:</th>
+                                                <th style="width: 5%">Fecha Estimada:</th>
+                                                <th style="width: 15%">Responsable:</th>
+                                                <th style="width: 5%">Implementacion:</th>
+                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                                    <th style="width: 20%"></th>
+                                                </c:if>                                            
+                                            </tr>                                                
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach items="#{editarAccion.actividades}" var="actividad" >
+                                                <tr>
+                                                    <td>#{actividad.tipoDeActividad.descripcion}</td>
+                                                    <td>#{actividad.descripcion}</td>
+                                                    <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                    <td>#{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                    <td>
+                                                        <c:if test="#{actividad.fechaImplementacion == null}" >
+                                                            Sin Implementar
+                                                        </c:if>
+                                                        <c:if test="#{actividad.fechaImplementacion != null}" >
+                                                            #{actividad.fechaImplementacion}
+                                                        </c:if>
+                                                    </td>
+                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">                                                            
+                                                        <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
+                                                            <td>                                                                    
+                                                                <c:choose>
+                                                                    <c:when test="#{actividad.fechaImplementacion == null}">
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                                <span class="caret"></span>
+                                                                            </button>
+                                                                            <ul class="dropdown-menu" role="menu"> 
+                                                                                <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                            outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=#{actividad.id}" >                                                                
+                                                                                        <f:ajax onevent="indicador" />
+                                                                                    </h:link>
+                                                                                </li>
+                                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
+                                                                                    <li><h:commandLink value="Quitar Actividad" action="#{editarAccion.quitarActividad(actividad.id)}" 
+                                                                                                       onclick="if (! confirm('Seguro que va a quitar esta Medida Preventiva? ')) return false">
+                                                                                            <f:ajax onevent="indicador"/>
+                                                                                        </h:commandLink>
+                                                                                    </li>
+                                                                                </c:if>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </c:when>                                                                        
+                                                                </c:choose>                                                                    
                                                             </td>
-                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' }">
-                                                                <td>
-                                                                    <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                                                        <c:choose>
-                                                                            <c:when test="#{correctiva.fechaImplementacion == null}">
-                                                                                <div class="btn-group">
-                                                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                                        <span class="caret"></span>
-                                                                                    </button>
-                                                                                    <ul class="dropdown-menu" role="menu">        
-                                                                                        <li><h:link value="Editar Medida" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                                                                    outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=#{correctiva.id}" >                                                                
-                                                                                                <f:ajax onevent="indicador" />
-                                                                                            </h:link>
-                                                                                        </li>
-                                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                            <li><h:commandLink value="Quitar Medida" action="#{editarAccion.quitarActividad(correctiva.id)}" 
-                                                                                                               onclick="if (! confirm('Seguro que va a quitar esta Medida Correctiva? ')) return false">
-                                                                                                    <f:ajax  onevent="indicador"/>
-                                                                                                </h:commandLink>
-                                                                                            </li>
-                                                                                        </c:if>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </c:when>
-                                                                        </c:choose>                                                                    
-                                                                    </c:if>
-                                                                </td>
-                                                            </c:if>
-                                                        </tr>                                            
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No se definieron medidas correctivas.
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                                <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                    <div class="form-group-sm">
-                                        <h:link id="agregar_medida_correctiva" value="Agregar Medida Correctiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                        </c:if>                                                            
+                                                    </c:if>
+                                                </tr>                                            
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se definieron actividades.
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
+                            <div class="form-group-sm">
+                                <c:choose>
+                                    <c:when test="#{editarAccion.accionSeleccionada.analisisCausa != ''}">
+                                        <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
                                                 outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
                                             <f:ajax onevent="indicador"/>
                                         </h:link>
-                                    </div>
-                                </c:if>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary disabled" disabled="true" title="Debe realizarse Analisis de Causa"
+                                                outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
+                                            <f:ajax onevent="indicador"/>
+                                        </h:link>
+                                    </c:otherwise>
+                                </c:choose>                                
                             </div>
-                            
-                            <!-- Medidas Preventivas -->
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">Medidas Preventivas / Prevencion de Recurrencia:</div>
-                                <div class="panel-body">
-                                    <c:choose>
-                                        <c:when test="#{not empty editarAccion.medidasPreventivas}">
-                                            <div class="table-responsive-sm">
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 55%">Descripcion:</th>
-                                                            <th style="width: 5%">Fecha Estimada:</th>
-                                                            <th style="width: 15%">Responsable:</th>
-                                                            <th style="width: 5%">Implementacion:</th>
-                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
-                                                                <th style="width: 20%"></th>
-                                                            </c:if>                                            
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{editarAccion.medidasPreventivas}" var="preventiva" >
-                                                            <tr>
-                                                                <td>#{preventiva.descripcion}</td>
-                                                                <td>#{preventiva.fechaEstimadaImplementacion}</td>
-                                                                <td>#{preventiva.responsableImplementacion.responsabilidadResponsable.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>
-                                                                    <c:if test="#{preventiva.fechaImplementacion == null}" >
-                                                                        Sin Implementar
-                                                                    </c:if>
-                                                                    <c:if test="#{preventiva.fechaImplementacion != null}" >
-                                                                        #{preventiva.fechaImplementacion}
-                                                                    </c:if>
-                                                                </td>
-                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">                                                            
-                                                                    <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                                                        <td>                                                                    
-                                                                            <c:choose>
-                                                                                <c:when test="#{preventiva.fechaImplementacion == null}">
-                                                                                    <div class="btn-group">
-                                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                                            <span class="caret"></span>
-                                                                                        </button>
-                                                                                        <ul class="dropdown-menu" role="menu"> 
-                                                                                            <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                                                                        outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=#{preventiva.id}" >                                                                
-                                                                                                    <f:ajax onevent="indicador" />
-                                                                                                </h:link>
-                                                                                            </li>
-                                                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                                <li><h:commandLink value="Quitar Medida" action="#{editarAccion.quitarActividad(preventiva.id)}" 
-                                                                                                                   onclick="if (! confirm('Seguro que va a quitar esta Medida Preventiva? ')) return false">
-                                                                                                        <f:ajax onevent="indicador"/>
-                                                                                                    </h:commandLink>
-                                                                                                </li>
-                                                                                            </c:if>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </c:when>                                                                        
-                                                                            </c:choose>                                                                    
-                                                                        </td>
-                                                                    </c:if>                                                            
-                                                                </c:if>
-                                                            </tr>                                            
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="alert alert-info">
-                                                <strong>Info!</strong> No se definieron medidas preventivas.
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                        <div class="form-group-sm">
-                                            <c:choose>
-                                                <c:when test="#{editarAccion.accionSeleccionada.analisisCausa != ''}">
-                                                    <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                            outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
-                                                        <f:ajax onevent="indicador"/>
-                                                    </h:link>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <h:link id="agregar_medida_preventiva" value="Agregar Medida Preventiva" class="btn btn-primary disabled" disabled="true" title="Debe realizarse Analisis de Causa"
-                                                            outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
-                                                        <f:ajax onevent="indicador"/>
-                                                    </h:link>
-                                                </c:otherwise>
-                                            </c:choose>                                
-                                        </div>
-                                    </c:if>                                
-                                </div>
-                            </div> 
-                        </c:when>
-                        <c:otherwise>
-                            <!-- ACTIVIDADES -->
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">Actividades:</div>
-                                <div class="panel-body">
-                                    <c:choose>
-                                        <c:when test="#{not empty editarAccion.actividades}">
-                                            <div class="table-responsive-sm">
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 55%">Descripcion:</th>
-                                                            <th style="width: 5%">Fecha Estimada:</th>
-                                                            <th style="width: 15%">Responsable:</th>
-                                                            <th style="width: 5%">Implementacion:</th>
-                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
-                                                                <th style="width: 20%"></th>
-                                                            </c:if>                                            
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{editarAccion.actividades}" var="actividad" >
-                                                            <tr>
-                                                                <td>#{actividad.descripcion}</td>
-                                                                <td>#{actividad.fechaEstimadaImplementacion}</td>
-                                                                <td>#{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>
-                                                                    <c:if test="#{actividad.fechaImplementacion == null}" >
-                                                                        Sin Implementar
-                                                                    </c:if>
-                                                                    <c:if test="#{actividad.fechaImplementacion != null}" >
-                                                                        #{actividad.fechaImplementacion}
-                                                                    </c:if>
-                                                                </td>
-                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">                                                            
-                                                                    <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                                                        <td>                                                                    
-                                                                            <c:choose>
-                                                                                <c:when test="#{actividad.fechaImplementacion == null}">
-                                                                                    <div class="btn-group">
-                                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                                            <span class="caret"></span>
-                                                                                        </button>
-                                                                                        <ul class="dropdown-menu" role="menu"> 
-                                                                                            <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                                                                        outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=#{actividad.id}" >                                                                
-                                                                                                    <f:ajax onevent="indicador" />
-                                                                                                </h:link>
-                                                                                            </li>
-                                                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
-                                                                                                <li><h:commandLink value="Quitar Actividad" action="#{editarAccion.quitarActividad(actividad.id)}" 
-                                                                                                                   onclick="if (! confirm('Seguro que va a quitar esta Medida Preventiva? ')) return false">
-                                                                                                        <f:ajax onevent="indicador"/>
-                                                                                                    </h:commandLink>
-                                                                                                </li>
-                                                                                            </c:if>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </c:when>                                                                        
-                                                                            </c:choose>                                                                    
-                                                                        </td>
-                                                                    </c:if>                                                            
-                                                                </c:if>
-                                                            </tr>                                            
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="alert alert-info">
-                                                <strong>Info!</strong> No se definieron actividades.
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:if test="#{editarAccion.accionSeleccionada.estadoDeAccion != 'PROCESO_VER' and editarAccion.accionSeleccionada.estadoDeAccion != 'CERRADA'}" >
-                                        <div class="form-group-sm">
-                                            <c:choose>
-                                                <c:when test="#{editarAccion.accionSeleccionada.analisisCausa != ''}">
-                                                    <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
-                                                            outcome="ActividadesCorrectiva.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
-                                                        <f:ajax onevent="indicador"/>
-                                                    </h:link>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary disabled" disabled="true" title="Debe realizarse Analisis de Causa"
-                                                            outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
-                                                        <f:ajax onevent="indicador"/>
-                                                    </h:link>
-                                                </c:otherwise>
-                                            </c:choose>                                
-                                        </div>
-                                    </c:if>                                
-                                </div>
-                            </div> 
-                        </c:otherwise>                            
-                    </c:choose>
+                        </c:if>                                
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -520,7 +335,7 @@
                                 <h:panelGroup id="panel_mensajes_implementacion">
                                     <div class="row">
                                         <c:choose>
-                                            <c:when test="#{not empty editarAccion.medidasCorrectivas or not empty editarAccion.medidasPreventivas}">
+                                            <c:when test="#{not empty editarAccion.actividades}">
                                                 <c:choose>
                                                     <c:when test="#{editarAccion.comprobacionImplementacion == null || editarAccion.comprobacionImplementacion.resultadoComprobacion == 'NO_COMPROBADA'}">
                                                         <div class="col-sm-6">
@@ -558,7 +373,7 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="alert alert-info">
-                                                    <strong>Info!</strong> No se definieron acciones correctivas.
+                                                    <strong>Info!</strong> No se definieron actividades.
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
@@ -575,7 +390,7 @@
                                 <h:panelGroup id="panel_mensajes_eficacia">
                                     <div class="row">
                                         <c:choose>
-                                            <c:when test="#{not empty editarAccion.medidasCorrectivas or not empty editarAccion.medidasPreventivas}">
+                                            <c:when test="#{not empty editarAccion.actividades}">
                                                 <c:choose>
                                                     <c:when test="#{editarAccion.comprobacionEficacia == null || editarAccion.comprobacionEficacia.resultadoComprobacion == 'NO_COMPROBADA'}">
                                                         <div class="col-sm-6">
@@ -613,7 +428,7 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="alert alert-info">
-                                                    <strong>Info!</strong> No se han definido acciones correctivas
+                                                    <strong>Info!</strong> No se han definido actividades
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
@@ -731,8 +546,8 @@
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
                             <f:ajax execute="analisis_causa descripcion fecha_deteccion area codificacion deteccion clasificacion
                                     fecha_estimada_comprobacion_implementacion responsable_comprobacion_implementacion 
-                                    fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia cliente" event="click" listener="#{editarAccion.editarAccion()}" onevent="indicador" render="panel_mensajes
-                                    panel_mensajes_implementacion panel_mensajes_eficacia"/>
+                                    fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia cliente" event="click" listener="#{editarAccion.editarAccion()}" onevent="indicador" 
+                                    render="panel_mensajes panel_mensajes_implementacion panel_mensajes_eficacia agregar_actividad"/>
                         </h:commandButton>
                     </div>
                     <div class='col-sm-4' >
@@ -795,6 +610,6 @@
                 </div>
             </div>
         </h:form>
-
+        
     </ui:define>
 </ui:composition>

@@ -99,8 +99,6 @@ public class EditarAccion implements Serializable {
     
     private List<Producto> ListaProductosAfectados;
     
-    private List<Actividad> MedidasCorrectivas;
-    private List<Actividad> MedidasPreventivas;
     private List<Actividad> actividades;
     
     //comprobaciones
@@ -152,8 +150,6 @@ public class EditarAccion implements Serializable {
     
     public List<Producto> getListaProductosAfectados(){return this.ListaProductosAfectados;}
     
-    public List<Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
-    public List<Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
     public List<Actividad> getActividades(){return actividades;}
     
     //comprobaciones
@@ -219,8 +215,6 @@ public class EditarAccion implements Serializable {
     
     public void setListaProductosAfectados(List<Producto> ListaProductosAfectados) {this.ListaProductosAfectados = ListaProductosAfectados;}
     
-    public void setMedidasCorrectivas(List<Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
-    public void setMedidasPreventivas(List<Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
     public void setActividades(List<Actividad> actividades){this.actividades = actividades;}
     
     // comprobaciones
@@ -301,18 +295,7 @@ public class EditarAccion implements Serializable {
             
             // Actividades: Medidas Correctivas y Preventivas
             actividades = AccionSeleccionada.getActividadesDeAccion();
-            if(tipoDeAccion == TipoAccion.CORRECTIVA){
-                MedidasCorrectivas = new ArrayList<>();
-                MedidasPreventivas = new ArrayList<>();
-                actividades.stream()
-                        .forEach(actividad->{
-                            if(actividad.getTipoDeActividad() == CORRECTIVA){
-                                MedidasCorrectivas.add(actividad);
-                            }else{
-                                MedidasPreventivas.add(actividad);
-                            }
-                        });
-            }
+            
             // Areas Sectores
             ListaAreasSectores = fLectura.listarAreas().stream()
                     .sorted()
@@ -426,7 +409,6 @@ public class EditarAccion implements Serializable {
     
     /**
      * Actualiza la accion correctiva con los datos nuevos.
-     * Se crean/actualizan los eventos de comprobacion de implemtacion y eficacia
      * Si se muestra mensaje de confirmacion.
      * @throws java.io.IOException
      */
@@ -439,49 +421,37 @@ public class EditarAccion implements Serializable {
             ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));
             ctx.renderResponse();
         }else{
-            if(!this.MedidasCorrectivas.isEmpty() || !this.MedidasPreventivas.isEmpty()){
-                if(AccionSeleccionada.getComprobacionImplementacion() != null){
-                    // si ya tiene estimada de comprobacion se comprueba si hay modificacion
-                    if(AccionSeleccionada.getComprobacionImplementacion().getFechaEstimada() != this.FechaEstimadaImplementacion
-                            || AccionSeleccionada.getComprobacionImplementacion().getResponsableComprobacion().getId() != this.ResponsableImplementacion){
-                        fDatos.setComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
-                        // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
-                        Evento eventoAccion = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
-                        if (pEventos.ExisteEventoAccion(eventoAccion)){
-                            pEventos.RemoverEventoAccion(eventoAccion);
-                            Evento eventoNuevo = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
-                            pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
-                        }
-                    }
-                }else{
-                    fDatos.setComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
-                    Evento eventoNuevo = new EventoAccion(TipoEvento.IMPLEMENTACION_ACCION, AccionSeleccionada);
-                    pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoNuevo);
+            if(!this.actividades.isEmpty()){
+                fDatos.setComprobacionImplementacion(this.FechaEstimadaImplementacion, this.ResponsableImplementacion, IdAccionSeleccionada);
+                if(AccionSeleccionada.getComprobacionImplementacion() != null){                    
+                    ajustarEvento(TipoEvento.IMPLEMENTACION_ACCION);
                 }
-                if(AccionSeleccionada.getComprobacionEficacia()!= null){
-                    // si ya tiene estimada de eficacia se comprueba si hay modificacion
-                    if(AccionSeleccionada.getComprobacionEficacia().getFechaEstimada() != this.FechaEstimadaVerificacion
-                            || AccionSeleccionada.getComprobacionEficacia().getResponsableComprobacion().getId() != this.ResponsableEficacia){
-                        fDatos.setVerificacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
-                        // se crea el evento con los datos guardados para comparar reemplazar con el anterior en el caso que hayan cambios
-                        Evento eventoAccion = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
-                        if (pEventos.ExisteEventoAccion(eventoAccion)){
-                            pEventos.RemoverEventoAccion(eventoAccion);
-                            Evento eventoNuevo = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
-                            pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
-                        }
-                    }
-                }else{
-                    fDatos.setVerificacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
-                    Evento eventoNuevo = new EventoAccion(TipoEvento.VERIFICACION_EFICACIA, AccionSeleccionada);
-                    pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoNuevo);
+                fDatos.setVerificacionEficacia(this.FechaEstimadaVerificacion, this.ResponsableEficacia, IdAccionSeleccionada);
+                if(AccionSeleccionada.getComprobacionEficacia()!= null){                    
+                    ajustarEvento(TipoEvento.VERIFICACION_EFICACIA);
                 }
             }
-            // Si la actualizacion se realizo correctamente redirige a lista de acciones.
-            ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
-            ctx.renderResponse();
         }
+        // Si la actualizacion se realizo correctamente redirige a lista de acciones.
+        ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron." ));
+        ctx.renderResponse();
     }
+    
+    /***
+     * Comprueba si el evento existe.
+     * Si existe se remplaza, de lo contrario se crea uno nuevo.
+     * @param tipo 
+     */
+    private void ajustarEvento(TipoEvento tipo){
+        Evento eventoAccion = new EventoAccion(tipo, AccionSeleccionada);
+        if (pEventos.ExisteEventoAccion(eventoAccion)){
+            pEventos.RemoverEventoAccion(eventoAccion);
+        }
+        switch(tipo){
+            case IMPLEMENTACION_ACCION->pEventos.ProgramarEvento(FechaEstimadaImplementacion, eventoAccion);
+            default-> pEventos.ProgramarEvento(FechaEstimadaVerificacion, eventoAccion);
+        }
+    } 
     
     /**
      * Elimina la accion de la base de datos.
