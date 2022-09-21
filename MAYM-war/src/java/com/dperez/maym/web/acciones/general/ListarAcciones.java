@@ -11,7 +11,6 @@ import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.acciones.Estado;
-import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
@@ -46,6 +45,10 @@ public class ListarAcciones implements Serializable{
     private TipoAccion tipoDeAccion;
     
     private List<Accion> ListaAcciones;
+    
+    private Accion accionSeleccionada;
+    
+    private ModalVerActividades verActividades;
     
     public ListarAcciones(){
         this.fLectura = new FacadeLectura();
@@ -359,6 +362,7 @@ public class ListarAcciones implements Serializable{
         }
     }
     public TipoAccion getTipoDeAccion() {return tipoDeAccion;}
+    public Accion getAccionSeleccionada(){return this.accionSeleccionada;}
     //</editor-fold>
     
     //<editor-fold desc="Setters">
@@ -393,7 +397,7 @@ public class ListarAcciones implements Serializable{
     }
 
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {this.tipoDeAccion = tipoDeAccion;}
-    
+    public void setAccionSeleccionada(Accion accion){this.accionSeleccionada = accion;}
     //</editor-fold>
     
     //**********************************************************************
@@ -413,12 +417,18 @@ public class ListarAcciones implements Serializable{
         return ids;
     }
     
+    public void SeleccionarAccion(int id){
+        accionSeleccionada = ListaAcciones.stream().filter((Accion accion)->accion.getId() == id).findFirst().get();
+        verActividades.setAccionSeleccionada(accionSeleccionada);
+    }
+    
     //  Inicializacion
     @PostConstruct
     public void init(){
         fLectura = new FacadeLectura();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        verActividades = context.getApplication().evaluateExpressionGet(context, "#{modalVerActividades}", ModalVerActividades.class);
         int id = 0;
         tipoDeAccion = TipoAccion.valueOf(request.getParameter("tipo"));
         try{           
@@ -466,4 +476,5 @@ public class ListarAcciones implements Serializable{
         
         ResetListasCodificacion();
     }
-}
+    
+ }

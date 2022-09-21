@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+      xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    
+    
+    <!-- Ver Actividades -->
+    <div id="modal_ver_actividades" class="modal fade" style="padding-top: 15%;" role="dialog">
+        <div class="modal-dialog">
+            <h:panelGroup id="panel_modal">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: gray; color: white;">
+                        <h4 class="modal-title">Actividades</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <!-- Actividades -->
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
+                                        <div class="table-responsive-sm">
+                                            <table class="table table-hover table-striped" style="font-size: x-small;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tipo:</th>
+                                                        <th>Descripcion:</th>
+                                                        <th>Fecha Estimada:</th>
+                                                        <th>Responsable Implementacion:</th>
+                                                        <th>Implementada:</th>
+                                                    </tr>                                                
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach items="#{modalVerActividades.accionSeleccionada.actividadesDeAccion}" var="actividad" >
+                                                        <tr>
+                                                            <td>#{actividad.tipoDeActividad}</td>
+                                                            <td>#{actividad.descripcion}</td>
+                                                            <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                            <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                            <td>
+                                                                <c:if test="#{actividad.fechaImplementacion == null}" >
+                                                                    Sin Implementar
+                                                                </c:if>
+                                                                <c:if test="#{actividad.fechaImplementacion != null}" >
+                                                                    #{actividad.fechaImplementacion}
+                                                                </c:if>
+                                                            </td>
+                                                        </tr>                                            
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
+                                    <f:ajax render="panel_modal" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </div>
+    </div>
+    
+</html>

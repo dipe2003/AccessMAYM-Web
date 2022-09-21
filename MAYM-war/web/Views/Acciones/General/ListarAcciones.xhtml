@@ -7,7 +7,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
                 xmlns:f="http://xmlns.jcp.org/jsf/core"                    
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                >
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    
     <ui:define name="page_content">
         <div class="row">
             <h:form id="listado-correctivas">
@@ -182,19 +183,10 @@
                                     <tr>
                                         <th style="width: 5%">Fecha</th>
                                         <th style="width: 5%">Area</th>
-                                        <th style="width: 10%">Generada Por</th>
-                                        <th style="width: 16%">Descripcion</th>
-                                        <th style="width: 16%">Analisis de Causa</th>
-                                        <c:choose>
-                                            <c:when test="#{listarAcciones.tipoDeAccion == 'CORRECTIVA'}">
-                                                <th style="width: 10%">Medidas Correctivas</th>
-                                                <th style="width: 10%">Medidas Preventivas</th>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <th style="width: 20%">Actividades</th>
-                                            </c:otherwise>
-                                        </c:choose>                                        
-                                        <th style="width: 5%">Plazo Eficacia</th>
+                                        <th style="width: 11%">Generada Por</th>
+                                        <th style="width: 25%">Descripcion</th>
+                                        <th style="width: 25%">Analisis de Causa</th>
+                                        <th style="width: 5%">Actividades</th> 
                                         <th style="width: 5%">Codificacion</th>
                                         <th style="width: 5%">Estado</th>
                                         <th style="width: 13%"></th>
@@ -220,68 +212,21 @@
                                                 #{accion.analisisCausa}
                                             </td>
                                             <c:choose>
-                                                <c:when test="#{listarAcciones.tipoDeAccion == 'CORRECTIVA'}">
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="#{not empty accion.actividadesDeAccion}">
-                                                                <c:forEach items="#{accion.actividadesDeAccion}" var="correctiva">
-                                                                    <c:if test="#{correctiva.tipoDeActividad == 'CORRECTIVA'}">
-                                                                        <div class="form-group-sm">
-                                                                            #{correctiva.descripcion}
-                                                                        </div>
-                                                                    </c:if>                                                            
-                                                                </c:forEach>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                No se han definido.
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="#{not empty accion.actividadesDeAccion}">
-                                                                <c:forEach items="#{accion.actividadesDeAccion}" var="preventiva">
-                                                                    <c:if test="#{preventiva.tipoDeActividad == 'PREVENTIVA'}">
-                                                                        <div class="form-group-sm">
-                                                                            #{preventiva.descripcion}
-                                                                        </div>
-                                                                    </c:if>                                                            
-                                                                </c:forEach>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                No se han definido.
-                                                            </c:otherwise>
-                                                        </c:choose>
+                                                <c:when test="#{accion.actividadesDeAccion.size()>0}">
+                                                    <td>                                                        
+                                                        <div class="form-group-sm">
+                                                            <h:commandLink p:data-toggle="modal" p:data-target="#modal_ver_actividades" action="#{listarAcciones.SeleccionarAccion(accion.id)}">
+                                                                Ver...
+                                                                <f:ajax delay="400" execute="@this" render="form_accion_modal:panel_modal"/>
+                                                            </h:commandLink>
+                                                        </div>
                                                     </td>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="#{not empty accion.actividadesDeAccion}">
-                                                                <c:forEach items="#{accion.actividadesDeAccion}" var="actividad">
-                                                                    <div class="form-group-sm">
-                                                                        #{actividad.descripcion}
-                                                                    </div>
-                                                                </c:forEach>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                No se han definido.
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
+                                                    Sin Definir
                                                 </c:otherwise>
-                                            </c:choose>      
+                                            </c:choose>                                                
                                             
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="#{accion.getComprobacionEficacia() != null and accion.getComprobacionEficacia().fechaEstimada != null }">
-                                                        #{accion.getComprobacionEficacia().fechaEstimada}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        No se ha definido.
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
                                             <td>
                                                 <c:if test="#{accion.codificacionAccion != null}">
                                                     #{accion.codificacionAccion.nombre}
@@ -366,6 +311,11 @@
                         </c:if>
                     </c:otherwise>
                 </c:choose>
+                
+            </h:form>
+           <h:form id="form_accion_modal">                
+                <!-- Panel de Producto Involucrado -->
+                <ui:include src="ModalVerActividades.xhtml"/>                
             </h:form>
         </div>
     </ui:define>
