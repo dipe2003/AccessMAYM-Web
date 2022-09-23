@@ -365,6 +365,28 @@
                                                         </div>
                                                     </c:when> 
                                                     <c:otherwise>
+                                                        <div class="table-responsive-sm">
+                                                            <table class="table table-hover table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Fecha Estimada:</th>
+                                                                        <th>Responsable: </th>
+                                                                        <th>Fecha Comprobacion:</th>
+                                                                        <th>Resultado:</th>
+                                                                        <th>Observaciones:</th>
+                                                                    </tr>                                                
+                                                                </thead>
+                                                                <tbody>                                                
+                                                                    <tr>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.fechaEstimada}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{editarAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.fechaComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.resultadoComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.observaciones}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                         <div class="alert alert-info">
                                                             <strong>Info!</strong> No se puede editar luego de comprobarse.
                                                         </div>
@@ -420,6 +442,28 @@
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
+                                                        <div class="table-responsive-sm">
+                                                            <table class="table table-hover table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Fecha Estimada:</th>
+                                                                        <th>Responsable: </th>
+                                                                        <th>Fecha Comprobacion:</th>
+                                                                        <th>Resultado:</th>
+                                                                        <th>Observaciones:</th>
+                                                                    </tr>                                                
+                                                                </thead>
+                                                                <tbody>                                                
+                                                                    <tr>
+                                                                        <td>#{editarAccion.comprobacionEficacia.fechaEstimada}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{editarAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.fechaComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.resultadoComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.observaciones}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                         <div class="alert alert-info">
                                                             <strong>Info!</strong> No se puede editar luego de comprobarse.
                                                         </div>

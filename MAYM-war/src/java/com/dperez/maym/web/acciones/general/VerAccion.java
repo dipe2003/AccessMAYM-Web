@@ -51,9 +51,6 @@ public class VerAccion implements Serializable {
     
     private List<Producto> ListaProductos;
 
-    
-    private List<Actividad> MedidasCorrectivas;
-    private List<Actividad> MedidasPreventivas;
     private List<Actividad> actividades;
     
     private Date FechaImplementacion;
@@ -85,8 +82,6 @@ public class VerAccion implements Serializable {
     
     public List<Producto> getListaProductos() {return ListaProductos;}
     
-    public List<Actividad> getMedidasCorrectivas() {return MedidasCorrectivas;}
-    public List<Actividad> getMedidasPreventivas() {return MedidasPreventivas;}
     public List<Actividad> getActividades(){return this.actividades;}
     public Date getFechaImplementacion(){return this.FechaImplementacion;}
     public String getObservacionesComprobacion() {return ObservacionesComprobacion;}
@@ -116,9 +111,7 @@ public class VerAccion implements Serializable {
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     
     public void setListaProductos(List<Producto> ListaProductos) {this.ListaProductos = ListaProductos;}   
-    
-    public void setMedidasCorrectivas(List<Actividad> MedidasCorrectivas) {this.MedidasCorrectivas = MedidasCorrectivas;}
-    public void setMedidasPreventivas(List<Actividad> MedidasPreventivas) {this.MedidasPreventivas = MedidasPreventivas;}
+
     public void setActividades(List<Actividad> actividades){this.actividades = actividades;}
     public void setFechaImplementacion(Date FechaImplementacion){this.FechaImplementacion = FechaImplementacion;}
     public void setObservacionesComprobacion(String ObservacionesComprobacion) {this.ObservacionesComprobacion = ObservacionesComprobacion;}
@@ -158,15 +151,6 @@ public class VerAccion implements Serializable {
             
             actividades = AccionSeleccionada.getActividadesDeAccion().stream()                    
                     .collect(Collectors.toList());
-            if(tipoDeAccion == TipoAccion.CORRECTIVA){
-                MedidasCorrectivas = actividades.stream()
-                        .filter(a->a.getTipoDeActividad() == CORRECTIVA)
-                        .collect(Collectors.toList());
-                
-                MedidasPreventivas = actividades.stream()
-                        .filter(a->a.getTipoDeActividad() == PREVENTIVA)
-                        .collect(Collectors.toList());
-            }
             if(!(AccionSeleccionada.getProductosInvolucrados().isEmpty())){
                 ListaProductos = AccionSeleccionada.getProductosInvolucrados();
             }
