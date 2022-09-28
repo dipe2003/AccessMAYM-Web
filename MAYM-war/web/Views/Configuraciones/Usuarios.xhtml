@@ -50,7 +50,7 @@
                                     <th>Recibe Alertas</th>
                                     <th>Permiso</th>
                                     <th>Fecha de Baja</th>
-                                    <th>Responsabilidad</th>
+                                    <th>Responsabilidades</th>
                                     <th></th>
                                 </tr>
                                 
@@ -106,7 +106,7 @@
                                         </td>
                                         <td>
                                             <c:forEach items="#{usuario.responsablesUsuario}" var="responsable">
-                                               #{responsable.nombre} 
+                                                #{responsable.responsabilidadResponsable.nombre},
                                             </c:forEach>
                                         </td>
                                         <td>                                            
@@ -133,12 +133,19 @@
                                                 </div>
                                             </c:if>
                                             <div class="btn-group">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Responsabilidades" 
+                                                               action="#{modalResponsabilidades.actualizarResponsabilidadesSeleccionadas(usuario.id)}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    <f:ajax delay="100" render="form_accion_modal_responsabilidades:panel_modal_responsabilidades" />
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="btn-group">
                                                 <!-- TODO revisar metodo tiene responsabilidades -->
                                                 <!--<c:if test="#{usuario.tieneResponsabilidadAsignada() == true and sesionUsuario.usuarioLogueado.id != usuario.id}">-->
-                                                    <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
-                                                        <span class="glyphicon glyphicon-trash"> </span>
-                                                        <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
-                                                    </h:commandLink>   
+                                                <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
+                                                    <span class="glyphicon glyphicon-trash"> </span>
+                                                    <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
+                                                </h:commandLink>   
                                                 <!--</c:if>-->
                                             </div>                                                
                                         </td>
@@ -470,6 +477,11 @@
                     </ul>                
                 </div>
             </c:if>
+        </h:form>
+        
+        <h:form id="form_accion_modal_responsabilidades">                
+            <!-- Panel de Producto Involucrado -->
+            <ui:include src="ModalResponsabilidades.xhtml"/>                
         </h:form>
         
     </ui:define>

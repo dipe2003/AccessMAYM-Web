@@ -118,6 +118,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     }
     
     public boolean tieneResponsabilidadAsignada(){
+        if (responsablesUsuario.isEmpty()) return false;
         boolean comprobacionAgisgnada = false;
         for(Responsable responsable:responsablesUsuario){
             comprobacionAgisgnada = responsable.getComprobacionesResponsable().stream()

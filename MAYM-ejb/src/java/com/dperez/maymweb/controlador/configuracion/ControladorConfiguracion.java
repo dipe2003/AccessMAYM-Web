@@ -495,7 +495,7 @@ public class ControladorConfiguracion {
         }catch(Exception ex){}
         return -1;
     }
-    
+    //TODO: revisar metodo, no se esta enlazando al usuario y en la base de datos se crea doble
     public Responsable crearResponsable(int idResponsabilidad, int idUsuario){
         Usuario usuario = repoUsuario.find(idUsuario);
         Responsabilidad responsabilidad= repoResponsabilidades.find(idResponsabilidad);
