@@ -305,7 +305,7 @@
                                                 <li class="active"><a>#{numero.count}</a></li>
                                             </c:when>
                                             <c:otherwise>
-                                                <li><h:link value="#{numero.count}" outcome="ListarCorrectivas.xhtml?pagina=#{numero.count}"/>
+                                                <li><h:link value="#{numero.count}" outcome="ListarAcciones.xhtml?pagina=#{numero.count}&amp;tipo=#{listarAcciones.tipoDeAccion}"/>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>

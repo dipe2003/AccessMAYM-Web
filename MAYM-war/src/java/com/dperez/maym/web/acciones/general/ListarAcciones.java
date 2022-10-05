@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -463,7 +464,7 @@ public class ListarAcciones implements Serializable{
         
         // llenar la lista con todas las areas registradas.
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
-        ListaAcciones.stream().sorted();
+        ListaAcciones.stream().sorted(Comparator.reverseOrder());
         
         // datos para filtros
         ResetFechasAcciones();
