@@ -32,13 +32,13 @@ public class Area implements Serializable, Comparable<Area> {
     private String nombre = new String();
     private String correo = new String();
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "areaAccion", cascade = CascadeType.ALL)
     private List<Accion> accionesArea;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="areaFortaleza", cascade = CascadeType.ALL)
     private List<Fortaleza> fortalezasArea;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="areaUsuario",cascade = CascadeType.ALL)
     private List<Usuario> usuariosArea;
     
     // Constructores

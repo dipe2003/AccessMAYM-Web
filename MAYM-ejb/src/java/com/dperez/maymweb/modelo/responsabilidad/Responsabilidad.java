@@ -27,7 +27,7 @@ public class Responsabilidad implements Serializable{
     private int id;
     private String nombre;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="responsabilidadResponsable", cascade = CascadeType.ALL)
     private List<Responsable> responsables;
     
     public Responsabilidad(){

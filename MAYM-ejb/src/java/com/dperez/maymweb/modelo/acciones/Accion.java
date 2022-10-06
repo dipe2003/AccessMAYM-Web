@@ -54,10 +54,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     protected List<Adjunto> adjuntosDeAccion;
     
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="accionActividad", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Actividad> actividadesDeAccion;
     
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="accionProducto", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Producto> productosInvolucrados;
     
     @ManyToOne

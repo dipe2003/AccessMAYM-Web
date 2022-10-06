@@ -43,7 +43,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     @OneToOne(mappedBy= "usuarioCredencial" ,orphanRemoval = true, cascade = CascadeType.ALL)
     private Credencial credencialUsuario;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="usuarioResponsable", cascade = CascadeType.ALL)
     private List<Responsable> responsablesUsuario;
     
     // Constructores

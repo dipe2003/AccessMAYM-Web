@@ -33,10 +33,10 @@ public class Deteccion implements Serializable, Comparable<Deteccion> {
     
     private TipoDeteccion tipoDeDeteccion;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="deteccionAccion", cascade = CascadeType.ALL)
     private List<Accion> accionesDeteccion;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="deteccionFortaleza", cascade = CascadeType.ALL)
     private List<Fortaleza> fortalezasDeteccion;
     
     // Constructores

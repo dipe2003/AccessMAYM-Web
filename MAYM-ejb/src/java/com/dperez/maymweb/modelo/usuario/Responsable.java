@@ -44,10 +44,10 @@ public class Responsable implements Serializable{
     @OneToOne
     private Usuario usuarioResponsable;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="responsableComprobacion", cascade = CascadeType.ALL)
     private List<Comprobacion> comprobacionesResponsable;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="responsableImplementacion", cascade = CascadeType.ALL)
     private List<Actividad> actividadesResponsable;
     
     public Responsable() {

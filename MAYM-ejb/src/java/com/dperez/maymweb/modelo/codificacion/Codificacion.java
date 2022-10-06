@@ -30,7 +30,7 @@ public class Codificacion implements Serializable, Comparable<Codificacion>{
     private String nombre = new String();
     private String descripcion = new String();
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="codificacionAccion", cascade = CascadeType.ALL)
     private List<Accion> accionesCodificacion;
     
     // Constructores
