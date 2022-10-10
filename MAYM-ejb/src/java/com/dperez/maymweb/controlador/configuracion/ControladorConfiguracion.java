@@ -499,7 +499,12 @@ public class ControladorConfiguracion {
     public Responsable crearResponsable(int idResponsabilidad, int idUsuario){
         Usuario usuario = repoUsuario.find(idUsuario);
         Responsabilidad responsabilidad= repoResponsabilidades.find(idResponsabilidad);
-        return repoResponsable.update(responsabilidad.crearResponsable(usuario));
+        Responsable responsable = responsabilidad.crearResponsable(usuario);
+        try{
+            repoResponsable.create(responsable);
+            return responsable;
+        }catch(Exception ex){}
+        return null;
     }
     
     public int darBajaResponsable(int idResponsabilidad, int idResponsable){
@@ -521,9 +526,9 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-
+    
     public int eliminarResponsabilidad(int idResponsabilidadSeleccionada) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-  
+    
 }

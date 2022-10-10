@@ -23,17 +23,36 @@ and open the template in the editor.
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <strong><label for="Responsabilidades:">Tipo</label></strong>  
-                            <h:selectManyCheckbox id="responsabilidades" value="#{modalResponsabilidades.listaResponsabilidadesSeleccionadas}">
-                                <c:forEach items="#{modalResponsabilidades.listaResponsabilidades}" var="resp">
-                                    <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp}" />
-                                </c:forEach>
-                                <f:ajax execute="@this" event="change" />
-                                <f:ajax render="panel_modal_responsabilidades panel_mensajes_modal" />
-                            </h:selectManyCheckbox>
-                           
+                            <div class="col-sm-6">
+                                <h:panelGroup id="panel-resp-disponibles">
+                                    <h:selectOneListbox id="responsabilidades" style="height:150pt; width:100%" 
+                                                        value="#{modalResponsabilidades.idResponsabilidadSeleccionada}"  >
+                                        <c:forEach items="#{modalResponsabilidades.listaResponsabilidades}" var="resp">
+                                            <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}"/>
+                                        </c:forEach>
+                                        <f:ajax execute="responsabilidades panel-resp-disponibles" event="change" onevent="indicador"
+                                                listener="#{modalResponsabilidades.agregarResponsabilidad()}" />
+                                        <f:ajax delay="100" render="panel_modal_responsabilidades 
+                                                panel-resp-disponibles responsabilidades panel-resp-seleccionadas form_usuarios"/>                                  
+                                    </h:selectOneListbox>
+                                </h:panelGroup>
+                            </div>  
+                            <div class="col-sm-6">
+                                <h:panelGroup id="panel-resp-seleccionadas">
+                                    <h:selectOneListbox id="responsabilidadesSeleccionadas" style="height:150pt; width:100%" 
+                                                        value="#{modalResponsabilidades.idResponsabilidadSeleccionada}" >
+                                        <c:forEach items="#{modalResponsabilidades.listaResponsabilidadesSeleccionadas}" var="resp">
+                                            <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}" />                                       
+                                        </c:forEach>
+                                        <f:ajax execute="responsabilidadesSeleccionadas panel-resp-seleccionadas" event="change" onevent="indicador"
+                                                listener="#{modalResponsabilidades.quitarResponsabilidad()}"  />
+                                        <f:ajax delay="100" render="panel_modal_responsabilidades 
+                                                panel-resp-disponibles panel-resp-seleccionadas responsabilidadesSeleccionadas form_usuarios" />
+                                    </h:selectOneListbox>
+                                </h:panelGroup>
+                            </div>  
                         </div>
-                         <h:panelGroup id="panel_mensajes_modal">
+                        <h:panelGroup id="panel_mensajes_modal">
                             <div class="form-group-sm">
                                 <h:message for="btn_guardar_responsabilidades" class="msj_info"/>
                             </div>
@@ -50,7 +69,7 @@ and open the template in the editor.
                                     <h:commandButton id="btn_guardar_responsabilidades" style="width: 99%;" class="btn btn-primary" value="Guardar"
                                                      action="#{modalResponsabilidades.guardarCambios()}">
                                         <f:ajax execute="panel_modal_responsabilidades" onevent="indicador" />
-                                        <f:ajax render="panel_modal_responsabilidades panel_mensajes_modal" />
+                                        <f:ajax render="panel_modal_responsabilidades panel_mensajes_modal form_usuarios" />
                                     </h:commandButton>
                                 </c:if>
                             </div>

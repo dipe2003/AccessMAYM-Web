@@ -57,8 +57,11 @@
                                             #{responsabilidad.nombre}
                                         </td>
                                         <td>
-                                            <c:forEach items="#{responsabilidad.responsables}" var="responsable">
+                                            <c:forEach items="#{responsabilidad.responsables}" var="responsable" varStatus="estado">
                                                 #{responsable.usuarioResponsable.nombreCompleto}
+                                                <c:if test="#{not estado.last}">
+                                                , 
+                                                </c:if>
                                             </c:forEach>
                                         </td>
                                         <td>                                            

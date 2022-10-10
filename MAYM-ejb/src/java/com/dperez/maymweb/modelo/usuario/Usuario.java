@@ -116,12 +116,11 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     public int compareTo(Usuario OtroUsuario) {
         return this.apellido.compareTo(OtroUsuario.apellido);
     }
-    
-    public boolean tieneResponsabilidadAsignada(){
+    public boolean tieneComprobacionAsignada(){
         if (responsablesUsuario.isEmpty()) return false;
-        boolean comprobacionAgisgnada = false;
+        boolean comprobacionAsignada = false;
         for(Responsable responsable:responsablesUsuario){
-            comprobacionAgisgnada = responsable.getComprobacionesResponsable().stream()
+            comprobacionAsignada = responsable.getComprobacionesResponsable().stream()
                     .anyMatch(c->c.getResponsableComprobacion().getUsuarioResponsable().getId()== this.id);
         }
         
@@ -130,6 +129,6 @@ public class Usuario implements Serializable, Comparable<Usuario> {
             implementacionAsignada = responsable.getActividadesResponsable().stream()
                     .anyMatch(a->a.getResponsableImplementacion().getUsuarioResponsable().getId()==this.id);
         }
-        return comprobacionAgisgnada && implementacionAsignada == false;
+        return comprobacionAsignada && implementacionAsignada == false;
     }
 }

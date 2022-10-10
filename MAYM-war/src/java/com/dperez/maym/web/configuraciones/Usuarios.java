@@ -326,7 +326,7 @@ public class Usuarios implements Serializable {
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False
             // TODO agregar metodo que comprueba si el usuario es responsable de alguna comprobacion o actividad
-            ContieneRegistros = usrSeleccionado.tieneResponsabilidadAsignada();
+            ContieneRegistros = usrSeleccionado.tieneComprobacionAsignada();
         }
     }
     
