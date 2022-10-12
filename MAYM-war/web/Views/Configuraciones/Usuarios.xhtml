@@ -105,8 +105,11 @@
                                             </c:choose> 
                                         </td>
                                         <td>
-                                            <c:forEach items="#{usuario.responsablesUsuario}" var="responsable">
-                                                #{responsable.responsabilidadResponsable.nombre},
+                                            <c:forEach items="#{usuario.responsablesUsuario}" var="responsable" varStatus="estado">
+                                                #{responsable.responsabilidadResponsable.nombre}
+                                                <c:if test="#{not estado.last}">
+                                                    , 
+                                                </c:if>
                                             </c:forEach>
                                         </td>
                                         <td>                                            
@@ -134,19 +137,18 @@
                                             </c:if>
                                             <div class="btn-group">
                                                 <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Responsabilidades" 
-                                                               action="#{modalResponsabilidades.actualizarResponsabilidadesSeleccionadas(usuario.id)}">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                               action="#{usuarios.actualizarResponsabilidadesSeleccionadas(usuario.id)}">
+                                                    <span class="glyphicon glyphicon-education"></span>
                                                     <f:ajax delay="100" render="form_accion_modal_responsabilidades:panel_modal_responsabilidades" />
                                                 </h:commandLink>
                                             </div>
                                             <div class="btn-group">
-                                                <!-- TODO revisar metodo tiene responsabilidades -->
-                                                <!--<c:if test="#{usuario.tieneResponsabilidadAsignada() == true and sesionUsuario.usuarioLogueado.id != usuario.id}">-->
-                                                <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
-                                                    <span class="glyphicon glyphicon-trash"> </span>
-                                                    <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
-                                                </h:commandLink>   
-                                                <!--</c:if>-->
+                                                <c:if test="#{usuario.tieneComprobacionAsignada() == true and sesionUsuario.usuarioLogueado.id != usuario.id}">
+                                                    <h:commandLink id="btn_eliminar_#{usuario.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar este Usuario? ')) return false" >
+                                                        <span class="glyphicon glyphicon-trash"> </span>
+                                                        <f:ajax event="click" listener="#{usuarios.eliminarUsuario(usuario.id)}" render="panel_mensajes_tabla"/>                                                            
+                                                    </h:commandLink>   
+                                                </c:if>
                                             </div>                                                
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
@@ -481,7 +483,77 @@
         
         <h:form id="form_accion_modal_responsabilidades">                
             <!-- Panel de Producto Involucrado -->
-            <ui:include src="ModalResponsabilidades.xhtml"/>                
+            <div id="modal_Responsabilidades" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_responsabilidades">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Responsabilidades</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h:panelGroup id="panel-resp-disponibles">
+                                            <h:selectOneListbox id="responsabilidades" style="height:150pt; width:100%" 
+                                                                value="#{usuarios.idResponsabilidadSeleccionada}"  >
+                                                <c:forEach items="#{usuarios.listaResponsabilidades}" var="resp">
+                                                    <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}"/>
+                                                </c:forEach>
+                                                <f:ajax execute="@this" event="valueChange" onevent="indicador"
+                                                        listener="#{usuarios.agregarResponsabilidad()}" />
+                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas"/>                                  
+                                            </h:selectOneListbox>
+                                        </h:panelGroup>
+                                    </div>  
+                                    <div class="col-sm-6">
+                                        <h:panelGroup id="panel-resp-seleccionadas">
+                                            <h:selectOneListbox id="responsabilidadesSeleccionadas" style="height:150pt; width:100%" 
+                                                                value="#{usuarios.idResponsabilidadSeleccionada}" >
+                                                <c:forEach items="#{usuarios.listaResponsabilidadesSeleccionadas}" var="resp">
+                                                    <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}" />                                       
+                                                </c:forEach>
+                                                <f:ajax execute="@this" event="valueChange" onevent="indicador"
+                                                        listener="#{usuarios.quitarResponsabilidad()}"  />
+                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas panel_mensajes_modal" />
+                                            </h:selectOneListbox>
+                                        </h:panelGroup>
+                                    </div>  
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal">
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_guardar_responsabilidades" class="msj_info"/>
+                                        <h:message for="responsabilidadesSeleccionadas" class="msj_info"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <c:if test="#{usuarios.listaResponsabilidadesSeleccionadas.size() == 0}" >
+                                            <h:commandButton id="btn_guardar_responsabilidades" title="Al menos una responsabilidad debe estar seleccionada." 
+                                                             style="width: 99%;" class="btn btn-primary disabled" value="Guardar" disabled="true" />
+                                        </c:if>
+                                        <c:if test="#{usuarios.listaResponsabilidadesSeleccionadas.size() > 0}" >
+                                            <h:commandButton id="btn_guardar_responsabilidades" style="width: 99%;" class="btn btn-primary" value="Guardar"
+                                                             action="#{usuarios.guardarCambios()}">
+                                                <f:ajax execute="panel_modal_responsabilidades" onevent="indicador" 
+                                                        render="panel_modal_responsabilidades panel_mensajes_modal form_usuarios" />
+                                            </h:commandButton>
+                                        </c:if>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal"  value="Cerrar">
+                                            <f:ajax render="panel_modal_responsabilidades panel_mensajes_modal" />
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+            
         </h:form>
         
     </ui:define>

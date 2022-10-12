@@ -131,4 +131,14 @@ public class Usuario implements Serializable, Comparable<Usuario> {
         }
         return comprobacionAsignada && implementacionAsignada == false;
     }
+    
+    /***
+     * Comprueba si algun responsable del usuario corresponde a la responsabilidad indicada.
+     * @param idResponsabilidad
+     * @return True si corresponde.
+     */
+    public boolean tieneResponsabilidadAsignada(int idResponsabilidad){
+        return this.responsablesUsuario.stream()
+                .anyMatch(responsable->responsable.getResponsabilidadResponsable().getId() == idResponsabilidad);
+    }
 }

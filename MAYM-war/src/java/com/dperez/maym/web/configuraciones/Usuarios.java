@@ -11,8 +11,10 @@ import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
+import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import com.dperez.maymweb.modelo.usuario.EnumPermiso;
+import com.dperez.maymweb.modelo.usuario.Responsable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -162,6 +165,11 @@ public class Usuarios implements Serializable {
         ListaAreas = tmpAreas.stream()
                 .sorted()
                 .collect(Collectors.toList());
+        
+        this.listaResponsabilidades = new ArrayList<>();
+        this.listaResponsabilidadesSeleccionadas = new ArrayList<>();
+        this.responsabilidadesAEliminar = new ArrayList<>();
+        this.responsabilidadesNuevas = new ArrayList<>();
     }
     
     
@@ -329,6 +337,170 @@ public class Usuarios implements Serializable {
             ContieneRegistros = usrSeleccionado.tieneComprobacionAsignada();
         }
     }
+    //</editor-fold>
+    //<editor-fold desc="Panel Responsabilidades">
+    
+    private Usuario usuarioSeleccionado;
+    private List<Responsabilidad> listaResponsabilidades;
+    private List<Responsabilidad> listaResponsabilidadesSeleccionadas;
+    private List<Responsabilidad> responsabilidadesNuevas;
+    private List<Responsabilidad> responsabilidadesAEliminar;
+    private int idResponsabilidadSeleccionada;
+    
+    //<editor-fold desc="Getters">
+    public List<Responsabilidad> getListaResponsabilidades(){return this.listaResponsabilidades;    }
+    
+    public List<Responsabilidad> getListaResponsabilidadesSeleccionadas() {
+        return listaResponsabilidadesSeleccionadas;
+    }
+    public int getIdResponsabilidadSeleccionada() {
+        return idResponsabilidadSeleccionada;
+    }
+    
+    public Usuario getUsuarioSeleccionado() {
+        return usuarioSeleccionado;
+    }
+    //</editor-fold>
+    
+    //<editor-fold desc="Setters">
+    public void setListaResponsabilidades(List<Responsabilidad> ListaResponsabilidades){this.listaResponsabilidades = ListaResponsabilidades;}
+    
+    public void setListaResponsabilidadesSeleccionadas(List<Responsabilidad> listaResponsabilidadesSeleccionadas) {
+        this.listaResponsabilidadesSeleccionadas = listaResponsabilidadesSeleccionadas;
+    }
+    
+    public void setIdResponsabilidadSeleccionada(int idResponsabilidadSeleccionada) {
+        this.idResponsabilidadSeleccionada = idResponsabilidadSeleccionada;
+    }
+    
+    public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
+        this.usuarioSeleccionado = usuarioSeleccionado;
+    }
+    //</editor-fold>
+    
+    //<editor-fold desc="Metodos">
+    
+    
+    /**
+     * Actualiza la lista de responsabilidades segun las que ya contenga el usuario.
+     * @param idUsuarioSeleccionado
+     */
+    public void actualizarResponsabilidadesSeleccionadas(int idUsuarioSeleccionado){
+        this.usuarioSeleccionado = fLectura.GetUsuario(idUsuarioSeleccionado);
+        
+        this.listaResponsabilidades.clear();
+        this.responsabilidadesAEliminar.clear();
+        this.responsabilidadesNuevas.clear();
+        
+        listaResponsabilidades = fLectura.listarResponsabilidades();
+        this.listaResponsabilidadesSeleccionadas.clear();
+        usuarioSeleccionado.getResponsablesUsuario().stream()
+                .forEach(resp->{
+                    listaResponsabilidadesSeleccionadas.add(resp.getResponsabilidadResponsable());
+                    listaResponsabilidades.remove(resp.getResponsabilidadResponsable());
+                });
+        
+        listaResponsabilidadesSeleccionadas.stream().sorted();
+        listaResponsabilidades.stream().sorted();
+    }
+    
+    
+    /**
+     * Agrega la responsabilidad seleccionada a la lista de seleccionadas y la quita
+     * de la lista de disponibles.
+     */
+    public void agregarResponsabilidad(){
+        Responsabilidad responsabilidad = listaResponsabilidades.stream()
+                .filter(r->r.getId()== idResponsabilidadSeleccionada)
+                .findFirst()
+                .get();
+        // si el usuario tiene la responsabilidad ya asignada y ésta está en la lista de responsabilidades es porque
+        // ya había sido seleccionada para eliminar.
+        if(usuarioSeleccionado.tieneResponsabilidadAsignada(idResponsabilidadSeleccionada)){
+            this.responsabilidadesAEliminar.remove(responsabilidad);
+        }else{
+            this.responsabilidadesNuevas.add(responsabilidad);
+        }
+        listaResponsabilidadesSeleccionadas.add(responsabilidad);
+        listaResponsabilidades.remove(responsabilidad);
+        idResponsabilidadSeleccionada = 0;
+    }
+    
+    /**
+     * Quita la responsabilidad seleccionada a la lista de seleccionadas y la quita
+     * de las disponibles.
+     */
+    public void quitarResponsabilidad(){
+        Responsabilidad responsabilidad = listaResponsabilidadesSeleccionadas.stream()
+                .filter(r->r.getId()== idResponsabilidadSeleccionada)
+                .findFirst()
+                .get();
+        // si el usuario NO tiene la responsabilidad ya asignada y ésta está se está quitando también
+        // se debe quitar de las responsabilidades nuevas.
+        if(!usuarioSeleccionado.tieneResponsabilidadAsignada(idResponsabilidadSeleccionada)){
+            this.responsabilidadesNuevas.remove(responsabilidad);
+        }else{
+            responsabilidadesAEliminar.add(responsabilidad);
+        }
+        // si el usuario ya tenía la responsabilidad y está siendo utilizada no se elimina, si no que debe darse de baja.
+        // esta comprobación se realiza en el metodo de guardar.
+        
+        listaResponsabilidades.add(responsabilidad);
+        listaResponsabilidadesSeleccionadas.remove(responsabilidad);
+        idResponsabilidadSeleccionada = 0;
+    }
+    
+    //TODO: falta caso de eliminar responsabilidad y dar de baja
+    public void guardarCambios(){
+        try{
+            // crear los nuevos responsables utilizando las nuevas responsabilidades seleccionadas.
+            responsabilidadesNuevas.stream()
+                    .forEach((Responsabilidad responsabilidad)->{
+                        fAdmin.nuevoResponsable(responsabilidad.getId(), usuarioSeleccionado.getId());
+                    });
+            // eliminar las responsabilidades que no estén en uso y dar de bajas las que si lo estén.
+            responsabilidadesAEliminar.stream()
+                    .forEach((Responsabilidad responsabilidad)->{
+                        Responsable responsable = responsabilidad.getResponsables().stream()
+                                .filter(resp->resp.getUsuarioResponsable().getId() == usuarioSeleccionado.getId())
+                                .findFirst()
+                                .orElseThrow();
+                        if(responsable.tieneActividadesAsignadas()|| responsable.tieneActividadesAsignadas()){
+                            // dar de baja
+                            fAdmin.darBajaResponsable(responsabilidad.getId(),
+                                    responsable.getId());                            
+                        }else{
+                            // eliminar
+                            fAdmin.eliminarResponsable(responsable.getId());                            
+                        }
+                    });
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
+                    new FacesMessage(SEVERITY_INFO,  "OK", "Las responsabilidaes se actualizacion correctamente." ));
+            FacesContext.getCurrentInstance().renderResponse();
+//            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+//            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Configuraciones/Usuarios.xhtml?pagina=" + PaginaActual);
+            
+//            if(!listaResponsabilidadesSeleccionadas.isEmpty()){
+//                listaResponsabilidadesSeleccionadas.stream()
+//                        .forEach(r->{
+//                            if(usuarioSeleccionado.getResponsablesUsuario().stream()
+//                                    .anyMatch(responsable->responsable.getResponsabilidadResponsable().getId() == r.getId()) == false){
+//                                fAdmin.nuevoResponsable(r.getId(), usuarioSeleccionado.getId());
+//                            }
+//                        });
+//                FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
+//                        new FacesMessage(SEVERITY_INFO,  "OK", "Las responsabilidaes se actualizacion correctamente." ));
+//                FacesContext.getCurrentInstance().renderResponse();
+//            }
+        }catch(Exception ex){
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
+                    new FacesMessage(SEVERITY_ERROR,  "Error", "Ocurrio un error." ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+    //</editor-fold>
+    
+    
     
     
 }

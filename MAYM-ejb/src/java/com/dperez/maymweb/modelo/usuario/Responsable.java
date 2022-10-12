@@ -134,6 +134,14 @@ public class Responsable implements Serializable{
                 .orElse(null);
     }
     
+    public boolean tieneComprobacionAsignada(){
+        return !this.comprobacionesResponsable.isEmpty();
+    }
+    
+    public boolean tieneActividadesAsignadas(){
+        return !this.actividadesResponsable.isEmpty();
+    }
+    
     public boolean isVigente(){
         return this.fechaBaja == null;
     }

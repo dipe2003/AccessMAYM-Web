@@ -240,7 +240,7 @@ public class SeguimientoAccion implements Serializable {
         }else{
             // regresar a la pagina listar acciones
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/Correctivas/ListarCorrectivas.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Acciones/General/ListarAcciones.xhtml?tipo="+tipoDeAccion);
         }
     }
     
