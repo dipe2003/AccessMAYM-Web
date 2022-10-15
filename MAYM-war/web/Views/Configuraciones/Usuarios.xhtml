@@ -502,7 +502,8 @@
                                                 </c:forEach>
                                                 <f:ajax execute="@this" event="valueChange" onevent="indicador"
                                                         listener="#{usuarios.agregarResponsabilidad()}" />
-                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas"/>                                  
+                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas 
+                                                        btn_guardar_responsabilidades"/>                                  
                                             </h:selectOneListbox>
                                         </h:panelGroup>
                                     </div>  
@@ -515,7 +516,8 @@
                                                 </c:forEach>
                                                 <f:ajax execute="@this" event="valueChange" onevent="indicador"
                                                         listener="#{usuarios.quitarResponsabilidad()}"  />
-                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas panel_mensajes_modal" />
+                                                <f:ajax delay="100" render="panel-resp-disponibles panel-resp-seleccionadas panel_mensajes_modal 
+                                                        btn_guardar_responsabilidades" />
                                             </h:selectOneListbox>
                                         </h:panelGroup>
                                     </div>  

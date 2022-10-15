@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.usuario;
 import com.dperez.maymweb.modelo.area.Area;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -56,6 +57,7 @@ public class Usuario implements Serializable, Comparable<Usuario> {
         this.correo = correoUsuario;
         this.recibeAlertas = recibeAlertas;
         this.permisoUsuario = permisoUsuario;
+        this.responsablesUsuario = new ArrayList<>();
     }
     
     // Getters
@@ -96,6 +98,13 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     }
     
     // Metodos
+    public void addRepsonsable(Responsable responsable){
+        this.responsablesUsuario.add(responsable);
+    }
+    
+    public void removeResponsable(Responsable responsable){
+        this.responsablesUsuario.remove(responsable);
+    }
     /***
      * Devuelve el nombre completo del Usuario (Nombre+Apellido)
      * @return

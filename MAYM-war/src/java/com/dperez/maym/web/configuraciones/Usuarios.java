@@ -477,21 +477,6 @@ public class Usuarios implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
                     new FacesMessage(SEVERITY_INFO,  "OK", "Las responsabilidaes se actualizacion correctamente." ));
             FacesContext.getCurrentInstance().renderResponse();
-//            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-//            FacesContext.getCurrentInstance().getExternalContext().redirect(url+"/Views/Configuraciones/Usuarios.xhtml?pagina=" + PaginaActual);
-            
-//            if(!listaResponsabilidadesSeleccionadas.isEmpty()){
-//                listaResponsabilidadesSeleccionadas.stream()
-//                        .forEach(r->{
-//                            if(usuarioSeleccionado.getResponsablesUsuario().stream()
-//                                    .anyMatch(responsable->responsable.getResponsabilidadResponsable().getId() == r.getId()) == false){
-//                                fAdmin.nuevoResponsable(r.getId(), usuarioSeleccionado.getId());
-//                            }
-//                        });
-//                FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
-//                        new FacesMessage(SEVERITY_INFO,  "OK", "Las responsabilidaes se actualizacion correctamente." ));
-//                FacesContext.getCurrentInstance().renderResponse();
-//            }
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
                     new FacesMessage(SEVERITY_ERROR,  "Error", "Ocurrio un error." ));

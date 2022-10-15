@@ -53,9 +53,14 @@ public class Responsabilidad implements Serializable{
         this.responsables.add(responsable);
     }
     
+    public void removeResponsable(Responsable responsable){
+        this.responsables.remove(responsable);
+    }
+    
     public Responsable crearResponsable(Usuario usuario){
         Responsable responsable = new Responsable(this, usuario);
         this.responsables.add(responsable);
+        usuario.addRepsonsable(responsable);
         return responsable;
     }
     

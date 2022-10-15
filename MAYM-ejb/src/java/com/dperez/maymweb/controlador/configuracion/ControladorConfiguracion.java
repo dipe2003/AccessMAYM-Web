@@ -501,7 +501,7 @@ public class ControladorConfiguracion {
         Responsabilidad responsabilidad= repoResponsabilidades.find(idResponsabilidad);
         Responsable responsable = responsabilidad.crearResponsable(usuario);
         try{
-            repoResponsable.create(responsable);
+            repoUsuario.update(usuario);
             return responsable;
         }catch(Exception ex){}
         return null;
