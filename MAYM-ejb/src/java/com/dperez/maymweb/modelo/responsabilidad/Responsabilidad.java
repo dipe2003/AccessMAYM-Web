@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
  * @author dipe2
  */
 @Entity
-public class Responsabilidad implements Serializable{
+public class Responsabilidad implements Serializable, Comparable<Responsabilidad>{
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String nombre;
@@ -82,5 +82,10 @@ public class Responsabilidad implements Serializable{
             return 1;
         }
         return -1;
+    }
+
+    @Override
+    public int compareTo(Responsabilidad otraResponsabilidad) {
+        return this.nombre.compareTo(otraResponsabilidad.nombre);
     }
 }

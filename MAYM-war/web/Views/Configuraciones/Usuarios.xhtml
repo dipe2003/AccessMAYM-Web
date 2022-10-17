@@ -497,6 +497,7 @@
                                         <h:panelGroup id="panel-resp-disponibles">
                                             <h:selectOneListbox id="responsabilidades" style="height:150pt; width:100%" 
                                                                 value="#{usuarios.idResponsabilidadSeleccionada}"  >
+                                                <f:selectItem noSelectionOption="true" itemLabel="--Seleccionar para agregar--" />
                                                 <c:forEach items="#{usuarios.listaResponsabilidades}" var="resp">
                                                     <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}"/>
                                                 </c:forEach>
@@ -511,6 +512,7 @@
                                         <h:panelGroup id="panel-resp-seleccionadas">
                                             <h:selectOneListbox id="responsabilidadesSeleccionadas" style="height:150pt; width:100%" 
                                                                 value="#{usuarios.idResponsabilidadSeleccionada}" >
+                                                <f:selectItem noSelectionOption="true" itemLabel="--Seleccionar para quitar--" />
                                                 <c:forEach items="#{usuarios.listaResponsabilidadesSeleccionadas}" var="resp">
                                                     <f:selectItem itemLabel="#{resp.nombre}" itemValue="#{resp.id}" />                                       
                                                 </c:forEach>

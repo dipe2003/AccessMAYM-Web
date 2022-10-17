@@ -400,8 +400,8 @@ public class Usuarios implements Serializable {
                     listaResponsabilidades.remove(resp.getResponsabilidadResponsable());
                 });
         
-        listaResponsabilidadesSeleccionadas.stream().sorted();
-        listaResponsabilidades.stream().sorted();
+        listaResponsabilidadesSeleccionadas.sort(Comparator.naturalOrder());
+        listaResponsabilidades.sort(Comparator.naturalOrder());
     }
     
     
