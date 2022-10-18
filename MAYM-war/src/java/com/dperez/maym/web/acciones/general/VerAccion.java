@@ -8,8 +8,6 @@ package com.dperez.maym.web.acciones.general;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Comprobacion;
 import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
-import static com.dperez.maymweb.modelo.acciones.actividad.TipoActividad.CORRECTIVA;
-import static com.dperez.maymweb.modelo.acciones.actividad.TipoActividad.PREVENTIVA;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.acciones.Estado;
@@ -49,6 +47,8 @@ public class VerAccion implements Serializable {
     private String Descripcion;
     private String AnalisisCausa;
     
+    private String ObservacionesDesestimada = "";
+    
     private List<Producto> ListaProductos;
 
     private List<Actividad> actividades;
@@ -79,6 +79,8 @@ public class VerAccion implements Serializable {
     public Area getAreaSector() {return AreaSector;}
     public String getDescripcion() {return Descripcion;}
     public String getAnalisisCausa() {return AnalisisCausa;}
+
+    public String getObservacionesDesestimada() {return ObservacionesDesestimada;}    
     
     public List<Producto> getListaProductos() {return ListaProductos;}
     
@@ -109,7 +111,9 @@ public class VerAccion implements Serializable {
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
-    
+
+    public void setObservacionesDesestimada(String ObservacionesDesestimada) {this.ObservacionesDesestimada = ObservacionesDesestimada;}
+        
     public void setListaProductos(List<Producto> ListaProductos) {this.ListaProductos = ListaProductos;}   
 
     public void setActividades(List<Actividad> actividades){this.actividades = actividades;}
@@ -146,6 +150,9 @@ public class VerAccion implements Serializable {
             Descripcion = AccionSeleccionada.getDescripcion();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             Estado = AccionSeleccionada.getEstadoDeAccion();
+            // si el estado es Desestimada se llena la propiedad
+            ObservacionesDesestimada = AccionSeleccionada.getEstadoDeAccion() == Estado.DESESTIMADA? 
+                    AccionSeleccionada.getObservacionesDesestimada():"";
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();            
             

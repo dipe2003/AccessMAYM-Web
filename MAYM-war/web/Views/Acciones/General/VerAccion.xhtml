@@ -72,6 +72,21 @@
                     </div>
                 </div>
                 
+                <c:if test="#{verAccion.estado == 'DESESTIMADA'}">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" style="background-color: black; color: white">OBSERVACIONES DE ESTADO DESESTIMADA:</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive-sm">
+                                        <strong>Info!</strong> #{verAccion.observacionesDesestimada}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
+                
                 <!-- Descripcion -->                
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descripcion</div>
@@ -211,7 +226,7 @@
                     </div>
                 </div>
                 
-                <!-- Comprobacion de implementacion -->                
+                <!-- Comprobacion de implementacion y Eficacia-->                
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
