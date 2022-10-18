@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,9 +33,11 @@ public class Fortaleza implements Serializable, Comparable<Fortaleza> {
     private String descripcion = new String();
     
     @ManyToOne
+    @JoinColumn(name = "deteccionFortaleza_id")
     private Deteccion deteccionFortaleza;
     
     @ManyToOne
+    @JoinColumn(name="areaFortaleza_id")
     private Area areaFortaleza;
     
     // Constructores

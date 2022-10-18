@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,9 +36,11 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     private TipoActividad tipoDeActividad;
     
     @ManyToOne
+    @JoinColumn(name="accionActividad_id")
     private Accion accionActividad;
     
     @ManyToOne
+    @JoinColumn(name = "responsableImplementacion_id")
     private Responsable responsableImplementacion;
     
     // Constructores

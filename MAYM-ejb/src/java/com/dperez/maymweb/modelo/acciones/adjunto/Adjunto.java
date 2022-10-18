@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -28,6 +29,7 @@ public class Adjunto implements Serializable{
     private TipoAdjunto tipoDeAdjunto;
     
     @ManyToOne
+    @JoinColumn(name ="accionAdjunto_id")
     private Accion accionAdjunto;
     
     // Constructores

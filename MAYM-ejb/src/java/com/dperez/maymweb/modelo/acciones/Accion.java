@@ -30,6 +30,7 @@ import java.util.Comparator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -61,12 +62,15 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     private List<Producto> productosInvolucrados;
     
     @ManyToOne
+    @JoinColumn(name = "deteccionAccion_id")
     protected Deteccion deteccionAccion;
     
     @ManyToOne
+    @JoinColumn(name="areaAccion_id")
     protected Area areaAccion;
     
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name ="codificacionAccion_id")
     protected Codificacion codificacionAccion;
     
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
