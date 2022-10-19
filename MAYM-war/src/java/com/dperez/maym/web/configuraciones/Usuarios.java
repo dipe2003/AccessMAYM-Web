@@ -146,7 +146,7 @@ public class Usuarios implements Serializable {
         
         ListaUsuarios = new ArrayList<>();
         ListaCompletaUsuarios = fLectura.listarUsuarios(false).stream()
-                .sorted(Comparator.comparing((Usuario u)->u.getNombre()))
+                .sorted(Comparator.comparing((Usuario u)->u.getApellido()))
                 .collect(Collectors.toList());
         
         PermisosUsuario = EnumPermiso.values();

@@ -16,7 +16,7 @@
                 <div class="col-md-12">
                     <div class="container-fluid">            
                         <div class="panel panel-info">
-                            <div class="panel-heading">Filtrar y Ordenar</div>
+                            <div class="panel-heading">Filtrar</div>
                             <div class="panel-body">
                                 <div class="table-responsive-sm">
                                     <table class="table table-hover">                        
@@ -154,6 +154,17 @@
                                                                 </div>
                                                             </div>
                                                         </h:panelGroup>
+                                                    </div>
+                                                </td>
+                                                <td>                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltros()}" 
+                                                                           value="Quitar Todos los Filtros">
+                                                                <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                        drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas" onevent="indicador" />                                                                           
+                                                            </h:commandLink>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class ListarAcciones implements Serializable{
-
+    
     private FacadeLectura fLectura;
     
     private TipoAccion tipoDeAccion;
@@ -292,21 +292,21 @@ public class ListarAcciones implements Serializable{
                     deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
                     codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                 }
-                    
+                
                 case "areas" -> {
                     accionesFiltradas = filtrarPorArea(accionesFiltradas);
                     // actualizar lista de fechas disponibles, detecciones, codificaciones
                     deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
                     codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                 }
-                    
+                
                 case "detecciones" -> {
                     accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
                     // actualizar lista de fechas disponibles, areas, codificaciones
                     areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
                     codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                 }
-                    
+                
                 case "codificaciones" -> {
                     // aplicar filtro de Codificaciones
                     accionesFiltradas = filtrarPorCodificacion(accionesFiltradas);
@@ -314,7 +314,7 @@ public class ListarAcciones implements Serializable{
                     areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
                     deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
                 }
-                    
+                
                 case "estados" -> {
                     accionesFiltradas = filtrarPorEstado(accionesFiltradas);
                     // actualizar lista de fechas disponibles, detecciones, codificaciones y estados
@@ -322,14 +322,14 @@ public class ListarAcciones implements Serializable{
                     deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
                     codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                 }
-                    
+                
                 default -> {
                 }
             }
         }
         // Cargar pagina
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, accionesFiltradas);
-        ListaAcciones.stream().sorted();
+        ListaAcciones.sort(Comparator.reverseOrder());
         CantidadPaginas = Presentacion.calcularCantidadPaginas(accionesFiltradas.size(), MAX_ITEMS);
     }
     //</editor-fold>
@@ -396,7 +396,7 @@ public class ListarAcciones implements Serializable{
         this.strFechaFinal = strFechaFinal;
         this.fechaFinal = cal.getTime();
     }
-
+    
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {this.tipoDeAccion = tipoDeAccion;}
     public void setAccionSeleccionada(Accion accion){this.accionSeleccionada = accion;}
     //</editor-fold>
@@ -423,6 +423,21 @@ public class ListarAcciones implements Serializable{
         verActividades.setAccionSeleccionada(accionSeleccionada);
     }
     
+    public void quitarFiltros(){
+        filtrosAplicados.remove("estados");
+        filtrosAplicados.remove("codificaciones");
+        filtrosAplicados.remove("detecciones");
+        filtrosAplicados.remove("areas");
+        
+        ResetFechasAcciones();
+        ResetListasAreas ();
+        ResetListasDeteccion();
+        ResetListasEstado();
+        ResetListasCodificacion();
+        
+        FiltrarAcciones();
+    }
+    
     //  Inicializacion
     @PostConstruct
     public void init(){
@@ -432,7 +447,7 @@ public class ListarAcciones implements Serializable{
         verActividades = context.getApplication().evaluateExpressionGet(context, "#{modalVerActividades}", ModalVerActividades.class);
         int id = 0;
         tipoDeAccion = TipoAccion.valueOf(request.getParameter("tipo"));
-        try{           
+        try{
             id = Integer.parseInt(request.getParameter("buscarid"));
         }catch(NumberFormatException ex){}
         
@@ -453,18 +468,18 @@ public class ListarAcciones implements Serializable{
                 ListaCompletaAcciones.add(accion);
             }
         }else{
-           switch(tipoDeAccion){
-               case CORRECTIVA -> ListaCompletaAcciones = fLectura.listarAccionesCorrectivas();
-               case PREVENTIVA -> ListaCompletaAcciones = fLectura.listarAccionesPreventivas();
-               case MEJORA -> ListaCompletaAcciones = fLectura.listarAccionesMejoras();
-           }
+            switch(tipoDeAccion){
+                case CORRECTIVA -> ListaCompletaAcciones = fLectura.listarAccionesCorrectivas();
+                case PREVENTIVA -> ListaCompletaAcciones = fLectura.listarAccionesPreventivas();
+                case MEJORA -> ListaCompletaAcciones = fLectura.listarAccionesMejoras();
+            }
         }
         
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
+        ListaCompletaAcciones.sort(Comparator.reverseOrder());
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
-        ListaAcciones.stream().sorted(Comparator.reverseOrder());
         
         // datos para filtros
         ResetFechasAcciones();
@@ -478,4 +493,4 @@ public class ListarAcciones implements Serializable{
         ResetListasCodificacion();
     }
     
- }
+}
