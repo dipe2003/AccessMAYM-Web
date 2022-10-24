@@ -244,6 +244,17 @@ public class SeguimientoAccion implements Serializable {
         }
     }
     
+    public void restarurarAccion() throws IOException{
+        if(fVerif.RestaurarAccion(AccionSeleccionada.getId())== -1){
+            FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_restaurar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo restaurar la accion", "No se pudo restaurar la accion" ));
+            FacesContext.getCurrentInstance().renderResponse();
+        }else{
+            // actualizar la pagina. "Referer" url desde donde se hizo el pedido.
+            String url = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("Referer");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        }
+    }
+    
     
     //  Inicializcion
     @PostConstruct

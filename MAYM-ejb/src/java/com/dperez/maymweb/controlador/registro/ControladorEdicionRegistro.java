@@ -117,6 +117,20 @@ public class ControladorEdicionRegistro {
     }
     
     /**
+     * Setea el estado de la acción como debería estar según sus últimos datos de seguimiento cargados.
+     * Se eliminan las observaciones de desestimada.
+     * @param idAccion
+     * @return 
+     */
+    public int restaurarAccion(int idAccion){
+        Accion accion = repoAccion.find(idAccion);
+        accion.setEstadoDeAccion(Estado.PENDIENTE);
+        accion.setObservacionesDesestimada("");
+        accion.cambiarEstado();
+        return repoAccion.update(accion).getId();
+    }
+    
+    /**
      * Remueve el producto involucrado de la accion seleccionada y actualiza la base de datos.
      * Elimina el producto de la base de datos.
      * @param idAccion

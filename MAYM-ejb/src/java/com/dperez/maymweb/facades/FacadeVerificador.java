@@ -60,5 +60,15 @@ public class FacadeVerificador {
     public int DesestimarAccion(String Observaciones, int IdAccion){
         return cEdicion.desestimarAccion(Observaciones, IdAccion);
     }
+    
+    /**
+     * Setea el etado de la acción al estado original previo a ser desestimada.
+     * Se eliminan las observaciones de desestimada.
+     * @param IdAccion
+     * @return 
+     */
+    public int RestaurarAccion(int IdAccion){
+        return cEdicion.restaurarAccion(IdAccion);
+    }
         
 }

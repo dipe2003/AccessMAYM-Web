@@ -74,9 +74,11 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     protected Codificacion codificacionAccion;
     
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="comprobacionImplementacion_id")
     private Implementacion comprobacionImplementacion;
     
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="comprobacionEficacia_id")
     private Eficacia comprobacionEficacia;
     
     // Constructores

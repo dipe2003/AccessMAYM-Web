@@ -104,13 +104,13 @@ public class SesionUsuario implements Serializable {
     public void ingresar() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String url = context.getExternalContext().getRequestContextPath();
+        //RequestHeaderMap.key("Referer"): contiene la url desde donde se hace el pedido.
+        String url = context.getExternalContext().getRequestHeaderMap().get((String)("Referer"));
         if(facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado),PasswordUsuario)){
             Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
             request.getSession().setAttribute("Usuario", usuario);
             
             this.UsuarioLogueado = usuario;
-            
             this.PasswordUsuario = new String();
             context.getExternalContext().redirect(url);
         }else{

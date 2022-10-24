@@ -38,7 +38,8 @@ public abstract class Comprobacion implements Serializable{
     private String observaciones = new String();
     private TipoComprobacion tipoDeComprobacion;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="accionComprobacion_id")
     private Accion accionComprobacion;
     
     @ManyToOne

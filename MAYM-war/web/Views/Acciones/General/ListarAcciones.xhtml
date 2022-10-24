@@ -238,7 +238,7 @@
                                                         <div class="form-group-sm">
                                                             Sin Definir
                                                         </div>
-                                                    </td>>
+                                                    </td>
                                                 </c:otherwise>
                                             </c:choose>                                                
                                             
@@ -288,9 +288,11 @@
                                                                 <li><h:link value="Editar Datos" outcome="EditarAccion.xhtml?id=#{accion.id}" />
                                                                 </li>
                                                                 <c:if test="#{accion.estadoDeAccion != 'CERRADA'}">
-                                                                    <li>                                                            
-                                                                        <h:link value="Agregar Actividad" outcome="ActividadesAccion.xhtml?id=#{accion.id}&amp;editar=0"/>
-                                                                    </li>                                                             
+                                                                    <c:if test="#{accion.estadoDeAccion != 'DESESTIMADA'}">
+                                                                        <li>                                                            
+                                                                            <h:link value="Agregar Actividad" outcome="ActividadesAccion.xhtml?id=#{accion.id}&amp;editar=0"/>
+                                                                        </li>  
+                                                                    </c:if>
                                                                     <li><h:link value="Realizar Seguimiento" outcome="SeguimientoAccion.xhtml?id=#{accion.id}" />
                                                                     </li>
                                                                 </c:if>

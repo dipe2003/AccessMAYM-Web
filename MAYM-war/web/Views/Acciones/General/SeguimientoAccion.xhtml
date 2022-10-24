@@ -544,7 +544,8 @@
                 </div>
                 <h:panelGroup id="panel_mensajes_desestimar">
                     <div class="form-group-sm">
-                        <h:message for="desestimar_accion" class="msj_error"/>
+                        <h:message for="btn_desestimar_accion" class="msj_error"/>
+                        <h:message for="btn_restaurar_accion" class="msj_error"/>
                     </div>
                 </h:panelGroup>
                 <div class="row">                    
@@ -552,11 +553,24 @@
                         <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" outcome="ListarAcciones.xhtml?tipo=#{seguimientoAccion.tipoDeAccion}" />
                     </div>
                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                        <div class='col-sm-6' >
-                            <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
-                                <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
-                            </h:commandButton>
-                        </div>
+                        <c:choose>
+                            <c:when test="#{seguimientoAccion.accionSeleccionada.estadoDeAccion != 'CERRADA' and 
+                                            seguimientoAccion.accionSeleccionada.estadoDeAccion != 'DESESTIMADA'}">
+                                <div class='col-sm-6' >
+                                    <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                                        <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                                    </h:commandButton>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class='col-sm-6' >
+                                    <h:commandButton id="btn_restaurar_accion" class="btn btn-danger" style="width: 99%" value="Restaurar" onclick="if (! confirm('Seguro que va a restaurar esta accion? Se eliminaran todos los comentarios relacionados.')) return false" >
+                                        <f:ajax event="click" listener="#{seguimientoAccion.restarurarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                                    </h:commandButton>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        
                     </c:if>
                 </div>
             </h:form>
