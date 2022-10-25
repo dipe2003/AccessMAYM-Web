@@ -1,7 +1,7 @@
 # AccessMAYM-Web
 Version simple refactorizada de MAYM-Web
 
-Sistema de Gestión de Acciones Correctivas, Preventivas, Mejoras y Fortalezas basado en el proceso de Medición, Analisis y Mejora (ISO 9001, BRCGS, etc) y Gestión de Oportunidades (ISO 17025).
+Sistema de Gestión de Acciones Correctivas, Preventivas, Mejoras y Fortalezas basado en el proceso de Medición, Analisis y Mejora de varios estándares mundiales (normas ISO 9001, BRCGS, etc) y Gestión de Oportunidades (norma ISO 17025).
 Consta de un módulo backend con manejo de base de datos (mysql) y un módulo frontend web.
 
 # Funciones - "resumen"
