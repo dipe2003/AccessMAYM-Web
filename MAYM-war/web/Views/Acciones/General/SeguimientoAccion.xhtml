@@ -557,9 +557,10 @@
                             <c:when test="#{seguimientoAccion.accionSeleccionada.estadoDeAccion != 'CERRADA' and 
                                             seguimientoAccion.accionSeleccionada.estadoDeAccion != 'DESESTIMADA'}">
                                 <div class='col-sm-6' >
-                                    <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
-                                        <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
-                                    </h:commandButton>
+                                    <h:commandLink class="btn btn-danger" style="width: 99%" p:data-toggle="modal" p:data-target="#modal_desestimar"
+                                                   value="Desestimar">
+                                        <f:ajax delay="100" render="modal_desestimar" />
+                                    </h:commandLink> 
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -569,12 +570,60 @@
                                     </h:commandButton>
                                 </div>
                             </c:otherwise>
-                        </c:choose>
-                        
+                        </c:choose>                        
                     </c:if>
                 </div>
+                
+                <div id="modal_desestimar" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Observaciones</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <!-- Actividades -->
+                                            <div class="panel panel-primary">
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+                                                        <strong><label for="observaciones_desestimada">Observaciones</label></strong>
+                                                        <h:inputTextarea id="observaciones_desestimadas" class="form-control" value="#{seguimientoAccion.observacionesDesestimada}" 
+                                                                     required="true" requiredMessage="Se debe ingresar el motivo" p:placeholder="Observaciones/ Motivos" >
+                                                            <f:ajax execute="@this" event="change" render="panel_modal" />
+                                                        </h:inputTextarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6" >
+                                            <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                                                <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
+                                            </h:commandButton>                                           
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal"  value="Cancelar">
+                                                <f:ajax render="panel_modal panel_mensajes_modal" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+                
             </h:form>
         </div>
+        
+        
     </ui:define>
 </ui:composition>
 

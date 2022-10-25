@@ -113,6 +113,7 @@ public class ControladorEdicionRegistro {
     public int desestimarAccion(String observaciones, int idAccion){
         Accion accion = repoAccion.find(idAccion);
         accion.setEstadoDeAccion(Estado.DESESTIMADA);
+        accion.setObservacionesDesestimada(observaciones);
         return repoAccion.update(accion).getId();
     }
     

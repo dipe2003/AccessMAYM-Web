@@ -256,7 +256,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         return this.actividadesDeAccion.stream()
                 .anyMatch((Actividad a)-> a.getId()==id);
     }
-   
+    
     @Override
     public int compareTo(Accion OtraAccion) {
         return this.getFechaDeteccion().compareTo(OtraAccion.getFechaDeteccion());
@@ -265,23 +265,17 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
      * Chequea las Medidas y cambia el estado de la accion de acuerdo a su implementacion.
      */
     public void cambiarEstado(){
-        if(this.estadoDeAccion!= Estado.DESESTIMADA && this.estadoDeAccion!= Estado.CERRADA){
-            // si no hay actividades el estado es pendiente.
+        if(this.estadoDeAccion != Estado.DESESTIMADA){
             if(this.actividadesDeAccion.isEmpty()){
                 this.estadoDeAccion = Estado.PENDIENTE;
             }else{
-                // chequear implementacion de todas las actividades
-                boolean actividadesImp = estanImplementadasTodasActividades();
-                
-                if(this.comprobacionEficacia != null && actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()!= ResultadoComprobacion.NO_COMPROBADA){
+                if(this.estaComprobadaEficacia()){
                     this.estadoDeAccion = Estado.CERRADA;
                 }else{
-                    if(this.comprobacionEficacia != null  && actividadesImp == true && this.comprobacionEficacia.getResultadoComprobacion()== ResultadoComprobacion.NO_COMPROBADA){
-                        this.estadoDeAccion =  Estado.PROCESO_VER;
+                    if(this.estaComprobadaImplementacion()){
+                        this.estadoDeAccion = Estado.PROCESO_VER;
                     }else{
-                        // chequear si existe al menos una actividad implementada
-                        boolean algunaActividadImp = estaImplementadaAlgunaActividad();
-                        if(actividadesImp != true && algunaActividadImp){
+                        if(estaImplementadaAlgunaActividad()){
                             this.estadoDeAccion = Estado.PROCESO_IMP;
                         }
                     }
@@ -300,7 +294,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
                 .allMatch((Actividad actividad)->actividad.estaImplementada());
     }
     
-   
+    
     /*
     * 	Productos
     */

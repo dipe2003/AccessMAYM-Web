@@ -71,6 +71,8 @@ public class SeguimientoAccion implements Serializable {
     
     private boolean EstaImplementada;
     
+    private String ObservacionesDesestimada;
+    
     //</editor-fold>
     
     //<editor-fold desc="Getters">
@@ -112,6 +114,9 @@ public class SeguimientoAccion implements Serializable {
     
     public List<Usuario> getListaUsuarios(){return this.ListaUsuarios;}
     public int getIdUsuarioSeleccionado(){return this.IdUsuarioSeleccionado;}
+
+    public String getObservacionesDesestimada() {return ObservacionesDesestimada;}    
+    
     //</editor-fold>
     
     //<editor-fold desc="Setters">
@@ -153,6 +158,9 @@ public class SeguimientoAccion implements Serializable {
     
     public void setListaUsuarios(List<Usuario> ListaUsuarios){this.ListaUsuarios = ListaUsuarios;}
     public void setIdUsuarioSeleccionado(int IdUsuarioSeleccionado){this.IdUsuarioSeleccionado = IdUsuarioSeleccionado;}
+
+    public void setObservacionesDesestimada(String ObservacionesDesestimada) {this.ObservacionesDesestimada = ObservacionesDesestimada;}
+        
     //</editor-fold>
     
     //<editor-fold desc="Metodos">
@@ -234,7 +242,7 @@ public class SeguimientoAccion implements Serializable {
      * @throws IOException
      */
     public void desestimarAccion() throws IOException{
-        if(fVerif.DesestimarAccion(ObservacionesImplementacion, AccionSeleccionada.getId())== -1){
+        if(fVerif.DesestimarAccion(ObservacionesDesestimada, AccionSeleccionada.getId())== -1){
             FacesContext.getCurrentInstance().addMessage("form_seguimiento_accion:btn_desestimar_accion", new FacesMessage(SEVERITY_FATAL, "No se pudo desestimar la accion", "No se pudo desestimar la accion" ));
             FacesContext.getCurrentInstance().renderResponse();
         }else{
