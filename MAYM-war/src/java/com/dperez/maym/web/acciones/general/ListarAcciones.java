@@ -70,7 +70,7 @@ public class ListarAcciones implements Serializable{
     //<editor-fold desc="Filtros">
     @Inject
     private DatosFiltros filtros;
-    private List<String> filtrosAplicados = new ArrayList<>();
+    private List<String> filtrosAplicados;
     
     // Filtros Fecha
     private Date fechaInicial;
@@ -93,6 +93,9 @@ public class ListarAcciones implements Serializable{
     // Filtros Codificaciones
     private Map<String, Codificacion> codificacionesEnRegistros = new HashMap<>();
     private String[] codificacionesSeleccionadas;
+    
+    // Filtro texto
+    private String textoBusqueda;
     
     //**********************************************************************
     // Metodos de filtro de Fechas
@@ -273,6 +276,30 @@ public class ListarAcciones implements Serializable{
         FiltrarAcciones();
     }
     
+    //**********************************************************************
+    // Metodos de filtro de Busqueda
+    //**********************************************************************
+    
+    private List<Accion> filtrarTexto(List<Accion> accionesAFiltrar){
+        return filtros.FiltrarAccionesPorTexto(accionesAFiltrar, textoBusqueda);
+    }
+    
+    public void resetTexto(){
+         textoBusqueda = "";
+    }
+    
+    public void quitarFiltroTexto(){
+        filtrosAplicados.remove("busqueda");
+        FiltrarAcciones();
+    }
+    
+    public void filtrarTexto(){
+        if(!filtrosAplicados.contains("busqueda")){
+            filtrosAplicados.add("busqueda");
+        }
+        FiltrarAcciones();
+    }
+    
     /**
      * Aplica los filtros uno sobre otro dependiendo de los que ya se encuentren seleccionados y el orden en que fueron seleccionados.
      * La variable FiltrosAplicados contienen los filtros seleccionados.
@@ -323,6 +350,14 @@ public class ListarAcciones implements Serializable{
                     codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
                 }
                 
+                case "busqueda" ->{
+                    // aplicar busqueda de texto
+                    accionesFiltradas = filtrarTexto(accionesFiltradas);
+                    areasEnRegistros = filtros.ExtraerAreas((List<Accion>)(List<?>)accionesFiltradas);
+                    deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>)(List<?>)accionesFiltradas);
+                    codificacionesEnRegistros = filtros.ExtraerCodificaciones((List<Accion>)(List<?>) accionesFiltradas);
+                }
+                
                 default -> {
                 }
             }
@@ -364,6 +399,9 @@ public class ListarAcciones implements Serializable{
     }
     public TipoAccion getTipoDeAccion() {return tipoDeAccion;}
     public Accion getAccionSeleccionada(){return this.accionSeleccionada;}
+    
+    public String getTextoBusqueda(){return this.textoBusqueda;} 
+    
     //</editor-fold>
     
     //<editor-fold desc="Setters">
@@ -399,6 +437,9 @@ public class ListarAcciones implements Serializable{
     
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {this.tipoDeAccion = tipoDeAccion;}
     public void setAccionSeleccionada(Accion accion){this.accionSeleccionada = accion;}
+    
+    public void setTextoBusqueda(String textoBusqueda) {this.textoBusqueda = textoBusqueda;}
+    
     //</editor-fold>
     
     //**********************************************************************
@@ -428,12 +469,14 @@ public class ListarAcciones implements Serializable{
         filtrosAplicados.remove("codificaciones");
         filtrosAplicados.remove("detecciones");
         filtrosAplicados.remove("areas");
+        filtrosAplicados.remove("busqueda");
         
         ResetFechasAcciones();
         ResetListasAreas ();
         ResetListasDeteccion();
         ResetListasEstado();
         ResetListasCodificacion();
+        resetTexto();
         
         FiltrarAcciones();
     }
@@ -441,6 +484,7 @@ public class ListarAcciones implements Serializable{
     //  Inicializacion
     @PostConstruct
     public void init(){
+        filtrosAplicados = new ArrayList<>();
         fLectura = new FacadeLectura();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();

@@ -215,4 +215,21 @@ public class DatosFiltros implements Serializable {
                 .sorted()
                 .collect(Collectors.toList());
     }
+    
+        //**********************************************************************
+    // Metodos de filtro de Texto
+    //**********************************************************************
+    
+    /**
+     * Devuelve una lista de acciones que contengan el mismo texto
+     * @param acciones
+     * @param texto
+     * @return
+     */
+    public List<Accion> FiltrarAccionesPorTexto(List<Accion> acciones, String texto){
+        return acciones.stream()
+                .filter((accion) -> (accion.getDescripcion().toLowerCase().contains(texto.toLowerCase())))
+                .sorted()
+                .collect(Collectors.toList());
+    }
 }

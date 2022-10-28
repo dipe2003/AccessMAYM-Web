@@ -28,33 +28,29 @@
                                                             <tr>
                                                                 <td>
                                                                     Desde:
-                                                                </td>                                                                
-                                                            </tr>
-                                                            <tr>
+                                                                </td>    
                                                                 <td>  
                                                                     <h:panelGroup id="drop-filtro-fecha-inicial">
                                                                         <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarAcciones.strFechaInicial}" >
                                                                             <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
-                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion 
+                                                                                    drop-filtro-codificacion drop-filtro-estado "/>
                                                                         </h:inputText>
                                                                     </h:panelGroup>
-                                                                </td>
-                                                            </tr>                                                            
-                                                            <tr>
+                                                                </td>                                                                
                                                                 <td>
                                                                     Hasta:
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td>
                                                                     <h:panelGroup id="drop-filtro-fecha-final">
                                                                         <h:inputText id="fecha_final" class="form-control calendario" value="#{listarAcciones.strFechaFinal}" >
                                                                             <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
-                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                                    render="form_tabla_acciones drop-filtro-areas drop-filtro-deteccion 
+                                                                                    drop-filtro-codificacion drop-filtro-estado "/>
                                                                         </h:inputText>
                                                                     </h:panelGroup>
                                                                 </td>
-                                                            </tr>
+                                                            </tr>  
                                                         </tbody>
                                                     </table>                                                    
                                                 </td>
@@ -68,14 +64,17 @@
                                                                 <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
                                                                     <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
-                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                            drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado "/>
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
-                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial 
+                                                                                drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion 
+                                                                                drop-filtro-codificacion drop-filtro-estado "  onevent="indicador" />                                                                           
                                                                     </h:commandLink>
                                                                 </div>
                                                             </div>
@@ -92,14 +91,17 @@
                                                                 <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
                                                                     <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
-                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                            drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
-                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial 
+                                                                                drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion 
+                                                                                drop-filtro-codificacion drop-filtro-estado "  onevent="indicador" />                                                                           
                                                                     </h:commandLink>
                                                                 </div>
                                                             </div>
@@ -116,14 +118,18 @@
                                                                 <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
                                                                     <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
-                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                            drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado 
+                                                                            "/>
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
-                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"  onevent="indicador" />                                                                           
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial 
+                                                                                drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion 
+                                                                                drop-filtro-codificacion drop-filtro-estado "  onevent="indicador" />                                                                           
                                                                     </h:commandLink>
                                                                 </div>
                                                             </div>
@@ -142,14 +148,18 @@
                                                                 <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
                                                                     <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
                                                                     <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorEstado(event)}" 
-                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado"/>
+                                                                            render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                            drop-filtro-areas drop-filtro-deteccion drop-filtro-codificacion drop-filtro-estado
+                                                                            "/>
                                                                 </c:forEach>
                                                             </h:selectManyListbox>
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
-                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas"  onevent="indicador" />                                                                           
+                                                                        <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial 
+                                                                                drop-filtro-fecha-final drop-filtro-estado drop-filtro-deteccion 
+                                                                                drop-filtro-codificacion drop-filtro-areas"  onevent="indicador" />                                                                           
                                                                     </h:commandLink>
                                                                 </div>
                                                             </div>
@@ -162,7 +172,27 @@
                                                             <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltros()}" 
                                                                            value="Quitar Todos los Filtros">
                                                                 <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
-                                                                        drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas" onevent="indicador" />                                                                           
+                                                                        drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas 
+                                                                        panel_lista_filtros_aplicados" onevent="indicador" />                                                                           
+                                                            </h:commandLink>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h:inputText id="texto_busqueda" class="form-control" value="#{listarAcciones.textoBusqueda}" >
+                                                                <f:ajax execute="@this" event="valueChange" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.filtrarTexto()}" 
+                                                                           value="Buscar Texto en descripcion">
+                                                                <f:ajax delay="10" render="form_tabla_acciones drop-filtro-fecha-inicial drop-filtro-fecha-final 
+                                                                        drop-filtro-estado drop-filtro-deteccion drop-filtro-codificacion drop-filtro-areas 
+                                                                        panel_lista_filtros_aplicados" onevent="indicador" />                                                                           
                                                             </h:commandLink>
                                                         </div>
                                                     </div>
