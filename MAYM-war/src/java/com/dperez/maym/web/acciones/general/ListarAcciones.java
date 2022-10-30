@@ -515,12 +515,7 @@ public class ListarAcciones implements Serializable{
         
         // Paginacion
         PaginaActual = 1;
-        try{
-            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
-        }catch(NumberFormatException ex){
-            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
-        }
-        
+                
         // llenar la lista de acciones dependiendo si se esta filtrando por Id
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = new ArrayList<>();
