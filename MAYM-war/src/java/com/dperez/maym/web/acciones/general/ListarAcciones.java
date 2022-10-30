@@ -285,7 +285,7 @@ public class ListarAcciones implements Serializable{
     }
     
     public void resetTexto(){
-         textoBusqueda = "";
+        textoBusqueda = "";
     }
     
     public void quitarFiltroTexto(){
@@ -363,9 +363,7 @@ public class ListarAcciones implements Serializable{
             }
         }
         // Cargar pagina
-        ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, accionesFiltradas);
-        ListaAcciones.sort(Comparator.reverseOrder());
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(accionesFiltradas.size(), MAX_ITEMS);
+        cargarPagina(accionesFiltradas);
     }
     //</editor-fold>
     
@@ -400,7 +398,11 @@ public class ListarAcciones implements Serializable{
     public TipoAccion getTipoDeAccion() {return tipoDeAccion;}
     public Accion getAccionSeleccionada(){return this.accionSeleccionada;}
     
-    public String getTextoBusqueda(){return this.textoBusqueda;} 
+    public String getTextoBusqueda(){return this.textoBusqueda;}
+    
+    public List<String> getFiltrosAplicados() {
+        return filtrosAplicados;
+    }
     
     //</editor-fold>
     
@@ -439,6 +441,11 @@ public class ListarAcciones implements Serializable{
     public void setAccionSeleccionada(Accion accion){this.accionSeleccionada = accion;}
     
     public void setTextoBusqueda(String textoBusqueda) {this.textoBusqueda = textoBusqueda;}
+    
+    public void setFiltrosAplicados(List<String> filtrosAplicados) {
+        this.filtrosAplicados = filtrosAplicados;
+    }
+    
     
     //</editor-fold>
     
@@ -481,6 +488,17 @@ public class ListarAcciones implements Serializable{
         FiltrarAcciones();
     }
     
+    public void quitarFiltro(String filtro){
+        switch(filtro){
+            case "estados"->this.quitarFiltroPorEstado();
+            case "codificaciones"->this.quitarFiltroPorCodificacion();
+            case "detecciones"->this.quitarFiltroPorDeteccion();
+            case "areas"->this.quitarFiltroPorArea();
+            case "busqueda"->this.quitarFiltroTexto();
+            default->this.quitarFiltros();
+        }
+    }
+    
     //  Inicializacion
     @PostConstruct
     public void init(){
@@ -510,31 +528,39 @@ public class ListarAcciones implements Serializable{
             Accion accion = fLectura.GetAccion(id);
             if (accion != null){
                 ListaCompletaAcciones.add(accion);
+                cambiarPagina(true, PaginaActual);
             }
+        }else{
+            cambiarPagina(false, PaginaActual);
+        }
+    }
+    
+    
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            FiltrarAcciones();
         }else{
             switch(tipoDeAccion){
                 case CORRECTIVA -> ListaCompletaAcciones = fLectura.listarAccionesCorrectivas();
                 case PREVENTIVA -> ListaCompletaAcciones = fLectura.listarAccionesPreventivas();
                 case MEJORA -> ListaCompletaAcciones = fLectura.listarAccionesMejoras();
             }
+            ListaCompletaAcciones.sort(Comparator.reverseOrder());
+            cargarPagina(ListaCompletaAcciones);
+            // datos para filtros
+            ResetFechasAcciones();
+            ResetListasAreas ();
+            ResetListasDeteccion();
+            ResetListasEstado();
+            ResetListasCodificacion();
         }
-        
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAcciones.size(), MAX_ITEMS);
-        
-        // llenar la lista con todas las areas registradas.
-        ListaCompletaAcciones.sort(Comparator.reverseOrder());
-        ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAcciones);
-        
-        // datos para filtros
-        ResetFechasAcciones();
-        
-        ResetListasAreas ();
-        
-        ResetListasDeteccion();
-        
-        ResetListasEstado();
-        
-        ResetListasCodificacion();
+    }
+    
+    private void cargarPagina(List<Accion> acciones){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(acciones.size(), MAX_ITEMS);
+        ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, acciones);
+        ListaAcciones.sort(Comparator.reverseOrder());        
     }
     
 }
