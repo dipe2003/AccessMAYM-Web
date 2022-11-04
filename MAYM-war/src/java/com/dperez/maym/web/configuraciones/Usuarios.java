@@ -373,7 +373,7 @@ public class Usuarios implements Serializable {
     
     public void resetFiltro(){
         textoBusqueda = "";
-        ListaUsuarios = ListaCompletaUsuarios;
+        cargarPagina(ListaCompletaUsuarios);
     }
     //</editor-fold>
     
