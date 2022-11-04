@@ -175,7 +175,7 @@
                                                     </tr>                                                
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach items="#{productoInvolucrado.listaProductosAfectados}" var="producto">
+                                                    <c:forEach items="#{editarAccion.accionSeleccionada.productosInvolucrados}" var="producto">
                                                         <tr>
                                                             <td>#{producto.nombre}</td>
                                                             <td>#{producto.datos}</td>
@@ -185,7 +185,7 @@
                                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                                         <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
                                                                     </h:commandLink>
-                                                                    <h:commandLink class="btn btn-danger" action="" 
+                                                                    <h:commandLink class="btn btn-danger"
                                                                                    onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
                                                                         <span class="glyphicon glyphicon-trash"> </span>
                                                                         <f:ajax render="panel_mensajes"/>

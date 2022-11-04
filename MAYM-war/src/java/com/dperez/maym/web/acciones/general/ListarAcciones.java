@@ -515,7 +515,7 @@ public class ListarAcciones implements Serializable{
         
         // Paginacion
         PaginaActual = 1;
-                
+        
         // llenar la lista de acciones dependiendo si se esta filtrando por Id
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = new ArrayList<>();
@@ -543,7 +543,7 @@ public class ListarAcciones implements Serializable{
             }
             ListaCompletaAcciones.sort(Comparator.reverseOrder());
             cargarPagina(ListaCompletaAcciones);
-            // datos para filtros
+            // reset datos filtros
             ResetFechasAcciones();
             ResetListasAreas ();
             ResetListasDeteccion();
@@ -554,8 +554,11 @@ public class ListarAcciones implements Serializable{
     
     private void cargarPagina(List<Accion> acciones){
         CantidadPaginas = Presentacion.calcularCantidadPaginas(acciones.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
         ListaAcciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, acciones);
-        ListaAcciones.sort(Comparator.reverseOrder());        
+        ListaAcciones.sort(Comparator.reverseOrder());
     }
     
 }

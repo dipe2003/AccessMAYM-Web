@@ -185,7 +185,7 @@
                                                                                 <f:ajax delay="10" render="form_tabla_acciones panel_filtros" onevent="indicador"/>
                                                                             </h:commandLink>                                                          
                                                                             <c:if test="#{not conteo.last}">
-                                                                                >
+                                                                                &#62;
                                                                             </c:if> 
                                                                         </c:forEach>
                                                                     </c:otherwise>
@@ -333,7 +333,9 @@
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <h:link class="btn btn-primary" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}"><span class="glyphicon glyphicon-eye-open"></span></h:link>
+                                                        <h:link class="btn btn-primary" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </h:link>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
@@ -342,33 +344,44 @@
                                 </tbody>
                             </table>  
                         </div>
-                        <c:if test="#{listarAcciones.cantidadPaginas > 1}">
+                        
                             <div class="container-fluid text-center" style="padding: 1%">
-                                <ul class="pagination">                                    
-                                    <c:forEach begin="1" end="#{listarAcciones.cantidadPaginas}" step="1" varStatus="numero" >
-                                        <c:choose>
-                                            <c:when test="#{listarAcciones.paginaActual == numero.count}" >
-                                                <li class="active"><a>#{listarAcciones.paginaActual}</a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li>
-                                                    <h:commandLink action="#{listarAcciones.cambiarPagina(true, numero.count)}" value="#{numero.count}">
-                                                        <f:ajax delay="10" onevent="indicador"/>
-                                                         <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
-                                                    </h:commandLink>                                                    
-                                                </li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>                                    
+                                <ul class="pagination"> 
+                                    <c:choose>
+                                        <c:when test="#{listarAcciones.paginaActual !=1}" >
+                                            <li>
+                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
+                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                                </h:commandLink>    
+                                            </li>                                           
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="disabled"><a>&#60;</a></li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
+                                    <c:choose>
+                                        <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
+                                            <li>
+                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
+                                                <f:ajax delay="10" onevent="indicador"/>
+                                                <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                            </h:commandLink>    
+                                            </li>
+                                            
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="disabled"><a>&#62;</a></li>
+                                        </c:otherwise>
+                                    </c:choose>                                    
                                 </ul>                
-                            </div> 
-                        </c:if>
+                            </div>
                     </c:otherwise>
                 </c:choose>
                 
             </h:form>
             <h:form id="form_accion_modal">                
-                <!-- Panel de Producto Involucrado -->
+                <!-- Panel de actividades -->
                 <ui:include src="ModalVerActividades.xhtml"/>                
             </h:form>
         </div>

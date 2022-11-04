@@ -67,13 +67,15 @@ public class Usuarios implements Serializable {
     private List<Area> ListaAreas;
     private int AreaSeleccionada;
     
+    private String textoBusqueda;
+    
     // Pagination
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
     private List<Usuario> ListaCompletaUsuarios;
     
-    //  Getters
+    //<editor-fold desc="Getters">
     public boolean isContieneRegistros() {return ContieneRegistros;}
     public String getCorreoElectronico() {return CorreoElectronico;}
     public int getNumeroNuevoUsuario() {return NumeroNuevoUsuario;}
@@ -94,12 +96,15 @@ public class Usuarios implements Serializable {
     public List<Area> getListaAreas() {return ListaAreas;}
     public int getAreaSeleccionada() {return AreaSeleccionada;}
     
+    public String getTextoBusqueda(){return this.textoBusqueda;}
+    //</editor-fold>
+    
     // Paginacion
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
     
-    //  Setters
+    //<editor-fold desc="Setters">
     public void setContieneRegistros(boolean ContieneRegistros) {this.ContieneRegistros = ContieneRegistros;}
     public void setNumeroNuevoUsuario(int NumeroNuevoUsuario) {this.NumeroNuevoUsuario = NumeroNuevoUsuario;}
     public void setNombre(String Nombre) {this.Nombre = Nombre;}
@@ -120,7 +125,10 @@ public class Usuarios implements Serializable {
     public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
     public void setAreaSeleccionada(int AreaSeleccionada) {this.AreaSeleccionada = AreaSeleccionada;}
     
-    //  Metodos
+    public void setTextoBusqueda(String textoBusqueda){this.textoBusqueda = textoBusqueda;}
+    //</editor-fold>
+    
+    //<editor-fold desc="Metodos">
     
     /**
      * Carga de propiedades al inicio
@@ -150,13 +158,10 @@ public class Usuarios implements Serializable {
                 .collect(Collectors.toList());
         
         PermisosUsuario = EnumPermiso.values();
+        
+        cambiarPagina(false, PaginaActual);
+        
         // llenar la lista con todas las areas registradas.
-        
-        // Paginas
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaUsuarios.size(), MAX_ITEMS);
-        ListaUsuarios = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaUsuarios);
-        ListaUsuarios.stream().sorted();
-        
         //Areas
         ListaAreas =  new ArrayList<>();
         // llenar la lista de areas con todas las areas registradas.
@@ -337,8 +342,42 @@ public class Usuarios implements Serializable {
             ContieneRegistros = usrSeleccionado.tieneComprobacionAsignada();
         }
     }
+    
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            filtrarTexto();
+        }else{
+            ListaCompletaUsuarios.sort(Comparator.naturalOrder());
+            cargarPagina(ListaCompletaUsuarios);
+            textoBusqueda ="";
+        }
+    }
+    
+    private void cargarPagina(List<Usuario> usuarios){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(usuarios.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
+        ListaUsuarios = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, usuarios);
+        ListaUsuarios.sort(Comparator.naturalOrder());
+    }
+    
+    public void filtrarTexto(){
+        List<Usuario> tmpUsuarios = new ArrayList<>();
+        tmpUsuarios = ListaCompletaUsuarios.stream()
+                .filter((Usuario u)->u.getNombreCompleto().toLowerCase().contains(textoBusqueda.toLowerCase()))
+                .toList();
+        cargarPagina(tmpUsuarios);
+    }
+    
+    public void resetFiltro(){
+        textoBusqueda = "";
+        ListaUsuarios = ListaCompletaUsuarios;
+    }
     //</editor-fold>
-    //<editor-fold desc="Panel Responsabilidades">
+    
+//<editor-fold desc="Panel Responsabilidades">
     
     private Usuario usuarioSeleccionado;
     private List<Responsabilidad> listaResponsabilidades;
@@ -468,10 +507,10 @@ public class Usuarios implements Serializable {
                         if(responsable.tieneActividadesAsignadas()|| responsable.tieneActividadesAsignadas()){
                             // dar de baja
                             fAdmin.darBajaResponsable(responsabilidad.getId(),
-                                    responsable.getId());                            
+                                    responsable.getId());
                         }else{
                             // eliminar
-                            fAdmin.eliminarResponsable(responsable.getId());                            
+                            fAdmin.eliminarResponsable(responsable.getId());
                         }
                     });
             FacesContext.getCurrentInstance().addMessage("form_accion_modal_responsabilidades:btn_guardar_responsabilidades",
