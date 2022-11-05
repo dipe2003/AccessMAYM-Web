@@ -9,6 +9,16 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
+        <div class="container-fluid">
+            <div class="panel panel-info">
+                <div class="panel-heading">Usuarios</div>
+                <div class="panel-body">
+                    Aqui se listan todos los Usuarios registrados.
+                    Pueden crearse, modificarse y elminarse cuando no esten en uso.
+                </div>                  
+            </div>                 
+        </div>
+        
         <h:form id="listado-usuarios-filtros">
             <!-- FILTROS -->
             <div class="container-fluid">            
@@ -42,16 +52,6 @@
             </div>
         </h:form>
         
-        
-        <div class="container-fluid">
-            <div class="panel panel-info">
-                <div class="panel-heading">Usuarios</div>
-                <div class="panel-body">
-                    Aqui se listan todos los Usuarios registrados.
-                    Pueden crearse, modificarse y elminarse cuando no esten en uso.
-                </div>                  
-            </div>                 
-        </div>
         <h:form id="form_usuarios" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>

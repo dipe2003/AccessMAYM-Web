@@ -41,17 +41,22 @@ public class Areas implements Serializable {
     
     private List<Area> ListaAreas;
     
-    // Pagination
+    private String textoBusqueda;
+    
+    //<editor-fold desc="Pagination">
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
     private List<Area> ListaCompletaAreas;
+    //</editor-fold>
     
-    //  Getters
+    //<editor-fold desc="Getters">
     
     public String getNombreArea() {return NombreArea;}
     public String getCorreoArea() {return CorreoArea;}
     public List<Area> getListaAreas() {return ListaAreas;}
+
+    public String getTextoBusqueda() {return textoBusqueda;}    
     
     public boolean isAplicaEmpresa() {return AplicaEmpresa;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
@@ -59,17 +64,21 @@ public class Areas implements Serializable {
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
+    //</editor-fold>
     
-    //  Setters
+    //<editor-fold desc="Setters">
     
     public void setNombreArea(String NombreArea) {this.NombreArea = NombreArea;}
     public void setCorreoArea(String CorreoArea) {this.CorreoArea = CorreoArea;}
     public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
+
+    public void setTextoBusqueda(String textoBusqueda) {this.textoBusqueda = textoBusqueda;}    
     
     public void setAplicaEmpresa(boolean AplicaEmpresa) {this.AplicaEmpresa = AplicaEmpresa;}
     public void setContieneAcciones(boolean ContieneAcciones) {this.ContieneAcciones = ContieneAcciones;}
+    //</editor-fold>
     
-    //  Metodos
+    //<editor-fold desc="Metodos">
     
     /**
      * Carga de propiedades al inicio
@@ -94,11 +103,7 @@ public class Areas implements Serializable {
                 .collect(Collectors.toList());
         
         // Paginas
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaAreas.size(), MAX_ITEMS);
-        
-        // llenar la lista con todas las areas registradas.
-        ListaAreas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaAreas);
-        ListaAreas.stream().sorted();
+        cambiarPagina(false, PaginaActual);
     }
     
     /**
@@ -187,4 +192,40 @@ public class Areas implements Serializable {
             this.IdAreaSeleccionada = IdArea;
         }
     }
+    //</editor-fold>
+    
+    //<editor-fold desc="Filtros">
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            filtrarTexto();
+        }else{
+            ListaCompletaAreas.sort(Comparator.naturalOrder());
+            cargarPagina(ListaCompletaAreas);
+            textoBusqueda ="";
+        }
+    }
+    
+    private void cargarPagina(List<Area> areas){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(areas.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
+        ListaAreas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, areas);
+        ListaAreas.sort(Comparator.naturalOrder());
+    }
+    
+    public void filtrarTexto(){
+        List<Area> tmpAreas = new ArrayList<>();
+        tmpAreas = ListaCompletaAreas.stream()
+                .filter((Area u)->u.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase()))
+                .toList();
+        cargarPagina(tmpAreas);
+    }
+    
+    public void resetFiltro(){
+        textoBusqueda = "";
+        cargarPagina(ListaCompletaAreas);
+    }
+    //</editor-fold>
 }
