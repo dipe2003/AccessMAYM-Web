@@ -15,7 +15,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,7 +72,7 @@ public class ListarFortalezas implements Serializable{
         CantidadPaginas =  Presentacion.calcularCantidadPaginas(ListaCompletaFortalezas.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
-       ListaFortalezas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaFortalezas);
+       ListaFortalezas = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaFortalezas);
        ListaFortalezas.stream().sorted();
     }
  

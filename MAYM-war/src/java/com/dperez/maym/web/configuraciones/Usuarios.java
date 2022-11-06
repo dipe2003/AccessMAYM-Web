@@ -5,6 +5,8 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.acciones.filtros.ContenedorFiltrable;
+import com.dperez.maym.web.acciones.filtros.DatosFiltros;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.modelo.area.Area;
@@ -43,7 +45,7 @@ public class Usuarios implements Serializable {
     
     @Inject
     private SesionUsuario sesion;
-    
+      
     private int IdUsuarioSeleccionado;
     
     private boolean ContieneRegistros;
@@ -60,7 +62,7 @@ public class Usuarios implements Serializable {
     private EnumPermiso[] PermisosUsuario;
     private EnumPermiso PermisoSeleccionado;
     
-    private List<Usuario> ListaUsuarios;
+    private List<ContenedorFiltrable<Usuario>> listaUsuariosFiltrable;
     
     private boolean CambiarPassword;
     
@@ -73,7 +75,7 @@ public class Usuarios implements Serializable {
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
-    private List<Usuario> ListaCompletaUsuarios;
+    private List<ContenedorFiltrable<Usuario>> listaCompletaUsuariosFiltrable;
     
     //<editor-fold desc="Getters">
     public boolean isContieneRegistros() {return ContieneRegistros;}
@@ -89,7 +91,7 @@ public class Usuarios implements Serializable {
     public EnumPermiso getPermisoSeleccionado(){return this.PermisoSeleccionado;}
     public EnumPermiso[] getPermisosUsuario(){return this.PermisosUsuario;}
     
-    public List<Usuario> getListaUsuarios() {return this.ListaUsuarios;}
+    public List<ContenedorFiltrable<Usuario>> getListaUsuariosFiltrable() {return listaUsuariosFiltrable;}    
     
     public boolean isCambiarPassword() {return CambiarPassword;}
     
@@ -117,8 +119,10 @@ public class Usuarios implements Serializable {
     
     public void setPermisoSeleccionado(EnumPermiso PermisoSeleccionado){this.PermisoSeleccionado = PermisoSeleccionado;}
     public void setPermisosUsuario(EnumPermiso[] PermisosUsuario){this.PermisosUsuario = PermisosUsuario;}
-    
-    public void setListaUsuarios(List<Usuario> ListaUsuarios) {this.ListaUsuarios = ListaUsuarios;}
+
+    public void setListaUsuariosFiltrable(List<ContenedorFiltrable<Usuario>> listaUsuariosFiltrable) {
+        this.listaUsuariosFiltrable = listaUsuariosFiltrable;
+    }    
     
     public void setCambiarPassword(boolean CambiarPassword) {this.CambiarPassword = CambiarPassword;}
     
@@ -138,24 +142,19 @@ public class Usuarios implements Serializable {
         fLectura = new FacadeLectura();
         fAdmin = new FacadeAdministrador();
         fMain = new FacadeMain();
-        
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        
+                
         this.PermisoSeleccionado  = EnumPermiso.DATOS;
         
         // Paginacion
         PaginaActual = 1;
-        try{
-            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
-        }catch(NumberFormatException ex){
-            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
-        }
         
-        ListaUsuarios = new ArrayList<>();
-        ListaCompletaUsuarios = fLectura.listarUsuarios(false).stream()
-                .sorted(Comparator.comparing((Usuario u)->u.getApellido()))
-                .collect(Collectors.toList());
+        listaUsuariosFiltrable = new ArrayList<>();
+        listaCompletaUsuariosFiltrable = new ArrayList<>();
+        fLectura.listarUsuarios(false).stream()
+                 .forEach((Usuario u)->{
+                     listaCompletaUsuariosFiltrable.add(new ContenedorFiltrable<>(u.getNombreCompleto(), u));
+                 });
+        listaCompletaUsuariosFiltrable.stream().sorted();
         
         PermisosUsuario = EnumPermiso.values();
         
@@ -297,8 +296,8 @@ public class Usuarios implements Serializable {
     }
     
     private boolean ComprobarContieneNumeroUsuario(){
-        return ListaUsuarios.stream()
-                .anyMatch(usuario->usuario.getId() == NumeroNuevoUsuario);
+        return listaUsuariosFiltrable.stream()
+                .anyMatch((ContenedorFiltrable<Usuario> c)->c.getContenido().getId() == NumeroNuevoUsuario);
     }
     
     /**
@@ -319,10 +318,11 @@ public class Usuarios implements Serializable {
             this.PasswordConfirmacion= new String();
             this.AreaSeleccionada = -1;
         }else{
-            Usuario usrSeleccionado = ListaUsuarios.stream()
-                    .filter(usuario->usuario.getId() == IdUsuario)
+
+            Usuario usrSeleccionado = listaUsuariosFiltrable.stream()
+                    .filter((ContenedorFiltrable<Usuario> c)->c.getContenido().getId() == IdUsuario)
                     .findFirst()
-                    .orElse(null);
+                    .orElse(null).getContenido();
             
             this.Nombre  = usrSeleccionado.getNombre();
             this.Apellido  = usrSeleccionado.getApellido();
@@ -348,32 +348,39 @@ public class Usuarios implements Serializable {
             PaginaActual = numero;
             filtrarTexto();
         }else{
-            ListaCompletaUsuarios.sort(Comparator.naturalOrder());
-            cargarPagina(ListaCompletaUsuarios);
+            listaCompletaUsuariosFiltrable = listaCompletaUsuariosFiltrable.stream()
+                     .sorted((o1, o2) -> {
+                         return o1.getContenido().compareTo(o2.getContenido());
+                     })
+                    .toList();
+            
+            cargarPagina(listaCompletaUsuariosFiltrable);
             textoBusqueda ="";
         }
     }
     
-    private void cargarPagina(List<Usuario> usuarios){
+    private void cargarPagina(List<ContenedorFiltrable<Usuario>> usuarios){
         CantidadPaginas = Presentacion.calcularCantidadPaginas(usuarios.size(), MAX_ITEMS);
         // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
         // en esa página no hayan datos para mostrar.
         if(PaginaActual>CantidadPaginas)PaginaActual = 1;
-        ListaUsuarios = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, usuarios);
-        ListaUsuarios.sort(Comparator.naturalOrder());
+        listaUsuariosFiltrable = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, usuarios);
+        listaUsuariosFiltrable = listaUsuariosFiltrable.stream()
+                     .sorted((o1, o2) -> {
+                         return o1.getContenido().compareTo(o2.getContenido());
+                     })
+                .toList();
     }
     
     public void filtrarTexto(){
-        List<Usuario> tmpUsuarios = new ArrayList<>();
-        tmpUsuarios = ListaCompletaUsuarios.stream()
-                .filter((Usuario u)->u.getNombreCompleto().toLowerCase().contains(textoBusqueda.toLowerCase()))
-                .toList();
+        List<ContenedorFiltrable<Usuario>> tmpUsuarios;
+        tmpUsuarios = DatosFiltros.FiltrarPorTexto(listaCompletaUsuariosFiltrable, textoBusqueda);
         cargarPagina(tmpUsuarios);
     }
     
     public void resetFiltro(){
         textoBusqueda = "";
-        cargarPagina(ListaCompletaUsuarios);
+        cargarPagina(listaCompletaUsuariosFiltrable);
     }
     //</editor-fold>
     

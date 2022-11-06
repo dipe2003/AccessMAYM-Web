@@ -5,6 +5,8 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.acciones.filtros.ContenedorFiltrable;
+import com.dperez.maym.web.acciones.filtros.DatosFiltros;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -12,22 +14,19 @@ import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
 public class Responsabilidades implements Serializable {
-
-    private FacadeAdministrador fAdmin;   
+    
+    private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
     
     private Responsabilidad areaSeleccionada;
@@ -35,28 +34,34 @@ public class Responsabilidades implements Serializable {
     private String nombre;
     private int idResponsabilidadSeleccionada;
     
-    private List<Responsabilidad> listaResponsabilidades;
+    private List<ContenedorFiltrable<Responsabilidad>> listaResponsabilidades;
+    
+    private String textoBusqueda;
     
     // Pagination
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
-    private List<Responsabilidad> listaCompletaResponsabilidades;
+    private List<ContenedorFiltrable<Responsabilidad>> listaCompletaResponsabilidades;
     
-    //  Getters
+    //<editor-fold desc="Getters">
     
     public String getNombre() {return nombre;}
-    public List<Responsabilidad> getListaResponsabilidades() {return listaResponsabilidades;}
+    public List<ContenedorFiltrable<Responsabilidad>> getListaResponsabilidades() {return listaResponsabilidades;}
+    public String getTextoBusqueda(){return this.textoBusqueda;}
     
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
+    //</editor-fold>
     
-    //  Setters
+    //<editor-fold desc="Setters">
     
     public void setNombre(String nombre) {this.nombre = nombre;}
-    public void setListaResponsabilidades(List<Responsabilidad> listaResponsabilidades) {this.listaResponsabilidades = listaResponsabilidades;}
-
+    public void setListaResponsabilidades(List<ContenedorFiltrable<Responsabilidad>> listaResponsabilidades) {this.listaResponsabilidades = listaResponsabilidades;}
+    public void setTextoBusqueda(String textoBusqueda){this.textoBusqueda = textoBusqueda;}
+    //</editor-fold>
+    
     //  Metodos
     
     /**
@@ -67,27 +72,57 @@ public class Responsabilidades implements Serializable {
         fLectura = new FacadeLectura();
         fAdmin = new FacadeAdministrador();
         
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         PaginaActual = 1;
-        try{
-            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
-        }catch(NumberFormatException ex){
-            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
-        }
+        
         //  Areas
         listaResponsabilidades = new ArrayList<>();
-        listaCompletaResponsabilidades = fLectura.listarResponsabilidades().stream()
-                .sorted(Comparator.comparing((Responsabilidad r)->r.getNombre()))
-                .collect(Collectors.toList());
-                
+        listaCompletaResponsabilidades = new ArrayList<>();
+        fLectura.listarResponsabilidades().stream()
+                .forEach((Responsabilidad resp)->{
+                    listaCompletaResponsabilidades.add(new ContenedorFiltrable<>(resp.getNombre(), resp));
+                });
         
-        // Paginas
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(listaCompletaResponsabilidades.size(), MAX_ITEMS);
-        
-        // llenar la lista con todas las areas registradas.
-        listaResponsabilidades = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, listaCompletaResponsabilidades);
-        listaResponsabilidades.stream().sorted();
+        cambiarPagina(false, PaginaActual);
+    }
+    
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            filtrarTexto();
+        }else{
+            listaCompletaResponsabilidades = listaCompletaResponsabilidades.stream()
+                    .sorted((o1, o2) -> {
+                        return o1.getContenido().compareTo(o2.getContenido());
+                    })
+                    .toList();
+            
+            cargarPagina(listaCompletaResponsabilidades);
+            textoBusqueda ="";
+        }
+    }
+    
+    private void cargarPagina(List<ContenedorFiltrable<Responsabilidad>> responsabilidades){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(responsabilidades.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
+        listaResponsabilidades = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, responsabilidades);
+        listaResponsabilidades = listaResponsabilidades.stream()
+                .sorted((o1, o2) -> {
+                    return o1.getContenido().compareTo(o2.getContenido());
+                })
+                .toList();
+    }
+    
+    public void filtrarTexto(){
+        List<ContenedorFiltrable<Responsabilidad>> tmpResponsabilidades;
+        tmpResponsabilidades = DatosFiltros.FiltrarPorTexto(listaCompletaResponsabilidades, textoBusqueda);
+        cargarPagina(tmpResponsabilidades);
+    }
+    
+    public void resetFiltro(){
+        textoBusqueda = "";
+        cargarPagina(listaCompletaResponsabilidades);
     }
     
     /**
@@ -151,7 +186,7 @@ public class Responsabilidades implements Serializable {
      */
     private boolean comprobarNombreResponsabilidad(String nombreResponsabilidad){
         return listaResponsabilidades.stream()
-                .anyMatch(r->r.getNombre().equalsIgnoreCase(nombreResponsabilidad));
+                .anyMatch((ContenedorFiltrable<Responsabilidad>r)->r.getContenido().getNombre().equalsIgnoreCase(nombreResponsabilidad));
     }
     
     /**
@@ -164,9 +199,9 @@ public class Responsabilidades implements Serializable {
             this.idResponsabilidadSeleccionada = -1;
         }else{
             areaSeleccionada = listaResponsabilidades.stream()
-                    .filter(r->r.getId() == idResponsabilidad)
+                    .filter((ContenedorFiltrable<Responsabilidad>r)->r.getContenido().getId() == idResponsabilidad)
                     .findFirst()
-                    .orElse(null);
+                    .orElse(null).getContenido();
             
             this.nombre = areaSeleccionada.getNombre();
             this.idResponsabilidadSeleccionada = idResponsabilidad;

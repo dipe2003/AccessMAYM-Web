@@ -95,7 +95,7 @@ public class Detecciones implements Serializable {
         
         TiposDeteccion =  TipoDeteccion.values();
         // llenar la lista con todas las areas registradas.
-        ListaDetecciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaDetecciones);
+        ListaDetecciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaDetecciones);
         ListaDetecciones.stream().sorted();
     }
     

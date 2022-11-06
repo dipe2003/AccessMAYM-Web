@@ -93,7 +93,7 @@ public class Codificaciones implements Serializable {
         CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaCodificaciones.size(), MAX_ITEMS);
         
         // llenar la lista con todas las areas registradas.
-        ListaCodificaciones = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaCodificaciones);
+        ListaCodificaciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaCodificaciones);
         ListaCodificaciones.stream().sorted();
     }
     
@@ -108,8 +108,7 @@ public class Codificaciones implements Serializable {
             context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "Ya existe una codificacion con ese nombre", "Ya existe una codificacion con ese nombre" ));
             context.renderResponse();
         }else{
-            Codificacion cod;
-            if((cod = fAdmin.nuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
+            if((fAdmin.nuevaCodificacion(NombreCodificacion, DescripcionCodificacion)) != null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
             }else{
                 context.addMessage("form_codificaciones:btn_nueva_codificacion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Codificacion", "No se pudo crear la Codificacion" ));

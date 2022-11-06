@@ -211,12 +211,12 @@ public class Areas implements Serializable {
         // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
         // en esa página no hayan datos para mostrar.
         if(PaginaActual>CantidadPaginas)PaginaActual = 1;
-        ListaAreas = new Presentacion().cargarPagina(PaginaActual, MAX_ITEMS, areas);
+        ListaAreas = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, areas);
         ListaAreas.sort(Comparator.naturalOrder());
     }
     
     public void filtrarTexto(){
-        List<Area> tmpAreas = new ArrayList<>();
+        List<Area> tmpAreas;
         tmpAreas = ListaCompletaAreas.stream()
                 .filter((Area u)->u.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase()))
                 .toList();

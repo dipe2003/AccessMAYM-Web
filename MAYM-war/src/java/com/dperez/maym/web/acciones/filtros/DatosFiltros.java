@@ -51,15 +51,15 @@ public class DatosFiltros implements Serializable {
     //**********************************************************************
     // Metodos de buscar Id
     //**********************************************************************
-    public void buscarId() throws IOException{
+    public void buscarAccionId() throws IOException{
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         Accion accion = fLectura.GetAccion(idAccionBuscada);
         TipoAccion tipoDefault = TipoAccion.CORRECTIVA;
         if (accion != null) {
             tipoDefault = TipoAccion.valueOf(accion.getClass().getSimpleName().toUpperCase());
-        }        
+        }
         FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(url+"/Views/Acciones/General/ListarAcciones.xhtml?pagina=1&tipo="+tipoDefault+"&buscarid="+idAccionBuscada);       
+                .redirect(url+"/Views/Acciones/General/ListarAcciones.xhtml?tipo="+tipoDefault+"&buscarid="+idAccionBuscada);
         
     }
     //**********************************************************************
@@ -216,7 +216,7 @@ public class DatosFiltros implements Serializable {
                 .collect(Collectors.toList());
     }
     
-        //**********************************************************************
+    //**********************************************************************
     // Metodos de filtro de Texto
     //**********************************************************************
     
@@ -230,6 +230,19 @@ public class DatosFiltros implements Serializable {
         return acciones.stream()
                 .filter((accion) -> (accion.getDescripcion().toLowerCase().contains(texto.toLowerCase())))
                 .sorted()
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Devuelve una lista de acciones que contengan el mismo texto
+     * @param <T>
+     * @param lista
+     * @param texto
+     * @return
+     */
+    public static <T> List<ContenedorFiltrable<T>> FiltrarPorTexto(List<ContenedorFiltrable<T>> lista, String texto){
+        return lista.stream()
+                .filter((elemento) -> elemento.getTextoFiltrable().contains(texto.toLowerCase()))
                 .collect(Collectors.toList());
     }
 }

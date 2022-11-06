@@ -35,12 +35,13 @@ public class Presentacion<T> {
     
      /**
      * Carga la lista de acciones para visualizar.
+     * @param <T>
      * @param pagina
      * @param maxItems
      * @param listaItems 
      * @return  
      */
-    public List<T> cargarPagina(int pagina, int maxItems, List<T> listaItems){      
+    public static <T> List<T> cargarPagina(int pagina, int maxItems, List<T> listaItems){      
         List<T> nuevaLista = new ArrayList<>();
         int min = 0;
         int max = maxItems;

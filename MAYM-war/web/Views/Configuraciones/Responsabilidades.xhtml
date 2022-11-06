@@ -19,6 +19,40 @@
                 </div>                  
             </div>                 
         </div>
+        
+        <h:form id="listado-responsabilidades-filtros">
+            <!-- FILTROS -->
+            <div class="container-fluid">            
+                <div class="panel panel-info">
+                    <div class="panel-heading">Filtrar</div>
+                    <div class="panel-body">
+                        <div class="table-responsive-sm">
+                            <h:panelGroup id="panel_filtros">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h:inputText id="texto_busqueda" class="form-control" value="#{responsabilidades.textoBusqueda}" 
+                                                     p:placeholder="Buscar responsabilidad">
+                                            <f:ajax execute="@this" event="keyup" listener="#{responsabilidades.filtrarTexto()}" 
+                                                    delay="300" render="form_responsabilidades panel_filtros" onevent="indicador" />                   
+                                        </h:inputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{responsabilidades.resetFiltro()}" 
+                                                       value="Quitar Filtro">
+                                            <f:ajax delay="10" render="form_responsabilidades panel_filtros" onevent="indicador" />                                                                           
+                                        </h:commandLink>
+                                    </div>
+                                    <div class="col-md-4">
+                                        
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        
         <h:form id="form_responsabilidades" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>
@@ -51,13 +85,13 @@
                             </thead>
                             
                             <tbody>
-                                <c:forEach items="#{responsabilidades.listaResponsabilidades}" var="responsabilidad">
+                                <c:forEach items="#{responsabilidades.listaResponsabilidades}" var="elemento">
                                     <tr>
                                         <td>
-                                            #{responsabilidad.nombre}
+                                            #{elemento.contenido.nombre}
                                         </td>
                                         <td>
-                                            <c:forEach items="#{responsabilidad.responsables}" var="responsable" varStatus="estado">
+                                            <c:forEach items="#{elemento.contenido.responsables}" var="responsable" varStatus="estado">
                                                 #{responsable.usuarioResponsable.nombreCompleto}
                                                 <c:if test="#{not estado.last}">
                                                 , 
@@ -66,7 +100,7 @@
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{responsabilidades.cargarDatos(responsabilidad.id)}">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{responsabilidades.cargarDatos(elemento.contenido.id)}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     <f:ajax delay="100" render="panel_modal_editar" />
                                                 </h:commandLink>                                                   
@@ -77,7 +111,7 @@
                                                         <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{responsabilidades.cargarDatos(-1)}"
                                                                        onclick="if (! confirm('Seguro que va a eliminar esta REsponsabilidad? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{responsabilidades.eliminarResponsabilidad(responsabilidad.id)}"/>
+                                                            <f:ajax event="click" listener="#{responsabilidades.eliminarResponsabilidad(elemento.contenido.id)}"/>
                                                         </h:commandLink>   
                                                     </c:if>
                                                 </c:if>
@@ -85,7 +119,7 @@
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
-                                                <h:message for="btn_eliminar_#{responsabilidad.id}" class="msj_error"/>
+                                                <h:message for="btn_eliminar_#{elemento.contenido.id}" class="msj_error"/>
                                             </div>
                                         </h:panelGroup>
                                     </tr>                                        
@@ -95,7 +129,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <!-- Modal Nueva Area -->
+            <!-- Modal Nueva Responsabilidad -->
             <div id="modal_Nueva" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
                     <h:panelGroup id="panel_modal">
@@ -137,7 +171,7 @@
                 </div>
             </div>
             
-            <!-- Modal Editar Area -->
+            <!-- Modal Editar Responsabilidad -->
             <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
                     <h:panelGroup id="panel_modal_editar">
@@ -178,23 +212,37 @@
                     </h:panelGroup>
                 </div>
             </div>
-            <c:if test="#{responsabilidades.cantidadPaginas > 1}">
-                <div class="container-fluid text-center" style="padding: 1%">
-                    <ul class="pagination">
-                        <c:forEach begin="1" end="#{responsabilidades.cantidadPaginas}" step="1" varStatus="numero" >
-                            <c:choose>
-                                <c:when test="#{responsabilidades.paginaActual == numero.count}" >
-                                    <li class="active"><a>#{numero.count}</a></li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li><h:link value="#{numero.count}" outcome="Responsabilidades.xhtml?pagina=#{numero.count}"/>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </ul>                
-                </div>
-            </c:if>
+            <div class="container-fluid text-center" style="padding: 1%">
+                <ul class="pagination"> 
+                    <c:choose>
+                        <c:when test="#{responsabilidades.paginaActual !=1}" >
+                            <li>
+                                <h:commandLink class="active" action="#{responsabilidades.cambiarPagina(true, responsabilidades.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
+                                    <f:ajax delay="10" render="form_responsabilidades panel_filtros"/>
+                                </h:commandLink>    
+                            </li>                                           
+                        </c:when>
+                        <c:otherwise>
+                            <li class="disabled"><a>&#60;</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                    <li class="active"><a>#{responsabilidades.paginaActual} / #{responsabilidades.cantidadPaginas}</a></li>
+                    <c:choose>
+                        <c:when test="#{responsabilidades.paginaActual lt responsabilidades.cantidadPaginas}" >
+                            <li>
+                                <h:commandLink class="active" action="#{responsabilidades.cambiarPagina(true, responsabilidades.paginaActual +1)}" value="&#62;" >
+                                    <f:ajax delay="10" onevent="indicador"/>
+                                    <f:ajax delay="10" render="form_responsabilidades panel_filtros"/>
+                                </h:commandLink>    
+                            </li>
+                            
+                        </c:when>
+                        <c:otherwise>
+                            <li class="disabled"><a>&#62;</a></li>
+                        </c:otherwise>
+                    </c:choose>                                    
+                </ul>                
+            </div>
         </h:form>
         
     </ui:define>

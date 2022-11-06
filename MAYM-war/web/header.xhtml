@@ -72,7 +72,7 @@
                                 <div class="form-group" ><label for="buscarid">Buscar</label>
                                     <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
                                 </div>
-                                <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarId()}">
+                                <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarAccionId()}">
                                     <f:ajax execute="formBuscar" onevent="indicador" />
                                 </h:commandButton>
                             </h:form>
@@ -85,9 +85,9 @@
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Codificaciones.xhtml?pagina=1">Codificaciones</a></li>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml?pagina=1">Detecciones</a></li>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml?pagina=1">Areas / Sectores</a></li>
-                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Responsabilidades.xhtml?pagina=1">Responsabilidades</a></li>
+                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Responsabilidades.xhtml">Responsabilidades</a></li>
                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}" >
-                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml?pagina=1">Usuarios</a></li>
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>
                                 </c:if>
                             </ul>
                         </li>
