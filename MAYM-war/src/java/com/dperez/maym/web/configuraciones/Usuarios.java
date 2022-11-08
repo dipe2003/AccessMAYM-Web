@@ -33,7 +33,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 @Named
 @ViewScoped
@@ -373,9 +372,7 @@ public class Usuarios implements Serializable {
     }
     
     public void filtrarTexto(){
-        List<ContenedorFiltrable<Usuario>> tmpUsuarios;
-        tmpUsuarios = DatosFiltros.FiltrarPorTexto(listaCompletaUsuariosFiltrable, textoBusqueda);
-        cargarPagina(tmpUsuarios);
+        cargarPagina(DatosFiltros.FiltrarPorTexto(listaCompletaUsuariosFiltrable, textoBusqueda));
     }
     
     public void resetFiltro(){
@@ -422,6 +419,7 @@ public class Usuarios implements Serializable {
     public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
         this.usuarioSeleccionado = usuarioSeleccionado;
     }
+    //</editor-fold>
     //</editor-fold>
     
     //<editor-fold desc="Metodos">
@@ -530,8 +528,5 @@ public class Usuarios implements Serializable {
         }
     }
     //</editor-fold>
-    
-    
-    
-    
+        
 }

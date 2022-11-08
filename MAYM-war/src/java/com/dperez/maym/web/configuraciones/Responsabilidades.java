@@ -115,9 +115,7 @@ public class Responsabilidades implements Serializable {
     }
     
     public void filtrarTexto(){
-        List<ContenedorFiltrable<Responsabilidad>> tmpResponsabilidades;
-        tmpResponsabilidades = DatosFiltros.FiltrarPorTexto(listaCompletaResponsabilidades, textoBusqueda);
-        cargarPagina(tmpResponsabilidades);
+        cargarPagina(DatosFiltros.FiltrarPorTexto(listaCompletaResponsabilidades, textoBusqueda));
     }
     
     public void resetFiltro(){

@@ -5,6 +5,8 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.acciones.filtros.ContenedorFiltrable;
+import com.dperez.maym.web.acciones.filtros.DatosFiltros;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
@@ -12,59 +14,62 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 
 
 @Named
 @ViewScoped
 public class Codificaciones implements Serializable {
-
-    private FacadeAdministrador fAdmin; 
+    
+    private FacadeAdministrador fAdmin;
     private FacadeLectura fLectura;
-
+    
     private Codificacion CodificacionSeleccionada;
     
     private String NombreCodificacion;
     private String DescripcionCodificacion;
     private int IdCodificacionSeleccionada;
     private boolean ContieneAcciones;
-    private List<Codificacion> ListaCodificaciones;
+    private List<ContenedorFiltrable<Codificacion>> ListaCodificaciones;
+    private String textoBusqueda;
     
     // Pagination
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
-    private List<Codificacion> ListaCompletaCodificaciones;
+    private List<ContenedorFiltrable<Codificacion>> ListaCompletaCodificaciones;
     
-    //  Getters
+    //<editor-fold desc="Getters">
     
     public String getNombreCodificacion() {return NombreCodificacion;}
     public String getDescripcionCodificacion() {return DescripcionCodificacion;}
-    public List<Codificacion> getListaCodificaciones() {return ListaCodificaciones;}
+    public List<ContenedorFiltrable<Codificacion>> getListaCodificaciones() {return ListaCodificaciones;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
+    public String getTextoBusqueda(){return this.textoBusqueda;}
     
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
+    //</editor-fold>
     
-    //  Setters
+    //<editor-fold desc="Setters">
     
     public void setNombreCodificacion(String NombreCodificacion) {this.NombreCodificacion = NombreCodificacion;}
     public void setDescripcionCodificacion(String DescripcionCodificacion) {this.DescripcionCodificacion = DescripcionCodificacion;}
-    public void setListaCodificaciones(List<Codificacion> ListaCodificaciones) {this.ListaCodificaciones = ListaCodificaciones;}
+    public void setListaCodificaciones(List<ContenedorFiltrable<Codificacion>> ListaCodificaciones) {this.ListaCodificaciones = ListaCodificaciones;}
     public void setContieneAcciones(boolean ContieneAcciones) {this.ContieneAcciones = ContieneAcciones;}
+    public void setTextoBusqueda(String textoBusqueda){this.textoBusqueda = textoBusqueda;}
     
-    //  Metodos
+    //</editor-fold>
+    
+    //<editor-fold desc="Metodos">
     
     /**
      * Carga de propiedades al inicio
@@ -74,30 +79,61 @@ public class Codificaciones implements Serializable {
         fLectura = new FacadeLectura();
         fAdmin = new FacadeAdministrador();
         
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        
         PaginaActual = 1;
-        try{
-            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
-        }catch(NumberFormatException ex){
-            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
-        }
+        
         //  Areas
         ListaCodificaciones = new ArrayList<>();
-        ListaCompletaCodificaciones = fLectura.listarCodificaciones().stream()
-                .sorted(Comparator.comparing((Codificacion c)->c.getNombre()))
-                .collect(Collectors.toList());
+        ListaCompletaCodificaciones = new ArrayList<>();
+        fLectura.listarCodificaciones().stream()
+                .forEach((Codificacion c)->{
+                    ListaCompletaCodificaciones.add(new ContenedorFiltrable<>(c.getNombre(), c));
+                });
         
-        // Paginas
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaCodificaciones.size(), MAX_ITEMS);
-        
-        // llenar la lista con todas las areas registradas.
-        ListaCodificaciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaCodificaciones);
-        ListaCodificaciones.stream().sorted();
+        cambiarPagina(false, PaginaActual);
     }
     
-       /**
+    //<editor-fold desc="Filtros">
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            filtrarTexto();
+        }else{
+            ListaCompletaCodificaciones = ListaCompletaCodificaciones.stream()
+                    .sorted((o1, o2) -> {
+                        return o1.getContenido().compareTo(o2.getContenido());
+                    })
+                    .toList();
+            
+            cargarPagina(ListaCompletaCodificaciones);
+            textoBusqueda ="";
+        }
+    }
+    
+    private void cargarPagina(List<ContenedorFiltrable<Codificacion>> codificaciones){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(codificaciones.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
+        ListaCodificaciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, codificaciones);
+        ListaCodificaciones = ListaCodificaciones.stream()
+                .sorted((o1, o2) -> {
+                    return o1.getContenido().compareTo(o2.getContenido());
+                })
+                .toList();
+    }
+    
+    public void filtrarTexto(){
+        cargarPagina(DatosFiltros.FiltrarPorTexto(ListaCompletaCodificaciones, textoBusqueda));
+    }
+    
+    public void resetFiltro(){
+        textoBusqueda = "";
+        cargarPagina(ListaCompletaCodificaciones);
+    }
+    
+    //</editor-fold>
+    
+    /**
      * Crea la codificacion con los datos ingresados.
      * Muestra un mensaje de errror si no se creo, se agrega la codificacion a la empres logueada y redirige a la misma pagina para ver los resultados.
      * @throws java.io.IOException
@@ -140,8 +176,8 @@ public class Codificaciones implements Serializable {
      */
     private boolean comprobarNombreCodificacion(String NombreCodificacion){
         return ListaCodificaciones.stream()
-                .anyMatch(codificacion->codificacion.getNombre().endsWith(NombreCodificacion));
-    }
+                .anyMatch((ContenedorFiltrable<Codificacion>c)->c.getContenido().getNombre().equalsIgnoreCase(NombreCodificacion));
+                }
     
     /**
      * Eliminina la codificacion indicada.
@@ -152,12 +188,12 @@ public class Codificaciones implements Serializable {
     public void eliminarCodificacion(int IdCodificacionSeleccionada) throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
         // primero se comprueba que pertenezca a la empresa del usuario logueado y que no aplique a otra empresa
-            if(fAdmin.eliminarCodificacion(IdCodificacionSeleccionada)!=-1){
-                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
-            }else{
-                context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
-                context.renderResponse();
-            }
+        if(fAdmin.eliminarCodificacion(IdCodificacionSeleccionada)!=-1){
+            context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Codificaciones.xhtml?pagina=1");
+        }else{
+            context.addMessage("form_codificaciones:btn_eliminar_"+IdCodificacionSeleccionada, new FacesMessage(SEVERITY_ERROR, "No se pudo eliminar la codificacion", "No se pudo eliminar la codificacion" ));
+            context.renderResponse();
+        }
     }
     
     /**
@@ -171,9 +207,9 @@ public class Codificaciones implements Serializable {
             this.IdCodificacionSeleccionada = -1;
         }else{
             CodificacionSeleccionada = ListaCodificaciones.stream()
-                    .filter(codificacion->codificacion.getId() == IdCodificacion)
+                    .filter((ContenedorFiltrable<Codificacion> cod)->cod.getContenido().getId() == IdCodificacion)
                     .findFirst()
-                    .orElse(null);
+                    .orElse(null).getContenido();
             
             this.NombreCodificacion = CodificacionSeleccionada.getNombre();
             this.DescripcionCodificacion = CodificacionSeleccionada.getDescripcion();
@@ -181,5 +217,5 @@ public class Codificaciones implements Serializable {
             
         }
     }
-    
+    //</editor-fold>
 }

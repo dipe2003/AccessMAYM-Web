@@ -19,6 +19,38 @@
                 </div>                  
             </div>                 
         </div>
+        <h:form id="listado-responsabilidades-filtros">
+            <!-- FILTROS -->
+            <div class="container-fluid">            
+                <div class="panel panel-info">
+                    <div class="panel-heading">Filtrar</div>
+                    <div class="panel-body">
+                        <div class="table-responsive-sm">
+                            <h:panelGroup id="panel_filtros">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h:inputText id="texto_busqueda" class="form-control" value="#{codificaciones.textoBusqueda}" 
+                                                     p:placeholder="Buscar codificacion">
+                                            <f:ajax execute="@this" event="keyup" listener="#{codificaciones.filtrarTexto()}" 
+                                                    delay="300" render="form_codificaciones panel_filtros" onevent="indicador" />                   
+                                        </h:inputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{codificaciones.resetFiltro()}" 
+                                                       value="Quitar Filtro">
+                                            <f:ajax delay="10" render="form_codificaciones panel_filtros" onevent="indicador" />                                                                           
+                                        </h:commandLink>
+                                    </div>
+                                    <div class="col-md-4">
+                                        
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
         <h:form id="form_codificaciones" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>
@@ -51,28 +83,28 @@
                             </thead>
                             
                             <tbody>
-                                <c:forEach items="#{codificaciones.listaCodificaciones}" var="codificacion">
+                                <c:forEach items="#{codificaciones.listaCodificaciones}" var="elemento">
                                     <tr>
                                         <td>
-                                            #{codificacion.nombre}
+                                            #{elemento.contenido.nombre}
                                         </td>
                                         <td>
-                                            #{codificacion.descripcion}
+                                            #{elemento.contenido.descripcion}
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(codificacion.id)}">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{codificaciones.cargarDatos(elemento.contenido.id)}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     <f:ajax delay="100" render="panel_modal_editar" />
                                                 </h:commandLink>
                                             </div>
                                             <div class="btn-group">
                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
-                                                    <c:if test="#{codificacion.accionesCodificacion.size() == 0}">
-                                                        <h:commandLink id="btn_eliminar_#{codificacion.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(codificacion.id)}"
+                                                    <c:if test="#{elemento.contenido.accionesCodificacion.size() == 0}">
+                                                        <h:commandLink id="btn_eliminar_#{elemento.contenido.id}" class="btn btn-danger" action="#{codificaciones.cargarDatos(elemento.codificacion.id)}"
                                                                        onclick="if (! confirm('Seguro que va a eliminar esta Codificacion? ')) return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
-                                                            <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(codificacion.id)}"/>
+                                                            <f:ajax event="click" listener="#{codificaciones.eliminarCodificacion(elemento.contenido.id)}"/>
                                                         </h:commandLink>   
                                                     </c:if>
                                                 </c:if>
@@ -87,23 +119,37 @@
                                 </c:forEach>
                             </tbody>
                         </table>  
-                        <c:if test="#{codificaciones.cantidadPaginas > 1}">
-                            <div class="container-fluid text-center" style="padding: 1%">
-                                <ul class="pagination">
-                                    <c:forEach begin="1" end="#{codificaciones.cantidadPaginas}" step="1" varStatus="numero" >
-                                        <c:choose>
-                                            <c:when test="#{codificaciones.paginaActual == numero.count}" >
-                                                <li class="active"><a>#{numero.count}</a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li><h:link value="#{numero.count}" outcome="Codificaciones.xhtml?pagina=#{numero.count}"/>
-                                                </li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                </ul>                
-                            </div>
-                        </c:if>
+                        <div class="container-fluid text-center" style="padding: 1%">
+                            <ul class="pagination"> 
+                                <c:choose>
+                                    <c:when test="#{codificaciones.paginaActual !=1}" >
+                                        <li>
+                                            <h:commandLink class="active" action="#{codificaciones.cambiarPagina(true, codificaciones.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
+                                                <f:ajax delay="10" render="form_codificaciones panel_filtros"/>
+                                            </h:commandLink>    
+                                        </li>                                           
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled"><a>&#60;</a></li>
+                                    </c:otherwise>
+                                </c:choose>
+                                <li class="active"><a>#{codificaciones.paginaActual} / #{codificaciones.cantidadPaginas}</a></li>
+                                <c:choose>
+                                    <c:when test="#{codificaciones.paginaActual lt codificaciones.cantidadPaginas}" >
+                                        <li>
+                                            <h:commandLink class="active" action="#{codificaciones.cambiarPagina(true, codificaciones.paginaActual +1)}" value="&#62;" >
+                                                <f:ajax delay="10" onevent="indicador"/>
+                                                <f:ajax delay="10" render="form_codificaciones panel_filtros"/>
+                                            </h:commandLink>    
+                                        </li>
+                                        
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled"><a>&#62;</a></li>
+                                    </c:otherwise>
+                                </c:choose>                                    
+                            </ul>                
+                        </div>
                     </c:otherwise>
                 </c:choose>
             </div>

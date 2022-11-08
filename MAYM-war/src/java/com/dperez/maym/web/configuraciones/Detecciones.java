@@ -5,6 +5,8 @@
 */
 package com.dperez.maym.web.configuraciones;
 
+import com.dperez.maym.web.acciones.filtros.ContenedorFiltrable;
+import com.dperez.maym.web.acciones.filtros.DatosFiltros;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
@@ -13,16 +15,13 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -35,22 +34,24 @@ public class Detecciones implements Serializable {
     
     private int IdDeteccionSeleccionada;
     private String NombreDeteccion;
-    private List<Deteccion> ListaDetecciones;
+    private List<ContenedorFiltrable<Deteccion>> ListaDetecciones;
     
     private boolean ContieneAcciones;
     
     private TipoDeteccion[] TiposDeteccion;
     private TipoDeteccion TipoDeDeteccionSeleccionada;
     
+    private String textoBusqueda;
+    
     // Pagination
     private static final int MAX_ITEMS = 10;
     private int CantidadPaginas;
     private int PaginaActual;
-    private List<Deteccion> ListaCompletaDetecciones;
+    private List<ContenedorFiltrable<Deteccion>> ListaCompletaDetecciones;
     
-    //  Getters
+    //<editor-fold desc="Getters">
     public String getNombreDeteccion() {return NombreDeteccion;}
-    public List<Deteccion> getListaDetecciones() {return ListaDetecciones;}
+    public List<ContenedorFiltrable<Deteccion>> getListaDetecciones() {return ListaDetecciones;}
     public boolean isContieneAcciones() {return ContieneAcciones;}
     
     public TipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
@@ -58,14 +59,18 @@ public class Detecciones implements Serializable {
     public static int getMAX_ITEMS() {return MAX_ITEMS;}
     public int getCantidadPaginas() {return CantidadPaginas;}
     public int getPaginaActual() {return PaginaActual;}
+    public String getTextoBusqueda(){return this.textoBusqueda;}
+    //</editor-fold>
     
-    //  Setters
+    //<editor-fold desc="Setter">
     public void setNombreDeteccion(String NombreDeteccion) {this.NombreDeteccion = NombreDeteccion;}
-    public void setListaDetecciones(List<Deteccion> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
+    public void setListaDetecciones(List<ContenedorFiltrable<Deteccion>> ListaDetecciones) {this.ListaDetecciones = ListaDetecciones;}
     public void setTipoDeDeteccionSeleccionada(TipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
     public void setTiposDeteccion(TipoDeteccion[] TiposDeteccion){this.TiposDeteccion = TiposDeteccion;}
+    public void setTextoBusqueda(String textoBusqueda){this.textoBusqueda = textoBusqueda;}
+    //</editor-fold>
     
-    //  Metodos
+//<editor-fold desc="Metodo">
     
     /**
      * Carga de propiedades al inicio
@@ -75,31 +80,58 @@ public class Detecciones implements Serializable {
         fLectura = new FacadeLectura();
         fAdmin = new FacadeAdministrador();
         
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        PaginaActual = 1;        
         
-        PaginaActual = 1;
-        try{
-            PaginaActual = Integer.parseInt(request.getParameter("pagina"));
-        }catch(NumberFormatException ex){
-            System.out.println("Error en pagina actual: " + ex.getLocalizedMessage());
-        }
-        //  Areas
         ListaDetecciones = new ArrayList<>();
-        ListaCompletaDetecciones = fLectura.listarDetecciones().stream()
-                .sorted(Comparator.comparing((Deteccion d)->d.getNombre()))
-                .collect(Collectors.toList());
+        ListaCompletaDetecciones = new ArrayList<>();
+                fLectura.listarDetecciones().stream()
+                .forEach((Deteccion det)->{
+                    ListaCompletaDetecciones.add(new ContenedorFiltrable<>(det.getNombre(), det));
+                });
         
-        // Paginas
-        CantidadPaginas = Presentacion.calcularCantidadPaginas(ListaCompletaDetecciones.size(), MAX_ITEMS);
-        
-        TiposDeteccion =  TipoDeteccion.values();
-        // llenar la lista con todas las areas registradas.
-        ListaDetecciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, ListaCompletaDetecciones);
-        ListaDetecciones.stream().sorted();
+        cambiarPagina(false, PaginaActual);
     }
     
+    //<editor-fold desc="Filtros">
+    public void cambiarPagina(boolean conFiltros, int numero){
+        if(conFiltros){
+            PaginaActual = numero;
+            filtrarTexto();
+        }else{
+            ListaCompletaDetecciones = ListaCompletaDetecciones.stream()
+                    .sorted((o1, o2) -> {
+                        return o1.getContenido().compareTo(o2.getContenido());
+                    })
+                    .toList();
+            
+            cargarPagina(ListaCompletaDetecciones);
+            textoBusqueda ="";
+        }
+    }
     
+    private void cargarPagina(List<ContenedorFiltrable<Deteccion>> detecciones){
+        CantidadPaginas = Presentacion.calcularCantidadPaginas(detecciones.size(), MAX_ITEMS);
+        // Corregir el numero de pagina en caso que se apliquen filtros en una página diferente de 1 y luego de filtrar
+        // en esa página no hayan datos para mostrar.
+        if(PaginaActual>CantidadPaginas)PaginaActual = 1;
+        ListaDetecciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, detecciones);
+        ListaDetecciones = ListaDetecciones.stream()
+                .sorted((o1, o2) -> {
+                    return o1.getContenido().compareTo(o2.getContenido());
+                })
+                .toList();
+    }
+    
+    public void filtrarTexto(){
+        cargarPagina(DatosFiltros.FiltrarPorTexto(ListaCompletaDetecciones, textoBusqueda));
+    }
+    
+    public void resetFiltro(){
+        textoBusqueda = "";
+        cargarPagina(ListaCompletaDetecciones);
+    }
+    
+    //</editor-fold>
     
     /**
      * Crea nueva deteccion con el tipo interna/externa seleccionado.
@@ -164,9 +196,9 @@ public class Detecciones implements Serializable {
             this.IdDeteccionSeleccionada = -1;
         }else{
             Deteccion deteccionSeleccionada = ListaDetecciones.stream()
-                    .filter(deteccion -> deteccion.getId() == IdDeteccion)
+                    .filter((ContenedorFiltrable<Deteccion> det) -> det.getContenido().getId() == IdDeteccion)
                     .findFirst()
-                    .orElse(null);
+                    .orElse(null).getContenido();
             
             this.NombreDeteccion = deteccionSeleccionada.getNombre();
             this.TipoDeDeteccionSeleccionada = deteccionSeleccionada.getTipoDeDeteccion();
@@ -186,6 +218,7 @@ public class Detecciones implements Serializable {
      */
     private boolean comprobarNombreDeteccion(String NombreDeteccion){
         return ListaDetecciones.stream()
-                .anyMatch(deteccion->deteccion.getNombre().equalsIgnoreCase(NombreDeteccion));
+                .anyMatch((ContenedorFiltrable<Deteccion> det)->det.getContenido().getNombre().equalsIgnoreCase(NombreDeteccion));
     }
+//</editor-fold>
 }
