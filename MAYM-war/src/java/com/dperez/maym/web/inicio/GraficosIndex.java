@@ -7,6 +7,8 @@ package com.dperez.maym.web.inicio;
 
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
 import com.dperez.maymweb.modelo.area.Area;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -162,6 +164,9 @@ public class GraficosIndex implements Serializable{
         
         lstAcciones = filtrarFechasAcciones(listaTotalAcciones, fechaInicial, fechaFinal);
         
+        // totales por tipo
+        calcularTotalPorTipo(lstAcciones);
+        
         TotalAcciones = lstAcciones.size();
         
         // totales por estado
@@ -171,8 +176,8 @@ public class GraficosIndex implements Serializable{
         List<Area> listaAreas = extraerAreasAcciones(lstAcciones);
         tamanio = listaAreas.size();
         
-        totalesPorProceso = calcularTotalesPorProceso(listaAreas);
-        nombresProcesos = calcularNombresPorProceso(listaAreas);
+        totalesPorProceso = generarTotalesPorProceso(listaAreas);
+        nombresProcesos = generarNombresPorProceso(listaAreas);
     }
     
     private List<Accion> filtrarFechasAcciones(List<Accion> acciones, Date fechaInicial, Date fechaFinal){
@@ -186,29 +191,38 @@ public class GraficosIndex implements Serializable{
      * @param acciones
      */
     private void calcularTotalPorEstado(List<Accion> acciones){
-        for(Accion accion:acciones){
-            switch(accion.getEstadoDeAccion()){
-                case CERRADA -> AccionesCerradas++;
-                case DESESTIMADA -> AccionesDesestimadas++;
-                case PENDIENTE -> AccionesPendientes++;
-                case PROCESO_IMP -> AccionesProcesoImp++;
-                case PROCESO_VER -> AccionesProcesoVerif++;
-            }
-            contarAccion(accion);
-        }
+        AccionesCerradas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getEstadoDeAccion() == Estado.CERRADA)
+                .count();
+        AccionesDesestimadas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getEstadoDeAccion() == Estado.DESESTIMADA)
+                .count();
+        AccionesPendientes = (int) acciones.stream()
+                .filter((Accion accion)->accion.getEstadoDeAccion() == Estado.PENDIENTE)
+                .count();
+        AccionesProcesoImp = (int) acciones.stream()
+                .filter((Accion accion)->accion.getEstadoDeAccion() == Estado.PROCESO_IMP)
+                .count();
+        AccionesProcesoVerif = (int) acciones.stream()
+                .filter((Accion accion)->accion.getEstadoDeAccion() == Estado.PROCESO_VER)
+                .count();
     }
     
-    private void resetConteo(){
-        AccionesCerradas = 0;
-        AccionesDesestimadas = 0;
-        AccionesPendientes = 0;
-        AccionesProcesoImp = 0;
-        AccionesProcesoVerif = 0;
-        AccionesCorrectivas = 0;
-        AccionesPreventivas = 0;
-        AccionesMejora = 0;        
+    /**
+     * Determina el tipo de accion y aumenta el valor correspondiente.
+     * @param accion
+     */
+    private void calcularTotalPorTipo(List<Accion> acciones){
+        AccionesCorrectivas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getClass().getSimpleName().equalsIgnoreCase("correctiva"))
+                .count();
+        AccionesPreventivas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getClass().getSimpleName().equalsIgnoreCase("preventiva"))
+                .count();
+        AccionesMejora = (int) acciones.stream()
+                .filter((Accion accion)->accion.getClass().getSimpleName().equalsIgnoreCase("mejora")).count();
     }
-    
+        
     private Date calcularFechaInicial(List<Accion> acciones){
         return acciones.stream()
                 .min(Comparator.naturalOrder()).get().getFechaDeteccion();
@@ -224,7 +238,7 @@ public class GraficosIndex implements Serializable{
      * @param areas
      * @return
      */
-    private String calcularTotalesPorProceso(List<Area> areas){
+    private String generarTotalesPorProceso(List<Area> areas){
         StringBuilder strBuilderTotales = new StringBuilder();
         for (int i = 0; i < tamanio; i++) {
             strBuilderTotales.append(areas.get(i).getAccionesArea().size());
@@ -240,7 +254,7 @@ public class GraficosIndex implements Serializable{
      * @param areas
      * @return
      */
-    private String calcularNombresPorProceso(List<Area> areas){
+    private String generarNombresPorProceso(List<Area> areas){
         StringBuilder strBuilderNombres = new StringBuilder();
         for (int i = 0; i < tamanio; i++) {
             strBuilderNombres
@@ -253,19 +267,7 @@ public class GraficosIndex implements Serializable{
         }
         return strBuilderNombres.insert(0, "[").append("]").toString();
     }
-    
-    /**
-     * Determina el tipo de accion y aumenta el valor correspondiente.
-     * @param accion
-     */
-    private void contarAccion(Accion accion){
-        switch(accion.getClass().getSimpleName()){
-            case "Correctiva" -> AccionesCorrectivas++;
-            case "Preventiva" -> AccionesPreventivas++;
-            case "Mejora" -> AccionesMejora++;
-        }
-    }
-    
+      
     /**
      * Extrae una lista de las areas de las acciones.
      * @param acciones
@@ -282,9 +284,14 @@ public class GraficosIndex implements Serializable{
         return areas;
     }
     
+    /**
+     * Se toman las fechas y se calculan todos los totales.
+     */
     public void filtrarPorFecha(){
-        resetConteo();
+        
         List<Accion> lstAcciones = filtrarFechasAcciones(listaTotalAcciones, fechaInicial, fechaFinal);
+        
+        calcularTotalPorTipo(lstAcciones);
         
         TotalAcciones = lstAcciones.size();
         
@@ -295,8 +302,8 @@ public class GraficosIndex implements Serializable{
         List<Area> areas = extraerAreasAcciones(lstAcciones);
         tamanio = areas.size();
         
-        totalesPorProceso = calcularTotalesPorProceso(areas);
-        nombresProcesos = calcularNombresPorProceso(areas);
+        totalesPorProceso = generarTotalesPorProceso(areas);
+        nombresProcesos = generarNombresPorProceso(areas);
     }
     
     public void resetFechas(){

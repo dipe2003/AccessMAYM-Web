@@ -363,6 +363,7 @@ public class ListarAcciones implements Serializable{
             }
         }
         // Cargar pagina
+        accionesFiltradas.sort(Comparator.reverseOrder());
         cargarPagina(accionesFiltradas);
     }
     //</editor-fold>
