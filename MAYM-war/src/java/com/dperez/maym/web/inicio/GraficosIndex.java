@@ -10,6 +10,8 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
 import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
+import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,6 +61,14 @@ public class GraficosIndex implements Serializable{
     private String totalesPorProceso;
     private String nombresProcesos;
     private int tamanio;
+    
+    // Valores para grafico de detecciones
+    private int totalDeteccionesInternas;
+    private int totalDeteccionesExternas;
+    
+    // Valores para grafico por codificaciones
+    private String  nombresCodificaciones;
+    private String totalCodificaciones;
     
     //<editor-fold desc="Fechas">
     // Getters
@@ -149,6 +159,38 @@ public class GraficosIndex implements Serializable{
     public void setNombresProcesos(String nombresProcesos) {this.nombresProcesos = nombresProcesos;}
     public void setTotalesPorProceso(String totalesPorProceso){this.totalesPorProceso = totalesPorProceso;}
     //</editor-fold>
+    // Getters
+    
+    //<editor-fold desc="Detecciones">
+    public int getTotalDeteccionesInternas() {return totalDeteccionesInternas;}
+    public int getTotalDeteccionesExternas() {return totalDeteccionesExternas;}
+    
+    // Setters
+    public void setTotalDeteccionesInternas(int totalDeteccionesInternas) {this.totalDeteccionesInternas = totalDeteccionesInternas;}
+    public void setTotalDeteccionesExternas(int totalDeteccionesExternas) {this.totalDeteccionesExternas = totalDeteccionesExternas;}
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="Codificaciones">
+    // Getters
+    public String getNombresCodificaciones() {
+        return nombresCodificaciones;
+    }
+    
+    public String getTotalCodificaciones() {
+        return totalCodificaciones;
+    }
+    // Setters
+    
+    public void setTotalCodificaciones(String totalCodificaciones) {
+        this.totalCodificaciones = totalCodificaciones;
+    }
+    
+    public void setNombresCodificaciones(String nombresCodificaciones) {
+        this.nombresCodificaciones = nombresCodificaciones;
+    }
+    
+    //</editor-fold>
     
     // Metodos
     @PostConstruct
@@ -164,6 +206,9 @@ public class GraficosIndex implements Serializable{
         
         lstAcciones = filtrarFechasAcciones(listaTotalAcciones, fechaInicial, fechaFinal);
         
+        // total por tipo de deteccion
+        calcularTotalDeteccion(lstAcciones);
+        
         // totales por tipo
         calcularTotalPorTipo(lstAcciones);
         
@@ -171,6 +216,11 @@ public class GraficosIndex implements Serializable{
         
         // totales por estado
         calcularTotalPorEstado(lstAcciones);
+        
+        // totales por codificacion
+        List<Codificacion> codificaciones = extraerCodificacionAcciones(lstAcciones);
+        totalCodificaciones = generarTotalesPorCodificaciones(codificaciones);
+        nombresCodificaciones = generarNombresPorCodificaciones(codificaciones);
         
         // totales por area
         List<Area> listaAreas = extraerAreasAcciones(lstAcciones);
@@ -222,7 +272,20 @@ public class GraficosIndex implements Serializable{
         AccionesMejora = (int) acciones.stream()
                 .filter((Accion accion)->accion.getClass().getSimpleName().equalsIgnoreCase("mejora")).count();
     }
-        
+    
+    /**
+     * Determina el tipo de deteccion de cada accion y calcula el total.
+     * @param acciones
+     */
+    private void calcularTotalDeteccion(List<Accion> acciones){
+        totalDeteccionesInternas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getDeteccionAccion().getTipoDeDeteccion() == TipoDeteccion.INTERNA)
+                .count();
+        totalDeteccionesExternas = (int) acciones.stream()
+                .filter((Accion accion)->accion.getDeteccionAccion().getTipoDeDeteccion() == TipoDeteccion.EXTERNA)
+                .count();
+    }
+    
     private Date calcularFechaInicial(List<Accion> acciones){
         return acciones.stream()
                 .min(Comparator.naturalOrder()).get().getFechaDeteccion();
@@ -267,7 +330,60 @@ public class GraficosIndex implements Serializable{
         }
         return strBuilderNombres.insert(0, "[").append("]").toString();
     }
-      
+    
+    /**
+     * Genera una cadena con arreglo del total de acciones por codificacion.
+     * @param codificaciones
+     * @return
+     */
+    private String generarTotalesPorCodificaciones(List<Codificacion> codificaciones){
+        StringBuilder strBuilderTotales = new StringBuilder();
+        int total = codificaciones.size();
+        for (int i = 0; i < total; i++) {
+            strBuilderTotales.append(codificaciones.get(i).getAccionesCodificacion().size());
+            if(i+1 < total){
+                strBuilderTotales.append(",");
+            }
+        }
+        return strBuilderTotales.insert(0, "[").append("]").toString();
+    }
+    
+    /**
+     * Genera una cadena con arreglo de cada nombre de codificacion.
+     * @param codificaciones
+     * @return
+     */
+    private String generarNombresPorCodificaciones(List<Codificacion> codificaciones){
+        StringBuilder strBuilderNombres = new StringBuilder();
+        int total = codificaciones.size();
+        for (int i = 0; i < total; i++) {
+            strBuilderNombres
+                    .append("'")
+                    .append(codificaciones.get(i).getNombre())
+                    .append("'");
+            if(i+1 < total){
+                strBuilderNombres.append(",");
+            }
+        }
+        return strBuilderNombres.insert(0, "[").append("]").toString();
+    }
+    
+    /**
+     * Extrae una lista de las codificaciones de las acciones.
+     * @param acciones
+     * @return
+     */
+    private List<Codificacion> extraerCodificacionAcciones(List<Accion> acciones){
+        List<Codificacion> codificaciones = new ArrayList<>();
+        acciones.stream()
+                .forEach((Accion accion)->{
+                    if(!codificaciones.contains(accion.getCodificacionAccion())){
+                        codificaciones.add(accion.getCodificacionAccion());
+                    }
+                });
+        return codificaciones;
+    }
+    
     /**
      * Extrae una lista de las areas de las acciones.
      * @param acciones
@@ -291,12 +407,19 @@ public class GraficosIndex implements Serializable{
         
         List<Accion> lstAcciones = filtrarFechasAcciones(listaTotalAcciones, fechaInicial, fechaFinal);
         
+        calcularTotalDeteccion(lstAcciones);
+        
         calcularTotalPorTipo(lstAcciones);
         
         TotalAcciones = lstAcciones.size();
         
         // totales por estado
         calcularTotalPorEstado(lstAcciones);
+        
+        // totales por codificacion
+        List<Codificacion> codificaciones = extraerCodificacionAcciones(lstAcciones);
+        totalCodificaciones = generarTotalesPorCodificaciones(codificaciones);
+        nombresCodificaciones = generarNombresPorCodificaciones(codificaciones);
         
         // totales por area
         List<Area> areas = extraerAreasAcciones(lstAcciones);

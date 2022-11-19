@@ -61,6 +61,41 @@
                             }]
                     }                        
                 }); 
+                
+                var ctxDetecciones = $("#chartDetecciones");
+                var chartDetecciones = new Chart(ctxDetecciones, {
+                    type:'pie',
+                    data: {
+                        labels: ['Intermas', 'Externas'],
+                        datasets: [{
+                                data:[#{graficosIndex.totalDeteccionesInternas}, #{graficosIndex.totalDeteccionesExternas}],
+                                backgroundColor:[
+                                    'rgba(255, 87, 51,0.7)', 
+                                    'rgba(124, 144, 197, 0.7)'
+                                ],
+                                borderWidth: 1,
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)'
+                                ]
+                            }]
+                    }                        
+                }); 
+                
+                var ctxCodificaciones = $("#chartCodificaciones");
+                var chartCodificaciones = new Chart(ctxCodificaciones, {
+                    type:'bar',
+                    data: {
+                        labels: ${graficosIndex.nombresCodificaciones},  
+                        datasets: [{
+                                label:'Total',
+                                data:${graficosIndex.totalCodificaciones},
+                                backgroundColor: 'rgba(25, 194, 169, 0.75)',
+                                borderWidth: 1,
+                                borderColor: 'green'
+                            }]
+                    }                        
+                }); 
                
                 var ctx = $("#chartProcesos");
                 var chartProcesos = new Chart(ctx , {
@@ -160,6 +195,23 @@
                                 </div>                            
                             </fieldset>
                         </div>                        
+                    </div>
+                    <div class="row">                    
+                        <div class="col-sm-4">
+                            <fieldset><legend>Total de Acciones por Deteccion</legend>
+                                <div style="width:27vw">
+                                    <canvas id="chartDetecciones"  ></canvas>   
+                                </div>                            
+                            </fieldset>
+                        </div>                        
+                        
+                        <div class="col-sm-8">
+                            <fieldset><legend>Total de Acciones por Codificacion</legend>
+                                <div style="width:55vw">
+                                    <canvas id="chartCodificaciones"  ></canvas>   
+                                </div>                            
+                            </fieldset>
+                        </div>   
                     </div>
                 </div>
             </h:form>
