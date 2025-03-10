@@ -48,7 +48,9 @@
                         <div class="jumbotron">
                             <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1>      
                             <p>Este es el sitio de inicio donde podras ver un resumen de los registros generados.</p> 
-                            <p><small>Para mas informacion o utilizar todas las funciones del sistema inicia sesion.</small></p>   
+                            <c:if test="${sesionUsuario.usuarioLogueado == null}">
+                                <p><small>Para mas informacion o utilizar todas las funciones del sistema inicia sesion.</small></p>   
+                            </c:if>
                         </div>
                         <a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml">Ver Resumen</a>
                     </div>

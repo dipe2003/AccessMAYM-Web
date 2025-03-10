@@ -351,7 +351,7 @@ public class EditarAccion implements Serializable {
      * Deja vacios los campos para un nuevo adjunto.
      */
     public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombre());
+        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
         if(!datosAdjunto[0].isEmpty()){
             TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
@@ -359,8 +359,8 @@ public class EditarAccion implements Serializable {
             List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = TipoAdjunto.DOCUMENTO;
-            }
-            if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+            }// se agrega a la ubicacion '/datos' ya que es el file-handler del servidor
+            if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, "/datos" + datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
                 this.ArchivoAdjunto =  null;

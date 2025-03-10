@@ -30,6 +30,11 @@ public class Empresa {
     public String getNombre() {
         return nombre;
     }
+    
+    // Define un nombre para el directorio eliminando espacios y caracteres invalidos
+    public String getNombreDeArchivo() {
+        return this.nombre.replaceAll("(\\W)", "_");
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;

@@ -77,10 +77,14 @@ public class CargarArchivo implements Serializable{
      */
     public boolean BorrarArchivo(String NombreUbicacionArchivo){
         if(!NombreUbicacionArchivo.isEmpty()){
-            String resPath = homeDir+separator+"MAyM_Web"+separator+NombreUbicacionArchivo;
+            String resPath = homeDir+separator+"MAYMWEB"+NombreUbicacionArchivo.replaceAll("\\|/", separator);
             File archivo = new File(resPath);
-            archivo.delete();
-            return true;
+            try{
+                archivo.delete();
+                return true;
+            } catch (Exception ex) {
+                System.out.println("que sali0o mal:" + ex.getLocalizedMessage());
+            }            
         }
         return false;
     }
