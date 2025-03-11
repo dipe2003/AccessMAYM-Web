@@ -78,8 +78,7 @@ public class CargarArchivo implements Serializable{
      */
     public boolean BorrarArchivo(String NombreUbicacionArchivo) {
         if (!NombreUbicacionArchivo.isEmpty()) {
-            // se quitan los primeros caracteres del nombre, ya que se corresponden a '/datos/' que es el file-handler del servidor
-            String resPath = homeDir + separator + "MAYMWEB" + NombreUbicacionArchivo.substring(6);
+            String resPath = homeDir + separator + "MAYMWEB" + NombreUbicacionArchivo;
             File archivo = new File(resPath);
             return archivo.delete();
         }

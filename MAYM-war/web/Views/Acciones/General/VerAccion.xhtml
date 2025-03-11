@@ -355,10 +355,10 @@
                                                             <td>                                                       
                                                                 <c:choose>
                                                                     <c:when test="#{adjunto.tipoDeAdjunto == 'IMAGEN'}" >
-                                                                        <a href="#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
                                                                     </c:when>
                                                                     <c:otherwise>
-                                                                        <a href="#{adjunto.ubicacion}" target="blank" >Ver Documento</a>
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Documento</a>
                                                                     </c:otherwise> 
                                                                 </c:choose> 
                                                             </td>

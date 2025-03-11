@@ -525,10 +525,10 @@
                                                                 <td>
                                                                     <c:choose>
                                                                         <c:when test="#{adjunto.value.tipoDeAdjunto == 'IMAGEN'}" >
-                                                                            <a href="#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
+                                                                            <a href="/datos#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="/datos#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                            <a href="#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
+                                                                            <a href="/datos#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
                                                                         </c:otherwise> 
                                                                     </c:choose>                                                            
                                                                 </td>

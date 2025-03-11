@@ -360,7 +360,7 @@ public class EditarAccion implements Serializable {
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = TipoAdjunto.DOCUMENTO;
             }// se agrega a la ubicacion '/datos' ya que es el file-handler del servidor
-            if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, "/datos" + datosAdjunto[0], tipoAdjunto))!=-1){
+            if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
                 this.ArchivoAdjunto =  null;
