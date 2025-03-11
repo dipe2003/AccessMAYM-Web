@@ -56,7 +56,7 @@ public class CargarArchivo implements Serializable{
                 if (!fileSaveDir.exists()) {
                     fileSaveDir.mkdirs();
                 }
-                String[] baseDatos = {"/adjuntos/"+NombreEmpresa+"/"+DirectorioArchivo+"/"+NombreArchivo, extensionArchivo};
+                String[] baseDatos = {separator+"adjuntos"+separator+NombreEmpresa+separator+DirectorioArchivo+separator+NombreArchivo, extensionArchivo};
                 Archivo.write(realPath[0]);
                 return baseDatos;
             }catch(FileNotFoundException ex){
@@ -73,20 +73,16 @@ public class CargarArchivo implements Serializable{
     /**
      * Elimina el archivo especificado.
      * @param NombreUbicacionArchivo El nombre del archivo debe incluir Directorio/NombreArchivo.extension
-     * @return Retorna <b>true</b> si se elimino correctamente de lo contrario retorna <b>False</b>.
+     * @return Retorna <b>true</b> si se elimino correctamente de lo contrario
+     * retorna <b>False</b>.
      */
-    public boolean BorrarArchivo(String NombreUbicacionArchivo){
-        if(!NombreUbicacionArchivo.isEmpty()){
-            String resPath = homeDir+separator+"MAYMWEB"+NombreUbicacionArchivo.replaceAll("\\|/", separator);
+    public boolean BorrarArchivo(String NombreUbicacionArchivo) {
+        if (!NombreUbicacionArchivo.isEmpty()) {
+            // se quitan los primeros caracteres del nombre, ya que se corresponden a '/datos/' que es el file-handler del servidor
+            String resPath = homeDir + separator + "MAYMWEB" + NombreUbicacionArchivo.substring(6);
             File archivo = new File(resPath);
-            try{
-                archivo.delete();
-                return true;
-            } catch (Exception ex) {
-                System.out.println("que sali0o mal:" + ex.getLocalizedMessage());
-            }            
+            return archivo.delete();
         }
         return false;
     }
-    
 }
