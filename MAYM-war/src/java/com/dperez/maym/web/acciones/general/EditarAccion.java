@@ -14,7 +14,6 @@ import com.dperez.maymweb.herramientas.TipoEvento;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Comprobacion;
 import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
-import static com.dperez.maymweb.modelo.acciones.actividad.TipoActividad.CORRECTIVA;
 import com.dperez.maymweb.modelo.acciones.adjunto.Adjunto;
 import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.area.Area;
@@ -329,9 +328,9 @@ public class EditarAccion implements Serializable {
     }
     
     private void actualizarListaAdjuntos(){
-        Accion AccionCorrectiva = fLectura.GetAccion(IdAccionSeleccionada);
-        if(!AccionCorrectiva.getAdjuntosDeAccion().isEmpty()){
-            List<Adjunto> listAdjuntos = AccionCorrectiva.getAdjuntosDeAccion();
+        Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+        if(!accionSeguida.getAdjuntosDeAccion().isEmpty()){
+            List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
             MapAdjuntos = listAdjuntos.stream()
                     .collect(Collectors.toMap(Adjunto::getIda, adjunto->adjunto));
         }
@@ -359,7 +358,7 @@ public class EditarAccion implements Serializable {
             List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
             if(!tipos.contains(extension.toLowerCase().trim())){
                 tipoAdjunto = TipoAdjunto.DOCUMENTO;
-            }// se agrega a la ubicacion '/datos' ya que es el file-handler del servidor
+            }
             if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
