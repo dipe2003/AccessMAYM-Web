@@ -6,6 +6,7 @@
 package com.dperez.maym.web.acciones.general;
 
 import com.dperez.maym.web.acciones.filtros.DatosFiltros;
+import com.dperez.maym.web.herramientas.Pdfteame;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
@@ -563,6 +564,30 @@ public class ListarAcciones implements Serializable{
         if(PaginaActual>CantidadPaginas)PaginaActual = 1;
         ListaAcciones = Presentacion.cargarPagina(PaginaActual, MAX_ITEMS, acciones);
         ListaAcciones.sort(Comparator.reverseOrder());
+    }
+    
+    public void pdftea() {
+        Pdfteame pdf = new Pdfteame(true);
+        List<Accion> accionesFiltradas = ListaCompletaAcciones;
+        for(String filtro:filtrosAplicados){
+            switch(filtro){
+                case "estados"-> accionesFiltradas = filtrarPorEstado(accionesFiltradas);
+                case "areas"->accionesFiltradas = filtrarPorArea(accionesFiltradas);
+                case "codificaciones" ->accionesFiltradas = filtrarPorCodificacion(accionesFiltradas);
+                case "detecciones" ->accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
+                case "busqueda" ->accionesFiltradas = filtrarTexto(accionesFiltradas);
+                default->accionesFiltradas = ListaCompletaAcciones;
+            }
+        }
+        StringBuilder titulo = new StringBuilder("Listado de ");
+        switch (tipoDeAccion){
+            case CORRECTIVA-> titulo.append("acciones correctivas.");
+            case PREVENTIVA->titulo.append("acciones Preventivas.");
+            case MEJORA->titulo.append("Oportunidades de mejora");
+        }
+        
+        pdf.ExportarListadoPD("Listado de Acciones.pdf", titulo.toString().toUpperCase(), accionesFiltradas,  false,null, null);
+
     }
     
 }

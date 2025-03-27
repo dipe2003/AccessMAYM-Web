@@ -11,7 +11,6 @@ import com.dperez.maymweb.modelo.acciones.adjunto.Adjunto;
 import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Eficacia;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Implementacion;
-import com.dperez.maymweb.modelo.acciones.comprobaciones.ResultadoComprobacion;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import java.util.Date;

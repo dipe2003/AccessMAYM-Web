@@ -12,6 +12,9 @@
     <ui:define name="page_content">
         <div class="row">
             <h:form id="listado-correctivas">
+                <h:commandLink class="btn btn-primary" action="#{listarAcciones.pdftea()}" immediate="true">
+                <span class="glyphicon glyphicon-save-file"></span>
+            </h:commandLink>
                 <!-- FILTROS -->
                 <div class="col-md-12">
                     <div class="container-fluid">            
