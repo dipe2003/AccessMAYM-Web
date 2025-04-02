@@ -10,7 +10,7 @@ package com.dperez.maymweb.modelo.acciones.comprobaciones;
  * @author dperez
  */
 public enum ResultadoComprobacion {
-    CORRECTA ("Correctiva"),
+    CORRECTA ("Correcta"),
     INCORRECTA ("Incorrecta"),
     NO_COMPROBADA ("No Comprobada");
     

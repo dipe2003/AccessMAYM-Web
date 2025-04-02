@@ -8,13 +8,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"                    
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
-    
+
     <ui:define name="page_content">
         <div class="row">
-            <h:form id="listado-correctivas">
-                <h:commandLink class="btn btn-primary" action="#{listarAcciones.pdftea()}" immediate="true">
-                <span class="glyphicon glyphicon-save-file"></span>
-            </h:commandLink>
+            <h:form id="listado-correctivas">                
                 <!-- FILTROS -->
                 <div class="col-md-12">
                     <div class="container-fluid">            
@@ -63,7 +60,7 @@
                                                                     Areas<span class="caret"></span></button>
                                                                 <div class="collapse" id="collapse-filtro-areas">
                                                                     <h:panelGroup id="drop-filtro-areas">
-                                                                        
+
                                                                         <h:selectManyListbox value="#{listarAcciones.areasSeleccionadas}" style="height:100px" >
                                                                             <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
                                                                                 <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
@@ -71,7 +68,7 @@
                                                                                         render="form_tabla_acciones panel_filtros"/>
                                                                             </c:forEach>
                                                                         </h:selectManyListbox>
-                                                                        
+
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
@@ -87,7 +84,7 @@
                                                                     Detecciones<span class="caret"></span></button>
                                                                 <div class="collapse" id="collapse-filtro-deteccion">
                                                                     <h:panelGroup id="drop-filtro-deteccion">
-                                                                        
+
                                                                         <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:100px" >
                                                                             <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
                                                                                 <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
@@ -95,7 +92,7 @@
                                                                                         render="form_tabla_acciones panel_filtros"/>
                                                                             </c:forEach>
                                                                         </h:selectManyListbox>
-                                                                        
+
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
@@ -111,7 +108,7 @@
                                                                     Codificacion<span class="caret"></span></button>
                                                                 <div class="collapse" id="collapse-filtro-codificacion">
                                                                     <h:panelGroup id="drop-filtro-codificacion">
-                                                                        
+
                                                                         <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:100px" >
                                                                             <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
                                                                                 <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
@@ -119,7 +116,7 @@
                                                                                         render="form_tabla_acciones panel_filtros"/>
                                                                             </c:forEach>
                                                                         </h:selectManyListbox>
-                                                                        
+
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
@@ -135,7 +132,7 @@
                                                                     Estados <span class="caret"></span></button>
                                                                 <div class="collapse" id="collapse-filtro-estados">
                                                                     <h:panelGroup id="drop-filtro-estado">
-                                                                        
+
                                                                         <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:100px" >
                                                                             <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
                                                                                 <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
@@ -143,7 +140,7 @@
                                                                                         render="form_tabla_acciones panel_filtros"/>
                                                                             </c:forEach>
                                                                         </h:selectManyListbox>
-                                                                        
+
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
@@ -206,6 +203,23 @@
                                             </tbody>
                                         </table>
                                     </h:panelGroup>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <h:commandLink class="btn btn-primary" value="Exportar pdf" action="#{listarAcciones.pdftea()}" immediate="true">
+                                                <span class="glyphicon glyphicon-save-file"></span>
+                                            </h:commandLink>
+                                        </div>
+                                        <div  class="col-md-1">
+                                            <h:commandLink class="btn btn-primary" value="Exportar Excel" action="#{listarAcciones.excelseaConActividades()}" immediate="true">
+                                                <span class="glyphicon glyphicon-save-file"></span>
+                                            </h:commandLink>
+                                        </div>
+                                        <div  class="col-md-1">
+                                            <h:commandLink class="btn btn-primary" value="Exportar Excel (sin actividades)" action="#{listarAcciones.excelsea()}" immediate="true">
+                                                <span class="glyphicon glyphicon-save-file"></span>
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +227,7 @@
                 </div>
             </h:form>
         </div>
-        
+
         <div class="container-fluid" style="padding: 1%">
             <!-- TABLA ACCIONES -->
             <h:form id="form_tabla_acciones" >
@@ -239,7 +253,7 @@
                                         <th style="width: 13%"></th>
                                     </tr>                                    
                                 </thead>
-                                
+
                                 <tbody style="font-size: 11px">
                                     <c:forEach items="#{listarAcciones.listaAcciones}" var="accion">
                                         <tr>
@@ -277,7 +291,7 @@
                                                     </td>
                                                 </c:otherwise>
                                             </c:choose>                                                
-                                            
+
                                             <td>
                                                 <c:if test="#{accion.codificacionAccion != null}">
                                                     #{accion.codificacionAccion.nombre}
@@ -332,13 +346,21 @@
                                                                     <li><h:link value="Realizar Seguimiento" outcome="SeguimientoAccion.xhtml?id=#{accion.id}" />
                                                                     </li>
                                                                 </c:if>
+                                                                <li>
+                                                                    <h:commandLink  value="Exportar pdf" action="#{listarAcciones.pdfteaRegistro(accion.id)}"/>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <h:link class="btn btn-primary" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">
-                                                            <span class="glyphicon glyphicon-eye-open"></span>
-                                                        </h:link>
+                                                        <div class="btn-group">
+                                                            <h:link class="btn btn-primary" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">
+                                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                                            </h:link>
+                                                            <h:commandLink class="btn btn-primary" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">
+                                                                <span class="glyphicon glyphicon-save-file"></span>
+                                                            </h:commandLink>
+                                                        </div>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
@@ -347,41 +369,42 @@
                                 </tbody>
                             </table>  
                         </div>
-                        
-                            <div class="container-fluid text-center" style="padding: 1%">
-                                <ul class="pagination"> 
-                                    <c:choose>
-                                        <c:when test="#{listarAcciones.paginaActual !=1}" >
-                                            <li>
-                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
-                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
-                                                </h:commandLink>    
-                                            </li>                                           
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="disabled"><a>&#60;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
-                                    <c:choose>
-                                        <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
-                                            <li>
-                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
+
+                        <div class="container-fluid text-center" style="padding: 1%">
+                            <ul class="pagination"> 
+                                <c:choose>
+                                    <c:when test="#{listarAcciones.paginaActual !=1}" >
+                                        <li>
+                                            <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
                                                 <f:ajax delay="10" onevent="indicador"/>
                                                 <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
                                             </h:commandLink>    
-                                            </li>
-                                            
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="disabled"><a>&#62;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>                                    
-                                </ul>                
-                            </div>
+                                        </li>                                           
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled"><a>&#60;</a></li>
+                                    </c:otherwise>
+                                </c:choose>
+                                <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
+                                <c:choose>
+                                    <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
+                                        <li>
+                                            <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
+                                                <f:ajax delay="10" onevent="indicador"/>
+                                                <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                            </h:commandLink>    
+                                        </li>
+
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled"><a>&#62;</a></li>
+                                    </c:otherwise>
+                                </c:choose>                                    
+                            </ul>                
+                        </div>
                     </c:otherwise>
                 </c:choose>
-                
+
             </h:form>
             <h:form id="form_accion_modal">                
                 <!-- Panel de actividades -->
