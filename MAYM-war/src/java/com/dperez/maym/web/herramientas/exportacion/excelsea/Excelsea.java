@@ -5,19 +5,12 @@
 package com.dperez.maym.web.herramientas.exportacion.excelsea;
 
 import com.dperez.maymweb.modelo.acciones.Accion;
-import com.dperez.maymweb.modelo.acciones.Estado;
-import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
-import static com.dperez.maymweb.modelo.acciones.Estado.DESESTIMADA;
-import static com.dperez.maymweb.modelo.acciones.Estado.PENDIENTE;
-import static com.dperez.maymweb.modelo.acciones.Estado.PROCESO_IMP;
-import static com.dperez.maymweb.modelo.acciones.Estado.PROCESO_VER;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -123,10 +116,11 @@ public class Excelsea {
 
         if (conActividades) {
             CrearEncabezadosTabla(sheet, encabezados);
-            CrearContenidoTabla(sheet, acciones);
+            CrearContenidoTabla(sheet, acciones, true);
         } else {
             CrearEncabezadosTabla(sheet, encabezadosSinActividades);
-            CrearContenidoTablaSinActividades(sheet, acciones);
+            //CrearContenidoTablaSinActividades(sheet, acciones);
+            CrearContenidoTabla(sheet, acciones, false);
         }
 
         try {
@@ -161,139 +155,14 @@ public class Excelsea {
         }
     }
 
-    private void CrearContenidoTabla(Sheet hoja, List<Accion> acciones) {
+    private void CrearContenidoTabla(Sheet hoja, List<Accion> acciones, boolean conActividades) {
         int[] numFila = new int[]{1};
         for (var a : acciones) {
-            AgregarRegistro(a, hoja, numFila);
+            AgregarRegistro(a, hoja, numFila, conActividades);
         }
     }
 
-    private void CrearContenidoTablaSinActividades(Sheet hoja, List<Accion> acciones) {
-        CrearFilas(hoja, acciones.size());
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
-
-        LlenarDatoEntero(hoja, 0, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getId()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoFecha(hoja, 1, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> df.format(a.getFechaDeteccion())))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 2, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getAreaAccion().getNombre()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 3, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getDeteccionAccion().getNombre()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 4, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getDescripcion()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 5, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getAnalisisCausa()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoFecha(hoja, 6, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionImplementacion() != null ? df.format(a.getComprobacionImplementacion().getFechaEstimada()) : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 7, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionImplementacion() != null ? a.getComprobacionImplementacion().getResponsableComprobacion().getResponsabilidadResponsable().getNombre() : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoFecha(hoja, 8, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionImplementacion() != null ? a.getComprobacionImplementacion().getFechaComprobacion() != null ? df.format(a.getComprobacionImplementacion().getFechaComprobacion()) : "" : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoFecha(hoja, 9, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionEficacia() != null ? df.format(a.getComprobacionEficacia().getFechaEstimada()) : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 10, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionEficacia() != null ? a.getComprobacionEficacia().getResponsableComprobacion().getResponsabilidadResponsable().getNombre() : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoFecha(hoja, 11, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getComprobacionEficacia() != null ? a.getComprobacionEficacia().getFechaComprobacion() != null ? df.format(a.getComprobacionEficacia().getFechaComprobacion()) : "" : ""))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 12, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getCodificacionAccion().getNombre()))
-                .values().stream()
-                .collect(Collectors.toList()));
-
-        LlenarDatoTexto(hoja, 13, acciones.stream()
-                .collect(Collectors.toMap((Accion a) -> a.getId(), (Accion a) -> a.getEstadoDeAccion().getDescripcion()))
-                .values().stream()
-                .collect(Collectors.toList()));
-    }
-
-    private void CrearFilas(Sheet hoja, int totalRegistros) {
-        Row fila = null;
-        for (int i = 1; i <= totalRegistros; i++) {
-            fila = hoja.createRow(i);
-        }
-    }
-
-    private void LlenarDatoFecha(Sheet hoja, int columna, List<String> valores) {
-        Row fila = null;
-        Cell dato = null;
-        int numFila = 1;
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
-        for (int i = 0; i < valores.size(); i++, numFila++) {
-            fila = hoja.getRow(numFila);
-            dato = fila.createCell(columna);
-            try {
-                dato.setCellValue(df.parse(valores.get(i)));
-            } catch (ParseException ex) {
-                dato.setCellValue("");
-                ex.getMessage();
-            } finally {
-                dato.setCellStyle(estiloContenidoTablaFecha);
-            }
-        }
-    }
-
-    private void LlenarDatoTexto(Sheet hoja, int columna, List<String> valroes) {
-        Row fila = null;
-        Cell dato = null;
-        int numFila = 1;
-        for (int i = 0; i < valroes.size(); i++, numFila++) {
-            fila = hoja.getRow(numFila);
-            dato = fila.createCell(columna);
-            dato.setCellValue(valroes.get(i));
-            dato.setCellStyle(estiloContenidoTabla);
-        }
-    }
-
-    private void LlenarDatoEntero(Sheet hoja, int columna, List<Integer> valores) {
-        Row fila = null;
-        Cell dato = null;
-        int numFila = 1;
-        for (int i = 0; i < valores.size(); i++, numFila++) {
-            fila = hoja.getRow(numFila);
-            dato = fila.createCell(columna);
-            dato.setCellValue(valores.get(i));
-            dato.setCellStyle(estiloContenidoTabla);
-        }
-    }
-
-    private void AgregarRegistro(Accion a, Sheet hoja, int[] numFila) {
+    private void AgregarRegistro(Accion a, Sheet hoja, int[] numFila, boolean conActividades) {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
         Cell celda = null;
         Row fila = null;
@@ -310,6 +179,7 @@ public class Excelsea {
             try {
                 celda.setCellValue(df.parse(df.format(a.getFechaDeteccion())));
             } catch (ParseException ex) {
+                celda.setCellValue("");
             }
             celda.setCellStyle(estiloContenidoTablaFecha);
 
@@ -324,59 +194,14 @@ public class Excelsea {
 
             celda = getNextCelda(fila, columnaActual);
             celda.setCellValue(a.getAnalisisCausa());
-            /*
-            /   COMIENZO DE ITERACION POR LA LISTA DE ACTIVIDADES
-             */
-            if (a.getActividadesDeAccion().isEmpty()) {
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue("Sin Definir");
 
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue("Sin Definir");
-
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue("");
-
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue("Sin Definir");
-
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue("");
-            } else {
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue(a.getActividadesDeAccion().get(i).getTipoDeActividad().name());
-
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue(a.getActividadesDeAccion().get(i).getDescripcion());
-
-                celda = getNextCelda(fila, columnaActual);
-                try {
-                    celda.setCellValue(df.parse(df.format(a.getActividadesDeAccion().get(i).getFechaEstimadaImplementacion())));
-                } catch (ParseException ex) {
-                    celda.setCellValue("");
-                }
-                celda.setCellStyle(estiloContenidoTablaFecha);
-
-                celda = getNextCelda(fila, columnaActual);
-                celda.setCellValue(a.getActividadesDeAccion().get(i).getResponsableImplementacion().getResponsabilidadResponsable().getNombre());
-
-                if (a.getActividadesDeAccion().get(i).getFechaImplementacion() != null) {
-                    celda = getNextCelda(fila, columnaActual);
-                    try {
-                        celda.setCellValue(df.parse(df.format(a.getActividadesDeAccion().get(i).getFechaImplementacion())));
-                    } catch (ParseException ex) {
-                        celda.setCellValue("");
-                    }
-                    celda.setCellStyle(estiloContenidoTablaFecha);
-                } else {
-                    celda = getNextCelda(fila, columnaActual);
-                    celda.setCellValue("");
-                }
+            if (conActividades) {
+                agregarActividad(celda, fila, columnaActual, i, a, df);
                 i++;
+            } else {
+                i = a.getActividadesDeAccion().size();
             }
-            /*
-            / FIN DE ITERACION POR LA LISTA DE ACTIVIDADES
-             */
+
             if (a.getComprobacionImplementacion() != null) {
                 celda = getNextCelda(fila, columnaActual);
                 try {
@@ -456,5 +281,54 @@ public class Excelsea {
         Cell celda = fila.createCell(columnaActual[0]++);
         celda.setCellStyle(estiloContenidoTabla);
         return celda;
+    }
+
+    private void agregarActividad(Cell celda, Row fila, int[] columnaActual, int indiceActividad, Accion a, SimpleDateFormat df) {
+        if (a.getActividadesDeAccion().isEmpty()) {
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue("Sin Definir");
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue("Sin Definir");
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue("");
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue("Sin Definir");
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue("");
+        } else {
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue(a.getActividadesDeAccion().get(indiceActividad).getTipoDeActividad().name());
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue(a.getActividadesDeAccion().get(indiceActividad).getDescripcion());
+
+            celda = getNextCelda(fila, columnaActual);
+            try {
+                celda.setCellValue(df.parse(df.format(a.getActividadesDeAccion().get(indiceActividad).getFechaEstimadaImplementacion())));
+            } catch (ParseException ex) {
+                celda.setCellValue("");
+            }
+            celda.setCellStyle(estiloContenidoTablaFecha);
+
+            celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue(a.getActividadesDeAccion().get(indiceActividad).getResponsableImplementacion().getResponsabilidadResponsable().getNombre());
+
+            if (a.getActividadesDeAccion().get(indiceActividad).getFechaImplementacion() != null) {
+                celda = getNextCelda(fila, columnaActual);
+                try {
+                    celda.setCellValue(df.parse(df.format(a.getActividadesDeAccion().get(indiceActividad).getFechaImplementacion())));
+                } catch (ParseException ex) {
+                    celda.setCellValue("");
+                }
+                celda.setCellStyle(estiloContenidoTablaFecha);
+            } else {
+                celda = getNextCelda(fila, columnaActual);
+                celda.setCellValue("");
+            }
+        }
     }
 }
