@@ -56,17 +56,17 @@ public class ControladorRegistro {
      * @param idDeteccion
      * @return Null: si no se creo.
      */
-    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, int idArea, int idDeteccion){
+    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, String referencias, int idArea, int idDeteccion){
         Area area = repoArea.find(idArea);
         Deteccion deteccion = repoDeteccion.find(idDeteccion);
         
         Accion accion;
         switch(tipo){
-            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, area, deteccion);
+            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, referencias, area, deteccion);
             
-            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, area, deteccion);
+            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, referencias, area, deteccion);
             
-            default -> accion = new Preventiva(fechaDeteccion , descripcion, area, deteccion);
+            default -> accion = new Preventiva(fechaDeteccion , descripcion, referencias,area, deteccion);
         }
         
         return repoAccion.create(accion);

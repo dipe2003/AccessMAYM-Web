@@ -45,6 +45,7 @@ public class VerAccion implements Serializable {
     private Deteccion GeneradaPor;
     private Area AreaSector;
     private String Descripcion;
+    private String Referencias;
     private String AnalisisCausa;
     
     private String ObservacionesDesestimada = "";
@@ -78,6 +79,7 @@ public class VerAccion implements Serializable {
     public Deteccion getGeneradaPor() {return GeneradaPor;}
     public Area getAreaSector() {return AreaSector;}
     public String getDescripcion() {return Descripcion;}
+    public String getReferencias(){return Referencias;}
     public String getAnalisisCausa() {return AnalisisCausa;}
 
     public String getObservacionesDesestimada() {return ObservacionesDesestimada;}    
@@ -110,6 +112,7 @@ public class VerAccion implements Serializable {
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+    public void setReferencias(String Referencias){this.Referencias = Referencias;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
 
     public void setObservacionesDesestimada(String ObservacionesDesestimada) {this.ObservacionesDesestimada = ObservacionesDesestimada;}
@@ -148,6 +151,7 @@ public class VerAccion implements Serializable {
             GeneradaPor = AccionSeleccionada.getDeteccionAccion();
             AreaSector = AccionSeleccionada.getAreaAccion();
             Descripcion = AccionSeleccionada.getDescripcion();
+            Referencias = AccionSeleccionada.getReferencias();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             Estado = AccionSeleccionada.getEstadoDeAccion();
             // si el estado es Desestimada se llena la propiedad

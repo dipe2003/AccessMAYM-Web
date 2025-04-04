@@ -21,8 +21,8 @@ public class Correctiva extends Accion implements Serializable {
     public Correctiva() {
     }
 
-    public Correctiva(Date fechaDeteccion, String descripcion, Area area, Deteccion deteccion) {
-        super(fechaDeteccion, descripcion, area, deteccion);        
+    public Correctiva(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion) {
+        super(fechaDeteccion, descripcion, referencias, area, deteccion);        
     }
 
     

@@ -5,12 +5,21 @@
 package com.dperez.maym.web.herramientas.exportacion.excelsea;
 
 import com.dperez.maymweb.modelo.acciones.Accion;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
+import static com.dperez.maymweb.modelo.acciones.Estado.DESESTIMADA;
+import static com.dperez.maymweb.modelo.acciones.Estado.PENDIENTE;
+import static com.dperez.maymweb.modelo.acciones.Estado.PROCESO_IMP;
+import static com.dperez.maymweb.modelo.acciones.Estado.PROCESO_VER;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -40,12 +49,20 @@ public class Excelsea {
     private final HSSFFont fuenteEncabezado = ((HSSFWorkbook) workbook).createFont();
     private final HSSFFont fuenteContenido = ((HSSFWorkbook) workbook).createFont();
 
+    // Estados
+    private final CellStyle estiloContenidoTablaCerrada = workbook.createCellStyle();
+    private final CellStyle estiloContenidoTablaPendiente = workbook.createCellStyle();
+    private final CellStyle estiloContenidoTablaProcesoImp = workbook.createCellStyle();
+    private final CellStyle estiloContenidoTablaProceoVer = workbook.createCellStyle();
+    private final CellStyle estiloContenidoTablaDesestimada = workbook.createCellStyle();
+
     private final String[] encabezados = new String[]{
         "Id",
         "Fecha Deteccion",
         "Area",
         "Generada Por",
         "Descripcion",
+        "Referencias",
         "Analisis de Causa",
         "Tipo de Actividad",
         "Actividad",
@@ -68,6 +85,7 @@ public class Excelsea {
         "Area",
         "Generada Por",
         "Descripcion",
+        "Referencias",
         "Analisis de Causa",
         "Fecha Estimada Implementacion",
         "Responsable Implementacion",
@@ -105,6 +123,23 @@ public class Excelsea {
 
         estiloContenidoTablaFecha.cloneStyleFrom(estiloContenidoTabla);
         estiloContenidoTablaFecha.setDataFormat((short) 14);
+
+        estiloContenidoTablaCerrada.cloneStyleFrom(estiloContenidoTabla);
+        estiloContenidoTablaCerrada.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        estiloContenidoTablaCerrada.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+
+        estiloContenidoTablaPendiente.cloneStyleFrom(estiloContenidoTablaCerrada);
+        estiloContenidoTablaPendiente.setFillForegroundColor(IndexedColors.RED.getIndex());
+
+        estiloContenidoTablaProcesoImp.cloneStyleFrom(estiloContenidoTablaCerrada);
+        estiloContenidoTablaProcesoImp.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+
+        estiloContenidoTablaProceoVer.cloneStyleFrom(estiloContenidoTablaCerrada);
+        estiloContenidoTablaProceoVer.setFillForegroundColor(IndexedColors.YELLOW1.getIndex());
+
+        estiloContenidoTablaDesestimada.cloneStyleFrom(estiloContenidoTablaCerrada);
+        estiloContenidoTablaDesestimada.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+
     }
 
     public void ExportarLibroExcel(List<Accion> acciones, String tituloArchivo, boolean conActividades) {
@@ -193,6 +228,9 @@ public class Excelsea {
             celda.setCellValue(a.getDescripcion());
 
             celda = getNextCelda(fila, columnaActual);
+            celda.setCellValue(a.getReferencias());
+
+            celda = getNextCelda(fila, columnaActual);
             celda.setCellValue(a.getAnalisisCausa());
 
             if (conActividades) {
@@ -273,6 +311,7 @@ public class Excelsea {
 
             celda = getNextCelda(fila, columnaActual);
             celda.setCellValue(a.getEstadoDeAccion().getDescripcion());
+            celda.setCellStyle(ObtenerColor(a.getEstadoDeAccion()));
 
         } while (i < a.getActividadesDeAccion().size());
     }
@@ -330,5 +369,25 @@ public class Excelsea {
                 celda.setCellValue("");
             }
         }
+
+    }
+
+    private CellStyle ObtenerColor(Estado estado) {
+        CellStyle estilo;
+        switch (estado) {
+            case CERRADA ->
+                estilo = estiloContenidoTablaCerrada;
+            case PROCESO_IMP ->
+                estilo = estiloContenidoTablaProcesoImp;
+            case PROCESO_VER ->
+                estilo = estiloContenidoTablaProceoVer;
+            case PENDIENTE ->
+                estilo = estiloContenidoTablaPendiente;
+            case DESESTIMADA ->
+                estilo = estiloContenidoTablaDesestimada;
+            default ->
+                estilo = estiloContenidoTabla;
+        }
+        return estilo;
     }
 }

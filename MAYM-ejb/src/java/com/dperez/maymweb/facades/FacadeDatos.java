@@ -39,9 +39,9 @@ public class FacadeDatos {
      * @param idDeteccion
      * @return Null: si no se creo.
      */
-    public Accion nuevaAccion(TipoAccion tipoAccion, Date fechaDeteccion, String descripcion,
+    public Accion nuevaAccion(TipoAccion tipoAccion, Date fechaDeteccion, String descripcion,String referencias,
             int idAreaSector, int idDeteccion){
-        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, idAreaSector, idDeteccion);
+        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, referencias, idAreaSector, idDeteccion);
     }
     
     /**
@@ -145,9 +145,9 @@ public class FacadeDatos {
      * @param idCodificacion
      * @return -1 si no se actualizo.
      */
-    public int editarAccion(int idAccion, Date fechaDeteccion, String descripcion, String analisisCausa, int idArea, 
+    public int editarAccion(int idAccion, Date fechaDeteccion, String descripcion, String referencias, String analisisCausa, int idArea, 
             int idDeteccion, int idCodificacion){
-        return cEdicion.editarAccion(idAccion, fechaDeteccion, descripcion, analisisCausa, idArea, idDeteccion, idCodificacion);
+        return cEdicion.editarAccion(idAccion, fechaDeteccion, descripcion, referencias, analisisCausa, idArea, idDeteccion, idCodificacion);
     }
     
     /**

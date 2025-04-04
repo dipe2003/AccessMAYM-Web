@@ -58,7 +58,7 @@ public class ControladorEdicionRegistro {
      * @param idCodificacion
      * @return -1 si no se actualizo.
      */
-    public int editarAccion(int idAccion, Date fechaDeteccion, String descripcion, String analisisCausa,
+    public int editarAccion(int idAccion, Date fechaDeteccion, String descripcion, String referencias, String analisisCausa,
             int idAreaSector, int idDeteccion, int idCodificacion){
         Accion accion = repoAccion.find(idAccion);
         //  Comprobar si hay cambio en el valor para "ahorrar" llamada a la base de datos.
@@ -76,7 +76,7 @@ public class ControladorEdicionRegistro {
         }
         accion.setFechaDeteccion(fechaDeteccion);
         accion.setDescripcion(descripcion);
-        
+        accion.setReferencias(referencias);
         accion.setAnalisisCausa(analisisCausa);
         return repoAccion.update(accion).getId();
     }

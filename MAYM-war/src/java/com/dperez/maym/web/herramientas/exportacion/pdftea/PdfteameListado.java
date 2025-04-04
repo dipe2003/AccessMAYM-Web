@@ -28,7 +28,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Optional;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
@@ -43,13 +42,12 @@ public class PdfteameListado implements Serializable {
     // 1 pulgada = 72
     private Document documento = new Document();
 
-    public PdfteameListado() {        
-            documento.setPageSize(PageSize.A4.rotate());
-            documento.setMargins(18, 18, 90, 36);        
+    public PdfteameListado() {
+        documento.setPageSize(PageSize.A4.rotate());
+        documento.setMargins(18, 18, 90, 36);
     }
 
-    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones,
-            boolean esPlanAccion, Optional<String> textoIntroduccion, Optional<String> tituloPie) {
+    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -96,7 +94,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getAreaAccion().getNombre(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getDeteccionAccion().getNombre(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
-                tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("")?"Sin Definir":a.getAnalisisCausa(), impar, 0));
+                tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
                 // Celda ACTIVIDADES
                 if (a.getActividadesDeAccion().size() > 0) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{17, 7, 4});
@@ -152,7 +150,124 @@ public class PdfteameListado implements Serializable {
 
     }
 
-    
+    public void ExportarPlanAccion(String nombreArchivo, String tituloPlan, List<Accion> acciones,
+            String textoIntroduccion) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+
+        try {
+            response.setContentType("application/pdf");
+            response.setHeader("Content-disposition", "inline; filename=" + nombreArchivo);
+            OutputStream outputStream = response.getOutputStream();
+            PdfWriter writer = PdfWriter.getInstance(documento, outputStream);
+
+            Accion accion = acciones.stream().findFirst().get();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan), 16, 570);
+            writer.setPageEvent(event);
+            TablaPie eventoPie = new TablaPie();
+            writer.setPageEvent(eventoPie);
+
+            documento.open();
+            // TODO: Crear nuevo metodo por separado ya que debe incluir menos columnas (deteccion y fecha deben ser parte del titulo) y no lleva estado (OPCIONAL: incluir REFERNCIAS)           
+
+            Phrase frase = new Phrase();
+
+            frase.setFont(FontFactory.getFont("arialbi", 10, Font.NORMAL, Color.BLACK));
+            frase.add(textoIntroduccion);
+            documento.add(frase);
+
+            // tabla listado de acciones, el total de columnas es fijo basado en los atributos que tiene la accion por defecto 11 (no inluye el tipo de Accion)            
+            PdfPTable tabla = CrearTablaListado(10, new int[]{8, 7, 18, 18, 19, 7, 5, 5, 7, 6});
+
+            // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
+            tabla.addCell(CrearCeldaTitulo("Area", 0));
+            tabla.addCell(CrearCeldaTitulo("Referencias", 0));
+            tabla.addCell(CrearCeldaTitulo("Descripcion", 0));
+            tabla.addCell(CrearCeldaTitulo("Analisis de Causa", 0));
+
+            //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha            
+            tabla.addCell(CrearCeldaTitulo("Actividades", 0));
+            tabla.addCell(CrearCeldaTitulo("Responsable", 0));
+            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
+
+            tabla.addCell(CrearCeldaTitulo("Fecha Ver. Eficacia", 0));
+            tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
+            tabla.addCell(CrearCeldaTitulo("Tipo", 0));
+
+            // FILAS RESTANTES - Datos de Acciones
+            int contador = 0;
+            boolean impar = true;
+
+            for (Accion a : acciones) {
+                tabla.addCell(CrearCeldaContenido(a.getAreaAccion().getNombre(), impar, 0));
+                tabla.addCell(CrearCeldaContenido(a.getReferencias(), impar, 0));
+                tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
+                tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
+                // Celda ACTIVIDADES
+                if (a.getActividadesDeAccion().size() > 0) {
+                    PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{19, 8, 4});
+                    final boolean repImpar = impar;
+                    a.getActividadesDeAccion().forEach((act) -> {
+                        tablaActividades.addCell(CrearCeldaContenido(act.getTipoDeActividad().getDescripcion() + ": " + act.getDescripcion(), repImpar, 0)).setBorder(0);
+                        tablaActividades.addCell(CrearCeldaContenido(act.getResponsableImplementacion().getResponsabilidadResponsable().getNombre(), repImpar, 0)).setBorder(0);
+                        tablaActividades.addCell(CrearCeldaContenido(act.getFechaImplementacion() != null ? df.format(act.getFechaImplementacion()) : "Sin Definir", repImpar, 0)).setBorder(0);
+                    });
+                    PdfPCell celda = new PdfPCell();
+                    celda.setColspan(3);
+                    if (impar) {
+                        celda.setBackgroundColor(new Color(216, 226, 242));
+                    }
+
+                    celda.addElement(tablaActividades);
+                    tabla.addCell(celda);
+                    tabla.setComplete(true);
+                } else {
+                    tabla.addCell(CrearCeldaContenido("Sin Definir", impar, 3));
+                    tabla.setComplete(true);
+                }
+
+                String fechaEficacia = "Sin Definir";
+                if (a.getComprobacionEficacia() != null) {
+                    if (a.getComprobacionEficacia().getFechaComprobacion() != null) {
+                        fechaEficacia = df.format(a.getComprobacionEficacia().getFechaComprobacion());
+                    } else {
+                        if (a.getComprobacionEficacia().getFechaEstimada() != null) {
+                            fechaEficacia = df.format(a.getComprobacionEficacia().getFechaEstimada());
+                        }
+                    }
+                }
+                tabla.addCell(CrearCeldaContenido(fechaEficacia, impar, 0));
+                tabla.addCell(CrearCeldaContenido(a.getCodificacionAccion().getNombre(), impar, 0));
+
+                tabla.addCell(CrearCeldaContenido(a.getClass().getSimpleName(), impar, 0));
+                contador++;
+                impar = contador % 2 == 0;
+            }
+
+            tabla.completeRow();
+            documento.add(tabla);
+
+            documento.add(Chunk.NEWLINE);
+            frase = new Phrase();
+            frase.setFont(FontFactory.getFont("arialbi", 10, Font.NORMAL, Color.BLACK));
+            frase.add("Atte.: __________________________________________");
+
+            documento.add(frase);
+
+            documento.close();
+            outputStream.flush();
+            context.responseComplete();
+        } catch (IOException ex) {
+            System.out.println("IO Error: " + ex.getMessage());
+        } catch (DocumentException de) {
+            System.out.println("Document Error: " + de.getMessage());
+        }
+
+    }
+
     private Color ObtnerColor(Estado estado) {
         Color colorFondo;
         switch (estado) {
@@ -164,14 +279,14 @@ public class PdfteameListado implements Serializable {
                 colorFondo = new Color(240, 240, 60);
             case PENDIENTE ->
                 colorFondo = new Color(235, 135, 130);
-            case DESESTIMADA->
-                colorFondo = new Color(120,130,150);
+            case DESESTIMADA ->
+                colorFondo = new Color(120, 130, 150);
             default ->
                 colorFondo = Color.WHITE;
         }
         return colorFondo;
     }
-    
+
     private PdfPCell CrearCeldaTitulo(String textoTitulo, int colspan) {
         PdfPCell celda = new PdfPCell();
         celda.setColspan(colspan);
@@ -235,7 +350,6 @@ public class PdfteameListado implements Serializable {
 
     }
 
-
     private PdfPTable CrearTablaListado(int totalColumnas, int anchosPorCiento[]) {
         PdfPTable tabla = new PdfPTable(totalColumnas);
         tabla.setWidthPercentage(100f);
@@ -248,7 +362,6 @@ public class PdfteameListado implements Serializable {
         tabla.getDefaultCell().setBorderWidthLeft(1);
         return tabla;
     }
-
 
     private PdfPTable CrearTablaActividades(int totalColumnas, int anchosPorCiento[]) {
         PdfPTable tabla = new PdfPTable(totalColumnas);
@@ -287,16 +400,16 @@ public class PdfteameListado implements Serializable {
 
         return tablaEncabezado;
     }
-    
 
     /// <summary>
     /// Genera la celda e inserta el logo de la empresa.
     /// </summary>
     /// <returns></returns>
     private PdfPCell CrearLogo() throws IOException {
+
         Phrase frase = new Phrase();
         try {
-            Image logo = Image.getInstance("Resources.MarfrigLogo");
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/Resources/Images/logo_maym.jpg");
             logo.setAlignment(Element.ALIGN_LEFT);
             Chunk chLogo = new Chunk(logo, 0, 0, true);
             frase.add(chLogo);
@@ -360,4 +473,3 @@ public class PdfteameListado implements Serializable {
     }
 
 }
-

@@ -19,8 +19,8 @@ import javax.persistence.Entity;
 public class Mejora extends Accion implements Serializable {
 
     // Constructores
-    public Mejora(Date fechaDeteccion, String descripcion, Area area, Deteccion deteccion){
-        super(fechaDeteccion, descripcion, area, deteccion);
+    public Mejora(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion){
+        super(fechaDeteccion, descripcion, referencias, area, deteccion);
     }
     public Mejora(){}
 

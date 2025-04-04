@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -704,8 +705,33 @@ public class ListarAcciones implements Serializable {
                 titulo.append("Oportunidades de mejora");
         }
 
-        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas, false, null, null);
+        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
 
+    }
+    
+    public void pdfteaPlanAccion(int id) {
+        PdfteameListado pdf = new PdfteameListado();
+        Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+        List<Accion> accionesPlan = fLectura.listarAcciones().stream()
+                .filter(a->a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion()==accionFiltrada.getDeteccionAccion())
+                .collect(Collectors.toList());      
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
+        StringBuilder strTitulo = new StringBuilder();
+         StringBuilder strIntroduccion = new StringBuilder();
+         
+        strTitulo.append("PLAN DE ACCION: ")
+                .append(accionFiltrada.getDeteccionAccion().getNombre())
+                .append(" - ")
+                .append(df.format(accionFiltrada.getFechaDeteccion()));
+       strIntroduccion.append("En respuesta a los hallazgos detectados por ")
+               .append(accionFiltrada.getDeteccionAccion().getNombre())
+               .append(" en el dia ")
+               .append(df.format(accionFiltrada.getFechaDeteccion()))
+               .append(" se presenta el siguiente Plan de Accion:");
+
+        df = new SimpleDateFormat("dd-MM-yyy");
+        pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf", 
+              strTitulo.toString(), accionesPlan, strIntroduccion.toString());
     }
 
     public void pdfteaRegistro(int id) {

@@ -19,8 +19,8 @@ import javax.persistence.Entity;
 public class Preventiva extends Accion implements Serializable {
 
     // Constructores
-    public Preventiva(Date fechaDeteccion, String descripcion, Area area, Deteccion deteccion){
-        super(fechaDeteccion, descripcion, area, deteccion);
+    public Preventiva(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion){
+        super(fechaDeteccion, descripcion, referencias, area, deteccion);
     }
     public Preventiva(){}
 

@@ -51,6 +51,7 @@ public class CrearAccion implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
+    private String Referencias;
     
     private TipoDeteccion[] tiposDeteccion;
     private TipoDeteccion TipoDeDeteccionSeleccionada;
@@ -76,7 +77,7 @@ public class CrearAccion implements Serializable {
         }
     }
     public String getDescripcion() {return Descripcion;}
-    
+    public String getReferencias(){return Referencias;}
     public TipoAccion getTipoDeAccion() {return tipoDeAccion;}
     
     public TipoDeteccion getTipoDeDeteccionSeleccionada(){return this.TipoDeDeteccionSeleccionada;}
@@ -102,7 +103,7 @@ public class CrearAccion implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
-    
+    public void setReferencias(String Referencias) {this.Referencias = Referencias;}
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {this.tipoDeAccion = tipoDeAccion;}
     
     public void setTipoDeDeteccionSeleccionada(TipoDeteccion TipoDeteccion){this.TipoDeDeteccionSeleccionada = TipoDeteccion;}
@@ -166,8 +167,9 @@ public class CrearAccion implements Serializable {
      * @throws java.io.IOException
      */
     public void crearAccionCorrectiva() throws IOException{
+        if(Referencias == null) Referencias = new String();
         Accion accion = fDatos.nuevaAccion(tipoDeAccion, FechaDeteccion,
-                Descripcion, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
+                Descripcion, Referencias, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
         
         if(accion != null){
             if(productoInvolucrado.getListaProductosAfectados()!=null){

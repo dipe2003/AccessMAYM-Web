@@ -16,7 +16,7 @@
                 <div class="col-md-12">
                     <div class="container-fluid">            
                         <div class="panel panel-info">
-                            <div class="panel-heading">Filtrar</div>
+                            <div class="panel-heading">Filtrar y Exportar</div>
                             <div class="panel-body">
                                 <div class="table-responsive-sm">
                                     <h:panelGroup id="panel_filtros">
@@ -204,20 +204,25 @@
                                         </table>
                                     </h:panelGroup>
                                     <div class="row">
-                                        <div class="col-md-1">
-                                            <h:commandLink class="btn btn-primary" value="Exportar pdf" action="#{listarAcciones.pdftea()}" immediate="true">
-                                                <span class="glyphicon glyphicon-save-file"></span>
-                                            </h:commandLink>
-                                        </div>
-                                        <div  class="col-md-1">
-                                            <h:commandLink class="btn btn-primary" value="Exportar Excel" action="#{listarAcciones.excelseaConActividades()}" immediate="true">
-                                                <span class="glyphicon glyphicon-save-file"></span>
-                                            </h:commandLink>
-                                        </div>
-                                        <div  class="col-md-1">
-                                            <h:commandLink class="btn btn-primary" value="Exportar Excel (sin actividades)" action="#{listarAcciones.excelsea()}" immediate="true">
-                                                <span class="glyphicon glyphicon-save-file"></span>
-                                            </h:commandLink>
+                                        <div class="col-sm-2">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    Exportar
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <h:commandLink class="dropdown-item" value="Listado completo (Pdf)" action="#{listarAcciones.pdftea()}" immediate="true"/>
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink class="dropdown-item" value="Listado completo (Excel)" action="#{listarAcciones.excelseaConActividades()}" immediate="true"/>
+                                                    </li>
+                                                    <li>
+                                                        <h:commandLink class="dropdown-item" value="Listado compacto (Excel)" action="#{listarAcciones.excelsea()}" immediate="true"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -354,12 +359,30 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <div class="btn-group">
-                                                            <h:link class="btn btn-primary" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">
-                                                                <span class="glyphicon glyphicon-eye-open"></span>
-                                                            </h:link>
-                                                            <h:commandLink class="btn btn-primary" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">
-                                                                <span class="glyphicon glyphicon-save-file"></span>
-                                                            </h:commandLink>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                ...
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li>
+                                                                    <h:link class="dropdown-item" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">                                                                        
+                                                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                                                        Ver Accion Web
+                                                                    </h:link>
+                                                                </li>
+                                                                <li>
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">                                                                       
+                                                                        <span class="glyphicon glyphicon-save-file"></span>
+                                                                         Ver Accion (pdf)
+                                                                    </h:commandLink>  
+                                                                </li>
+                                                                <li>
+                                                                    <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
+                                                                        <span class="glyphicon glyphicon-save-file"></span>
+                                                                         Crear Plan de Accion (pdf)
+                                                                    </h:commandLink>   
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </c:otherwise>
                                                 </c:choose>

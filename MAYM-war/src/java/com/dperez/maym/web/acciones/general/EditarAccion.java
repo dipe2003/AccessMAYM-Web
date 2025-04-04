@@ -78,6 +78,7 @@ public class EditarAccion implements Serializable {
     private Date FechaDeteccion;
     private String strFechaDeteccion;
     private String Descripcion;
+    private String Referencias;
     private String AnalisisCausa;
     private String Cliente;
     
@@ -129,6 +130,7 @@ public class EditarAccion implements Serializable {
         }
     }
     public String getDescripcion() {return Descripcion;}
+    public String getReferencias(){return Referencias;}
     public String getAnalisisCausa() {return AnalisisCausa;}
     public String getCliente() {return Cliente;}
     
@@ -194,6 +196,7 @@ public class EditarAccion implements Serializable {
         this.FechaDeteccion = cal.getTime();
     }
     public void setDescripcion(String Descripcion) {this.Descripcion = Descripcion;}
+    public void setReferencias(String Referencias){this.Referencias = Referencias;}
     public void setAnalisisCausa(String AnalisisCausa) {this.AnalisisCausa = AnalisisCausa;}
     public void setCliente(String Cliente) {this.Cliente = Cliente;}
     
@@ -274,6 +277,7 @@ public class EditarAccion implements Serializable {
             tipoDeAccion = TipoAccion.valueOf(AccionSeleccionada.getClass().getSimpleName().toUpperCase());
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
+            Referencias = AccionSeleccionada.getReferencias();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
             
             //  Codificaciones
@@ -414,7 +418,8 @@ public class EditarAccion implements Serializable {
     public void editarAccion() throws IOException{
         FacesContext ctx = FacesContext.getCurrentInstance();
         // actualizar accion
-        if(fDatos.editarAccion(IdAccionSeleccionada, FechaDeteccion, Descripcion, AnalisisCausa,
+        if(Referencias == null)Referencias = new String();
+        if(fDatos.editarAccion(IdAccionSeleccionada, FechaDeteccion, Descripcion, Referencias, AnalisisCausa,
                 AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada) == -1){
             // Si no se actualizo muestra mensaje de error.
             ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo editar la Accion", "No se pudo editar la Accion" ));

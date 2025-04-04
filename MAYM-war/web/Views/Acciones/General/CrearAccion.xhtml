@@ -80,8 +80,13 @@
                         </div>
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion o desvio." value="#{crearAccion.descripcion}" 
+                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion." value="#{crearAccion.descripcion}" 
                                              required="true" requiredMessage="No se ingreso descripcion."/>
+                        </div>
+                        <div class="form-group">
+                            <strong><label for="referencias">Referencias:</label></strong>                                    
+                            <h:inputTextarea class="form-control" id="referencias" p:placeholder="Referencias al requisito o especificación." value="#{crearAccion.referencias}" 
+                                             required="false" />
                         </div>
                         
                         <h:panelGroup id="panel_producto_afectado">
@@ -162,7 +167,10 @@
                     </div>                    
                     <div class="form-group-sm">
                         <h:message for="descripcion" class="msj_error"/>
-                    </div>
+                    </div> 
+                    <div class="form-group-sm">
+                        <h:message for="referencias" class="msj_error"/>
+                    </div>                    
                     <div class="form-group-sm">
                         <h:message for="crear_accion" class="msj_error"/>
                     </div>
@@ -171,7 +179,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h:commandButton id="crear_accion" class="btn btn-success" style="width: 99%" value="Guardar" action="#{crearAccion.crearAccionCorrectiva()}">
-                            <f:ajax execute="deteccion descripcion fecha_deteccion area" onevent="indicador" render="panel_mensajes"/>
+                            <f:ajax execute="deteccion descripcion referencias fecha_deteccion area" onevent="indicador" render="panel_mensajes"/>
                         </h:commandButton>
                     </div>
                     <div class="col-sm-6">

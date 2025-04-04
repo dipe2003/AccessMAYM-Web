@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
+import com.sun.mail.util.PropUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,6 +48,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     @Temporal(TemporalType.DATE)
     protected Date fechaDeteccion;
     protected String descripcion  = new String();
+    protected String referencias  = new String();
     protected String analisisCausa = new String();
     protected String observacionesDesestimada = new String();
     protected Estado estadoDeAccion;
@@ -88,16 +90,17 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.productosInvolucrados = new ArrayList<>();
     }
     
-    public Accion(Date fechaDeteccion, String descripcion) {
+    public Accion(Date fechaDeteccion, String descripcion, String referencias) {
         this.estadoDeAccion = Estado.PENDIENTE;
         this.fechaDeteccion = fechaDeteccion;
         this.descripcion = descripcion;
+        this.referencias = referencias;
         this.adjuntosDeAccion = new ArrayList<>();
         this.actividadesDeAccion = new ArrayList<>();
         this.productosInvolucrados = new ArrayList<>();
     }
     
-    public Accion(Date fechaDeteccion, String descripcion, Area area, Deteccion deteccion) {
+    public Accion(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion) {
         this.estadoDeAccion = Estado.PENDIENTE;
         this.fechaDeteccion = fechaDeteccion;
         this.descripcion = descripcion;
@@ -112,6 +115,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public int getId() {return this.id;}
     public Date getFechaDeteccion() {return this.fechaDeteccion;}
     public String getDescripcion() {return this.descripcion;}
+    public String getReferencias(){return this.referencias;}
     public String getAnalisisCausa() {return this.analisisCausa;}
     public String getObservacionesDesestimada() {return observacionesDesestimada;}
     
@@ -137,6 +141,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public void setId(int id) {this.id = id;}
     public void setFechaDeteccion(Date fechaDeteccion) {this.fechaDeteccion = fechaDeteccion;}
     public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+    public void setReferencias(String referencias){this.referencias = referencias;}
     public void setAnalisisCausa(String analisisCausa) {this.analisisCausa = analisisCausa;}
     public void setObservacionesDesestimada(String observacionesDesestimada) {this.observacionesDesestimada = observacionesDesestimada;}
     
