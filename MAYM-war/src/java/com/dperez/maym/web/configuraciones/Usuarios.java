@@ -22,7 +22,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -63,6 +65,8 @@ public class Usuarios implements Serializable {
     
     private List<ContenedorFiltrable<Usuario>> listaUsuariosFiltrable;
     
+    private Map<Integer, String> responsables;
+    
     private boolean CambiarPassword;
     
     private List<Area> ListaAreas;
@@ -91,6 +95,7 @@ public class Usuarios implements Serializable {
     public EnumPermiso[] getPermisosUsuario(){return this.PermisosUsuario;}
     
     public List<ContenedorFiltrable<Usuario>> getListaUsuariosFiltrable() {return listaUsuariosFiltrable;}    
+    public Map<Integer,  String> getResponsables(){return this.responsables;}
     
     public boolean isCambiarPassword() {return CambiarPassword;}
     
@@ -123,6 +128,8 @@ public class Usuarios implements Serializable {
         this.listaUsuariosFiltrable = listaUsuariosFiltrable;
     }    
     
+    public void setResponsables(Map<Integer,  String> responsables){this.responsables = responsables;}
+    
     public void setCambiarPassword(boolean CambiarPassword) {this.CambiarPassword = CambiarPassword;}
     
     public void setListaAreas(List<Area> ListaAreas) {this.ListaAreas = ListaAreas;}
@@ -149,9 +156,18 @@ public class Usuarios implements Serializable {
         
         listaUsuariosFiltrable = new ArrayList<>();
         listaCompletaUsuariosFiltrable = new ArrayList<>();
+        responsables = new HashMap<>();
         fLectura.listarUsuarios(false).stream()
                  .forEach((Usuario u)->{
                      listaCompletaUsuariosFiltrable.add(new ContenedorFiltrable<>(u.getNombreCompleto(), u));
+                     StringBuilder responsabilidades = new StringBuilder();
+                     int total = u.getResponsablesUsuario().size();
+                     for(int i = 0; i< total ; i++){
+                         responsabilidades.append(u.getResponsablesUsuario().get(i).getResponsabilidadResponsable().getNombre());
+                         if (i +1 < total )
+                             responsabilidades.append(", ");
+                     }
+                     responsables.put(u.getId(), responsabilidades.toString());
                  });
         listaCompletaUsuariosFiltrable.stream().sorted();
         

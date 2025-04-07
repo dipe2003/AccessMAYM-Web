@@ -386,7 +386,8 @@ public class PdfteameRegistro implements Serializable {
     private PdfPCell CrearLogo() throws IOException {
         Phrase frase = new Phrase();
         try {
-            Image logo = Image.getInstance("../../../Resources/Images/logo_maym.jpg");
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_maym.jpg"));             
+            logo.scalePercent(12f);
             logo.setAlignment(Element.ALIGN_LEFT);
             Chunk chLogo = new Chunk(logo, 0, 0, true);
             frase.add(chLogo);

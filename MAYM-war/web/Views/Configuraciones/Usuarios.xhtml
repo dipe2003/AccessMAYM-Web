@@ -73,6 +73,7 @@
                                 <f:ajax delay="100" render="panel_modal" />
                             </h:commandLink>                                                  
                         </div>
+                        <h:panelGroup id="panel-datos">
                         <table class="table table-hover table-striped table-responsive">
                             <thead>
                                 <tr>
@@ -138,12 +139,7 @@
                                             </c:choose> 
                                         </td>
                                         <td>
-                                            <c:forEach items="#{elemento.contenido.responsablesUsuario}" var="responsable" varStatus="estado">
-                                                #{responsable.responsabilidadResponsable.nombre}
-                                                <c:if test="#{not estado.last}">
-                                                    , 
-                                                </c:if>
-                                            </c:forEach>
+                                             #{usuarios.responsables.get(elemento.contenido.id)}
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
@@ -198,7 +194,8 @@
                                     </tr>
                                 </c:forEach>
                             </tbody>
-                        </table>                         
+                        </table>      
+                        </h:panelGroup>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -515,7 +512,7 @@
                             <li>
                                 <h:commandLink class="active" action="#{usuarios.cambiarPagina(true, usuarios.paginaActual +1)}" value="&#62;" >
                                     <f:ajax delay="10" onevent="indicador"/>
-                                    <f:ajax delay="10" render="form_usuarios panel_filtros"/>
+                                    <f:ajax delay="10" render="form_usuarios panel_filtros panel-datos"/>
                                 </h:commandLink>    
                             </li>
                             

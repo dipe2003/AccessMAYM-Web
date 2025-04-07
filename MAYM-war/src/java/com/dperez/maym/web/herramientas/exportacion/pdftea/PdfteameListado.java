@@ -334,22 +334,6 @@ public class PdfteameListado implements Serializable {
         return celda;
     }
 
-    private PdfPCell CrearCeldaVacia(int colspan, boolean colorFondoImpar) {
-        PdfPCell celda = new PdfPCell();
-        if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
-        }
-        celda.setColspan(colspan);
-        celda.setBorderWidthBottom(0);
-        celda.setBorderWidthTop(0);
-        celda.setBorderWidthRight(0);
-        celda.setBorderWidthLeft(0);
-        celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        celda.setPhrase(new Phrase(""));
-        return celda;
-
-    }
-
     private PdfPTable CrearTablaListado(int totalColumnas, int anchosPorCiento[]) {
         PdfPTable tabla = new PdfPTable(totalColumnas);
         tabla.setWidthPercentage(100f);
@@ -386,7 +370,7 @@ public class PdfteameListado implements Serializable {
         PdfPTable tablaEncabezado = new PdfPTable(4);
         tablaEncabezado.setWidthPercentage(100f);
         tablaEncabezado.setTotalWidth(810.68f);
-        tablaEncabezado.setWidths(new int[]{144, 214, 252, 216});
+        tablaEncabezado.setWidths(new int[]{74, 234, 252, 219});
         tablaEncabezado.getDefaultCell().setBorder(0);
         tablaEncabezado.getDefaultCell().setBorderWidth(0);
 
@@ -409,7 +393,8 @@ public class PdfteameListado implements Serializable {
 
         Phrase frase = new Phrase();
         try {
-            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/Resources/Images/logo_maym.jpg");
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_maym.jpg"));             
+            logo.scalePercent(12f);
             logo.setAlignment(Element.ALIGN_LEFT);
             Chunk chLogo = new Chunk(logo, 0, 0, true);
             frase.add(chLogo);
