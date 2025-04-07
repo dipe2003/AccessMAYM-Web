@@ -352,7 +352,16 @@
                                                                     </li>
                                                                 </c:if>
                                                                 <li>
-                                                                    <h:commandLink  value="Exportar pdf" action="#{listarAcciones.pdfteaRegistro(accion.id)}"/>
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">                                                                       
+                                                                        <span class="glyphicon glyphicon-save-file"></span>
+                                                                        Ver Accion (pdf)
+                                                                    </h:commandLink>  
+                                                                </li>
+                                                                <li>
+                                                                    <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
+                                                                        <span class="glyphicon glyphicon-save-file"></span>
+                                                                        Crear Plan de Accion (pdf)
+                                                                    </h:commandLink>   
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -373,13 +382,13 @@
                                                                 <li>
                                                                     <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">                                                                       
                                                                         <span class="glyphicon glyphicon-save-file"></span>
-                                                                         Ver Accion (pdf)
+                                                                        Ver Accion (pdf)
                                                                     </h:commandLink>  
                                                                 </li>
                                                                 <li>
                                                                     <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
                                                                         <span class="glyphicon glyphicon-save-file"></span>
-                                                                         Crear Plan de Accion (pdf)
+                                                                        Crear Plan de Accion (pdf)
                                                                     </h:commandLink>   
                                                                 </li>
                                                             </ul>
