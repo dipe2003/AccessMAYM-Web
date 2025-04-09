@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../../index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
+                xmlns:f="http://xmlns.jcp.org/jsf/core"                    
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="page_content">
+        <div class="container-fluid" style="padding: 0.5%">  
+            <div class="panel panel-info">
+                <div class="panel-heading">Perfil de Usuario</div>
+                <div class="panel-body">
+                    Desde aquí se pueden cambiar los datos del usuario y acceder a los registros correspondientes.
+                </div>                  
+            </div>                      
+        </div>
+        <div class="container-fluid" style="padding: 0.5%">
+            <h:form id="form_perfil_usuario">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Usuario</div>
+                            <div class="panel-body">   
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/perfil-usuario-placeholder.png" style='height: 100px' />
+                                        </div>
+                                        <div>
+                                            <h:outputText value="#{sesionUsuario.usuarioLogueado.nombreCompleto}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">                                        
+                                        <h:outputText value="#{sesionUsuario.usuarioLogueado.areaUsuario.nombre}"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h:outputText value="#{sesionUsuario.usuarioLogueado.permisoUsuario.descripcion}"/>
+                                    </div>                            
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>                
+
+                <!-- Registros Relacionados -->                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Registros Relacionados</div>
+                    <div class="panel-body">  
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Acciones Corectivas <span class="badge"> #{perfilUsuario.correctivas.size()}</span></a>
+                                    </h4>
+                                </div>
+                                <div id="collapse1" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <c:choose>
+                                            <c:when  test="#{perfilUsuario.correctivas.size() == 0}">
+                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Fecha</th>
+                                                            <th>Area</th>
+                                                            <th>Deteccion</th>
+                                                            <th>Descripcion</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody style="font-size: 11px">
+                                                        <c:forEach items="#{perfilUsuario.correctivas}" var="accion">
+                                                            <tr>
+                                                                <td>
+                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                        #{accion.id}
+                                                                    </h:link>
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.fechaDeteccion}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.areaAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.deteccionAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.descripcion}
+                                                                </td>
+                                                                <c:choose>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                        <td style="background-color: red; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                        <td style="background-color: green; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                        <td style="background-color: black; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                        <td style="background-color: #ff9900; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <td style="background-color: yellow; color: #ff9900">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>                                            
+                                                </table>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Acciones Preventivas <span class="badge"> #{perfilUsuario.preventivas.size()}</span> </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse2" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <c:choose>
+                                            <c:when test="#{perfilUsuario.preventivas.size() == 0}">
+                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Fecha</th>
+                                                            <th>Area</th>
+                                                            <th>Deteccion</th>
+                                                            <th>Descripcion</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody style="font-size: 11px">
+                                                        <c:forEach items="#{perfilUsuario.preventivas}" var="accion">
+                                                            <tr>
+                                                                <td>
+                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                        #{accion.id}
+                                                                    </h:link>
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.fechaDeteccion}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.areaAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.deteccionAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.descripcion}
+                                                                </td>
+                                                                <c:choose>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                        <td style="background-color: red; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                        <td style="background-color: green; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                        <td style="background-color: black; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                        <td style="background-color: #ff9900; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <td style="background-color: yellow; color: #ff9900">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>                                            
+                                                </table>
+                                            </c:otherwise>  
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Oportunidades de Mejoras <span class="badge"> #{perfilUsuario.mejoras.size()}</span></a>
+                                    </h4>
+                                </div>
+                                <div id="collapse3" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <c:choose>                                        
+                                            <c:when test="#{perfilUsuario.mejoras.size() == 0}">
+                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Fecha</th>
+                                                            <th>Area</th>
+                                                            <th>Deteccion</th>
+                                                            <th>Descripcion</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody style="font-size: 11px">
+                                                        <c:forEach items="#{perfilUsuario.mejoras}" var="accion">
+                                                            <tr>
+                                                                <td>
+                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                        #{accion.id}
+                                                                    </h:link>
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.fechaDeteccion}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.areaAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.deteccionAccion.nombre}
+                                                                </td>
+                                                                <td>
+                                                                    #{accion.descripcion}
+                                                                </td>
+                                                                <c:choose>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                        <td style="background-color: red; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                        <td style="background-color: green; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                        <td style="background-color: black; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                        <td style="background-color: #ff9900; color: white">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <td style="background-color: yellow; color: #ff9900">
+                                                                            #{accion.estadoDeAccion.descripcion}
+                                                                        </td>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>                                            
+                                                </table>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

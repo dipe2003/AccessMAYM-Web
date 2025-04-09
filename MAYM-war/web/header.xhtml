@@ -110,10 +110,10 @@
                                             <span class="glyphicon glyphicon-log-out"></span> Salir
                                             <f:ajax execute="@form" render="myNavbar" />
                                         </h:commandLink>
-                                        <h:commandLink id="btnEditarPerfil" class="btn btn-block" >
-                                            <span class="glyphicon glyphicon-edit"></span>Editar Perfil
+                                        <h:link id="btnEditarPerfil" class="btn btn-block" outcome="/Views/Perfil/PerfilUsuario.xhtml" >
+                                            <span class="glyphicon glyphicon-edit"></span> Mi Espacio
                                             <f:ajax execute="@form" render="myNavbar" />
-                                        </h:commandLink>
+                                        </h:link>
                                     </h:form>
                                 </div>
                             </li>
