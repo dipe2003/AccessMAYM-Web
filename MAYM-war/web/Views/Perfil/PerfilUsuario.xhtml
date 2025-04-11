@@ -8,292 +8,507 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
-        <div class="container-fluid" style="padding: 0.5%">  
-            <div class="panel panel-info">
-                <div class="panel-heading">Perfil de Usuario</div>
-                <div class="panel-body">
-                    Desde aquí se pueden cambiar los datos del usuario y acceder a los registros correspondientes.
-                </div>                  
-            </div>                      
-        </div>
-        <div class="container-fluid" style="padding: 0.5%">
-            <h:form id="form_perfil_usuario">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Usuario</div>
-                            <div class="panel-body">   
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div>
-                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/perfil-usuario-placeholder.png" style='height: 100px' />
-                                        </div>
-                                        <div>
-                                            <h:outputText value="#{sesionUsuario.usuarioLogueado.nombreCompleto}"/>
+        <h:form id="form_perfil_usuario">
+            <div class="container-fluid" style="padding: 1%">  
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Perfil de Usuario</div>
+                    <div class="panel-body">
+                        <div class="col-sm-11">
+                            <h:panelGroup id="panel-datos-perfil">
+                                <table class="table table-striped table-responsive-sm">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.id}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.nombre}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.apellido}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.correo}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.areaUsuario.nombre}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.permisoUsuario}"/>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="glyphicon glyphicon-edit"></span>
+                                                        Editar
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <h:commandLink class="dropdown-item" p:data-toggle="modal" p:data-target="#modal_datos_usuarios" value="Perfil" >
+                                                                <f:ajax delay="100" render="form_perfil_usuario:modal_datos_usuarios" />
+                                                            </h:commandLink>
+                                                        </li>
+                                                        <li>
+                                                            <h:commandLink class="dropdown-item" p:data-toggle="modal" p:data-target="#modal_cambiar_password" value="Password" >
+                                                                <f:ajax delay="100" render="form_perfil_usuario:modal_cambiar_password" />
+                                                            </h:commandLink>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </h:panelGroup>
+                        </div>
+                        <div class="col-sm-1">
+                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/perfil-usuario-placeholder.png" style='height: 100px' />
+                        </div>
+                    </div>                  
+                </div>                      
+            </div>
+
+            <!-- Registros Relacionados -->  
+            <div class="container-fluid" style="padding: 0.5%">               
+                <div class="container-fluid" style="padding: 0.5%">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Registros Relacionados</div>
+                        <div class="panel-body">  
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Acciones Corectivas 
+                                                <c:if test="#{perfilUsuario.correctivas.size()>0}">
+                                                    <span class="badge" style="background-color: #ac2925"> #{perfilUsuario.correctivas.size()}</span>
+                                                </c:if>
+                                                <c:if test="#{perfilUsuario.correctivas.size()==0}">
+                                                    <span class="badge" style="background-color: #398439"> #{perfilUsuario.correctivas.size()}</span>
+                                                </c:if>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <c:choose>
+                                                <c:when  test="#{perfilUsuario.correctivas.size() == 0}">
+                                                    <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Fecha</th>
+                                                                <th>Area</th>
+                                                                <th>Deteccion</th>
+                                                                <th>Descripcion</th>
+                                                                <th>Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{perfilUsuario.correctivas}" var="accion">
+                                                                <tr>
+                                                                    <td>
+                                                                        <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                            #{accion.id}
+                                                                        </h:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.fechaDeteccion}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.areaAccion.nombre}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.deteccionAccion.nombre}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.descripcion}
+                                                                    </td>
+                                                                    <c:choose>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                            <td style="background-color: red; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                            <td style="background-color: green; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                            <td style="background-color: black; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                            <td style="background-color: #ff9900; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <td style="background-color: yellow; color: #ff9900">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">                                        
-                                        <h:outputText value="#{sesionUsuario.usuarioLogueado.areaUsuario.nombre}"/>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Acciones Preventivas 
+                                                <c:if test="#{perfilUsuario.preventivas.size()>0}">
+                                                    <span class="badge" style="background-color: #ac2925"> #{perfilUsuario.preventivas.size()}</span>
+                                                </c:if>
+                                                <c:if test="#{perfilUsuario.preventivas.size()==0}">
+                                                    <span class="badge" style="background-color: #398439"> #{perfilUsuario.preventivas.size()}</span>
+                                                </c:if>
+                                            </a>
+                                        </h4>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <h:outputText value="#{sesionUsuario.usuarioLogueado.permisoUsuario.descripcion}"/>
-                                    </div>                            
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <c:choose>
+                                                <c:when test="#{perfilUsuario.preventivas.size() == 0}">
+                                                    <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Fecha</th>
+                                                                <th>Area</th>
+                                                                <th>Deteccion</th>
+                                                                <th>Descripcion</th>
+                                                                <th>Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{perfilUsuario.preventivas}" var="accion">
+                                                                <tr>
+                                                                    <td>
+                                                                        <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                            #{accion.id}
+                                                                        </h:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.fechaDeteccion}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.areaAccion.nombre}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.deteccionAccion.nombre}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.descripcion}
+                                                                    </td>
+                                                                    <c:choose>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                            <td style="background-color: red; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                            <td style="background-color: green; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                            <td style="background-color: black; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                            <td style="background-color: #ff9900; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <td style="background-color: yellow; color: #ff9900">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </c:otherwise>  
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Oportunidades de Mejoras 
+                                                <c:if test="#{perfilUsuario.mejoras.size()>0}">
+                                                    <span class="badge" style="background-color: #ac2925"> #{perfilUsuario.mejoras.size()}</span>
+                                                </c:if>
+                                                <c:if test="#{perfilUsuario.mejoras.size()==0}">
+                                                    <span class="badge" style="background-color: #398439"> #{perfilUsuario.mejoras.size()}</span>
+                                                </c:if>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse3" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <c:choose>                                        
+                                                <c:when test="#{perfilUsuario.mejoras.size() == 0}">
+                                                    <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Fecha</th>
+                                                                <th>Area</th>
+                                                                <th>Deteccion</th>
+                                                                <th>Descripcion</th>
+                                                                <th>Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{perfilUsuario.mejoras}" var="accion">
+
+                                                                <tr>
+                                                                    <td>
+                                                                        <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                            #{accion.id}
+                                                                        </h:link>
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.fechaDeteccion}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.areaAccion.nombre}
+                                                                    </td>
+                                                                    <td>
+                                                                        #{accion.deteccionAccion.nombre}
+                                                                    </td>
+                                                                    <td>                                                                   
+                                                                        #{accion.descripcion}                                                                    
+                                                                    </td>
+                                                                    <c:choose>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                                            <td style="background-color: red; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                                            <td style="background-color: green; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                                            <td style="background-color: black; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                                            <td style="background-color: #ff9900; color: white">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <td style="background-color: yellow; color: #ff9900">
+                                                                                #{accion.estadoDeAccion.descripcion}
+                                                                            </td>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
                                 </div>
                             </div> 
                         </div>
                     </div>
-                </div>                
+                </div>
+                <!-- MODAL DE EDICION DE DATOS DEL PERFIL -->
+                <div id="modal_datos_usuarios" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal_datos_usuarios">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Datos del Perfil</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <strong><label for="nombre">Nombre:</label></strong>  
+                                                <h:inputText class="form-control" id="nombre" p:placeholder="Nombre" value="#{perfilUsuario.nombre}" 
+                                                             required="true" requiredMessage="No se ingreso nombre.">
+                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <strong><label for="apellido">Apellido:</label></strong>  
+                                                <h:inputText class="form-control" id="apellido" p:placeholder="Apellido" value="#{perfilUsuario.apellido}" 
+                                                             required="true" requiredMessage="No se ingreso apellido.">
+                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
+                                                </h:inputText>
+                                            </div>
+                                            <div>
+                                                <div class="col-sm-12">
+                                                    <strong><label for="correo">Correo:</label></strong>  
+                                                    <h:inputText class="form-control" id="correo" p:placeholder="Correo" value="#{perfilUsuario.correo}" 
+                                                                 required="true" requiredMessage="No se ingreso correo.">
+                                                        <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
+                                                    </h:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">                                               
+                                                <strong><label for="area">Area:</label></strong>                                                   
+                                                <h:panelGroup id="panel-areas-disponibles">
+                                                    <h:selectOneMenu id="area" class="form-control" value="#{perfilUsuario.idAreaSeleccionada}"
+                                                                     required="true" requiredMessage="No se selecciono area">
+                                                        <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                        <c:forEach items="#{perfilUsuario.areasDisponibles}" var="area">
+                                                            <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                                        </c:forEach>
+                                                        <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
+                                                    </h:selectOneMenu>                                                    
+                                                </h:panelGroup>
+                                            </div>
+                                            <div class="col-sm-4">       
+                                                <strong><label for="alertas">Recibir Alertas:</label></strong>    
+                                                <h:selectBooleanCheckbox id="alertas" title="Recibir Alertas" value="#{perfilUsuario.recibeAlertas}">
+                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
+                                                </h:selectBooleanCheckbox>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                <!-- Registros Relacionados -->                
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Registros Relacionados</div>
-                    <div class="panel-body">  
-                        <div class="panel-group" id="accordion">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Acciones Corectivas <span class="badge"> #{perfilUsuario.correctivas.size()}</span></a>
-                                    </h4>
+                                    <h:panelGroup id="panel_mensajes_modal">
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_guardar_datos" class="msj_info"/>
+                                            <h:message for="area" class="msj_info"/>
+                                            <h:message for="apellido" class="msj_info"/>
+                                            <h:message for="nombre" class="msj_info"/>
+                                            <h:message for="correo" class="msj_info"/>
+                                        </div>
+                                    </h:panelGroup>
                                 </div>
-                                <div id="collapse1" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <c:choose>
-                                            <c:when  test="#{perfilUsuario.correctivas.size() == 0}">
-                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Fecha</th>
-                                                            <th>Area</th>
-                                                            <th>Deteccion</th>
-                                                            <th>Descripcion</th>
-                                                            <th>Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{perfilUsuario.correctivas}" var="accion">
-                                                            <tr>
-                                                                <td>
-                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
-                                                                        #{accion.id}
-                                                                    </h:link>
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.fechaDeteccion}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.areaAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.deteccionAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.descripcion}
-                                                                </td>
-                                                                <c:choose>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                        <td style="background-color: red; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                        <td style="background-color: green; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                        <td style="background-color: black; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                        <td style="background-color: #ff9900; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <td style="background-color: yellow; color: #ff9900">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </c:otherwise>
-                                        </c:choose>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6" >
+                                            <h:commandButton id="btn_guardar_datos" style="width: 99%;" class="btn btn-primary" value="Guardar"
+                                                             action="#{perfilUsuario.guardarCambios()}">
+                                                <f:ajax execute="panel_modal_datos_usuarios" onevent="indicador" 
+                                                        render="panel_modal_datos_usuarios panel_mensajes_modal form_perfil_usuario:panel-datos-perfil" />
+                                            </h:commandButton>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal"  value="Cerrar">
+                                                <f:ajax render="panel_modal_datos_usuarios panel_mensajes_modal" />
+                                            </h:commandButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Acciones Preventivas <span class="badge"> #{perfilUsuario.preventivas.size()}</span> </a>
-                                    </h4>
-                                </div>
-                                <div id="collapse2" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <c:choose>
-                                            <c:when test="#{perfilUsuario.preventivas.size() == 0}">
-                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Fecha</th>
-                                                            <th>Area</th>
-                                                            <th>Deteccion</th>
-                                                            <th>Descripcion</th>
-                                                            <th>Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{perfilUsuario.preventivas}" var="accion">
-                                                            <tr>
-                                                                <td>
-                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
-                                                                        #{accion.id}
-                                                                    </h:link>
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.fechaDeteccion}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.areaAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.deteccionAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.descripcion}
-                                                                </td>
-                                                                <c:choose>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                        <td style="background-color: red; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                        <td style="background-color: green; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                        <td style="background-color: black; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                        <td style="background-color: #ff9900; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <td style="background-color: yellow; color: #ff9900">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </c:otherwise>  
-                                        </c:choose>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Oportunidades de Mejoras <span class="badge"> #{perfilUsuario.mejoras.size()}</span></a>
-                                    </h4>
-                                </div>
-                                <div id="collapse3" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <c:choose>                                        
-                                            <c:when test="#{perfilUsuario.mejoras.size() == 0}">
-                                                <span class="label label-success">No hay registros relacionados con tareas asignadas.</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Fecha</th>
-                                                            <th>Area</th>
-                                                            <th>Deteccion</th>
-                                                            <th>Descripcion</th>
-                                                            <th>Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{perfilUsuario.mejoras}" var="accion">
-                                                            <tr>
-                                                                <td>
-                                                                    <h:link outcome="/Views/Acciones/General/SeguimientoAccion.xhtml?id=#{accion.id}" >
-                                                                        #{accion.id}
-                                                                    </h:link>
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.fechaDeteccion}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.areaAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.deteccionAccion.nombre}
-                                                                </td>
-                                                                <td>
-                                                                    #{accion.descripcion}
-                                                                </td>
-                                                                <c:choose>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                        <td style="background-color: red; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                        <td style="background-color: green; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                        <td style="background-color: black; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                        <td style="background-color: #ff9900; color: white">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <td style="background-color: yellow; color: #ff9900">
-                                                                            #{accion.estadoDeAccion.descripcion}
-                                                                        </td>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
+                        </h:panelGroup>
                     </div>
                 </div>
-            </h:form>
-        </div>
+
+                <!-- CAMBIAR PASSWORD -->
+                <div id="modal_cambiar_password" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal_cambiar_password">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Cambiar Password</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div>
+                                            <strong><label for="password_actual">Password Actual:</label></strong>  
+                                            <h:inputSecret class="form-control" id="password_actual" p:placeholder="Password Actual" value="#{perfilUsuario.actualPassword}" 
+                                                           required="true" requiredMessage="No se ingreso password actual.">
+                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
+                                            </h:inputSecret>
+                                        </div>
+                                        <div>
+                                            <strong><label for="nuevo_password">Nuevo Password:</label></strong>  
+                                            <h:inputSecret class="form-control" id="nuevo_password" p:placeholder="Nuevo Password" value="#{perfilUsuario.nuevoPassword}" 
+                                                           required="true" requiredMessage="No se ingreso nuevo password.">
+                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
+                                            </h:inputSecret>
+                                        </div>
+                                        <div>
+                                            <strong><label for="rep_nuevo_password">Repetir Nuevo Password:</label></strong>  
+                                            <h:inputSecret class="form-control" id="rep_nuevo_password" p:placeholder="Repeticion de Nuevo Password" value="#{perfilUsuario.repNuevoPassword}" 
+                                                           required="true" requiredMessage="No se ingreso repeticion de password.">
+                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
+                                            </h:inputSecret>
+                                        </div>
+                                    </div>
+
+                                    <h:panelGroup id="panel_mensajes_modal_password">
+                                        <div class="form-group-sm">
+                                            <h:message for="btn_cambiar_password" class="msj_info"/>
+                                             <h:message for="password_actual" class="msj_info"/>
+                                            <h:message for="nuevo_password" class="msj_info"/>
+                                            <h:message for="rep_nuevo_password" class="msj_info"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6" >
+                                            <h:commandButton id="btn_cambiar_password" style="width: 99%;" class="btn btn-primary" value="Cambiar"
+                                                             action="#{perfilUsuario.cambiarPassword()}">
+                                                <f:ajax execute="panel_modal_cambiar_password" onevent="indicador" 
+                                                        render="panel_modal_cambiar_password panel_mensajes_modal_password form_perfil_usuario:panel-datos-perfil" />
+                                            </h:commandButton>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal"  value="Cerrar">
+                                                <f:ajax render="panel_modal_cambiar_password panel_mensajes_modal_password" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
     </ui:define>
 </ui:composition>
 

@@ -40,6 +40,7 @@ public class FacadeMain {
         return cConfig.cambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea);
     }
     
+    
     /**
      * Comprueba la validez del password ingresado con el correspondiente del usuario en la base de datos.
      * @param IdUsuario
