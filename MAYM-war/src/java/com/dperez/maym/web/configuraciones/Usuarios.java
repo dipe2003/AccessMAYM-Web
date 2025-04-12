@@ -320,7 +320,7 @@ public class Usuarios implements Serializable {
      * @param IdUsuario
      */
     public void cargarDatos(int IdUsuario){
-        if(IdUsuario < 0 ){
+        if(IdUsuario <= 0 ){
             this.Nombre  = new String();
             this.Apellido  = new String();
             this.CorreoElectronico  = new String();

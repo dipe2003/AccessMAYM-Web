@@ -515,25 +515,21 @@ public class ListarAcciones implements Serializable {
     }
 
     public void setStrFechaInicial(String strFechaInicial) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            cal.setTime(sdf.parse(strFechaInicial));
+            this.fechaInicial = sdf.parse(strFechaInicial);
         } catch (ParseException ex) {
         }
         this.strFechaInicial = strFechaInicial;
-        this.fechaInicial = cal.getTime();
     }
 
     public void setStrFechaFinal(String strFechaFinal) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            cal.setTime(sdf.parse(strFechaFinal));
+            this.fechaFinal = sdf.parse(strFechaFinal);
         } catch (ParseException ex) {
         }
         this.strFechaFinal = strFechaFinal;
-        this.fechaFinal = cal.getTime();
     }
 
     public void setTipoDeAccion(TipoAccion tipoDeAccion) {
@@ -581,6 +577,7 @@ public class ListarAcciones implements Serializable {
         filtrosAplicados.remove("detecciones");
         filtrosAplicados.remove("areas");
         filtrosAplicados.remove("busqueda");
+        filtrosAplicados.remove("fechas");
 
         ResetFechasAcciones();
         ResetListasAreas();
@@ -708,30 +705,30 @@ public class ListarAcciones implements Serializable {
         pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
 
     }
-    
+
     public void pdfteaPlanAccion(int id) {
         PdfteameListado pdf = new PdfteameListado();
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
         List<Accion> accionesPlan = fLectura.listarAcciones().stream()
-                .filter(a->a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion()==accionFiltrada.getDeteccionAccion())
-                .collect(Collectors.toList());      
+                .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
+                .collect(Collectors.toList());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
         StringBuilder strTitulo = new StringBuilder();
-         StringBuilder strIntroduccion = new StringBuilder();
-         
+        StringBuilder strIntroduccion = new StringBuilder();
+
         strTitulo.append("PLAN DE ACCION: ")
                 .append(accionFiltrada.getDeteccionAccion().getNombre())
                 .append(" - ")
                 .append(df.format(accionFiltrada.getFechaDeteccion()));
-       strIntroduccion.append("En respuesta a los hallazgos detectados por ")
-               .append(accionFiltrada.getDeteccionAccion().getNombre())
-               .append(" en el dia ")
-               .append(df.format(accionFiltrada.getFechaDeteccion()))
-               .append(" se presenta el siguiente Plan de Accion:");
+        strIntroduccion.append("En respuesta a los hallazgos detectados por ")
+                .append(accionFiltrada.getDeteccionAccion().getNombre())
+                .append(" en el dia ")
+                .append(df.format(accionFiltrada.getFechaDeteccion()))
+                .append(" se presenta el siguiente Plan de Accion:");
 
         df = new SimpleDateFormat("dd-MM-yyy");
-        pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf", 
-              strTitulo.toString(), accionesPlan, strIntroduccion.toString());
+        pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
+                strTitulo.toString(), accionesPlan, strIntroduccion.toString());
     }
 
     public void pdfteaRegistro(int id) {
@@ -781,7 +778,7 @@ public class ListarAcciones implements Serializable {
 
         excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), false);
     }
-    
+
     public void excelseaConActividades() {
         Excelsea excel = new Excelsea();
         List<Accion> accionesFiltradas = ListaCompletaAcciones;

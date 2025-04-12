@@ -9,7 +9,6 @@ import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import com.dperez.maymweb.modelo.usuario.Responsable;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 

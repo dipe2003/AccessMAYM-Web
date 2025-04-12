@@ -143,7 +143,7 @@
                                         </td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(usuario.id)}">
+                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{usuarios.cargarDatos(elemento.contenido.id)}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     <f:ajax delay="100" render="panel_modal_editar" />
                                                 </h:commandLink>

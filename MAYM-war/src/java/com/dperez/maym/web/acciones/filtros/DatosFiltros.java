@@ -75,10 +75,10 @@ public class DatosFiltros implements Serializable {
         Date[] fechas = new Date[2];
         if (!acciones.isEmpty()){
             fechas[0]  = acciones.stream()
-                    .sorted().max(Comparator.naturalOrder()).get().getFechaDeteccion();
+                    .sorted().min(Comparator.naturalOrder()).get().getFechaDeteccion();
             fechas[1]  = acciones.stream()
                     .sorted()
-                    .min(Comparator.naturalOrder()).get().getFechaDeteccion();
+                    .max(Comparator.naturalOrder()).get().getFechaDeteccion();
         }
         return fechas;
     }

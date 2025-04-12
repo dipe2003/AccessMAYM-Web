@@ -28,22 +28,18 @@
                                                             <div class="col-md-4">
                                                                 <table>
                                                                     <tbody>    
-                                                                        <tr>
-                                                                            <td>
-                                                                                Desde:
-                                                                            </td>    
-                                                                            <td>  
+                                                                        <tr>                                                                              
+                                                                            <td> 
+                                                                                <div>Desde:</div>
                                                                                 <h:panelGroup id="drop-filtro-fecha-inicial">
                                                                                     <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarAcciones.strFechaInicial}" >
                                                                                         <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
                                                                                                 render="form_tabla_acciones panel_filtros"/>
                                                                                     </h:inputText>
                                                                                 </h:panelGroup>
-                                                                            </td>                                                                
-                                                                            <td>
-                                                                                Hasta:
                                                                             </td>
                                                                             <td>
+                                                                                <div>Hasta:</div>
                                                                                 <h:panelGroup id="drop-filtro-fecha-final">
                                                                                     <h:inputText id="fecha_final" class="form-control calendario" value="#{listarAcciones.strFechaFinal}" >
                                                                                         <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
@@ -206,8 +202,8 @@
                                     <div class="row">
                                         <div class="col-sm-2">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span></button>
                                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="glyphicon glyphicon-save-file"></span>
                                                     Exportar
                                                     <span class="caret"></span>
                                                 </button>
