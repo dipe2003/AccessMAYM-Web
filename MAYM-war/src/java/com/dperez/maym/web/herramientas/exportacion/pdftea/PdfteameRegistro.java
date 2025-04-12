@@ -180,7 +180,7 @@ public class PdfteameRegistro implements Serializable {
                 tablaImplementacion.addCell(CrearCeldaVacia(3, false));
                 tablaImplementacion.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
                 tablaImplementacion.addCell(CrearCeldaContenido(accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                        : accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion() + " "
+                        : accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion() + ": "
                         + accion.getComprobacionImplementacion().getObservaciones(), false, 2, 0));
             } else {
                 tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 3, 0));
@@ -224,7 +224,7 @@ public class PdfteameRegistro implements Serializable {
                 tablaEficacia.addCell(CrearCeldaVacia(3, false));
                 tablaEficacia.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
                 tablaEficacia.addCell(CrearCeldaContenido(accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                        : accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion() + " "
+                        : accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion() + ": "
                         + accion.getComprobacionEficacia().getObservaciones(), false, 2, 0));
             } else {
                 tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 3, 0));

@@ -72,10 +72,10 @@
                             <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml"><span class="glyphicon glyphicon-stats"></span>Graficos</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Buscar<span class="glyphicon glyphicon-search"></span></a>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Buscar  <span class="glyphicon glyphicon-search"></span></a>
                         <div class="dropdown-menu">
                             <h:form id="formBuscar" class="form container-fluid">
-                                <div class="form-group" ><label for="buscarid">Buscar</label>
+                                <div class="form-group" ><label for="buscarid">Id de Registro:</label>
                                     <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
                                 </div>
                                 <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarAccionId()}">

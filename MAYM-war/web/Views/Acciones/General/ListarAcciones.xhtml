@@ -19,7 +19,7 @@
                             <div class="panel-heading">Filtrar y Exportar</div>
                             <div class="panel-body">
                                 <div class="table-responsive-sm">
-                                    <h:panelGroup id="panel_filtros">
+                                    <h:panelGroup id="panel_filtros" rendered="#{listarAcciones.esBusqueda == false}">
                                         <table class="table table-hover">                        
                                             <tbody style="font-size: 11px">
                                                 <tr>
@@ -420,39 +420,40 @@
                                 </tbody>
                             </table>  
                         </div>
+                        <h:panelGroup id="panel-pagination" rendered="#{listarAcciones.esBusqueda == false}">
+                            <div class="container-fluid text-center" style="padding: 1%">
+                                <ul class="pagination"> 
+                                    <c:choose>
+                                        <c:when test="#{listarAcciones.paginaActual !=1}" >
+                                            <li>
+                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
+                                                    <f:ajax delay="10" onevent="indicador"/>
+                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                                </h:commandLink>    
+                                            </li>                                           
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="disabled"><a>&#60;</a></li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
+                                    <c:choose>
+                                        <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
+                                            <li>
+                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
+                                                    <f:ajax delay="10" onevent="indicador"/>
+                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                                </h:commandLink>    
+                                            </li>
 
-                        <div class="container-fluid text-center" style="padding: 1%">
-                            <ul class="pagination"> 
-                                <c:choose>
-                                    <c:when test="#{listarAcciones.paginaActual !=1}" >
-                                        <li>
-                                            <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
-                                                <f:ajax delay="10" onevent="indicador"/>
-                                                <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
-                                            </h:commandLink>    
-                                        </li>                                           
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="disabled"><a>&#60;</a></li>
-                                    </c:otherwise>
-                                </c:choose>
-                                <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
-                                <c:choose>
-                                    <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
-                                        <li>
-                                            <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
-                                                <f:ajax delay="10" onevent="indicador"/>
-                                                <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
-                                            </h:commandLink>    
-                                        </li>
-
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="disabled"><a>&#62;</a></li>
-                                    </c:otherwise>
-                                </c:choose>                                    
-                            </ul>                
-                        </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="disabled"><a>&#62;</a></li>
+                                        </c:otherwise>
+                                    </c:choose>                                    
+                                </ul>                
+                            </div>
+                        </h:panelGroup>
                     </c:otherwise>
                 </c:choose>
 

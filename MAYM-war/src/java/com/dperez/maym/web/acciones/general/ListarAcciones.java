@@ -56,6 +56,8 @@ public class ListarAcciones implements Serializable {
     private Accion accionSeleccionada;
 
     private ModalVerActividades verActividades;
+    
+    private boolean esBusqueda;
 
     public ListarAcciones() {
         this.fLectura = new FacadeLectura();
@@ -459,6 +461,10 @@ public class ListarAcciones implements Serializable {
         return this.accionSeleccionada;
     }
 
+    public boolean isEsBusqueda() {
+        return esBusqueda;
+    }    
+
     public String getTextoBusqueda() {
         return this.textoBusqueda;
     }
@@ -539,6 +545,10 @@ public class ListarAcciones implements Serializable {
         this.accionSeleccionada = accion;
     }
 
+    public void setEsBusqueda(boolean esBusqueda) {
+        this.esBusqueda = esBusqueda;
+    }
+    
     public void setTextoBusqueda(String textoBusqueda) {
         this.textoBusqueda = textoBusqueda;
     }
@@ -631,6 +641,7 @@ public class ListarAcciones implements Serializable {
             if (accion != null) {
                 ListaCompletaAcciones.add(accion);
                 cambiarPagina(true, PaginaActual);
+                esBusqueda = true;
             }
         } else {
             cambiarPagina(false, PaginaActual);
