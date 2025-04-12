@@ -17,7 +17,6 @@ import com.dperez.maymweb.modelo.producto.Producto;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,14 +99,12 @@ public class VerAccion implements Serializable {
     
     //<editor-fold desc="Setters">
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
-    public void setStrFechaDeteccion(String strFechaDeteccion) {
-        Calendar cal = Calendar.getInstance();
+    public void setStrFechaDeteccion(String strFechaDeteccion) {      
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try{
-            cal.setTime(sdf.parse(strFechaDeteccion));
+            this.FechaDeteccion = sdf.parse(strFechaDeteccion);
         }catch(ParseException ex){}
-        this.strFechaDeteccion = strFechaDeteccion;
-        this.FechaDeteccion = cal.getTime();
+        this.strFechaDeteccion = strFechaDeteccion;        
     }
     public void setGeneradaPor(Deteccion GeneradaPor) {this.GeneradaPor = GeneradaPor;}
     public void setAreaSector(Area AreaSector) {this.AreaSector = AreaSector;}

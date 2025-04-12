@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +52,7 @@ public class SeguimientoAccion implements Serializable {
     private CargarArchivo cArchivo;
     @Inject
     private SesionUsuario sesion;
-    
+
     private int IdAccionSeleccionada;
     private FacadeLectura fLectura;
     private FacadeDatos fDatos;
@@ -94,7 +93,10 @@ public class SeguimientoAccion implements Serializable {
 
     //</editor-fold>
     //<editor-fold desc="Getters">
-    public int getIdAccionSeleccionada(){ return this.IdAccionSeleccionada;}
+    public int getIdAccionSeleccionada() {
+        return this.IdAccionSeleccionada;
+    }
+
     public List<Actividad> getMedidasCorrectivas() {
         return medidasCorrectivas;
     }
@@ -195,7 +197,10 @@ public class SeguimientoAccion implements Serializable {
 
     //</editor-fold>
     //<editor-fold desc="Setters">
-    public void setIdAccionSeleccionada(int id){this.IdAccionSeleccionada = id;}
+    public void setIdAccionSeleccionada(int id) {
+        this.IdAccionSeleccionada = id;
+    }
+
     public void setMedidasCorrectivas(List<Actividad> MedidasCorrectivas) {
         this.medidasCorrectivas = MedidasCorrectivas;
     }
@@ -221,14 +226,12 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionImplementacion(String strFechaComprobacionImplementacion) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            cal.setTime(sdf.parse(strFechaComprobacionImplementacion));
+            this.FechaComprobacionImplementacion = sdf.parse(strFechaComprobacionImplementacion);
         } catch (ParseException ex) {
         }
         this.strFechaComprobacionImplementacion = strFechaComprobacionImplementacion;
-        this.FechaComprobacionImplementacion = cal.getTime();
     }
 
     public void setComprobaciones(ResultadoComprobacion[] Comprobaciones) {
@@ -248,14 +251,12 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionEficacia(String strFechaComprobacionEficacia) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            cal.setTime(sdf.parse(strFechaComprobacionEficacia));
+            this.FechaComprobacionEficacia = sdf.parse(strFechaComprobacionEficacia);
         } catch (ParseException ex) {
         }
         this.strFechaComprobacionEficacia = strFechaComprobacionEficacia;
-        this.FechaComprobacionEficacia = cal.getTime();
     }
 
     public void setComprobacionSeleccionadaEficacia(ResultadoComprobacion ComprobacionSeleccionadaEficacia) {
@@ -474,38 +475,39 @@ public class SeguimientoAccion implements Serializable {
                     .collect(Collectors.toMap(Adjunto::getIda, adjunto -> adjunto));
         }
     }
-    
+
     /**
-     * Carga el adjunto en la lista de adjuntos.
-     * Deja vacios los campos para un nuevo adjunto.
+     * Carga el adjunto en la lista de adjuntos. Deja vacios los campos para un
+     * nuevo adjunto.
      */
-    public void agregarAdjunto(){
-        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_"+ String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
+    public void agregarAdjunto() {
+        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
         // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
-        if(!datosAdjunto[0].isEmpty()){
+        if (!datosAdjunto[0].isEmpty()) {
             TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
             String extension = datosAdjunto[1];
             List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
-            if(!tipos.contains(extension.toLowerCase().trim())){
+            if (!tipos.contains(extension.toLowerCase().trim())) {
                 tipoAdjunto = TipoAdjunto.DOCUMENTO;
             }
-            if((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto))!=-1){
+            if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
                 actualizarListaAdjuntos();
                 this.TituloAdjunto = new String();
-                this.ArchivoAdjunto =  null;
-            }else{
+                this.ArchivoAdjunto = null;
+            } else {
                 cArchivo.BorrarArchivo(datosAdjunto[0]);
             }
         }
     }
-    
+
     /**
      * Quita el adjunto de la lista de adjuntos.
+     *
      * @param IdAdjunto
      * @throws IOException
      */
-    public void quitarAdjunto(int IdAdjunto) throws IOException{
-        if((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto))!=-1){
+    public void quitarAdjunto(int IdAdjunto) throws IOException {
+        if ((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto)) != -1) {
             cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
             this.MapAdjuntos.remove(IdAdjunto);
         }
