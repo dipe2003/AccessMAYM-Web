@@ -9,7 +9,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
-        
+
         <div class="container-fluid">
             <div class="panel panel-info">
                 <div class="panel-heading">Detecciones</div>
@@ -42,7 +42,7 @@
                                         </h:commandLink>
                                     </div>
                                     <div class="col-md-4">
-                                        
+
                                     </div>
                                 </div>
                             </h:panelGroup>
@@ -59,7 +59,7 @@
                             <strong>Info!</strong> No hay registros para listar.
                         </div>
                         <div class="btn-group" >
-                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}" rendered="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                 <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                 <f:ajax delay="100" render="panel_modal" />
                             </h:commandLink>                                           
@@ -67,7 +67,7 @@
                     </c:when>
                     <c:otherwise>
                         <div class="btn-group">
-                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{detecciones.cargarDatos(-1)}" rendered="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                 <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                 <f:ajax delay="100" render="panel_modal" />
                             </h:commandLink>                                              
@@ -80,7 +80,7 @@
                                     <th></th>
                                 </tr>                                
                             </thead>
-                            
+
                             <tbody>
                                 <c:forEach items="#{detecciones.listaDetecciones}" var="elemento">
                                     <tr>
@@ -90,23 +90,24 @@
                                         <td>
                                             #{elemento.contenido.tipoDeDeteccion.descripcion}
                                         </td>
-                                        <td>                                            
-                                            <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(elemento.contenido.id)}">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                    <f:ajax delay="100" render="panel_modal_editar" />
-                                                </h:commandLink>                                               
-                                            </div>
-                                            <div class="btn-group">
-                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                        <td>                     
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                                <div class="btn-group">
+                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{detecciones.cargarDatos(elemento.contenido.id)}">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                        <f:ajax delay="100" render="panel_modal_editar" />
+                                                    </h:commandLink>                                               
+                                                </div>
+                                                <div class="btn-group">
                                                     <c:if test="#{elemento.contenido.accionesDeteccion.size() == 0 and elemento.contenido.fortalezasDeteccion.size() == 0 }">
-                                                        <h:commandLink id="btn_eliminar_#{elemento.contenido.id}" class="btn btn-danger" onclick="if (! confirm('Seguro que va a eliminar esta deteccion? ')) return false" >
+                                                        <h:commandLink id="btn_eliminar_#{elemento.contenido.id}" class="btn btn-danger" onclick="if (!confirm('Seguro que va a eliminar esta deteccion? '))
+                                                                    return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                             <f:ajax event="click" listener="#{detecciones.eliminarDeteccion(elemento.contenido.id)}"/>
                                                         </h:commandLink>  
                                                     </c:if>
-                                                </c:if>
-                                            </div>                                                
+                                                </div>     
+                                            </c:if>
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
@@ -122,7 +123,8 @@
                                 <c:choose>
                                     <c:when test="#{detecciones.paginaActual !=1}" >
                                         <li>
-                                            <h:commandLink class="active" action="#{detecciones.cambiarPagina(true, detecciones.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
+                                            <h:commandLink class="active" action="#{detecciones.cambiarPagina(true, detecciones.paginaActual -1)}" value="&#60;" >
+                                                <f:ajax delay="10" onevent="indicador"/>
                                                 <f:ajax delay="10" render="form_detecciones panel_filtros"/>
                                             </h:commandLink>    
                                         </li>                                           
@@ -140,7 +142,7 @@
                                                 <f:ajax delay="10" render="form_detecciones panel_filtros"/>
                                             </h:commandLink>    
                                         </li>
-                                        
+
                                     </c:when>
                                     <c:otherwise>
                                         <li class="disabled"><a>&#62;</a></li>
@@ -199,13 +201,13 @@
                                         <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </h:panelGroup>
                 </div>
             </div>
-            
+
             <!-- Modal Editar Deteccion -->
             <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
@@ -254,7 +256,7 @@
                                         <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </h:panelGroup>

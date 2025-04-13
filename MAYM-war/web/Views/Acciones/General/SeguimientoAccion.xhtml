@@ -6,9 +6,10 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"          
                 xmlns:f="http://xmlns.jcp.org/jsf/core"                    
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                
+
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
+
         <div class="container-fluid" style="padding: 1%">   
             <div class="panel panel-info">
                 <div class="panel-heading">Seguimiento de #{seguimientoAccion.tipoDeAccion.descripcion}</div>
@@ -108,7 +109,7 @@
                                 <h:inputTextarea id="descripcion_correctiva" class="form-control" readonly="true" style="background-color: rgb(255,255,255)" value="#{seguimientoAccion.accionSeleccionada.descripcion}" />
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -138,7 +139,7 @@
                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                                 <th></th>
                                                             </c:if>
-                                                            
+
                                                         </tr>                                                
                                                     </thead>
                                                     <tbody>
@@ -155,7 +156,7 @@
                                                                         #{correctiva.fechaImplementacion}
                                                                     </c:if>
                                                                 </td>
-                                                                
+
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.fechaImplementacion == null}">
                                                                         <c:choose>
@@ -211,7 +212,7 @@
                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                                 <th></th>
                                                             </c:if>
-                                                            
+
                                                         </tr>                                                
                                                     </thead>
                                                     <tbody>
@@ -228,7 +229,7 @@
                                                                         #{preventiva.fechaImplementacion}
                                                                     </c:if>
                                                                 </td>
-                                                                
+
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
                                                                         <c:choose>
@@ -286,7 +287,7 @@
                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                                 <th></th>
                                                             </c:if>
-                                                            
+
                                                         </tr>                                                
                                                     </thead>
                                                     <tbody>
@@ -303,7 +304,7 @@
                                                                         #{actividad.fechaImplementacion}
                                                                     </c:if>
                                                                 </td>
-                                                                
+
                                                                 <td>
                                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
                                                                         <c:choose>
@@ -344,7 +345,7 @@
                         </h:panelGroup>
                     </c:otherwise>
                 </c:choose>
-                
+
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
@@ -420,7 +421,7 @@
                                             </div>
                                         </c:when>
                                         <!-- CASO 3: esta implementada y Se comprobo la implementacion. -->
-                                        
+
                                         <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion != null and
                                                         seguimientoAccion.estaImplementada == true}">
                                             Se comprobo la implementacion el dia #{seguimientoAccion.fechaComprobacionImplementacion} con resultado
@@ -434,7 +435,7 @@
                                                 Observaciones: #{seguimientoAccion.observacionesImplementacion}
                                             </c:choose>
                                         </c:when> 
-                                        
+
                                     </c:choose>
                                 </h:panelGroup>
                             </div>
@@ -597,7 +598,8 @@
                                                                             <span class="caret"></span>
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">
-                                                                            <li><h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
+                                                                            <li><h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                                return false">
                                                                                     <f:ajax render="form_segumiento_accion:panel_lista_adjuntos"  onevent="indicador"/>
                                                                                 </h:commandLink>
                                                                             </li>
@@ -616,7 +618,7 @@
                         </h:panelGroup>
                     </div>
                 </div>
-                
+
                 <h:panelGroup id="panel_mensajes_desestimar">
                     <div class="form-group-sm">
                         <h:message for="btn_desestimar_accion" class="msj_error"/>
@@ -640,7 +642,8 @@
                             </c:when>
                             <c:otherwise>
                                 <div class='col-sm-6' >
-                                    <h:commandButton id="btn_restaurar_accion" class="btn btn-danger" style="width: 99%" value="Restaurar" onclick="if (! confirm('Seguro que va a restaurar esta accion? Se eliminaran todos los comentarios relacionados.')) return false" >
+                                    <h:commandButton id="btn_restaurar_accion" class="btn btn-danger" style="width: 99%" value="Restaurar" onclick="if (!confirm('Seguro que va a restaurar esta accion? Se eliminaran todos los comentarios relacionados.'))
+                                                        return false" >
                                         <f:ajax event="click" listener="#{seguimientoAccion.restarurarAccion()}" onevent="indicador" render="panel_mensajes"/>
                                     </h:commandButton>
                                 </div>
@@ -648,7 +651,7 @@
                         </c:choose>                        
                     </c:if>
                 </div>
-                
+
                 <div id="modal_desestimar" class="modal fade" style="padding-top: 15%;" role="dialog">
                     <div class="modal-dialog">
                         <h:panelGroup id="panel_modal">
@@ -666,7 +669,7 @@
                                                     <div class="form-group">
                                                         <strong><label for="observaciones_desestimada">Observaciones</label></strong>
                                                         <h:inputTextarea id="observaciones_desestimadas" class="form-control" value="#{seguimientoAccion.observacionesDesestimada}" 
-                                                                     required="true" requiredMessage="Se debe ingresar el motivo" p:placeholder="Observaciones/ Motivos" >
+                                                                         required="true" requiredMessage="Se debe ingresar el motivo" p:placeholder="Observaciones/ Motivos" >
                                                             <f:ajax execute="@this" event="change" render="panel_modal" />
                                                         </h:inputTextarea>
                                                     </div>
@@ -674,12 +677,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="modal-footer">
                                     <div class="row">
                                         <div class="col-sm-6" >
-                                            <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                                            <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (!confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.'))
+                                                                return false" >
                                                 <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
                                             </h:commandButton>                                           
                                         </div>
@@ -694,50 +698,46 @@
                         </h:panelGroup>
                     </div>
                 </div>
-                
+
                 <!-- Modal Nuevo Archivo Adjunto -->
-            <div id="modal_nuevo_adjunto" class="modal fade" style="padding-top: 15%;" role="dialog">
-                <div class="modal-dialog">
-                    <h:panelGroup id="panel_modal_adjunto">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header" style="background-color: gray; color: white;">
-                                <h4 class="modal-title">Agregar Nuevo Archivo Adjunto</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <strong><label for="titulo_adjunto">Titulo:</label></strong>
-                                    <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{seguimientoAccion.tituloAdjunto}">
-                                        <f:ajax execute="@this"  onevent="indicador"/>
-                                        <f:ajax render="panel_modal_adjunto" />
-                                    </h:inputText>
+                <div id="modal_nuevo_adjunto" class="modal fade" style="padding-top: 15%;" role="dialog">
+                    <div class="modal-dialog">
+                        <h:panelGroup id="panel_modal_adjunto">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: gray; color: white;">
+                                    <h4 class="modal-title">Agregar Nuevo Archivo Adjunto</h4>
                                 </div>
-                                <div class="form-group">
-                                    <c:if test="#{not empty seguimientoAccion.tituloAdjunto}">
-                                        <div class="form-group">
-                                            <h:inputFile  value="#{seguimientoAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
-                                                <f:ajax event="change" listener="#{seguimientoAccion.setArchivoAdjunto(seguimientoAccion.archivoAdjunto)}" />
-                                                <f:ajax event="change" listener="#{seguimientoAccion.agregarAdjunto()}" render="form_segumiento_accion:panel_lista_adjuntos form_segumiento_accion:panel_modal_adjunto" onevent="indicador"/>
-                                            </h:inputFile>
-                                        </div>
-                                    </c:if>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <strong><label for="titulo_adjunto">Titulo:</label></strong>
+                                        <h:inputText id="titulo_adjunto" class="form-control" p:placeholder="Titulo que describe el adjunto." value="#{seguimientoAccion.tituloAdjunto}">
+                                            <f:ajax execute="@this"  onevent="indicador"/>
+                                            <f:ajax render="panel_modal_adjunto" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="form-group">
+                                        <c:if test="#{not empty seguimientoAccion.tituloAdjunto}">
+                                            <div class="form-group">
+                                                <h:inputFile  value="#{seguimientoAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                                    <f:ajax event="change" listener="#{seguimientoAccion.setArchivoAdjunto(seguimientoAccion.archivoAdjunto)}" />
+                                                    <f:ajax event="change" listener="#{seguimientoAccion.agregarAdjunto()}" render="form_segumiento_accion:panel_lista_adjuntos form_segumiento_accion:panel_modal_adjunto" onevent="indicador"/>
+                                                </h:inputFile>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" >
+                                        <f:ajax render="panel_modal_adjunto panel_lista_adjuntos" />
+                                    </h:commandButton>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" >
-                                    <f:ajax render="panel_modal_adjunto panel_lista_adjuntos" />
-                                </h:commandButton>
-                            </div>
-                        </div>
-                    </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
                 </div>
-            </div>
-                
-                
             </h:form>
         </div>
-        
-        
     </ui:define>
 </ui:composition>
 

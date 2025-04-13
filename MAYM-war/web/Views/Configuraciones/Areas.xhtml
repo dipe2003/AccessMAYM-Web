@@ -9,7 +9,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
-        
+
         <div class="container-fluid">
             <div class="panel panel-info">
                 <div class="panel-heading">Areas</div>
@@ -19,7 +19,7 @@
                 </div>                  
             </div>                 
         </div>
-        
+
         <h:form id="listado-areas-filtros">
             <!-- FILTROS -->
             <div class="container-fluid">            
@@ -43,7 +43,7 @@
                                         </h:commandLink>
                                     </div>
                                     <div class="col-md-4">
-                                        
+
                                     </div>
                                 </div>
                             </h:panelGroup>
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </h:form>
-        
+
         <h:form id="form_areas" >
             <div class="container-fluid" style="padding: 1%">
                 <c:choose>
@@ -61,7 +61,7 @@
                             <strong>Info!</strong> No hay registros para listar.
                         </div>
                         <div class="btn-group" >
-                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{areas.cargarDatos(-1)}">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{areas.cargarDatos(-1)}" rendered="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                 <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                 <f:ajax delay="100" render="panel_modal" />
                             </h:commandLink>                                                 
@@ -69,7 +69,7 @@
                     </c:when>
                     <c:otherwise>
                         <div class="btn-group">
-                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{areas.cargarDatos(-1)}">
+                            <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" action="#{areas.cargarDatos(-1)}" rendered="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                 <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
                                 <f:ajax delay="100" render="panel_modal" />
                             </h:commandLink>                                                  
@@ -81,9 +81,9 @@
                                     <th>Correo</th>
                                     <th></th>
                                 </tr>
-                                
+
                             </thead>
-                            
+
                             <tbody>
                                 <c:forEach items="#{areas.listaAreas}" var="area">
                                     <tr>
@@ -93,24 +93,25 @@
                                         <td>
                                             #{area.correo}
                                         </td>
-                                        <td>                                            
-                                            <div class="btn-group">
-                                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{areas.cargarDatos(area.id)}">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                    <f:ajax delay="100" render="panel_modal_editar" />
-                                                </h:commandLink>                                                   
-                                            </div>
-                                            <div class="btn-group"> 
-                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                        <td>   
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                                <div class="btn-group">
+                                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Editar" action="#{areas.cargarDatos(area.id)}">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                        <f:ajax delay="100" render="panel_modal_editar" />
+                                                    </h:commandLink>                                                   
+                                                </div>
+                                                <div class="btn-group">
                                                     <c:if test="#{area.accionesArea.size() == 0 and area.fortalezasArea.size() ==0 and area.usuariosArea.size() == 0}">
                                                         <h:commandLink id="btn_eliminar_#{area.id}" class="btn btn-danger" action="#{areas.cargarDatos(-1)}"
-                                                                       onclick="if (! confirm('Seguro que va a eliminar esta Area / Sector? ')) return false" >
+                                                                       onclick="if (!confirm('Seguro que va a eliminar esta Area / Sector? '))
+                                                                                   return false" >
                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                             <f:ajax event="click" listener="#{areas.eliminarArea(area.id)}"/>
                                                         </h:commandLink>   
                                                     </c:if>
-                                                </c:if>
-                                            </div>                                                
+                                                </div> 
+                                            </c:if>
                                         </td>
                                         <h:panelGroup id="panel_mensajes_tabla">
                                             <div class="form-group-sm">
@@ -167,13 +168,13 @@
                                         <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </h:panelGroup>
                 </div>
             </div>
-            
+
             <!-- Modal Editar Area -->
             <div id="modal_Editar" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
@@ -217,7 +218,7 @@
                                         <button type="button" class="btn btn-default" style="width: 99%;" data-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </h:panelGroup>
@@ -228,7 +229,8 @@
                     <c:choose>
                         <c:when test="#{areas.paginaActual !=1}" >
                             <li>
-                                <h:commandLink class="active" action="#{areas.cambiarPagina(true, areas.paginaActual -1)}" value="&#60;" >                                                <f:ajax delay="10" onevent="indicador"/>
+                                <h:commandLink class="active" action="#{areas.cambiarPagina(true, areas.paginaActual -1)}" value="&#60;" >
+                                    <f:ajax delay="10" onevent="indicador"/>
                                     <f:ajax delay="10" render="form_usuarios panel_filtros"/>
                                 </h:commandLink>    
                             </li>                                           
@@ -246,7 +248,7 @@
                                     <f:ajax delay="10" render="form_areas panel_filtros"/>
                                 </h:commandLink>    
                             </li>
-                            
+
                         </c:when>
                         <c:otherwise>
                             <li class="disabled"><a>&#62;</a></li>
@@ -255,6 +257,6 @@
                 </ul>                
             </div>
         </h:form>
-        
+
     </ui:define>
 </ui:composition>
