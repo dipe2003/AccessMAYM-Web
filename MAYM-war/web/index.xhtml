@@ -7,7 +7,7 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
-        
+
         <title>Medicion Analisis y Mejora</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -16,28 +16,28 @@
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Cargando.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Mensajes.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css"/>
-        
+
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/jquery/jquery-1.11.3.min.js"/>
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/jquery-ui-1.12.1.custom/jquery-ui.min.js"/>
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>        
-        
+
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/Datepicker.js"/>
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/IndicadorCarga.js"/>
-        
+
         <script src="#{facesContext.externalContext.requestContextPath}/Resources/Scripts/Charts/chart.js"/>
-        
+
         <link rel="shortcut icon" type="image/x-icon" href="#{facesContext.externalContext.requestContextPath}/Resources/Images/maym_favicon.ico"/>
-        
+
     </h:head>
     <h:body>
-        
+
         <div id="loading-container" class="contenedor-carga" >
             <div id="loading" class="carga" style="display: none;">
                 <img height="100px" src="#{facesContext.externalContext.requestContextPath}/Resources/Images/loading-wheel.gif"/>                
             </div>  
             <div>Cargando...</div>
         </div>        
-        
+
         <div style="position: fixed;z-index: 999; width: 100%">
             <ui:include src="header.xhtml"/>
         </div>
@@ -55,7 +55,15 @@
                     </div>
                 </div>
             </ui:insert>
-        </div>        
+        </div> 
+        <footer style="position: relative; top: 207px !important; text-align: center; background-color: rgb(223, 220, 220);">
+            <div>    
+                MAYM-Web(C) -  2025 - Diego Perez
+            </div>
+            <div>    
+                Iconos de <h:outputLink value="http://www.icons8.com"  >Icons8</h:outputLink>
+            </div>
+        </footer>
     </h:body>
 </html>
 

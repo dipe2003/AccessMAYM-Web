@@ -11,44 +11,62 @@
         <script>
             $(document).ready(function llenarGraficos() {
                 var ctx = $("#chartestado");
-                var etiquetas = ['Cerradas', 'Pendientes', 'Desestimadas', 'En Proceso Implemetacion' , 'En Proceso Verificacion'];
-                
-                var chartestado = new Chart(ctx , {
-                    type:'bar',                    
+                var etiquetas = ['Cerradas', 'Pendientes', 'Desestimadas', 'En Proceso Implemetacion', 'En Proceso Verificacion'];
+
+                var chartestado = new Chart(ctx, {
+                    type: 'bar',
                     data: {
                         labels: etiquetas,
                         datasets: [{
-                                label:'Total',
-                                data:[#{graficosIndex.accionesCerradas}, #{graficosIndex.accionesPendientes}, #{graficosIndex.accionesDesestimadas}, #{graficosIndex.accionesProcesoImp}, #{graficosIndex.accionesProcesoVerif}],
-                                backgroundColor:['green', 
-                                    'red', 
+                                label: 'Correctivas',
+                                data: [#{graficosIndex.correctivasCerradas}, #{graficosIndex.correctivasPendientes}, #{graficosIndex.correctivasDesestimadas}, #{graficosIndex.correctivasProcesoImp}, #{graficosIndex.correctivasProcesoVerif}],
+                                backgroundColor: ['green',
+                                    'red',
                                     'black',
                                     'chocolate',
                                     'yellow'
                                 ],
                                 borderWidth: 1
-                            }]
+                            },
+                            {label: 'Preventivas',
+                                data: [#{graficosIndex.preventivasCerradas}, #{graficosIndex.preventivasPendientes}, #{graficosIndex.preventivasDesestimadas}, #{graficosIndex.preventivasProcesoImp}, #{graficosIndex.preventivasProcesoVerif}],
+                                backgroundColor: ['green',
+                                    'red',
+                                    'black',
+                                    'chocolate',
+                                    'yellow'
+                                ],
+                                borderWidth: 1},
+                            {label: 'Mejoras',
+                                data: [#{graficosIndex.mejorasCerradas}, #{graficosIndex.mejorasPendientes}, #{graficosIndex.mejorasDesestimadas}, #{graficosIndex.mejorasProcesoImp}, #{graficosIndex.mejorasProcesoVerif}],
+                                backgroundColor: ['green',
+                                    'red',
+                                    'black',
+                                    'chocolate',
+                                    'yellow'
+                                ],
+                                borderWidth: 1}]
                     },
                     options: {
                         scales: {
                             yAxes: [{
                                     ticks: {
-                                        beginAtZero:true
+                                        beginAtZero: true
                                     }
                                 }]
                         }
-                        
-                    }                         
-                }); 
+
+                    }
+                });
                 var ctxTipo = $("#chartTipos");
-                var chartTipos = new Chart(ctxTipo , {
-                    type:'pie',
+                var chartTipos = new Chart(ctxTipo, {
+                    type: 'pie',
                     data: {
                         labels: ['Correctivas', 'Mejoras', 'Preventivas'],
                         datasets: [{
-                                data:[#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionesMejora}, #{graficosIndex.accionesPreventivas}],
-                                backgroundColor:[
-                                    'rgba(255, 87, 51,0.7)', 
+                                data: [#{graficosIndex.accionesCorrectivas}, #{graficosIndex.accionesMejora}, #{graficosIndex.accionesPreventivas}],
+                                backgroundColor: [
+                                    'rgba(255, 87, 51,0.7)',
                                     'rgba(124, 144, 197, 0.7)',
                                     'rgba(255, 210, 101, 0.7)'
                                 ],
@@ -59,18 +77,18 @@
                                     'rgba(255, 206, 86, 1)'
                                 ]
                             }]
-                    }                        
-                }); 
-                
+                    }
+                });
+
                 var ctxDetecciones = $("#chartDetecciones");
                 var chartDetecciones = new Chart(ctxDetecciones, {
-                    type:'pie',
+                    type: 'pie',
                     data: {
                         labels: ['Intermas', 'Externas'],
                         datasets: [{
-                                data:[#{graficosIndex.totalDeteccionesInternas}, #{graficosIndex.totalDeteccionesExternas}],
-                                backgroundColor:[
-                                    'rgba(255, 87, 51,0.7)', 
+                                data: [#{graficosIndex.totalDeteccionesInternas}, #{graficosIndex.totalDeteccionesExternas}],
+                                backgroundColor: [
+                                    'rgba(255, 87, 51,0.7)',
                                     'rgba(124, 144, 197, 0.7)'
                                 ],
                                 borderWidth: 1,
@@ -79,52 +97,76 @@
                                     'rgba(54, 162, 235, 1)'
                                 ]
                             }]
-                    }                        
-                }); 
-                
+                    }
+                });
+
                 var ctxCodificaciones = $("#chartCodificaciones");
                 var chartCodificaciones = new Chart(ctxCodificaciones, {
-                    type:'bar',
+                    type: 'bar',
                     data: {
-                        labels: ${graficosIndex.nombresCodificaciones},  
+                        labels: ${graficosIndex.nombresCodificaciones},
                         datasets: [{
-                                label:'Total',
-                                data:${graficosIndex.totalCodificaciones},
-                                backgroundColor: 'rgba(25, 194, 169, 0.75)',
+                                label: 'Correctivas',
+                                data:${graficosIndex.totalCodificacionesCorrectivas},
+                                backgroundColor: 'rgba(255,128,128,0.75)',
                                 borderWidth: 1,
                                 borderColor: 'green'
-                            }]
-                    }                        
-                }); 
-               
-                var ctx = $("#chartProcesos");
-                var chartProcesos = new Chart(ctx , {
-                    type:'bar',
+                            },
+                            {label: 'Preventivas',
+                                data:${graficosIndex.totalCodificacionesPreventivas},
+                                backgroundColor: 'rgba(191,255,128, 0.75)',
+                                borderWidth: 1,
+                                borderColor: 'green'},
+                            {label: 'Mejoras',
+                                data:${graficosIndex.totalCodificacionesMejoras},
+                                backgroundColor: 'rgba(213, 128, 255,0.75)',
+                                borderWidth: 1,
+                                borderColor: 'green'}]
+                    }
+                });
+
+                var ctx = $("#chartAccionesProcesos");
+                var chartAccionesProcesos = new Chart(ctx, {
+                    type: 'bar',
                     data: {
                         labels: ${graficosIndex.nombresProcesos},
                         datasets: [{
-                                label:'Total',
-                                data: ${graficosIndex.totalesPorProceso},
-                                backgroundColor: 'rgba(25, 194, 169, 0.75)',
+                                label: 'Correctivas',
+                                data: ${graficosIndex.totalesACPorProceso},
+                                backgroundColor: 'rgba(255,128,128,0.75)',
+                                borderWidth: 1,
+                                borderColor: 'red'
+                            },
+                            {
+                                label: 'Preventivas',
+                                data: ${graficosIndex.totalesAPPorProceso},
+                                backgroundColor: 'rgba(191,255,128, 0.75)',
                                 borderWidth: 1,
                                 borderColor: 'green'
-                            }]                            
+                            },
+                            {
+                                label: 'Mejoras',
+                                data: ${graficosIndex.totalesOMPorProceso},
+                                backgroundColor: 'rgba(213, 128, 255,0.75)',
+                                borderWidth: 1,
+                                borderColor: 'blue'
+                            }]
                     },
                     options: {
                         scales: {
                             yAxes: [{
                                     ticks: {
-                                        beginAtZero:true
+                                        beginAtZero: true
                                     }
                                 }]
                         }
-                        
-                    } 
-                }); 
-               
+
+                    }
+                });
+
             });
         </script>
-        
+
         <h:form id="graficos_filtros">
             <!-- FILTROS -->
             <div class="container-fluid">            
@@ -135,15 +177,26 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <!-- FECHA DESDE -->
-                                    <h:inputText id="fecha_inicial" class="form-control calendario" value="#{graficosIndex.strFechaInicial}" >
+                                    <div class="col-sm-1" style="padding: 1%">
+                                        Desde:
+                                    </div>
+                                    <div class="col-sm-11">
+                                         <h:inputText id="fecha_inicial" class="form-control calendario" value="#{graficosIndex.strFechaInicial}" >
                                         <f:ajax execute="@this" event="change"  />
                                     </h:inputText>
+                                    </div>
+                                   
                                 </div>
                                 <div class="col-md-4">
                                     <!-- FECHA FINAL -->
+                                    <div class="col-sm-1" style="padding: 1%">
+                                        Hasta:
+                                    </div>
+                                    <div class="col-sm-11">
                                     <h:inputText id="fecha_final" class="form-control calendario" value="#{graficosIndex.strFechaFinal}" >
                                         <f:ajax execute="@this" event="change"  />
                                     </h:inputText>
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <!-- BOTON FILTRAR -->
@@ -166,7 +219,7 @@
                 </div>
             </div>
         </h:form>
-        
+
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_graficos_index">
                 <div class="table-responsive-sm">
@@ -186,12 +239,12 @@
                             </fieldset>
                         </div>
                     </div>
-                    
+
                     <div class="row">                    
                         <div class="col-sm-12">
-                            <fieldset><legend>Total de Acciones por Proceso</legend>
+                            <fieldset><legend>Total de Acciones por Tipo por Proceso</legend>
                                 <div style="width:90vw">
-                                    <canvas id="chartProcesos"  ></canvas>   
+                                    <canvas id="chartAccionesProcesos"  ></canvas>   
                                 </div>                            
                             </fieldset>
                         </div>                        
@@ -204,7 +257,7 @@
                                 </div>                            
                             </fieldset>
                         </div>                        
-                        
+
                         <div class="col-sm-8">
                             <fieldset><legend>Total de Acciones por Codificacion</legend>
                                 <div style="width:55vw">

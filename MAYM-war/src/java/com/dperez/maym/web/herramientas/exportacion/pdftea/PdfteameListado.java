@@ -96,7 +96,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
                 // Celda ACTIVIDADES
-                if (a.getActividadesDeAccion().size() > 0) {
+                if (!a.getActividadesDeAccion().isEmpty()) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{17, 7, 4});
                     final boolean repImpar = impar;
                     a.getActividadesDeAccion().forEach((act) -> {
