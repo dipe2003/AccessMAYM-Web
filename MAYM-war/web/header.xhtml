@@ -7,19 +7,19 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition >
-        
+
         <div class="container-fluid" >
-            <div class="row" style="background-color: #000000">
+            <div class="row" style="background-color: #161717">
                 <div class="col-sm-4">
-                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 100px' />
+                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" style='height: 100px' />
                 </div>
                 <div class="col-sm-8">
-                    <h1 style="color: #FFF"><abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1> 
+                    <h1 style="color: #cce8f6"><abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> </h1> 
                 </div>
             </div>
-            
+
         </div>
-        <nav class="navbar navbar-inverse" style="background-color: #000000" >
+        <nav class="navbar navbar-inverse" style="background-color:#000; border-width: 0px" >
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <span class="icon-bar"></span>
@@ -66,7 +66,7 @@
                             <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
                         </ul>
                     </li>
-                     <li class="dropdown">
+                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Estadisticas y Graficos<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml"><span class="glyphicon glyphicon-stats"></span> Graficos</a></li>
@@ -92,12 +92,15 @@
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Detecciones.xhtml">Detecciones</a></li>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Areas.xhtml?pagina=1">Areas / Sectores</a></li>
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Responsabilidades.xhtml">Responsabilidades</a></li>                                
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>                                
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>
+                                <c:if test="#{sesionUsuario.usuarioLogueado != null and sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/ConfigGeneral.xhtml">General</a></li>
+                                </c:if>
                             </ul>
                         </li>
                     </c:if>
                 </ul>
-                
+
                 <ul class="nav navbar-nav navbar-right">
                     <c:choose>
                         <c:when test="#{sesionUsuario.usuarioLogueado != null}">

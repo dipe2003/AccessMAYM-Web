@@ -56,12 +56,28 @@
                 </div>
             </ui:insert>
         </div> 
-        <footer style="position: relative; top: 207px !important; text-align: center; background-color: rgb(223, 220, 220);">
-            <div>    
-                MAYM-Web(C) -  2025 - Diego Perez
-            </div>
-            <div>    
-                Iconos de <h:outputLink value="http://www.icons8.com"  >Icons8</h:outputLink>
+        <footer style="position: relative; top: 207px !important; text-align: center; vertical-align: middle;background-color: #cbe8f6;">
+            <div class="row">
+                <div class="col-sm-3" style="text-align: right !important;padding-left: 1.5%">
+                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 60px' />
+                </div>
+                <div class="col-sm-6">
+                    <div>
+                        MAYM-Web(C) -  2025
+                    </div>    
+                    <div>
+                        <h:outputLink value="mailto:dipejperez@gmail.com">
+                             <span class="glyphicon glyphicon-envelope"></span> 
+                        </h:outputLink>
+                        Diego Perez
+                    </div>
+                    <div>    
+                        Iconos de <h:outputLink value="http://www.icons8.com"  >Icons8</h:outputLink>
+                    </div>
+                </div>
+                <div class="col-sm-3" style="text-align: left !important;padding-right: 1.5%">
+                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 60px' />
+                </div>
             </div>
         </footer>
     </h:body>

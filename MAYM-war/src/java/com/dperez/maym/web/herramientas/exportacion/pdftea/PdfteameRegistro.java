@@ -4,6 +4,7 @@
  */
 package com.dperez.maym.web.herramientas.exportacion.pdftea;
 
+import com.dperez.maym.web.empresa.Empresa;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
@@ -50,7 +51,7 @@ public class PdfteameRegistro implements Serializable {
 
     }
 
-    public void ExportarRegistro(String nombreArchivo, String tituloListado, Accion accion) {
+    public void ExportarRegistro(String nombreArchivo, String tituloListado, Accion accion, Empresa empresa) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -61,7 +62,7 @@ public class PdfteameRegistro implements Serializable {
             OutputStream outputStream = response.getOutputStream();
             PdfWriter writer = PdfWriter.getInstance(documento, outputStream);
 
-            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado), 16, 830);
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado, empresa), 16, 830);
             writer.setPageEvent(event);
 
             documento.open();
@@ -82,7 +83,7 @@ public class PdfteameRegistro implements Serializable {
             tablaGeneral.addCell(CrearCeldaContenido(accion.getAreaAccion().getNombre(), false, 0, 0));
             tablaGeneral.addCell(CrearCeldaVacia(0, false));
             tablaGeneral.addCell(CrearCeldaContenido(accion.getDeteccionAccion().getNombre(), false, 2, 0));
-            
+
             tablaGeneral.addCell(CrearCeldaVacia(5, false));
             tablaGeneral.addCell(CrearCeldaTitulo("Descripcion", 2));
             tablaGeneral.addCell(CrearCeldaVacia(0, false));
@@ -99,21 +100,21 @@ public class PdfteameRegistro implements Serializable {
             tablaGeneral.addCell(new PdfPCell(CrearCeldaTitulo("Codificacion:", 2)));
             tablaGeneral.addCell(CrearCeldaContenido(accion.getCodificacionAccion().getNombre(), false, 3, 18));
             tablaGeneral.addCell(CrearCeldaVacia(5, false));
-                        
+
             tablaGeneral.setComplete(true);
             documento.add(tablaGeneral);
-            
-            if (accion.getProductosInvolucrados().size()>0){
+
+            if (accion.getProductosInvolucrados().size() > 0) {
                 documento.add(CrearTituloSeccion("Producto Involucrado"));
                 tablaGeneral.addCell(CrearCeldaVacia(5, false));
-                PdfPTable tablaProducto = CrearTablaRegistro(2, new int[]{50,50});
-                for(var prod:accion.getProductosInvolucrados()){
+                PdfPTable tablaProducto = CrearTablaRegistro(2, new int[]{50, 50});
+                for (var prod : accion.getProductosInvolucrados()) {
                     tablaProducto.addCell(CrearCeldaTitulo("Denominacion", 0));
                     tablaProducto.addCell(CrearCeldaTitulo("Datos", 0));
-                    tablaProducto.addCell(CrearCeldaContenido(prod.getNombre(), false, 0,18));    
-                    tablaProducto.addCell(CrearCeldaContenido(prod.getDatos(), false, 0,18));                                    
+                    tablaProducto.addCell(CrearCeldaContenido(prod.getNombre(), false, 0, 18));
+                    tablaProducto.addCell(CrearCeldaContenido(prod.getDatos(), false, 0, 18));
                 }
-                tablaProducto.addCell(CrearCeldaVacia(5, false));          
+                tablaProducto.addCell(CrearCeldaVacia(5, false));
                 documento.add(tablaProducto);
             }
 
@@ -238,10 +239,10 @@ public class PdfteameRegistro implements Serializable {
             Color colorFondo = ObtenerColor(accion.getEstadoDeAccion());
             tablaEstado.addCell(CrearCeldaTitulo("Estado", 0));
             tablaEstado.addCell(CrearCeldaContenido(accion.getEstadoDeAccion().getDescripcion(), false, colorFondo));
-            
-            if(accion.getEstadoDeAccion()==Estado.DESESTIMADA){
+
+            if (accion.getEstadoDeAccion() == Estado.DESESTIMADA) {
                 tablaEstado.addCell(CrearCeldaTitulo("Motivo Desestimada", 0));
-                tablaEstado.addCell(CrearCeldaContenido(accion.getObservacionesDesestimada(), false,0,20));
+                tablaEstado.addCell(CrearCeldaContenido(accion.getObservacionesDesestimada(), false, 0, 20));
             }
 
             tablaEstado.setComplete(true);
@@ -354,22 +355,21 @@ public class PdfteameRegistro implements Serializable {
         return tabla;
     }
 
-
     ////// <summary>
     /// Crea la tabla que aloja el encabezado y la completa con los datos.
     /// </summary>
     /// <param name="tituloImpresion"></param>
     /// <returns></returns>
-    private PdfPTable CrearEncabezado(String tituloImpresion) throws IOException {
+    private PdfPTable CrearEncabezado(String tituloImpresion, Empresa empresa) throws IOException {
         PdfPTable tablaEncabezado = new PdfPTable(4);
         tablaEncabezado.setWidthPercentage(100f);
         tablaEncabezado.setTotalWidth(560.0f);
-        tablaEncabezado.setWidths(new int[]{81, 178, 151, 153});
+        tablaEncabezado.setWidths(new int[]{81, 220, 131, 131});
         tablaEncabezado.getDefaultCell().setBorder(0);
         tablaEncabezado.getDefaultCell().setBorderWidth(0);
 
         tablaEncabezado.addCell(CrearLogo());
-        tablaEncabezado.addCell(CrearDatosEmpresa());
+        tablaEncabezado.addCell(CrearDatosEmpresa(empresa));
         tablaEncabezado.addCell(new Phrase(""));
         tablaEncabezado.addCell(new Phrase("M.A.Y.M-WebApp")).setVerticalAlignment(Element.ALIGN_RIGHT);
         tablaEncabezado.addCell(CrearTituloImpresion(tituloImpresion));
@@ -386,7 +386,7 @@ public class PdfteameRegistro implements Serializable {
     private PdfPCell CrearLogo() throws IOException {
         Phrase frase = new Phrase();
         try {
-            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_maym.jpg"));             
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));
             logo.scalePercent(12f);
             logo.setAlignment(Element.ALIGN_LEFT);
             Chunk chLogo = new Chunk(logo, 0, 0, true);
@@ -405,20 +405,30 @@ public class PdfteameRegistro implements Serializable {
     /// Genera la celda con los datos de la empresa
     /// </summary>
     /// <returns></returns>
-    private PdfPCell CrearDatosEmpresa() {
+    private PdfPCell CrearDatosEmpresa(Empresa empresa) {
 
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));
-        frase.add(new Chunk("Unidad Productiva San José"));
-        frase.add(Chunk.NEWLINE);
-        Chunk texto = new Chunk("INALER S.A. - EST. 55");
+        Chunk texto;
+        if (empresa.getNumHabilitacion() != "") {
+            texto = new Chunk(empresa.getNombre() + " | Hab. " + empresa.getNumHabilitacion());
+        } else {
+            texto = new Chunk(empresa.getNombre());
+        }
         texto.setFont(FontFactory.getFont("arialbi", 9, Font.BOLD, Color.BLACK));
         frase.add(texto);
         frase.add(Chunk.NEWLINE);
-        frase.add(new Chunk("Paraje Bañado, San José, Uruguay"));
+        frase.add(new Chunk(empresa.getDireccion()));
         frase.add(Chunk.NEWLINE);
-        frase.add(new Chunk("Tel: (+598) 4342 2525 | (+598) 4342 2420"));
-
+        if (empresa.getMovil() != "") {
+            frase.add(new Chunk("Tel: " + empresa.getTelefono() + " | Movil: " + empresa.getMovil()));
+        } else {
+            frase.add(new Chunk("Tel: " + empresa.getTelefono()));
+        }
+        if (empresa.getCorreo() != "") {
+            frase.add(Chunk.NEWLINE);
+            frase.add(new Chunk(empresa.getCorreo()));
+        }
         PdfPCell celda = new PdfPCell(frase);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         celda.setBorder(0);

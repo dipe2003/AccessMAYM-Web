@@ -4,6 +4,7 @@
  */
 package com.dperez.maym.web.herramientas.exportacion.pdftea;
 
+import com.dperez.maym.web.empresa.Empresa;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
@@ -47,7 +48,7 @@ public class PdfteameListado implements Serializable {
         documento.setMargins(18, 18, 90, 36);
     }
 
-    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones) {
+    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones, Empresa empresa) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -58,7 +59,7 @@ public class PdfteameListado implements Serializable {
             OutputStream outputStream = response.getOutputStream();
             PdfWriter writer = PdfWriter.getInstance(documento, outputStream);
 
-            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado), 16, 570);
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado, empresa), 16, 570);
             writer.setPageEvent(event);
             TablaPie eventoPie = new TablaPie();
             writer.setPageEvent(eventoPie);
@@ -151,7 +152,7 @@ public class PdfteameListado implements Serializable {
     }
 
     public void ExportarPlanAccion(String nombreArchivo, String tituloPlan, List<Accion> acciones,
-            String textoIntroduccion) {
+            String textoIntroduccion, Empresa empresa) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -165,7 +166,7 @@ public class PdfteameListado implements Serializable {
             Accion accion = acciones.stream().findFirst().get();
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
 
-            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan), 16, 570);
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan, empresa), 16, 570);
             writer.setPageEvent(event);
             TablaPie eventoPie = new TablaPie();
             writer.setPageEvent(eventoPie);
@@ -366,16 +367,16 @@ public class PdfteameListado implements Serializable {
     /// </summary>
     /// <param name="tituloImpresion"></param>
     /// <returns></returns>
-    private PdfPTable CrearEncabezado(String tituloImpresion) throws IOException {
+    private PdfPTable CrearEncabezado(String tituloImpresion, Empresa empresa) throws IOException {
         PdfPTable tablaEncabezado = new PdfPTable(4);
         tablaEncabezado.setWidthPercentage(100f);
         tablaEncabezado.setTotalWidth(810.68f);
-        tablaEncabezado.setWidths(new int[]{74, 234, 252, 219});
+        tablaEncabezado.setWidths(new int[]{100, 250, 226, 203});
         tablaEncabezado.getDefaultCell().setBorder(0);
         tablaEncabezado.getDefaultCell().setBorderWidth(0);
 
         tablaEncabezado.addCell(CrearLogo());
-        tablaEncabezado.addCell(CrearDatosEmpresa());
+        tablaEncabezado.addCell(CrearDatosEmpresa(empresa));
         tablaEncabezado.addCell(new Phrase("M.A.Y.M-WebApp"));
         tablaEncabezado.addCell(new Phrase(""));
         tablaEncabezado.addCell(CrearTituloImpresion(tituloImpresion));
@@ -393,7 +394,7 @@ public class PdfteameListado implements Serializable {
 
         Phrase frase = new Phrase();
         try {
-            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_maym.jpg"));             
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));             
             logo.scalePercent(12f);
             logo.setAlignment(Element.ALIGN_LEFT);
             Chunk chLogo = new Chunk(logo, 0, 0, true);
@@ -412,20 +413,30 @@ public class PdfteameListado implements Serializable {
     /// Genera la celda con los datos de la empresa
     /// </summary>
     /// <returns></returns>
-    private PdfPCell CrearDatosEmpresa() {
+    private PdfPCell CrearDatosEmpresa(Empresa empresa) {
 
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));
-        frase.add(new Chunk("Unidad Productiva San José"));
-        frase.add(Chunk.NEWLINE);
-        Chunk texto = new Chunk("INALER S.A. - EST. 55");
+        Chunk texto;
+        if (empresa.getNumHabilitacion() != "") {
+            texto = new Chunk(empresa.getNombre() + " | Hab. " + empresa.getNumHabilitacion());
+        } else {
+            texto = new Chunk(empresa.getNombre());
+        }
         texto.setFont(FontFactory.getFont("arialbi", 9, Font.BOLD, Color.BLACK));
         frase.add(texto);
         frase.add(Chunk.NEWLINE);
-        frase.add(new Chunk("Paraje Bañado, San José, Uruguay"));
+        frase.add(new Chunk(empresa.getDireccion()));
         frase.add(Chunk.NEWLINE);
-        frase.add(new Chunk("Tel: (+598) 4342 2525 | (+598) 4342 2420"));
-
+        if (empresa.getMovil() != "") {
+            frase.add(new Chunk("Tel: " + empresa.getTelefono() + " | Movil: " + empresa.getMovil()));
+        } else {
+            frase.add(new Chunk("Tel: " + empresa.getTelefono()));
+        }
+        if (empresa.getCorreo() != "") {
+            frase.add(Chunk.NEWLINE);
+            frase.add(new Chunk(empresa.getCorreo()));
+        }
         PdfPCell celda = new PdfPCell(frase);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         celda.setBorder(0);

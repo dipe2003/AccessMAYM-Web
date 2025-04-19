@@ -16,6 +16,7 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maym.web.herramientas.Presentacion;
 import com.dperez.maym.web.herramientas.exportacion.excelsea.Excelsea;
 import com.dperez.maym.web.herramientas.exportacion.pdftea.PdfteameRegistro;
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import static com.dperez.maymweb.modelo.acciones.TipoAccion.CORRECTIVA;
 import static com.dperez.maymweb.modelo.acciones.TipoAccion.MEJORA;
@@ -47,6 +48,9 @@ import javax.servlet.http.HttpServletRequest;
 @ViewScoped
 public class ListarAcciones implements Serializable {
 
+    @Inject
+    SesionUsuario sesionUsuario;
+
     private FacadeLectura fLectura;
 
     private TipoAccion tipoDeAccion;
@@ -56,7 +60,7 @@ public class ListarAcciones implements Serializable {
     private Accion accionSeleccionada;
 
     private ModalVerActividades verActividades;
-    
+
     private boolean esBusqueda;
 
     public ListarAcciones() {
@@ -312,10 +316,12 @@ public class ListarAcciones implements Serializable {
     }
 
     public void filtrarTexto() {
-        if (!filtrosAplicados.contains("busqueda")) {
-            filtrosAplicados.add("busqueda");
+        if (textoBusqueda!= null && !textoBusqueda.isEmpty()) {
+            if (!filtrosAplicados.contains("busqueda")) {
+                filtrosAplicados.add("busqueda");
+            }
+            FiltrarAcciones();
         }
-        FiltrarAcciones();
     }
 
     /**
@@ -463,7 +469,7 @@ public class ListarAcciones implements Serializable {
 
     public boolean isEsBusqueda() {
         return esBusqueda;
-    }    
+    }
 
     public String getTextoBusqueda() {
         return this.textoBusqueda;
@@ -548,7 +554,7 @@ public class ListarAcciones implements Serializable {
     public void setEsBusqueda(boolean esBusqueda) {
         this.esBusqueda = esBusqueda;
     }
-    
+
     public void setTextoBusqueda(String textoBusqueda) {
         this.textoBusqueda = textoBusqueda;
     }
@@ -712,7 +718,7 @@ public class ListarAcciones implements Serializable {
                 titulo.append("Oportunidades de mejora");
         }
 
-        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
+        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas, sesionUsuario.getEmpresa());
 
     }
 
@@ -738,7 +744,7 @@ public class ListarAcciones implements Serializable {
 
         df = new SimpleDateFormat("dd-MM-yyy");
         pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
-                strTitulo.toString(), accionesPlan, strIntroduccion.toString());
+                strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getEmpresa());
     }
 
     public void pdfteaRegistro(int id) {
@@ -753,7 +759,7 @@ public class ListarAcciones implements Serializable {
                     .append(" - ")
                     .append(accionFiltrada.getDeteccionAccion().getNombre());
 
-            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada);
+            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada, sesionUsuario.getEmpresa());
         }
     }
 

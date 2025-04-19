@@ -271,14 +271,12 @@ public class EditarAccion implements Serializable {
     }
 
     public void setStrFechaDeteccion(String strFechaDeteccion) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            cal.setTime(sdf.parse(strFechaDeteccion));
+             this.FechaDeteccion = sdf.parse(strFechaDeteccion);
         } catch (ParseException ex) {
         }
         this.strFechaDeteccion = strFechaDeteccion;
-        this.FechaDeteccion = cal.getTime();
     }
 
     public void setDescripcion(String Descripcion) {
@@ -376,7 +374,6 @@ public class EditarAccion implements Serializable {
     }
 
     public void setStrFechaEstimadaVerificacion(String strFechaEstimadaVerificacion) {
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
             this.FechaEstimadaVerificacion = sdf.parse(strFechaEstimadaVerificacion);
