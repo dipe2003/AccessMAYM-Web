@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
@@ -46,6 +47,13 @@ public class ConfigGeneral implements Serializable {
     private String movil;
     private String correo;
     private String habilitacion;
+
+    private boolean tls;
+    private String puerto;
+    private String host;
+    private String from;
+    private String usuario;
+    private String password;
 
     //<editor-fold desc="Setters / Getters">
     public String getNombre() {
@@ -95,11 +103,58 @@ public class ConfigGeneral implements Serializable {
     public void setHabilitacion(String habilitacion) {
         this.habilitacion = habilitacion;
     }
-    //</editor-fold>
 
+    public boolean isTls() {
+        return tls;
+    }
+
+    public void setTls(boolean tls) {
+        this.tls = tls;
+    }
+
+    public String getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    //</editor-fold>
     //<editor-fold desc="Metodos">
-    
-    public void guardarDatosEmpresa()throws IOException{     
+    public void guardarDatosEmpresa() throws IOException {
         Map<String, String> props = new HashMap<>();
         props.put("nombre", nombre);
         props.put("direccion", direccion);
@@ -107,11 +162,11 @@ public class ConfigGeneral implements Serializable {
         props.put("movil", movil);
         props.put("correo", correo);
         props.put("numHabilitacion", habilitacion);
-        try{            
+        try {
             ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
-            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(SEVERITY_INFO, "Guardado" ,"Los datos se guardaron correctamente." ));
+            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
             FacesContext.getCurrentInstance().renderResponse();
-            
+
             sesionUsuario.getEmpresa().setCorreo(correo);
             sesionUsuario.getEmpresa().setNombre(nombre);
             sesionUsuario.getEmpresa().setDireccion(direccion);
@@ -119,13 +174,29 @@ public class ConfigGeneral implements Serializable {
             sesionUsuario.getEmpresa().setMovil(movil);
             sesionUsuario.getEmpresa().setNumHabilitacion(habilitacion);
 
-        }catch(Exception ex){
-            ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
-            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(SEVERITY_INFO, "Error", "Los datos se guardaron correctamente." ));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Los datos no se guardaron."));
             FacesContext.getCurrentInstance().renderResponse();
-        }        
+        }
     }
-    
+
+    public void guardarDatosCorreo() throws IOException {
+        Map<String, String> props = new HashMap<>();
+        props.put("mail_from", from);
+        props.put("mail_user", usuario);
+        props.put("mail_pass", password);
+        props.put("mail_port", puerto);
+        props.put("mail_tls", String.valueOf(tls));
+        try {
+            ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-grupo1", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
+            FacesContext.getCurrentInstance().renderResponse();
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-grupo1", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Los datos no se guardaron."));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+
     //</editor-fold>
     @PostConstruct
     public void init() {
@@ -137,6 +208,14 @@ public class ConfigGeneral implements Serializable {
         movil = empresaGuardada.getMovil();
         correo = empresaGuardada.getCorreo();
         habilitacion = empresaGuardada.getNumHabilitacion();
+
+        Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
+        from = prop.get("mail_from")!=null?prop.get("mail_from").toString():"";        
+        usuario = prop.get("mail_user")!=null?prop.get("mail_user").toString():"";
+        password = prop.get("mail_pass")!=null?prop.get("mail_pass").toString():"";
+        puerto = prop.get("mail_port")!=null?prop.get("mail_port").toString():"";
+        tls = prop.get("mail_tls")!=null?Boolean.parseBoolean(prop.get("mail_tls").toString()):false;
+
     }
 
 }

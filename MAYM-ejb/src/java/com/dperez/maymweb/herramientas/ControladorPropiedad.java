@@ -32,6 +32,9 @@ public class ControladorPropiedad {
     public int getMailPort(){
         return Integer.parseInt(ioProp.getPropiedad("mail_port"));
     }
-        
+    
+    public boolean getUtilizarTls(){
+        return Boolean.parseBoolean(ioProp.getPropiedad("usar_tls"));
+    }
 }
 

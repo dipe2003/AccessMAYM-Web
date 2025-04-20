@@ -23,12 +23,13 @@ public class SendMail {
     private static String pass;
     private static String mail;
     private static String host;
+    private static boolean utilizarTls;
     private static int puerto;
     
     private static Properties props;
     private static Session session;
     
-    public SendMail() {}
+    public SendMail() {}    
         
     @PostConstruct
     public void init(){
@@ -36,11 +37,12 @@ public class SendMail {
         pass = prop.getMailPass();
         mail = prop.getMailFrom();
         host = prop.getMailSmtp();
-        puerto = prop.getMailPort();
+        utilizarTls = prop.getUtilizarTls();
+        puerto = prop.getMailPort();        
         
         props = new Properties();
-        props.put("mail.transport.protocol", "smtp");
-        //props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.transport.protocol", "smtp");        
+        props.put("mail.smtp.starttls.enable", String.valueOf(utilizarTls));
         props.put("mail.smtp.port", puerto);              
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.auth", "true");

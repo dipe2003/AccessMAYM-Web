@@ -6,7 +6,6 @@
 package com.dperez.maymweb.herramientas.EnvioAlertas;
 
 import com.dperez.maymweb.modelo.acciones.Accion;
-import com.dperez.maymweb.modelo.acciones.Correctiva;
 import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import com.dperez.maymweb.herramientas.ControladorAlertas;

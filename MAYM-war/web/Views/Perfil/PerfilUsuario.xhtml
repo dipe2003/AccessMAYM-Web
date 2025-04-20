@@ -368,24 +368,21 @@
                                             <div class="col-sm-6">
                                                 <strong><label for="nombre">Nombre:</label></strong>  
                                                 <h:inputText class="form-control" id="nombre" p:placeholder="Nombre" value="#{perfilUsuario.nombre}" 
-                                                             required="true" requiredMessage="No se ingreso nombre.">
-                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
-                                                </h:inputText>
+                                                             required="true" requiredMessage="No se ingreso nombre."/>
+                                                <h:message for="nombre" class="msj_error"/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <strong><label for="apellido">Apellido:</label></strong>  
                                                 <h:inputText class="form-control" id="apellido" p:placeholder="Apellido" value="#{perfilUsuario.apellido}" 
-                                                             required="true" requiredMessage="No se ingreso apellido.">
-                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
-                                                </h:inputText>
+                                                             required="true" requiredMessage="No se ingreso apellido."/>
+                                                <h:message for="apellido" class="msj_error"/>
                                             </div>
                                             <div>
                                                 <div class="col-sm-12">
                                                     <strong><label for="correo">Correo:</label></strong>  
                                                     <h:inputText class="form-control" id="correo" p:placeholder="Correo" value="#{perfilUsuario.correo}" 
-                                                                 required="true" requiredMessage="No se ingreso correo.">
-                                                        <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
-                                                    </h:inputText>
+                                                                 required="true" requiredMessage="No se ingreso correo."/>
+                                                    <h:message for="correo" class="msj_error"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -398,16 +395,14 @@
                                                         <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
                                                         <c:forEach items="#{perfilUsuario.areasDisponibles}" var="area">
                                                             <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
-                                                        </c:forEach>
-                                                        <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
-                                                    </h:selectOneMenu>                                                    
+                                                        </c:forEach>                                                       
+                                                    </h:selectOneMenu>       
+                                                    <h:message for="area" class="msj_error"/>
                                                 </h:panelGroup>
                                             </div>
                                             <div class="col-sm-4">       
                                                 <strong><label for="alertas">Recibir Alertas:</label></strong>    
-                                                <h:selectBooleanCheckbox id="alertas" title="Recibir Alertas" value="#{perfilUsuario.recibeAlertas}">
-                                                    <f:ajax execute="@this" event="change" render="panel_modal_datos_usuarios" />
-                                                </h:selectBooleanCheckbox>
+                                                <h:selectBooleanCheckbox id="alertas" title="Recibir Alertas" value="#{perfilUsuario.recibeAlertas}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -415,19 +410,14 @@
                                     <h:panelGroup id="panel_mensajes_modal">
                                         <div class="form-group-sm">
                                             <h:message for="btn_guardar_datos" class="msj_info"/>
-                                            <h:message for="area" class="msj_info"/>
-                                            <h:message for="apellido" class="msj_info"/>
-                                            <h:message for="nombre" class="msj_info"/>
-                                            <h:message for="correo" class="msj_info"/>
                                         </div>
                                     </h:panelGroup>
                                 </div>
                                 <div class="modal-footer">
                                     <div class="row">
                                         <div class="col-sm-6" >
-                                            <h:commandButton id="btn_guardar_datos" style="width: 99%;" class="btn btn-primary" value="Guardar"
-                                                             action="#{perfilUsuario.guardarCambios()}">
-                                                <f:ajax execute="panel_modal_datos_usuarios" onevent="indicador" 
+                                            <h:commandButton id="btn_guardar_datos" style="width: 99%;" class="btn btn-primary" value="Guardar">
+                                                <f:ajax execute="panel_modal_datos_usuarios" event="click" listener="#{perfilUsuario.guardarCambios()}" onevent="indicador" 
                                                         render="panel_modal_datos_usuarios panel_mensajes_modal form_perfil_usuario:panel-datos-perfil" />
                                             </h:commandButton>
                                         </div>
@@ -457,32 +447,26 @@
                                         <div>
                                             <strong><label for="password_actual">Password Actual:</label></strong>  
                                             <h:inputSecret class="form-control" id="password_actual" p:placeholder="Password Actual" value="#{perfilUsuario.actualPassword}" 
-                                                           required="true" requiredMessage="No se ingreso password actual.">
-                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
-                                            </h:inputSecret>
+                                                           required="true" requiredMessage="No se ingreso password actual."/>
+                                             <h:message for="password_actual" class="msj_error"/>
                                         </div>
                                         <div>
                                             <strong><label for="nuevo_password">Nuevo Password:</label></strong>  
                                             <h:inputSecret class="form-control" id="nuevo_password" p:placeholder="Nuevo Password" value="#{perfilUsuario.nuevoPassword}" 
-                                                           required="true" requiredMessage="No se ingreso nuevo password.">
-                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
-                                            </h:inputSecret>
+                                                           required="true" requiredMessage="No se ingreso nuevo password."/>
+                                            <h:message for="nuevo_password" class="msj_error"/>
                                         </div>
                                         <div>
                                             <strong><label for="rep_nuevo_password">Repetir Nuevo Password:</label></strong>  
                                             <h:inputSecret class="form-control" id="rep_nuevo_password" p:placeholder="Repeticion de Nuevo Password" value="#{perfilUsuario.repNuevoPassword}" 
-                                                           required="true" requiredMessage="No se ingreso repeticion de password.">
-                                                <f:ajax execute="@this" event="change" render="panel_mensajes_modal_password" />
-                                            </h:inputSecret>
+                                                           required="true" requiredMessage="No se ingreso repeticion de password."/>
+                                             <h:message for="rep_nuevo_password" class="msj_error"/>
                                         </div>
                                     </div>
 
                                     <h:panelGroup id="panel_mensajes_modal_password">
                                         <div class="form-group-sm">
                                             <h:message for="btn_cambiar_password" class="msj_info"/>
-                                             <h:message for="password_actual" class="msj_info"/>
-                                            <h:message for="nuevo_password" class="msj_info"/>
-                                            <h:message for="rep_nuevo_password" class="msj_info"/>
                                         </div>
                                     </h:panelGroup>
                                 </div>
@@ -490,8 +474,8 @@
                                     <div class="row">
                                         <div class="col-sm-6" >
                                             <h:commandButton id="btn_cambiar_password" style="width: 99%;" class="btn btn-primary" value="Cambiar"
-                                                             action="#{perfilUsuario.cambiarPassword()}">
-                                                <f:ajax execute="panel_modal_cambiar_password" onevent="indicador" 
+                                                             >
+                                                <f:ajax execute="panel_modal_cambiar_password" event="click" onevent="indicador" listener="#{perfilUsuario.cambiarPassword()}"
                                                         render="panel_modal_cambiar_password panel_mensajes_modal_password form_perfil_usuario:panel-datos-perfil" />
                                             </h:commandButton>
                                         </div>
