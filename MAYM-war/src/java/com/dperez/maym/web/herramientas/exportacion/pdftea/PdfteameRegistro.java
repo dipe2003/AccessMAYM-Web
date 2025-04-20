@@ -108,9 +108,9 @@ public class PdfteameRegistro implements Serializable {
                 documento.add(CrearTituloSeccion("Producto Involucrado"));
                 tablaGeneral.addCell(CrearCeldaVacia(5, false));
                 PdfPTable tablaProducto = CrearTablaRegistro(2, new int[]{50, 50});
+                tablaProducto.addCell(CrearCeldaTitulo("Denominacion", 0));
+                tablaProducto.addCell(CrearCeldaTitulo("Datos", 0));
                 for (var prod : accion.getProductosInvolucrados()) {
-                    tablaProducto.addCell(CrearCeldaTitulo("Denominacion", 0));
-                    tablaProducto.addCell(CrearCeldaTitulo("Datos", 0));
                     tablaProducto.addCell(CrearCeldaContenido(prod.getNombre(), false, 0, 18));
                     tablaProducto.addCell(CrearCeldaContenido(prod.getDatos(), false, 0, 18));
                 }
@@ -159,20 +159,20 @@ public class PdfteameRegistro implements Serializable {
                 if (accion.getComprobacionImplementacion().getFechaEstimada() != null) {
                     implementacion = df.format(accion.getComprobacionImplementacion().getFechaEstimada());
                 }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 0));
+                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
                 implementacion = "Sin Comprobar";
 
                 if (accion.getComprobacionImplementacion().getFechaComprobacion() != null) {
                     implementacion = df.format(accion.getComprobacionImplementacion().getFechaComprobacion());
                 }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 0));
+                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
                 implementacion = "Sin Definir";
 
                 if (accion.getComprobacionImplementacion().getResponsableComprobacion() != null) {
                     implementacion = accion.getComprobacionImplementacion().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
                             + accion.getComprobacionImplementacion().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
                 }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 0));
+                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
                 implementacion = "Sin Definir";
 
                 if (accion.getComprobacionImplementacion().getResultadoComprobacion() != null) {
@@ -204,20 +204,20 @@ public class PdfteameRegistro implements Serializable {
                 if (accion.getComprobacionEficacia().getFechaEstimada() != null) {
                     eficacia = df.format(accion.getComprobacionEficacia().getFechaEstimada());
                 }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 0));
+                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
                 eficacia = "Sin Verificar";
 
                 if (accion.getComprobacionEficacia().getFechaComprobacion() != null) {
                     eficacia = df.format(accion.getComprobacionEficacia().getFechaComprobacion());
                 }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 0));
+                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
                 eficacia = "Sin Definir";
 
                 if (accion.getComprobacionEficacia().getResponsableComprobacion() != null) {
                     eficacia = accion.getComprobacionEficacia().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
                             + accion.getComprobacionEficacia().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
                 }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 0));
+                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
                 eficacia = "Sin Definir";
                 if (accion.getComprobacionEficacia().getResultadoComprobacion() != null) {
                     eficacia = accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion();
