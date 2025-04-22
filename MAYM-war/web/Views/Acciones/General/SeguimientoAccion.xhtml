@@ -593,17 +593,11 @@
                                                                     </c:choose>                                                            
                                                                 </td>
                                                                 <td><div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                            <span class="caret"></span>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu" role="menu">
-                                                                            <li><h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                return false">
-                                                                                    <f:ajax render="form_segumiento_accion:panel_lista_adjuntos"  onevent="indicador"/>
-                                                                                </h:commandLink>
-                                                                            </li>
-                                                                        </ul>
+                                                                        <h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                   return false">
+                                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                                            <f:ajax render="form_segumiento_accion:panel_lista_adjuntos"  onevent="indicador"/>
+                                                                        </h:commandLink>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -643,7 +637,7 @@
                             <c:otherwise>
                                 <div class='col-sm-6' >
                                     <h:commandButton id="btn_restaurar_accion" class="btn btn-danger" style="width: 99%" value="Restaurar" onclick="if (!confirm('Seguro que va a restaurar esta accion? Se eliminaran todos los comentarios relacionados.'))
-                                                        return false" >
+                                                return false" >
                                         <f:ajax event="click" listener="#{seguimientoAccion.restarurarAccion()}" onevent="indicador" render="panel_mensajes"/>
                                     </h:commandButton>
                                 </div>
@@ -683,7 +677,7 @@
                                     <div class="row">
                                         <div class="col-sm-6" >
                                             <h:commandButton id="btn_desestimar_accion" class="btn btn-danger" style="width: 99%" value="Desestimar" onclick="if (!confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.'))
-                                                                return false" >
+                                                        return false" >
                                                 <f:ajax event="click" listener="#{seguimientoAccion.desestimarAccion()}" onevent="indicador" render="panel_mensajes"/>
                                             </h:commandButton>                                           
                                         </div>

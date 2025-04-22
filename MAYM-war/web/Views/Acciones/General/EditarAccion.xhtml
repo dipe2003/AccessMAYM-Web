@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                         </div>                        
-                        
+
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -131,14 +131,14 @@
                                     <f:ajax delay="100" render="modal_nueva" />
                                 </h:commandLink> 
                             </div>                  
-                            
+
                         </div>
                         <div class="form-group">
                             <strong><label for="descripcion">Descripcion:</label></strong>                                    
                             <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion."
                                              value="#{editarAccion.descripcion}" required="true" requiredMessage="No se ingreso descripcion."/>
                         </div>   
-                         <div class="form-group">
+                        <div class="form-group">
                             <strong><label for="referencias">Referencias:</label></strong>                                    
                             <h:inputTextarea class="form-control" id="referencias" p:placeholder="Referencias al requisito o especificación."
                                              value="#{editarAccion.referencias}" required="false" />
@@ -168,7 +168,7 @@
                                             <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
                                         </h:commandLink> 
                                     </div>  
-                                    
+
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <table class="table table-hover table-striped">
@@ -191,7 +191,8 @@
                                                                         <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
                                                                     </h:commandLink>
                                                                     <h:commandLink class="btn btn-danger"
-                                                                                   onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
+                                                                                   onclick="if (!confirm('Seguro que va a eliminar este Producto? '))
+                                                                                               return false">
                                                                         <span class="glyphicon glyphicon-trash"> </span>
                                                                         <f:ajax render="panel_mensajes"/>
                                                                         <f:ajax render="panel_producto_afectado"/>
@@ -209,7 +210,7 @@
                         </h:panelGroup>
                     </div>
                 </div> 
-                
+
                 <!-- Analisis de Causa -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Analisis de Causa</div>
@@ -233,7 +234,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Actividades -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Actividades:</div>
@@ -280,14 +281,16 @@
                                                                                 <span class="caret"></span>
                                                                             </button>
                                                                             <ul class="dropdown-menu" role="menu"> 
-                                                                                <li><h:link value="Editar Actividad" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                                                                <li><h:link value="Editar Actividad" onclick="if (!confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?'))
+                                                                                            return false"
                                                                                             outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=#{actividad.id}" >                                                                
                                                                                         <f:ajax onevent="indicador" />
                                                                                     </h:link>
                                                                                 </li>
                                                                                 <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR' ||  sesionUsuario.usuarioLogueado.permisoUsuario == 'VERIFICADOR'}">
                                                                                     <li><h:commandLink value="Quitar Actividad" action="#{editarAccion.quitarActividad(actividad.id)}" 
-                                                                                                       onclick="if (! confirm('Seguro que va a quitar esta Medida Preventiva? ')) return false">
+                                                                                                       onclick="if (!confirm('Seguro que va a quitar esta Medida Preventiva? '))
+                                                                                                                   return false">
                                                                                             <f:ajax onevent="indicador"/>
                                                                                         </h:commandLink>
                                                                                     </li>
@@ -315,7 +318,8 @@
                             <div class="form-group-sm">
                                 <c:choose>
                                     <c:when test="#{editarAccion.accionSeleccionada.analisisCausa != ''}">
-                                        <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" onclick="if (! confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?')) return false"
+                                        <h:link id="agregar_actividad" value="Agregar Actividad" class="btn btn-primary" onclick="if (!confirm('Si se realizaron cambios y no se guardaron se perderan. Continuar?'))
+                                                    return false"
                                                 outcome="ActividadesAccion.xhtml?id=#{editarAccion.idAccionSeleccionada}&amp;editar=0">
                                             <f:ajax onevent="indicador"/>
                                         </h:link>
@@ -487,7 +491,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
@@ -537,17 +541,13 @@
                                                                         </c:otherwise> 
                                                                     </c:choose>                                                            
                                                                 </td>
-                                                                <td><div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                            <span class="caret"></span>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu" role="menu">
-                                                                            <li><h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" value="Eliminar Adjunto" onclick="if (! confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.')) return false">
-                                                                                    <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
-                                                                                </h:commandLink>
-                                                                            </li>
-                                                                        </ul>
+                                                                <td>
+                                                                    <div class="btn-group">
+                                                                        <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                    return false">
+                                                                            <span class="glyphicon glyphicon-trash"> </span>
+                                                                            <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
+                                                                        </h:commandLink>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -562,7 +562,7 @@
                         </h:panelGroup>
                     </div>
                 </div>
-                
+
                 <h:panelGroup id="panel_mensajes">
                     <div class="form-group-sm">
                         <h:message for="fecha_deteccion" class="msj_error"/>
@@ -592,7 +592,7 @@
                         <h:message for="guardar_accion" class="msj_info"/>
                     </div>
                 </h:panelGroup>
-                
+
                 <div class="row">
                     <div class='col-sm-4' >
                         <h:commandButton id="guardar_accion" class="btn btn-default" style="width: 99%" value="Guardar" >
@@ -603,12 +603,14 @@
                         </h:commandButton>
                     </div>
                     <div class='col-sm-4' >
-                        <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (! confirm('Los cambios no guardados se perderan. Continar?')) return false"
+                        <h:link id="cerrar_accion" class="btn btn-default" style="width: 99%" value="Cerrar" onclick="if (!confirm('Los cambios no guardados se perderan. Continar?'))
+                                    return false"
                                 outcome="ListarAcciones.xhtml?tipo=#{editarAccion.tipoDeAccion}" />
                     </div>
                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                         <div class='col-sm-4' >
-                            <h:commandButton id="eliminar_accion" class="btn btn-danger" style="width: 99%" value="Eliminar" onclick="if (! confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.')) return false" >
+                            <h:commandButton id="eliminar_accion" class="btn btn-danger" style="width: 99%" value="Eliminar" onclick="if (!confirm('Seguro que va a eliminar esta accion? Se eliminaran todos los datos relacionados.'))
+                                        return false" >
                                 <f:ajax event="click" listener="#{editarAccion.eliminarAccion()}" onevent="indicador" render="panel_mensajes"/>
                             </h:commandButton>
                         </div>
@@ -617,13 +619,13 @@
             </h:form>
         </div>
         <h:form id="form_accion_modal" enctype="multipart/form-data">
-            
+
             <!-- Modal Nueva Deteccion -->
             <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>
-            
+
             <!-- Modal Producto Involucrado -->
             <ui:include src="ProductoInvolucrado.xhtml"/>
-            
+
             <!-- Modal Nuevo Archivo Adjunto -->
             <div id="modal_nuevo_adjunto" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
@@ -662,6 +664,6 @@
                 </div>
             </div>
         </h:form>
-        
+
     </ui:define>
 </ui:composition>
