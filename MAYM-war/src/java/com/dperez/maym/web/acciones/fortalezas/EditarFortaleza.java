@@ -166,6 +166,7 @@ public class EditarFortaleza implements Serializable {
             Descripcion = FortalezaSeleccionada.getDescripcion();
 
             //  Detecciones
+            modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
             TiposDeteccion = TipoDeteccion.values();
             ListaDetecciones = modalDetecciones.getListaDetecciones();
             TipoDeDeteccionSeleccionada = FortalezaSeleccionada.getDeteccionFortaleza().getTipoDeDeteccion();
