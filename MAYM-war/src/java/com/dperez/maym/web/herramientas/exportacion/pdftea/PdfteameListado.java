@@ -5,6 +5,7 @@
 package com.dperez.maym.web.herramientas.exportacion.pdftea;
 
 import com.dperez.maym.web.empresa.Empresa;
+import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import static com.dperez.maymweb.modelo.acciones.Estado.CERRADA;
@@ -24,6 +25,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -40,15 +42,22 @@ import javax.servlet.http.HttpServletResponse;
 @Named
 public class PdfteameListado implements Serializable {
 
+    private CargarArchivo cArchivo;
     // 1 pulgada = 72
     private Document documento = new Document();
+    private Empresa empresa;
 
-    public PdfteameListado() {
+    public PdfteameListado(Empresa empresa) {
+        this.empresa = empresa;
         documento.setPageSize(PageSize.A4.rotate());
         documento.setMargins(18, 18, 90, 36);
+        cArchivo = new CargarArchivo();
     }
 
-    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones, Empresa empresa) {
+    public PdfteameListado() {
+    }
+
+    public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -59,7 +68,7 @@ public class PdfteameListado implements Serializable {
             OutputStream outputStream = response.getOutputStream();
             PdfWriter writer = PdfWriter.getInstance(documento, outputStream);
 
-            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado, empresa), 16, 570);
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloListado), 16, 570);
             writer.setPageEvent(event);
             TablaPie eventoPie = new TablaPie();
             writer.setPageEvent(eventoPie);
@@ -166,7 +175,7 @@ public class PdfteameListado implements Serializable {
             Accion accion = acciones.stream().findFirst().get();
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
 
-            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan, empresa), 16, 570);
+            TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan), 16, 570);
             writer.setPageEvent(event);
             TablaPie eventoPie = new TablaPie();
             writer.setPageEvent(eventoPie);
@@ -367,7 +376,7 @@ public class PdfteameListado implements Serializable {
     /// </summary>
     /// <param name="tituloImpresion"></param>
     /// <returns></returns>
-    private PdfPTable CrearEncabezado(String tituloImpresion, Empresa empresa) throws IOException {
+    private PdfPTable CrearEncabezado(String tituloImpresion) throws IOException {
         PdfPTable tablaEncabezado = new PdfPTable(4);
         tablaEncabezado.setWidthPercentage(100f);
         tablaEncabezado.setTotalWidth(810.68f);
@@ -376,7 +385,7 @@ public class PdfteameListado implements Serializable {
         tablaEncabezado.getDefaultCell().setBorderWidth(0);
 
         tablaEncabezado.addCell(CrearLogo());
-        tablaEncabezado.addCell(CrearDatosEmpresa(empresa));
+        tablaEncabezado.addCell(CrearDatosEmpresa());
         tablaEncabezado.addCell(new Phrase("M.A.Y.M-WebApp"));
         tablaEncabezado.addCell(new Phrase(""));
         tablaEncabezado.addCell(CrearTituloImpresion(tituloImpresion));
@@ -391,19 +400,26 @@ public class PdfteameListado implements Serializable {
     /// </summary>
     /// <returns></returns>
     private PdfPCell CrearLogo() throws IOException {
-
         Phrase frase = new Phrase();
+        Image logo = null;
         try {
-            Image logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));             
-            logo.scalePercent(12f);
-            logo.setAlignment(Element.ALIGN_LEFT);
-            Chunk chLogo = new Chunk(logo, 0, 0, true);
-            frase.add(chLogo);
+            String realPath = cArchivo.getHome() + cArchivo.getSeparator() + "MAYMWEB" + cArchivo.getSeparator();
+            logo = Image.getInstance(realPath + empresa.getUbicacionLogo());
+        } catch (FileNotFoundException ex) {
+            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));
         } catch (IOException ex) {
             ex.getMessage();
             frase.add("[No se pudo cargar logo]");
         }
+        if (logo != null) {
+            logo.scaleToFit(100, 40);
+            logo.setAlignment(Element.ALIGN_LEFT);
+            Chunk chLogo = new Chunk(logo, 0, 0, true);
+            frase.add(chLogo);
+        }
         PdfPCell celda = new PdfPCell(frase);
+        celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         celda.setBorder(0);
         celda.setBorderWidth(0);
         return celda;
@@ -413,7 +429,7 @@ public class PdfteameListado implements Serializable {
     /// Genera la celda con los datos de la empresa
     /// </summary>
     /// <returns></returns>
-    private PdfPCell CrearDatosEmpresa(Empresa empresa) {
+    private PdfPCell CrearDatosEmpresa() {
 
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));

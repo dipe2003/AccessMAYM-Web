@@ -690,7 +690,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void pdftea() {
-        PdfteameListado pdf = new PdfteameListado();
+        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getEmpresa());
         List<Accion> accionesFiltradas = ListaCompletaAcciones;
         for (String filtro : filtrosAplicados) {
             switch (filtro) {
@@ -718,12 +718,12 @@ public class ListarAcciones implements Serializable {
                 titulo.append("Oportunidades de mejora");
         }
 
-        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas, sesionUsuario.getEmpresa());
+        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
 
     }
 
     public void pdfteaPlanAccion(int id) {
-        PdfteameListado pdf = new PdfteameListado();
+        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getEmpresa());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
         List<Accion> accionesPlan = fLectura.listarAcciones().stream()
                 .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
@@ -748,7 +748,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void pdfteaRegistro(int id) {
-        PdfteameRegistro pdf = new PdfteameRegistro();
+        PdfteameRegistro pdf = new PdfteameRegistro(sesionUsuario.getEmpresa());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
 
         if (accionFiltrada != null) {
@@ -759,7 +759,7 @@ public class ListarAcciones implements Serializable {
                     .append(" - ")
                     .append(accionFiltrada.getDeteccionAccion().getNombre());
 
-            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada, sesionUsuario.getEmpresa());
+            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada);
         }
     }
 
