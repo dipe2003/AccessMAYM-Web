@@ -15,6 +15,7 @@ public class Empresa {
     private String movil;
     private String correo;
     private String numHabilitacion;
+    private String ubicacionLogo;
     
     public Empresa(){}
 
@@ -24,7 +25,17 @@ public class Empresa {
         this.telefono = telefono;
         this.movil = movil;
         this.correo = correo;
-        this.numHabilitacion = numHabilitacion;
+        this.numHabilitacion = numHabilitacion;        
+    }
+    
+       public Empresa(String nombre, String direccion, String telefono, String movil, String correo, String numHabilitacion, String ubicacionLogo) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.movil = movil;
+        this.correo = correo;
+        this.numHabilitacion = numHabilitacion;   
+        this.ubicacionLogo = ubicacionLogo;
     }
 
     public String getNombre() {
@@ -78,6 +89,14 @@ public class Empresa {
 
     public void setNumHabilitacion(String numHabilitacion) {
         this.numHabilitacion = numHabilitacion;
+    }
+
+    public String getUbicacionLogo() {
+        return ubicacionLogo;
+    }
+
+    public void setUbicacionLogo(String ubicacionLogo) {
+        this.ubicacionLogo = ubicacionLogo;
     }
     
     

@@ -646,10 +646,11 @@
                                 <div class="form-group">
                                     <c:if test="#{not empty editarAccion.tituloAdjunto}">
                                         <div class="form-group">
-                                            <h:inputFile  value="#{editarAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                            <h:inputFile id="input-adjunto"  value="#{editarAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
                                                 <f:ajax event="change" listener="#{editarAccion.setArchivoAdjunto(editarAccion.archivoAdjunto)}" />
                                                 <f:ajax event="change" listener="#{editarAccion.agregarAdjunto()}" render="form_accion:panel_lista_adjuntos form_accion_modal:panel_modal_adjunto" onevent="indicador"/>
                                             </h:inputFile>
+                                            <h:message for="input-adjunto" class="msj_error"/>
                                         </div>
                                     </c:if>
                                 </div>

@@ -16,42 +16,61 @@
                 <h:form id="form_config_general">
                     <div class="container-fluid" style="padding: 1%">  
                         <div class="panel panel-primary">
-                            <div class="panel-heading">Perfil de Empresa</div>
+                            <div class="panel-heading">Perfil de la Empresa</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel-datos-empresa">
-                                    <div class="form-group row">
-                                        <div class="col-xs-2">
-                                            <label>Nombre:</label>
-                                            <h:inputText class="form-control" id="nombre" value="#{configGeneral.nombre}" required="true" requiredMessage="=bligatorio." />
-                                            <h:message for="nombre" class="msj_error"/>
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <label>Direccion:</label>
-                                            <h:inputText class="form-control" id="direccon" value="#{configGeneral.direccion}" required="true" requiredMessage="Oligatorio" />
-                                            <h:message for="direccon" class="msj_error"/>
-                                        </div>
-                                        <div class="col-xs-2">
-                                            <label>Telefono:</label>
-                                            <h:inputText class="form-control" id="telefono" value="#{configGeneral.telefono}" required="true" requiredMessage="Obligatorio." />
-                                            <h:message for="telefono" class="msj_info"/>
-                                        </div>
-                                        <div class="col-xs-2">
-                                            <label>Movil:</label>
-                                            <h:inputText class="form-control" id="movil" value="#{configGeneral.movil}" required="false"/>
-                                        </div>
-                                        <div class="col-xs-2">
-                                            <label>Correo</label>
-                                            <h:inputText class="form-control" id="correo" value="#{configGeneral.correo}" required="true" requiredMessage="Obligatorio." />
-                                            <h:message for="correo" class="msj_error"/>
+                                    <div class="form-group row">                                        
+                                        <div class="col-xs-11"> 
+                                            <div class="col-xs-2">
+                                                <label>Nombre:</label>
+                                                <h:inputTextarea class="form-control" id="nombre" value="#{configGeneral.nombre}" required="true" requiredMessage="=bligatorio." />
+                                                <h:message for="nombre" class="msj_error"/>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <label>Direccion:</label>
+                                                <h:inputTextarea class="form-control" id="direccon" value="#{configGeneral.direccion}" required="true" requiredMessage="Oligatorio" />
+                                                <h:message for="direccon" class="msj_error"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <label>Telefono:</label>
+                                                <h:inputTextarea class="form-control" id="telefono" value="#{configGeneral.telefono}" required="true" requiredMessage="Obligatorio." />
+                                                <h:message for="telefono" class="msj_info"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <label>Movil:</label>
+                                                <h:inputTextarea class="form-control" id="movil" value="#{configGeneral.movil}" required="false"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <label>Correo</label>
+                                                <h:inputTextarea class="form-control" id="correo" value="#{configGeneral.correo}" required="true" requiredMessage="Obligatorio." />
+                                                <h:message for="correo" class="msj_error"/>
+                                            </div>
+                                            <div class="col-xs-1">
+                                                <label>Habilitacion</label>
+                                                <h:inputTextarea class="form-control" id="habilitacion" value="#{configGeneral.habilitacion}" required="false" />
+                                            </div>
                                         </div>
                                         <div class="col-xs-1">
-                                            <label>Habilitacion</label>
-                                            <h:inputText class="form-control" id="habilitacion" value="#{configGeneral.habilitacion}" required="false" />
+                                            <h:panelGroup id="panel-logo">
+                                                <h:commandLink p:data-toggle="modal" p:data-target="#modal_cargar_logo">
+                                                    <c:choose>
+                                                        <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogo}">
+                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogo}" class="img-responsive img-thumbnail" style="height: 100px"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <f:ajax delay="100" render="form_cargar_logo:modal_cargar_logo" /> 
+                                                </h:commandLink>
+
+                                            </h:panelGroup>
                                         </div>
                                     </div>
-                                </h:panelGroup>
-                                <div>
-                                    <h:commandButton id="boton-guardar-datos" class="btn btn-primary" value="Guardar">
+                                </h:panelGroup> 
+
+                                <div class="col-xs-2">
+                                    <h:commandButton id="boton-guardar-datos" class="btn btn-primary" value="Guardar" >
                                         <f:ajax execute="form_config_general:panel-datos-empresa" event="click" onevent="indicador" listener="#{configGeneral.guardarDatosEmpresa()}" />
                                         <f:ajax render="form_config_general:panel-mensajes-datos-empresa" />
                                         <f:ajax render="form_config_general:panel-datos-empresa" />
@@ -60,103 +79,98 @@
                                         <div class="form-group-sm">
                                             <h:message for="boton-guardar-datos" class="msj_info"/>
                                         </div>
-                                    </h:panelGroup>
-                                </div>    
+                                    </h:panelGroup> 
+                                </div>
                             </div>
-                        </div>                      
-                    </div>
+                        </div>
+                    </div>                    
 
                     <!-- Otras Configuraciones -->  
                     <div class="container-fluid" style="padding: 0.5%">               
                         <div class="container-fluid" style="padding: 0.5%">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Configuracion del Sistema</div>
+                                <div class="panel-heading">Correo del Sistema</div>
                                 <div class="panel-body">  
-                                    <div class="panel-group" id="accordion">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                                       Correo del Sistema 
-                                                    </a>
-                                                </h4>
+                                    <div class="form-group row">   
+                                        <h:panelGroup id="panel-datos-correo">
+                                            <div class="col-xs-3">
+                                                <label>From:</label>
+                                                <h:inputText id="from" class="form-control" value="#{configGeneral.from}" required="true" requiredMessage="Requerido!"/>
+                                                <h:message for="from" class="msj_error"/>
                                             </div>
-                                            <div id="collapse1" class="panel-collapse collapse">
-
-                                                <div class="panel-body">
-                                                    <div class="form-group row">   
-                                                        <h:panelGroup id="panel-datos-correo">
-                                                            <div class="col-xs-3">
-                                                                <label>From:</label>
-                                                                <h:inputText id="from" class="form-control" value="#{configGeneral.from}" required="true" requiredMessage="Requerido!"/>
-                                                                 <h:message for="from" class="msj_error"/>
-                                                            </div>
-                                                            <div class="col-xs-1" style="text-align: center">
-                                                                <label>Utilizar tls: </label>
-                                                                <h:selectBooleanCheckbox class="form-control" value="#{configGeneral.tls}" title="Utilizar tls" requiredMessage="Requerido!"/>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <label>Puerto: </label>
-                                                                <h:inputText id="puerto" class="form-control" value="#{configGeneral.puerto}" required="true" requiredMessage="Requerido!"/>
-                                                                <h:message for="puerto" class="msj_error"/>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <label>Usuario:</label>
-                                                                <h:inputText id="usuario" class="form-control" value="#{configGeneral.usuario}" required="true" requiredMessage="Requerido!"/>
-                                                                <h:message for="usuario" class="msj_error"/>
-                                                            </div>
-                                                            <div class="col-xs-3" >
-                                                                <label>Password: </label>
-                                                                <h:inputSecret id="password" class="form-control" value="#{configGeneral.password}" required="true" requiredMessage="Requerido!"/>
-                                                                <h:message for="password" class="msj_error"/>
-                                                            </div>
-                                                        </h:panelGroup>
-                                                    </div>                                                
-                                                    <div>
-                                                        <h:commandButton id="boton-guardar-grupo1" class="btn btn-primary" value="Guardar"  >                                                            
-                                                            <f:ajax execute="form_config_general:panel-datos-correo" event="click" listener="#{configGeneral.guardarDatosCorreo()}" 
-                                                                    render="form_config_general:panel-mensajes-correo form_config_general:panel-datos-correo" onevent="indicador"/>
-                                                        </h:commandButton>
-                                                        <h:panelGroup id="panel-mensajes-correo">                                                            
-                                                            <div class="form-group-sm">
-                                                                <h:message for="boton-guardar-grupo1" class="msj_info"/>
-                                                            </div>
-                                                        </h:panelGroup>
-                                                    </div>
-                                                </div>
+                                            <div class="col-xs-1" style="text-align: center">
+                                                <label>Utilizar tls: </label>
+                                                <h:selectBooleanCheckbox class="form-control" value="#{configGeneral.tls}" title="Utilizar tls" requiredMessage="Requerido!"/>
                                             </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"> Grupo 2 
-
-                                                    </a>
-                                                </h4>
+                                            <div class="col-xs-2">
+                                                <label>Puerto: </label>
+                                                <h:inputText id="puerto" class="form-control" value="#{configGeneral.puerto}" required="true" requiredMessage="Requerido!"/>
+                                                <h:message for="puerto" class="msj_error"/>
                                             </div>
-                                            <div id="collapse2" class="panel-collapse collapse">
-                                                <div class="panel-body">
-
-                                                </div>
+                                            <div class="col-xs-2">
+                                                <label>Usuario:</label>
+                                                <h:inputText id="usuario" class="form-control" value="#{configGeneral.usuario}" required="true" requiredMessage="Requerido!"/>
+                                                <h:message for="usuario" class="msj_error"/>
                                             </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"> Grupo 3 
-
-                                                    </a>
-                                                </h4>
+                                            <div class="col-xs-3" >
+                                                <label>Password: </label>
+                                                <h:inputSecret id="password" class="form-control" value="#{configGeneral.password}" required="true" requiredMessage="Requerido!"/>
+                                                <h:message for="password" class="msj_error"/>
                                             </div>
-                                            <div id="collapse3" class="panel-collapse collapse">
-                                                <div class="panel-body">
-
-                                                </div>
+                                        </h:panelGroup>
+                                    </div>                                                
+                                    <div>
+                                        <h:commandButton id="boton-guardar-grupo1" class="btn btn-primary" value="Guardar"  >                                                            
+                                            <f:ajax execute="form_config_general:panel-datos-correo" event="click" listener="#{configGeneral.guardarDatosCorreo()}" 
+                                                    render="form_config_general:panel-mensajes-correo form_config_general:panel-datos-correo" onevent="indicador"/>
+                                        </h:commandButton>
+                                        <h:panelGroup id="panel-mensajes-correo">                                                            
+                                            <div class="form-group-sm">
+                                                <h:message for="boton-guardar-grupo1" class="msj_info"/>
                                             </div>
-                                        </div>
-                                    </div> 
+                                        </h:panelGroup>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                </h:form>
+                <h:form id="form_config_logo" enctype="multipart/form-data">
+                    <!-- Modal Nuevo Archivo Adjunto -->
+                    <div id="modal_cargar_logo" class="modal fade" style="padding-top: 15%;" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_logo">
+                                <!-- Modal content-->             
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Cargar Logo de Empresa</h4>
+                                    </div>
+                                    <div class="modal-body">                                       
+                                        <div class="form-group">
+                                            <h:inputFile id="input-logo"  value="#{configGeneral.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg">
+                                                <f:ajax event="change" render="form_config_general:panel-logo"/>
+                                            </h:inputFile>
+                                            <h:message for="input-logo" class="msj_error" />
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <h:commandButton class="btn btn-primary" style="width: 49%" value="Guardar Logo" >                            
+
+                                                <f:ajax execute="form_config_logo:input-logo" event="click" listener="#{configGeneral.guardarLogo()}" 
+                                                        render="form_config_general:panel-logo 
+                                                        form_config_logo:panel_modal_logo"
+                                                        onevent="indicador"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton  class="btn btn-default" style="width: 49%" p:data-dismiss="modal" value="Cerrar" >
+                                                <f:ajax render="form_config_general:panel-logo 
+                                                        form_config_logo:panel_modal_logo" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>                            
+                                </div>
+                            </h:panelGroup>
                         </div>
                     </div>
                 </h:form>

@@ -17,10 +17,13 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -35,6 +38,8 @@ public class ConfigGeneral implements Serializable {
 
     @Inject
     private CargarArchivo cArchivo;
+
+    private Part ArchivoAdjunto;
 
     @Inject
     private IOPropiedades ioProp;
@@ -152,6 +157,24 @@ public class ConfigGeneral implements Serializable {
         this.password = password;
     }
 
+    public Part getArchivoAdjunto() {
+        return ArchivoAdjunto;
+    }
+
+    public void setArchivoAdjunto(Part ArchivoAdjunto) {
+        this.ArchivoAdjunto = ArchivoAdjunto;
+    }
+
+    public Empresa getEmpresaGuardada() {
+        return empresaGuardada;
+    }
+
+    public void setEmpresaGuardada(Empresa empresaGuardada) {
+        this.empresaGuardada = empresaGuardada;
+    }
+
+    
+    
     //</editor-fold>
     //<editor-fold desc="Metodos">
     public void guardarDatosEmpresa() throws IOException {
@@ -197,6 +220,25 @@ public class ConfigGeneral implements Serializable {
         }
     }
 
+    public void guardarLogo() throws IOException {
+        if (ArchivoAdjunto != null) {
+            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoAdjunto, empresaGuardada.getNombreDeArchivo());
+            // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+            if (!ubicacion.isEmpty()) {
+                Map<String, String> props = new HashMap<>();
+                props.put("logo_empresa", ubicacion);
+                ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+                sesionUsuario.cargarEmpresa();
+                empresaGuardada.setUbicacionLogo(ubicacion);
+                FacesContext ctx = FacesContext.getCurrentInstance();
+                String url = ctx.getExternalContext().getRequestContextPath();
+                ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
+            }
+            FacesContext.getCurrentInstance().addMessage("form_config_logo:input-logo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo cargar el logo."));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+
     //</editor-fold>
     @PostConstruct
     public void init() {
@@ -210,11 +252,11 @@ public class ConfigGeneral implements Serializable {
         habilitacion = empresaGuardada.getNumHabilitacion();
 
         Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
-        from = prop.get("mail_from")!=null?prop.get("mail_from").toString():"";        
-        usuario = prop.get("mail_user")!=null?prop.get("mail_user").toString():"";
-        password = prop.get("mail_pass")!=null?prop.get("mail_pass").toString():"";
-        puerto = prop.get("mail_port")!=null?prop.get("mail_port").toString():"";
-        tls = prop.get("mail_tls")!=null?Boolean.parseBoolean(prop.get("mail_tls").toString()):false;
+        from = prop.get("mail_from") != null ? prop.get("mail_from").toString() : "";
+        usuario = prop.get("mail_user") != null ? prop.get("mail_user").toString() : "";
+        password = prop.get("mail_pass") != null ? prop.get("mail_pass").toString() : "";
+        puerto = prop.get("mail_port") != null ? prop.get("mail_port").toString() : "";
+        tls = prop.get("mail_tls") != null ? Boolean.parseBoolean(prop.get("mail_tls").toString()) : false;
 
     }
 

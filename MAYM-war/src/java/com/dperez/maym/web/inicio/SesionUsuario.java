@@ -128,6 +128,9 @@ public class SesionUsuario implements Serializable {
                     prop.getProperty("movil"),
                     prop.getProperty("correo"),
                     prop.getProperty("numHabilitacion"));
+                    if(prop.get("logo_empresa")!=null){
+                        empresa.setUbicacionLogo(prop.getProperty("logo_empresa"));
+                    }
         }else{
              try{
                 String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
