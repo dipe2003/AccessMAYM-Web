@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -481,21 +482,34 @@ public class SeguimientoAccion implements Serializable {
      * nuevo adjunto.
      */
     public void agregarAdjunto() {
-        String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
-        // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
-        if (!datosAdjunto[0].isEmpty()) {
-            TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
-            String extension = datosAdjunto[1];
-            List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
-            if (!tipos.contains(extension.toLowerCase().trim())) {
-                tipoAdjunto = TipoAdjunto.DOCUMENTO;
-            }
-            if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
-                actualizarListaAdjuntos();
-                this.TituloAdjunto = new String();
-                this.ArchivoAdjunto = null;
+        String msj = "";
+        if (this.TituloAdjunto.isEmpty()) {
+            msj = "El Titulo está vacío.";
+        } else {
+            if (this.MapAdjuntos.values().stream()
+                    .anyMatch(a -> a.getTitulo().toLowerCase().equals(TituloAdjunto.toLowerCase()))) {
+                msj = "Ya existe un adjunto con ese nombre.";
+                FacesContext ctx = FacesContext.getCurrentInstance();
+                ctx.addMessage("form_segumiento_accion:input-adjunto", new FacesMessage(SEVERITY_ERROR, "No se pudo cargar.", msj));
+                ctx.renderResponse();
             } else {
-                cArchivo.BorrarArchivo(datosAdjunto[0]);
+                String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
+                // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+                if (!datosAdjunto[0].isEmpty()) {
+                    TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
+                    String extension = datosAdjunto[1];
+                    List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
+                    if (!tipos.contains(extension.toLowerCase().trim())) {
+                        tipoAdjunto = TipoAdjunto.DOCUMENTO;
+                    }
+                    if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
+                        actualizarListaAdjuntos();
+                        this.TituloAdjunto = new String();
+                        this.ArchivoAdjunto = null;
+                    } else {
+                        cArchivo.BorrarArchivo(datosAdjunto[0]);
+                    }
+                }
             }
         }
     }

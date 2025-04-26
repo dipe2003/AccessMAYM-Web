@@ -22,7 +22,7 @@
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltroExportar">
-                                                    Filtrar y Exportar <span class="caret"></span>
+                                                    Filtrar y Exportar (#{listarAcciones.tipoDeAccion.descripcion}) <span class="caret"></span>
                                                 </a>
                                             </h4>
                                         </div>
@@ -442,7 +442,7 @@
                                                                 <label for="areas-disponibles">Areas</label>
                                                             </div>
                                                             <div>
-                                                                <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 10px" >
+                                                                <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
                                                                         <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
                                                                         <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
@@ -516,7 +516,7 @@
                                                                 <label for="detecciones-disponibles">Areas</label>
                                                             </div>
                                                             <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 10px" >
+                                                                <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
                                                                         <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
                                                                         <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
@@ -589,7 +589,7 @@
                                                                 <label for="codificaciones-disponibles">Areas</label>
                                                             </div>
                                                             <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 10px" >
+                                                                <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
                                                                         <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
                                                                         <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
@@ -662,7 +662,7 @@
                                                                 <label for="estados-disponibles">Areas</label>
                                                             </div>
                                                             <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 10px" >
+                                                                <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
                                                                         <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
                                                                         <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorEstado(event)}" 

@@ -14,7 +14,7 @@ and open the template in the editor.
     
     
     <!-- Ver Actividades -->
-    <div id="modal_ver_actividades" class="modal fade" style="padding-top: 15%;" role="dialog">
+    <div id="modal_ver_actividades" class="modal fade" style="padding-top: 15%;width: auto" role="dialog">
         <div class="modal-dialog">
             <h:panelGroup id="panel_modal">
                 <!-- Modal content-->
@@ -29,10 +29,9 @@ and open the template in the editor.
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
                                         <div class="table-responsive-sm">
-                                            <table class="table table-hover table-striped" style="font-size: x-small;">
+                                            <table class="table table-hover table-striped" style="font-size: 11px;">
                                                 <thead>
-                                                    <tr>
-                                                        <th>Tipo:</th>
+                                                    <tr>                                                        
                                                         <th>Descripcion:</th>
                                                         <th>Fecha Estimada:</th>
                                                         <th>Responsable Implementacion:</th>
@@ -41,9 +40,8 @@ and open the template in the editor.
                                                 </thead>
                                                 <tbody>
                                                     <c:forEach items="#{modalVerActividades.accionSeleccionada.actividadesDeAccion}" var="actividad" >
-                                                        <tr>
-                                                            <td>#{actividad.tipoDeActividad}</td>
-                                                            <td>#{actividad.descripcion}</td>
+                                                        <tr>                                                           
+                                                            <td>#{actividad.tipoDeActividad}: #{actividad.descripcion}</td>
                                                             <td>#{actividad.fechaEstimadaImplementacion}</td>
                                                             <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                             <td>

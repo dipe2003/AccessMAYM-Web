@@ -8,62 +8,38 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
-        <div class="container-fluid" style="padding: 1%">   
-            <div class="panel panel-info">
-                <div class="panel-heading">Editar Accion</div>
-                <div class="panel-body">
-                    Aqui puedes editar una #{editarAccion.tipoDeAccion.descripcion}. Cuando un campo sea obligatorio se mostrara el mensaje.
-                </div>                  
-            </div>                   
-        </div>
+
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_accion" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-sm-10">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Empresa</div>
-                            <div class="panel-body">   
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <h:outputText value="#{sesionUsuario.empresa.nombre}"/>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <h:outputText value="#{sesionUsuario.empresa.direccion}"/>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <h:outputText value="Establecimiento Nº #{sesionUsuario.empresa.numHabilitacion}"/>
-                                    </div>                           
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
+                    
+                    <div class="col-sm-12">
                         <!-- Estado -->
                         <div class="panel panel-default">
                             <div class="panel-heading">Estado:</div>
                             <c:choose>
                                 <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'PENDIENTE'}">
-                                    <div class="panel-body" style="background-color: red; color: white">
+                                    <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
                                         #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'CERRADA'}" >
-                                    <div class="panel-body" style="background-color: green; color: white">
+                                    <div class="panel-body" style="background-image:linear-gradient(#008000,#003300); color: white">
                                         #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'DESESTIMADA'}" >
-                                    <div class="panel-body" style="background-color: black; color: white">
+                                    <div class="panel-body" style="background-image: linear-gradient(gray, black); color: white">
                                         #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'PROCESO_IMP'}" >
-                                    <div class="panel-body" style="background-color: #ff9900; color: white">
+                                    <div class="panel-body" style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
                                         #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
                                     </div>
                                 </c:when>
                                 <c:otherwise>
-                                    <div class="panel-body" style="background-color: yellow; color: #ff9900">
+                                    <div class="panel-body" style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
                                         #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
                                     </div>
                                 </c:otherwise>
