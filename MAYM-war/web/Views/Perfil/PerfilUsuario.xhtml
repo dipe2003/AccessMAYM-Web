@@ -11,7 +11,7 @@
         <h:form id="form_perfil_usuario">
             <div class="container-fluid" style="padding: 1%">  
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Perfil de Usuario</div>
+                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Perfil de Usuario</div>
                     <div class="panel-body">
                         <div class="col-sm-11">
                             <h:panelGroup id="panel-datos-perfil">
@@ -84,7 +84,7 @@
             <div class="container-fluid" style="padding: 0.5%">               
                 <div class="container-fluid" style="padding: 0.5%">
                     <div class="panel panel-primary">
-                        <div class="panel-heading">Registros Relacionados</div>
+                        <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Registros Relacionados</div>
                         <div class="panel-body">  
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default">
@@ -175,7 +175,7 @@
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">
+                                    <div class="panel-heading" >
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Acciones Preventivas 
                                                 <c:if test="#{perfilUsuario.preventivas.size()>0}">

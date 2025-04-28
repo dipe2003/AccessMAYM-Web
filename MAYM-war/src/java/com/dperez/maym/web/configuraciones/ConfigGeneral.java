@@ -17,8 +17,6 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -40,11 +38,18 @@ public class ConfigGeneral implements Serializable {
     private CargarArchivo cArchivo;
 
     private Part ArchivoAdjunto;
-
+    private Part ArchivoLogoInforme;
     @Inject
     private IOPropiedades ioProp;
 
     private Empresa empresaGuardada;
+
+    private OpcionesSistema ops;
+    private String colorSuperior;
+    private String colorInferior;
+    private String colorFuenteEncabezado;
+    private String colorTitulo;
+    private String colorFuenteTitulo;
 
     private String nombre;
     private String direccion;
@@ -165,6 +170,14 @@ public class ConfigGeneral implements Serializable {
         this.ArchivoAdjunto = ArchivoAdjunto;
     }
 
+    public Part getArchivoLogoInforme() {
+        return ArchivoLogoInforme;
+    }
+
+    public void setArchivoLogoInforme(Part ArchivoLogoInforme) {
+        this.ArchivoLogoInforme = ArchivoLogoInforme;
+    }
+    
     public Empresa getEmpresaGuardada() {
         return empresaGuardada;
     }
@@ -173,8 +186,56 @@ public class ConfigGeneral implements Serializable {
         this.empresaGuardada = empresaGuardada;
     }
 
+    public OpcionesSistema getOps() {
+        return ops;
+    }
+
+    public void setOps(OpcionesSistema ops) {
+        this.ops = ops;
+    }
+
+    public String getColorSuperior() {
+        return colorSuperior;
+    }
+
+    public void setColorSuperior(String colorSuperior) {
+        this.colorSuperior = colorSuperior;
+    }
+
+    public String getColorInferior() {
+        return colorInferior;
+    }
+
+    public void setColorInferior(String colorInferior) {
+        this.colorInferior = colorInferior;
+    }
+
+    public String getColorTitulo() {
+        return colorTitulo;
+    }
+
+    public void setColorTitulo(String colorTitulo) {
+        this.colorTitulo = colorTitulo;
+    }
+
+    public String getColorFuenteEncabezado() {
+        return colorFuenteEncabezado;
+    }
+
+    public void setColorFuenteEncabezado(String colorFuenteEncabezado) {
+        this.colorFuenteEncabezado = colorFuenteEncabezado;
+    }
+
+    public String getColorFuenteTitulo() {
+        return colorFuenteTitulo;
+    }
+
+    public void setColorFuenteTitulo(String colorFuenteTitulo) {
+        this.colorFuenteTitulo = colorFuenteTitulo;
+    }
     
     
+
     //</editor-fold>
     //<editor-fold desc="Metodos">
     public void guardarDatosEmpresa() throws IOException {
@@ -238,6 +299,39 @@ public class ConfigGeneral implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
+    
+    public void guardarLogoInformes() throws IOException {
+        if (ArchivoLogoInforme != null) {
+            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoLogoInforme, "_informes_" + empresaGuardada.getNombreDeArchivo());
+            // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+            if (!ubicacion.isEmpty()) {
+                Map<String, String> props = new HashMap<>();
+                props.put("logo_informes_empresa", ubicacion);
+                ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+                sesionUsuario.cargarEmpresa();
+                empresaGuardada.setUbicacionLogo(ubicacion);
+                FacesContext ctx = FacesContext.getCurrentInstance();
+                String url = ctx.getExternalContext().getRequestContextPath();
+                ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
+            }
+            FacesContext.getCurrentInstance().addMessage("form_color:input-logo-informes", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo cargar el logo."));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+
+    public void guardarColor() throws IOException {
+        Map<String, String> props = new HashMap<>();
+        props.put("color-superior", !colorSuperior.isEmpty() ? colorSuperior : ops.getColorSuperiorPanelTitulo());
+        props.put("color-inferior", !colorInferior.isEmpty() ? colorInferior : ops.getColorInferiorPanelTitulo());
+        props.put("color-titulos", !colorTitulo.isEmpty() ? colorTitulo : ops.getColorPanelTitulo());
+        props.put("color-fuente-encabezado", !colorFuenteEncabezado.isEmpty() ? colorFuenteEncabezado : ops.getColorFuentePanelEncabezado());
+        props.put("color-fuente-titulos", !colorFuenteTitulo.isEmpty() ? colorFuenteTitulo : ops.getColorFuentePanelTitulo());
+        ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+        sesionUsuario.cargarColores();
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        String url = ctx.getExternalContext().getRequestContextPath();
+        ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
+    }
 
     //</editor-fold>
     @PostConstruct
@@ -258,6 +352,12 @@ public class ConfigGeneral implements Serializable {
         puerto = prop.get("mail_port") != null ? prop.get("mail_port").toString() : "";
         tls = prop.get("mail_tls") != null ? Boolean.parseBoolean(prop.get("mail_tls").toString()) : false;
 
+        ops = sesionUsuario.getOpcionesSistema();
+        colorSuperior = ops.getColorSuperiorPanelTitulo();
+        colorFuenteEncabezado = ops.getColorFuentePanelEncabezado();
+        colorInferior = ops.getColorInferiorPanelTitulo();
+        colorTitulo = ops.getColorPanelTitulo();
+        colorFuenteTitulo = ops.getColorFuentePanelTitulo();
     }
 
 }

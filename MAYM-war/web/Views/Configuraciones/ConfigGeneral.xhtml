@@ -16,7 +16,7 @@
                 <h:form id="form_config_general">
                     <div class="container-fluid" style="padding: 1%">  
                         <div class="panel panel-primary">
-                            <div class="panel-heading">Perfil de la Empresa</div>
+                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Perfil de la Empresa</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel-datos-empresa">
                                     <div class="form-group row">                                        
@@ -63,7 +63,6 @@
                                                     </c:choose>
                                                     <f:ajax delay="100" render="form_cargar_logo:modal_cargar_logo" /> 
                                                 </h:commandLink>
-
                                             </h:panelGroup>
                                         </div>
                                     </div>
@@ -89,7 +88,7 @@
                     <div class="container-fluid" style="padding: 0.5%">               
                         <div class="container-fluid" style="padding: 0.5%">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Correo del Sistema</div>
+                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Correo del Sistema</div>
                                 <div class="panel-body">  
                                     <div class="form-group row">   
                                         <h:panelGroup id="panel-datos-correo">
@@ -134,8 +133,183 @@
                             </div>
                         </div>
                     </div>
-
                 </h:form>
+                <!-- Configuracion de Colores -->
+                <script>
+                    function setColorValueSuperior(color) {
+                        document.getElementById('hiddenColorInput-superior').value = color;
+                    }
+                    ;
+                    function setColorValueFuenteEncabezado(color) {
+                        document.getElementById('hiddenColorInput-fuente-encabezado').value = color;
+                    }
+                    ;
+                    function setColorValueInferior(color) {
+                        document.getElementById('hiddenColorInput-inferior').value = color;
+                    }
+                    ;
+                    function setColorValueTitulo(color) {
+                        document.getElementById('hiddenColorInput-titulo').value = color;
+                    }
+                    ;
+                    function setColorValueFuenteTitulo(color) {
+                        document.getElementById('hiddenColorInput-fuente-titulo').value = color;
+                    }
+                    ;
+                </script>
+                <h:form id="form-color" prependId="false">
+                    <input type="hidden" id="hiddenColorInput-superior" name="hiddenColorInput-superior" />
+                    <h:inputHidden id="hiddenColorInput-superior" value="#{configGeneral.colorSuperior}" />
+
+                    <input type="hidden" id="hiddenColorInput-fuente-encabezado" name="hiddenColorInput-fuente-encabezado" />
+                    <h:inputHidden id="hiddenColorInput-fuente-encabezado" value="#{configGeneral.colorFuenteEncabezado}" />
+
+                    <input type="hidden" id="hiddenColorInput-inferior" name="hiddenColorInput-inferior" />
+                    <h:inputHidden id="hiddenColorInput-inferior" value="#{configGeneral.colorInferior}" />
+
+                    <input type="hidden" id="hiddenColorInput-titulo" name="hiddenColorInput-titulo" />
+                    <h:inputHidden id="hiddenColorInput-titulo" value="#{configGeneral.colorTitulo}" />
+
+                    <input type="hidden" id="hiddenColorInput-fuente-titulo" name="hiddenColorInput-fuente-titulo" />
+                    <h:inputHidden id="hiddenColorInput-fuente-titulo" value="#{configGeneral.colorFuenteTitulo}" />
+
+                    <div class="container-fluid" style="padding: 0.5%">               
+                        <div class="container-fluid" style="padding: 0.5%">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important" >Color y Apariencia</div>
+                                <div class="panel-body">
+                                    <h:panelGroup id="panel-datos-color">
+                                        <table class="table table-hover table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Encabezado</th>
+                                                    <th>Vistas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-superior" value="Color Superior:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-superior" type="color" value="#{configGeneral.ops.colorSuperiorPanelTitulo}" onchange="setColorValueSuperior(this.value)" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-titulo" value="Color de Titulos:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-titulo" type="color" value="#{configGeneral.ops.colorPanelTitulo}" onchange="setColorValueTitulo(this.value)" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-inferior" value="Color Inferior:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-inferior" type="color" value="#{configGeneral.ops.colorInferiorPanelTitulo}" onchange="setColorValueInferior(this.value)" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-fuente-titulo" value="Color de Fuente de Panel:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-fuente-titulo" type="color" value="#{configGeneral.ops.colorFuentePanelTitulo}" onchange="setColorValueFuenteTitulo(this.value)" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-fuente-encabezado" value="Color de Fuente:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-fuente-encabezado" type="color" value="#{configGeneral.ops.colorFuentePanelEncabezado}" onchange="setColorValueFuenteEncabezado(this.value)" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 60%">
+                                                                        <h:outputLabel for="img-logo-informes" value="Logo de Informes:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <h:panelGroup id="panel-logo-informes">
+                                                                            <h:commandLink p:data-toggle="modal" p:data-target="#modal_cargar_logo_informes">
+                                                                                <c:choose>
+                                                                                    <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogoInformes}">
+                                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogoInformes}" class="img-responsive img-thumbnail" style="height: 40px"/>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                                <f:ajax delay="100" render="form-color:modal_cargar_logo-informe" /> 
+                                                                            </h:commandLink>
+                                                                        </h:panelGroup>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </h:panelGroup>                                                                                   
+                                    <div>
+                                        <h:commandButton id="boton-guardar-color" class="btn btn-primary" value="Guardar"  >                                                            
+                                            <f:ajax execute="@form" event="click"
+                                                    listener="#{configGeneral.guardarColor()}"
+                                                    render="@all"/>
+                                        </h:commandButton>
+                                        <h:panelGroup id="panel-mensajes-color">                                                            
+                                            <div class="form-group-sm">
+                                                <h:message for="boton-guardar-color" class="msj_info"/>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+
                 <h:form id="form_config_logo" enctype="multipart/form-data">
                     <!-- Modal Nuevo Archivo Adjunto -->
                     <div id="modal_cargar_logo" class="modal fade" style="padding-top: 15%;" role="dialog">
@@ -166,6 +340,44 @@
                                             <h:commandButton  class="btn btn-default" style="width: 49%" p:data-dismiss="modal" value="Cerrar" >
                                                 <f:ajax render="form_config_general:panel-logo 
                                                         form_config_logo:panel_modal_logo" />
+                                            </h:commandButton>
+                                        </div>
+                                    </div>                            
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </h:form>
+                <h:form id="form_config_logo_informes" enctype="multipart/form-data">
+                    <!-- Modal Nuevo Logo Informes -->
+                    <div id="modal_cargar_logo_informes" class="modal fade" style="padding-top: 15%;" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_logo_informes">
+                                <!-- Modal content-->             
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Cargar Logo de Empresa para Informes</h4>
+                                    </div>
+                                    <div class="modal-body">                                       
+                                        <div class="form-group">
+                                            <h:inputFile id="input-logo-informes"  value="#{configGeneral.archivoLogoInforme}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg">
+                                                <f:ajax event="change" render="form_color:panel-logo-informe"/>
+                                            </h:inputFile>
+                                            <h:message for="input-logo-informe" class="msj_error" />
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <h:commandButton class="btn btn-primary" style="width: 49%" value="Guardar Logo" >                            
+
+                                                <f:ajax execute="form_config_logo_informes:input-logo-informes" event="click" listener="#{configGeneral.guardarLogoInformes()}" 
+                                                        render="form_color:panel-logo-informes 
+                                                        form_config_logo_informes:panel_modal_logo_informes"
+                                                        onevent="indicador"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton  class="btn btn-default" style="width: 49%" p:data-dismiss="modal" value="Cerrar" >
+                                                <f:ajax render="colorl:panel-logo-informes 
+                                                        form_config_logo_informes:panel_modal_logo_informes" />
                                             </h:commandButton>
                                         </div>
                                     </div>                            

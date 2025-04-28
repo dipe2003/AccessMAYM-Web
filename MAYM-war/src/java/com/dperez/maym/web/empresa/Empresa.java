@@ -16,6 +16,7 @@ public class Empresa {
     private String correo;
     private String numHabilitacion;
     private String ubicacionLogo;
+    private String ubicacionLogoInformes;
     
     public Empresa(){}
 
@@ -97,6 +98,14 @@ public class Empresa {
 
     public void setUbicacionLogo(String ubicacionLogo) {
         this.ubicacionLogo = ubicacionLogo;
+    }
+
+    public String getUbicacionLogoInformes() {
+        return ubicacionLogoInformes;
+    }
+
+    public void setUbicacionLogoInformes(String ubicacionLogoInformes) {
+        this.ubicacionLogoInformes = ubicacionLogoInformes;
     }
     
     

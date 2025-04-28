@@ -16,7 +16,7 @@
                     <div class="col-sm-12">
                         <!-- Estado -->
                         <div class="panel panel-default">
-                            <div class="panel-heading">Estado:</div>
+                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important" >Estado:</div>
                             <c:choose>
                                 <c:when test="#{seguimientoAccion.accionSeleccionada.estadoDeAccion == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
@@ -49,7 +49,7 @@
                 </div>
                 <!-- Descripcion -->
                 <div class="panel panel-default">
-                    <div class="panel-heading">Descripcion</div>
+                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Descripcion</div>
                     <div class="panel-body">
                         <div class="row">                            
                             <div class="col-sm-3">
@@ -98,7 +98,7 @@
                     <c:when test="#{seguimientoAccion.tipoDeAccion == 'CORRECTIVA'}">
                         <h:panelGroup id="panel_medidas_correctivas">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Medidas Correctivas</div>
+                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Medidas Correctivas</div>
                                 <div class="panel-body">
                                     <c:choose>
                                         <c:when test="#{not empty seguimientoAccion.medidasCorrectivas}">
@@ -171,7 +171,7 @@
                         </h:panelGroup>
                         <h:panelGroup id="panel_medidas_preventivas">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Medidas Preventivas</div>
+                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Medidas Preventivas</div>
                                 <div class="panel-body">
                                     <c:choose>
                                         <c:when test="#{not empty seguimientoAccion.medidasPreventivas}">
@@ -246,7 +246,7 @@
                     <c:otherwise>
                         <h:panelGroup id="panel_actividades">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Actividades:</div>
+                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Actividades:</div>
                                 <div class="panel-body">
                                     <c:choose>
                                         <c:when test="#{not empty seguimientoAccion.actividades}">
@@ -323,7 +323,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
-                            <div class="panel-heading">Comprobacion de Implementacion</div>
+                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Implementacion</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel_comprobacion_implementacion">
                                     <c:choose>
@@ -417,7 +417,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
-                            <div class="panel-heading">Comprobacion de Eficacia</div>
+                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Eficacia</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel_comprobacion_eficacia">
                                     <c:choose>
@@ -519,7 +519,7 @@
                 </div>
                 <!-- ADJUNTOS -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Archivos Adjuntos / Anexos:</div>
                     <div class="panel-body">                        
                         <h:panelGroup id="panel_lista_adjuntos">
                             <c:choose>
