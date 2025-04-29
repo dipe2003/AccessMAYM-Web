@@ -16,7 +16,7 @@
                     <div class="col-sm-12">
                         <!-- Estado -->
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Estado:</div>
+                            <div class="panel-heading" >Estado:</div>
                             <c:choose>
                                 <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
@@ -49,7 +49,7 @@
                 </div>
                 <!-- Descripcion -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Descripcion</div>
+                    <div class="panel-heading" >Descripcion</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-6" >
@@ -189,7 +189,7 @@
 
                 <!-- Analisis de Causa -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Analisis de Causa</div>
+                    <div class="panel-heading">Analisis de Causa</div>
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
@@ -213,7 +213,7 @@
 
                 <!-- Actividades -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Actividades:</div>
+                    <div class="panel-heading" >Actividades:</div>
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty editarAccion.actividades}">
@@ -315,7 +315,7 @@
                     <div class="col-sm-6">
                         <!-- Implementacion -->
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Implementacion</div>
+                            <div class="panel-heading" >Comprobacion de Implementacion</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel_mensajes_implementacion">
                                     <div class="row">
@@ -392,7 +392,7 @@
                     <div class="col-sm-6">
                         <!-- Eficacia -->
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Eficacia</div>
+                            <div class="panel-heading">Comprobacion de Eficacia</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel_mensajes_eficacia">
                                     <div class="row">
@@ -470,7 +470,7 @@
 
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
                     <div class="panel-body">                        
                         <h:panelGroup id="panel_lista_adjuntos">
                             <c:choose>

@@ -50,6 +50,8 @@ public class ConfigGeneral implements Serializable {
     private String colorFuenteEncabezado;
     private String colorTitulo;
     private String colorFuenteTitulo;
+    private String colorFondo;
+    private String colorBoton;
 
     private String nombre;
     private String direccion;
@@ -59,6 +61,7 @@ public class ConfigGeneral implements Serializable {
     private String habilitacion;
 
     private boolean tls;
+    private boolean activarAlertas;
     private String puerto;
     private String host;
     private String from;
@@ -122,6 +125,14 @@ public class ConfigGeneral implements Serializable {
         this.tls = tls;
     }
 
+    public boolean isActivarAlertas() {
+        return activarAlertas;
+    }
+
+    public void setActivarAlertas(boolean activarAlertas) {
+        this.activarAlertas = activarAlertas;
+    }
+
     public String getPuerto() {
         return puerto;
     }
@@ -177,7 +188,7 @@ public class ConfigGeneral implements Serializable {
     public void setArchivoLogoInforme(Part ArchivoLogoInforme) {
         this.ArchivoLogoInforme = ArchivoLogoInforme;
     }
-    
+
     public Empresa getEmpresaGuardada() {
         return empresaGuardada;
     }
@@ -233,8 +244,22 @@ public class ConfigGeneral implements Serializable {
     public void setColorFuenteTitulo(String colorFuenteTitulo) {
         this.colorFuenteTitulo = colorFuenteTitulo;
     }
-    
-    
+
+    public String getColorFondo() {
+        return colorFondo;
+    }
+
+    public void setColorFondo(String colorFondo) {
+        this.colorFondo = colorFondo;
+    }
+
+    public String getColorBoton() {
+        return colorBoton;
+    }
+
+    public void setColorBoton(String colorBoton) {
+        this.colorBoton = colorBoton;
+    }
 
     //</editor-fold>
     //<editor-fold desc="Metodos">
@@ -271,6 +296,7 @@ public class ConfigGeneral implements Serializable {
         props.put("mail_pass", password);
         props.put("mail_port", puerto);
         props.put("mail_tls", String.valueOf(tls));
+        props.put("alertas_on", String.valueOf(activarAlertas));
         try {
             ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-grupo1", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
@@ -299,7 +325,7 @@ public class ConfigGeneral implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
-    
+
     public void guardarLogoInformes() throws IOException {
         if (ArchivoLogoInforme != null) {
             String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoLogoInforme, "_informes_" + empresaGuardada.getNombreDeArchivo());
@@ -326,6 +352,8 @@ public class ConfigGeneral implements Serializable {
         props.put("color-titulos", !colorTitulo.isEmpty() ? colorTitulo : ops.getColorPanelTitulo());
         props.put("color-fuente-encabezado", !colorFuenteEncabezado.isEmpty() ? colorFuenteEncabezado : ops.getColorFuentePanelEncabezado());
         props.put("color-fuente-titulos", !colorFuenteTitulo.isEmpty() ? colorFuenteTitulo : ops.getColorFuentePanelTitulo());
+        props.put("color-body", !colorFondo.isEmpty() ? colorFondo : ops.getColorBody());
+        props.put("color-boton", !colorBoton.isEmpty() ? colorBoton : ops.getColorBoton());
         ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
         sesionUsuario.cargarColores();
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -351,6 +379,7 @@ public class ConfigGeneral implements Serializable {
         password = prop.get("mail_pass") != null ? prop.get("mail_pass").toString() : "";
         puerto = prop.get("mail_port") != null ? prop.get("mail_port").toString() : "";
         tls = prop.get("mail_tls") != null ? Boolean.parseBoolean(prop.get("mail_tls").toString()) : false;
+        activarAlertas = prop.get("alertas_on") != null ? Boolean.parseBoolean(prop.get("alertas_on").toString()) : false;
 
         ops = sesionUsuario.getOpcionesSistema();
         colorSuperior = ops.getColorSuperiorPanelTitulo();
@@ -358,6 +387,8 @@ public class ConfigGeneral implements Serializable {
         colorInferior = ops.getColorInferiorPanelTitulo();
         colorTitulo = ops.getColorPanelTitulo();
         colorFuenteTitulo = ops.getColorFuentePanelTitulo();
+        colorFondo = ops.getColorBody();
+        colorBoton = ops.getColorBoton();
     }
 
 }

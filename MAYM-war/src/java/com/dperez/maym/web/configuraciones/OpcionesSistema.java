@@ -15,14 +15,9 @@ public class OpcionesSistema {
     private String colorFuentePanelEncabezado;
     private String colorPanelTitulo;
     private String colorFuentePanelTitulo;
-
-    public OpcionesSistema(String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo, String colorPanelTitulo, String colorFuentePanelEncabezado, String colorFuentePanelTitulo) {
-        this.colorSuperiorPanelTitulo = colorSuperiorPanelTitulo;
-        this.colorInferiorPanelTitulo = colorInferiorPanelTitulo;
-        this.colorFuentePanelEncabezado = colorFuentePanelEncabezado;
-        this.colorPanelTitulo = colorPanelTitulo;
-        this.colorFuentePanelTitulo = colorFuentePanelTitulo;
-    }
+    private String colorBody;
+    private String colorBoton;
+ 
 
     public OpcionesSistema() {
     }
@@ -65,6 +60,22 @@ public class OpcionesSistema {
 
     public void setColorFuentePanelTitulo(String colorFuentePanelTitulo) {
         this.colorFuentePanelTitulo = colorFuentePanelTitulo;
+    }
+
+    public String getColorBody() {
+        return colorBody;
+    }
+
+    public void setColorBody(String colorBody) {
+        this.colorBody = colorBody;
+    }
+
+    public String getColorBoton() {
+        return colorBoton;
+    }
+
+    public void setColorBoton(String colorBoton) {
+        this.colorBoton = colorBoton;
     }
 
 }

@@ -28,6 +28,46 @@
 
         <link rel="shortcut icon" type="image/x-icon" href="#{facesContext.externalContext.requestContextPath}/Resources/Images/maym_favicon.ico"/>
 
+        <style>
+            .navbar-inverse{
+                background-color:#{sesionUsuario.opcionesSistema.colorInferiorPanelTitulo}!important;
+                border-width: 0px
+            }
+
+            .panel-heading{
+                background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;
+                color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important
+            }
+
+            /* fuente titulo de opcion de menu */
+            .navbar-nav > li > a{
+                color: #{sesionUsuario.opcionesSistema.colorFuentePanelEncabezado} !important
+            }
+
+            /* fuente botón HOME */
+            .navbar-inverse .navbar-brand {
+                color: #{sesionUsuario.opcionesSistema.colorFuentePanelEncabezado} !important
+            }
+
+            /* fondo de opcion de menu seleccionada */
+            .navbar-nav > .open > a{
+                background-color:#666464 !important;
+            }
+
+            body {
+                background-color: #{sesionUsuario.opcionesSistema.colorBody} !important;
+            }
+
+            .btn-primary{
+                background-color: #{sesionUsuario.opcionesSistema.colorBoton} !important;
+            }
+
+            /* sobreescribir valores del css de jquery /*
+            .ui-datepicker-month, .ui-datepicker-year{
+            color: black !important
+            }
+        </style>
+
     </h:head>
     <h:body>
 
@@ -67,7 +107,7 @@
                     </div>    
                     <div>
                         <h:outputLink value="mailto:dipejperez@gmail.com">
-                             <span class="glyphicon glyphicon-envelope"></span> 
+                            <span class="glyphicon glyphicon-envelope"></span> 
                         </h:outputLink>
                         Diego Perez
                     </div>

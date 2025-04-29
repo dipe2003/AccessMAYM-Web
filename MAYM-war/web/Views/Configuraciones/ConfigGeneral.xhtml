@@ -16,7 +16,7 @@
                 <h:form id="form_config_general">
                     <div class="container-fluid" style="padding: 1%">  
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Perfil de la Empresa</div>
+                            <div class="panel-heading" >Perfil de la Empresa</div>
                             <div class="panel-body">
                                 <h:panelGroup id="panel-datos-empresa">
                                     <div class="form-group row">                                        
@@ -88,7 +88,7 @@
                     <div class="container-fluid" style="padding: 0.5%">               
                         <div class="container-fluid" style="padding: 0.5%">
                             <div class="panel panel-primary">
-                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Correo del Sistema</div>
+                                <div class="panel-heading" >Correo del Sistema y Alertas</div>
                                 <div class="panel-body">  
                                     <div class="form-group row">   
                                         <h:panelGroup id="panel-datos-correo">
@@ -111,10 +111,14 @@
                                                 <h:inputText id="usuario" class="form-control" value="#{configGeneral.usuario}" required="true" requiredMessage="Requerido!"/>
                                                 <h:message for="usuario" class="msj_error"/>
                                             </div>
-                                            <div class="col-xs-3" >
+                                            <div class="col-xs-2" >
                                                 <label>Password: </label>
                                                 <h:inputSecret id="password" class="form-control" value="#{configGeneral.password}" required="true" requiredMessage="Requerido!"/>
                                                 <h:message for="password" class="msj_error"/>
+                                            </div>
+                                            <div class="col-xs-1" style="text-align: center">
+                                                <label>Activar Alertas: </label>
+                                                <h:selectBooleanCheckbox class="form-control" value="#{configGeneral.activarAlertas}" title="Activar Alertas" />
                                             </div>
                                         </h:panelGroup>
                                     </div>                                                
@@ -136,24 +140,30 @@
                 </h:form>
                 <!-- Configuracion de Colores -->
                 <script>
-                    function setColorValueSuperior(color) {
-                        document.getElementById('hiddenColorInput-superior').value = color;
-                    }
-                    ;
-                    function setColorValueFuenteEncabezado(color) {
-                        document.getElementById('hiddenColorInput-fuente-encabezado').value = color;
-                    }
-                    ;
-                    function setColorValueInferior(color) {
-                        document.getElementById('hiddenColorInput-inferior').value = color;
-                    }
-                    ;
-                    function setColorValueTitulo(color) {
-                        document.getElementById('hiddenColorInput-titulo').value = color;
-                    }
-                    ;
-                    function setColorValueFuenteTitulo(color) {
-                        document.getElementById('hiddenColorInput-fuente-titulo').value = color;
+                    function setColorValue(color, elemento) {
+                        switch (elemento) {
+                            case 'superior':
+                                document.getElementById('hiddenColorInput-superior').value = color;
+                                break;
+                            case 'fuente-encabezado':
+                                document.getElementById('hiddenColorInput-fuente-encabezado').value = color;
+                                break;
+                            case 'inferior':
+                                document.getElementById('hiddenColorInput-inferior').value = color;
+                                break;
+                            case 'titulo':
+                                document.getElementById('hiddenColorInput-titulo').value = color;
+                                break;
+                            case 'fuente-titulo':
+                                document.getElementById('hiddenColorInput-fuente-titulo').value = color;
+                                break;
+                            case 'color-fondo':
+                                document.getElementById('hiddenColorInput-color-fondo').value = color;
+                                break;
+                            case 'color-boton':
+                                document.getElementById('hiddenColorInput-color-boton').value = color;
+                                break;
+                        }
                     }
                     ;
                 </script>
@@ -173,16 +183,22 @@
                     <input type="hidden" id="hiddenColorInput-fuente-titulo" name="hiddenColorInput-fuente-titulo" />
                     <h:inputHidden id="hiddenColorInput-fuente-titulo" value="#{configGeneral.colorFuenteTitulo}" />
 
+                    <input type="hidden" id="hiddenColorInput-color-fondo" name="hiddenColorInput-color-fondo" />
+                    <h:inputHidden id="hiddenColorInput-color-fondo" value="#{configGeneral.colorFondo}" />
+
+                    <input type="hidden" id="hiddenColorInput-color-boton" name="hiddenColorInput-color-boton" />
+                    <h:inputHidden id="hiddenColorInput-color-boton" value="#{configGeneral.colorBoton}" />
+
                     <div class="container-fluid" style="padding: 0.5%">               
                         <div class="container-fluid" style="padding: 0.5%">
                             <div class="panel panel-primary">
-                                <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important" >Color y Apariencia</div>
+                                <div class="panel-heading" >Color y Apariencia</div>
                                 <div class="panel-body">
                                     <h:panelGroup id="panel-datos-color">
                                         <table class="table table-hover table-responsive">
                                             <thead>
                                                 <tr>
-                                                    <th>Encabezado</th>
+                                                    <th>Encabezado y Menú</th>
                                                     <th>Vistas</th>
                                                 </tr>
                                             </thead>
@@ -196,7 +212,7 @@
                                                                         <h:outputLabel for="colorPicker-superior" value="Color Superior:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-superior" type="color" value="#{configGeneral.ops.colorSuperiorPanelTitulo}" onchange="setColorValueSuperior(this.value)" />
+                                                                        <input id="colorPicker-superior" type="color" value="#{configGeneral.ops.colorSuperiorPanelTitulo}" onchange="setColorValue(this.value, 'superior')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -210,7 +226,7 @@
                                                                         <h:outputLabel for="colorPicker-titulo" value="Color de Titulos:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-titulo" type="color" value="#{configGeneral.ops.colorPanelTitulo}" onchange="setColorValueTitulo(this.value)" />
+                                                                        <input id="colorPicker-titulo" type="color" value="#{configGeneral.ops.colorPanelTitulo}" onchange="setColorValue(this.value, 'titulo')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -226,7 +242,7 @@
                                                                         <h:outputLabel for="colorPicker-inferior" value="Color Inferior:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-inferior" type="color" value="#{configGeneral.ops.colorInferiorPanelTitulo}" onchange="setColorValueInferior(this.value)" />
+                                                                        <input id="colorPicker-inferior" type="color" value="#{configGeneral.ops.colorInferiorPanelTitulo}" onchange="setColorValue(this.value, 'inferior')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -240,7 +256,7 @@
                                                                         <h:outputLabel for="colorPicker-fuente-titulo" value="Color de Fuente de Panel:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-fuente-titulo" type="color" value="#{configGeneral.ops.colorFuentePanelTitulo}" onchange="setColorValueFuenteTitulo(this.value)" />
+                                                                        <input id="colorPicker-fuente-titulo" type="color" value="#{configGeneral.ops.colorFuentePanelTitulo}" onchange="setColorValue(this.value, 'fuente-titulo')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -256,7 +272,7 @@
                                                                         <h:outputLabel for="colorPicker-fuente-encabezado" value="Color de Fuente:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-fuente-encabezado" type="color" value="#{configGeneral.ops.colorFuentePanelEncabezado}" onchange="setColorValueFuenteEncabezado(this.value)" />
+                                                                        <input id="colorPicker-fuente-encabezado" type="color" value="#{configGeneral.ops.colorFuentePanelEncabezado}" onchange="setColorValue(this.value, 'fuente-encabezado')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -264,6 +280,21 @@
                                                     </td>
                                                     <td>
                                                         <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-color-fondo" value="Color de Fondo" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-color-fondo" type="color" value="#{configGeneral.ops.colorBody}" onchange="setColorValue(this.value, 'color-fondo')" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><table>
                                                             <tbody>
                                                                 <tr>
                                                                     <td style="width: 60%">
@@ -283,6 +314,20 @@
                                                                                 <f:ajax delay="100" render="form-color:modal_cargar_logo-informe" /> 
                                                                             </h:commandLink>
                                                                         </h:panelGroup>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-color-boton" value="Color de Botones" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-color-boton" type="color" value="#{configGeneral.ops.colorBoton}" onchange="setColorValue(this.value, 'color-boton')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>

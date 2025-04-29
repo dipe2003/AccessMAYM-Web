@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-sm-10">
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Empresa</div>
+                            <div class="panel-heading" >Empresa</div>
                             <div class="panel-body">   
                                 <div class="row">
                                     <div class="col-sm-2">
@@ -32,7 +32,7 @@
                     <div class="col-sm-2">
                         <!-- Estado -->
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Estado:</div>
+                            <div class="panel-heading" >Estado:</div>
                             <c:choose>
                                 <c:when test="#{verAccion.estado == 'PENDIENTE'}">
                                     <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
@@ -81,7 +81,7 @@
 
                 <!-- Descripcion -->                
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Descripcion</div>
+                    <div class="panel-heading" >Descripcion</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-2">
@@ -155,7 +155,7 @@
                 </div> 
                 <!-- Analisis de Causa -->                
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Analisis de Causa</div>
+                    <div class="panel-heading" >Analisis de Causa</div>
                     <div class="panel-body">
                         <div class="form-group">
                             <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
@@ -175,7 +175,7 @@
                     <div class="col-sm-12">
                         <!-- Actividades -->
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Actividades</div>
+                            <div class="panel-heading" >Actividades</div>
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{not empty verAccion.accionSeleccionada.actividadesDeAccion}">
@@ -226,7 +226,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Implementacion:</div>
+                            <div class="panel-heading" >Comprobacion de Implementacion:</div>
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{verAccion.comprobacionImplementacion != null}">
@@ -277,7 +277,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="panel panel-primary">
-                            <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Comprobacion de Eficacia</div>
+                            <div class="panel-heading" >Comprobacion de Eficacia</div>
                             <div class="panel-body">
                                 <c:choose>
                                     <c:when test="#{verAccion.comprobacionEficacia != null}">
@@ -330,7 +330,7 @@
 
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" style="background-color: #{sesionUsuario.opcionesSistema.colorPanelTitulo} !important;color: #{sesionUsuario.opcionesSistema.colorFuentePanelTitulo} !important">Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-heading" >Archivos Adjuntos / Anexos:</div>
                     <div class="panel-body">
                         <c:choose>
                             <c:when test="#{not empty verAccion.accionSeleccionada.adjuntosDeAccion}">

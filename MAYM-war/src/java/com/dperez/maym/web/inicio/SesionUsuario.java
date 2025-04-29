@@ -130,17 +130,20 @@ public class SesionUsuario implements Serializable {
         cargarColores();
 
     }
-    
-    public void cargarColores(){
-        opcionesSistema = new OpcionesSistema("#2a2a2a","black","#337ab7", "#cce8f6", "#cce8f6");
+
+    public void cargarColores() {
+        opcionesSistema = new OpcionesSistema();
+        Properties prop = new Properties();
         if (!ManejadorPropiedades.getPropiedades(ioProp.getDirectorio()).isEmpty()) {
-            Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
-            opcionesSistema.setColorSuperiorPanelTitulo(prop.getProperty("color-superior") != null ? prop.getProperty("color-superior") : "#2a2a2a");
-            opcionesSistema.setColorInferiorPanelTitulo(prop.getProperty("color-inferior") != null ? prop.getProperty("color-inferior") : "black");
-            opcionesSistema.setColorPanelTitulo(prop.getProperty("color-titulos") != null ? prop.getProperty("color-titulos") : "#337ab7");
-            opcionesSistema.setColorFuentePanelEncabezado(prop.getProperty("color-fuente-encabezado") != null ? prop.getProperty("color-fuente-encabezado") : "#cce8f6");
-            opcionesSistema.setColorFuentePanelTitulo(prop.getProperty("color-fuente-titulos") != null ? prop.getProperty("color-fuente-titulos") : "#cce8f6");
+            prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
         }
+        opcionesSistema.setColorSuperiorPanelTitulo(prop.getProperty("color-superior") != null ? prop.getProperty("color-superior") : "#2a2a2a");
+        opcionesSistema.setColorInferiorPanelTitulo(prop.getProperty("color-inferior") != null ? prop.getProperty("color-inferior") : "black");
+        opcionesSistema.setColorPanelTitulo(prop.getProperty("color-titulos") != null ? prop.getProperty("color-titulos") : "#337ab7");
+        opcionesSistema.setColorFuentePanelEncabezado(prop.getProperty("color-fuente-encabezado") != null ? prop.getProperty("color-fuente-encabezado") : "#cce8f6");
+        opcionesSistema.setColorFuentePanelTitulo(prop.getProperty("color-fuente-titulos") != null ? prop.getProperty("color-fuente-titulos") : "#cce8f6");
+        opcionesSistema.setColorBody(prop.getProperty("color-body") != null ? prop.getProperty("color-body") : "#ffffff");
+        opcionesSistema.setColorBoton(prop.getProperty("color-boton") != null ? prop.getProperty("color-boton") : "#337ab7");
     }
 
     public void ingresar() throws IOException {
