@@ -135,7 +135,7 @@
                                             <label for="usr">Operario:</label>
                                             <h:inputText class="form-control" p:placeholder="Padron" id="usr" value="#{sesionUsuario.usuarioSeleccionado}">
                                                 <f:ajax event="change" execute="@this" listener="#{sesionUsuario.comprobarIdUsuario()}" 
-                                                        render="panel_datos_usuario" onevent="indicador" />
+                                                        render="panel_datos_usuario panel_mensaje_password" onevent="indicador" />                                                 
                                             </h:inputText>
                                             <h:panelGroup id="panel_datos_usuario">
                                                 <c:if test="#{not empty sesionUsuario.nombreUsuario}">
@@ -148,6 +148,7 @@
                                             <h:inputSecret class="form-control" p:placeholder='Contraseña' id="pwd" value="#{sesionUsuario.passwordUsuario}"/>
                                             <h:panelGroup id="panel_mensaje_password">
                                                 <h:message for="pwd" class="msj_error" />
+                                                <h:message for="usr" class="msj_error" />
                                             </h:panelGroup>
                                         </div>
                                         <h:commandButton id="btnLogin" class="btn btn-block" value="Ingresar" action="#{sesionUsuario.ingresar()}">

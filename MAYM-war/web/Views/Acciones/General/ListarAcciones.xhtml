@@ -37,7 +37,7 @@
                                                                         <div class="form-group col-md-2">
                                                                             <label for="fecha_inicial">Desde:</label>
                                                                             <h:panelGroup id="drop-filtro-fecha-inicial">
-                                                                                <h:inputText id="fecha_inicial" class="form-control" value="#{listarAcciones.strFechaInicial}" >
+                                                                                <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarAcciones.strFechaInicial}" >
                                                                                     <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
                                                                                             render="form_tabla_acciones panel_filtros"/>
                                                                                 </h:inputText>
@@ -46,7 +46,7 @@
                                                                         <div class="col-md-2">
                                                                             <label for="fecha_final">Hasta:</label>
                                                                             <h:panelGroup id="drop-filtro-fecha-final">
-                                                                                <h:inputText id="fecha_final" class="form-control" value="#{listarAcciones.strFechaFinal}" >
+                                                                                <h:inputText id="fecha_final" class="form-control calendario" value="#{listarAcciones.strFechaFinal}" >
                                                                                     <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
                                                                                             render="form_tabla_acciones panel_filtros"/>
                                                                                 </h:inputText>
@@ -439,12 +439,12 @@
                                                     <div class="table-responsive-sm">
                                                         <h:panelGroup id="drop-filtro-areas">
                                                             <div>
-                                                                <label for="areas-disponibles">Areas</label>
+                                                                <label for="areas-disponibles">Areas Disponibles:</label>
                                                             </div>
                                                             <div>
                                                                 <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}" />
+                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}" />
                                                                         <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
                                                                                 render="form_tabla_acciones 
                                                                                 form_filtros:modal_aplicar_filtros_areas 
@@ -513,12 +513,12 @@
                                                     <div class="table-responsive-sm">
                                                         <h:panelGroup id="drop-filtro-detecciones">
                                                             <div>
-                                                                <label for="detecciones-disponibles">Areas</label>
+                                                                <label for="detecciones-disponibles">Detecciones Disponibles</label>
                                                             </div>
                                                             <div>
                                                                 <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
                                                                                 render="form_tabla_acciones 
                                                                                 form_filtros:modal_aplicar_filtros_areas 
@@ -586,12 +586,12 @@
                                                     <div class="table-responsive-sm">
                                                         <h:panelGroup id="drop-filtro-codificaciones">
                                                             <div>
-                                                                <label for="codificaciones-disponibles">Areas</label>
+                                                                <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
                                                             </div>
                                                             <div>
                                                                 <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                     <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.value.nombre}" itemValue="#{entry.key}"/>
+                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
                                                                                 render="form_tabla_acciones 
                                                                                 form_filtros:modal_aplicar_filtros_areas 
@@ -659,7 +659,7 @@
                                                     <div class="table-responsive-sm">
                                                         <h:panelGroup id="drop-filtro-estados">
                                                             <div>
-                                                                <label for="estados-disponibles">Areas</label>
+                                                                <label for="estados-disponibles">Estados Disponibles:</label>
                                                             </div>
                                                             <div>
                                                                 <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >

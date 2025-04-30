@@ -98,11 +98,11 @@ public class ListarAcciones implements Serializable {
     private String strFechaFinal;
 
     // Filtros AREA
-    private Map<String, Area> areasEnRegistros = new HashMap<>();
+    private List<Area> areasEnRegistros = new ArrayList<>();
     private String[] areasSeleccionadas;
 
     // Filtros Deteccion
-    private Map<String, Deteccion> deteccionesEnRegistros = new HashMap<>();
+    private List<Deteccion> deteccionesEnRegistros = new ArrayList<>();
     private String[] deteccionesSeleccionadas;
 
     // Filtros Estado
@@ -110,7 +110,7 @@ public class ListarAcciones implements Serializable {
     private Estado[] estadosSeleccionados;
 
     // Filtros Codificaciones
-    private Map<String, Codificacion> codificacionesEnRegistros = new HashMap<>();
+    private List<Codificacion> codificacionesEnRegistros = new ArrayList<>();
     private String[] codificacionesSeleccionadas;
 
     // Filtro texto
@@ -171,8 +171,11 @@ public class ListarAcciones implements Serializable {
      * Llena las listas para filtros con los valores originales.
      */
     private void ResetListasAreas() {
-        areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);
-        areasSeleccionadas = areasEnRegistros.keySet().toArray(new String[areasEnRegistros.size()]);
+        areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);        
+        areasSeleccionadas = new String[areasEnRegistros.size()];
+        for (int i = 0; i < areasEnRegistros.size(); i++) {
+            areasSeleccionadas[1] = areasEnRegistros.get(i).getNombre();
+        }
     }
 
     public void filtrarPorArea(AjaxBehaviorEvent event) {
@@ -211,7 +214,10 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasDeteccion() {
         deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
-        deteccionesSeleccionadas = deteccionesEnRegistros.keySet().toArray(new String[deteccionesEnRegistros.size()]);
+        deteccionesSeleccionadas = new String[deteccionesEnRegistros.size()];
+        for (int i = 0; i < deteccionesEnRegistros.size(); i++) {
+            deteccionesSeleccionadas[1] = deteccionesEnRegistros.get(i).getNombre();
+        }
     }
 
     public void filtrarPorDeteccion(AjaxBehaviorEvent event) {
@@ -250,7 +256,10 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasCodificacion() {
         codificacionesEnRegistros = filtros.ExtraerCodificaciones(ListaCompletaAcciones);
-        codificacionesSeleccionadas = codificacionesEnRegistros.keySet().toArray(new String[codificacionesEnRegistros.size()]);
+        codificacionesSeleccionadas = new String[codificacionesEnRegistros.size()];
+        for (int i = 0; i < codificacionesEnRegistros.size(); i++) {
+            codificacionesSeleccionadas[1] = codificacionesEnRegistros.get(i).getNombre();
+        }
     }
 
     public void filtrarPorCodificacion(AjaxBehaviorEvent event) {
@@ -401,15 +410,15 @@ public class ListarAcciones implements Serializable {
         return ListaAcciones;
     }
 
-    public Map<String, Area> getAreasEnRegistros() {
+    public List<Area> getAreasEnRegistros() {
         return areasEnRegistros;
     }
 
-    public Map<String, Codificacion> getCodificacionesEnRegistros() {
+    public List<Codificacion> getCodificacionesEnRegistros() {
         return codificacionesEnRegistros;
     }
 
-    public Map<String, Deteccion> getDeteccionesEnRegistros() {
+    public List<Deteccion> getDeteccionesEnRegistros() {
         return deteccionesEnRegistros;
     }
 
@@ -485,15 +494,15 @@ public class ListarAcciones implements Serializable {
         this.ListaAcciones = ListaAcciones;
     }
 
-    public void setAreasEnRegistros(Map<String, Area> areasEnRegistros) {
+    public void setAreasEnRegistros(List<Area> areasEnRegistros) {
         this.areasEnRegistros = areasEnRegistros;
     }
 
-    public void setCodificacionesEnRegistros(Map<String, Codificacion> codificacionesEnRegistros) {
+    public void setCodificacionesEnRegistros(List<Codificacion> codificacionesEnRegistros) {
         this.codificacionesEnRegistros = codificacionesEnRegistros;
     }
 
-    public void setDeteccionesEnRegistros(Map<String, Deteccion> deteccionesEnRegistros) {
+    public void setDeteccionesEnRegistros(List<Deteccion> deteccionesEnRegistros) {
         this.deteccionesEnRegistros = deteccionesEnRegistros;
     }
 

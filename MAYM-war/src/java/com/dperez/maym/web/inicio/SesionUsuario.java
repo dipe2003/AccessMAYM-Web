@@ -151,14 +151,19 @@ public class SesionUsuario implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         //RequestHeaderMap.key("Referer"): contiene la url desde donde se hace el pedido.
         String url = context.getExternalContext().getRequestHeaderMap().get((String) ("Referer"));
-        if (facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado), PasswordUsuario)) {
-            Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
-            request.getSession().setAttribute("Usuario", usuario);
+        try {
+            if (facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado), PasswordUsuario)) {
+                Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
+                request.getSession().setAttribute("Usuario", usuario);
 
-            this.UsuarioLogueado = usuario;
-            this.PasswordUsuario = new String();
-            context.getExternalContext().redirect(url);
-        } else {
+                this.UsuarioLogueado = usuario;
+                this.PasswordUsuario = new String();
+                context.getExternalContext().redirect(url);
+            } else {
+                context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
+                context.renderResponse();
+            }
+        } catch (Exception ex) {
             context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             context.renderResponse();
         }
@@ -204,15 +209,21 @@ public class SesionUsuario implements Serializable {
      * Comprueba la existencia del usuario y devuelve si existe.
      */
     public void comprobarIdUsuario() {
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
             int id = Integer.valueOf(UsuarioSeleccionado);
             if (id != 0 && facadeMain.ExisteUsuario(id)) {
                 Usuario usuario = Usuarios.get(id);
                 NombreUsuario = usuario.getNombreCompleto();
+            } else {
+                context.addMessage("formlogin:usr", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
+                context.renderResponse();
             }
         } catch (NumberFormatException ex) {
             System.out.println("Error: " + ex.getLocalizedMessage());
             NombreUsuario = "";
+            context.addMessage("formlogin:usr", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
+            context.renderResponse();
         }
     }
 
