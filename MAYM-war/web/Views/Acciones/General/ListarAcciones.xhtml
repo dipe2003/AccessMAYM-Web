@@ -333,9 +333,15 @@
                                                                     </li>
                                                                 </c:if>
                                                                 <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">                                                                       
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
                                                                         <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
                                                                         Ver Accion (pdf)
+                                                                    </h:commandLink>  
+                                                                </li>
+                                                                 <li>
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
+                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                        Ver Accion sin Estado (pdf)
                                                                     </h:commandLink>  
                                                                 </li>
                                                                 <li>
@@ -361,9 +367,15 @@
                                                                     </h:link>
                                                                 </li>
                                                                 <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id)}" title="Exportar a PDF">                                                                       
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
                                                                         <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
                                                                         Ver Accion (pdf)
+                                                                    </h:commandLink>  
+                                                                </li>
+                                                                <li>
+                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
+                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                       Ver Accion sin Estado (pdf)
                                                                     </h:commandLink>  
                                                                 </li>
                                                                 <li>

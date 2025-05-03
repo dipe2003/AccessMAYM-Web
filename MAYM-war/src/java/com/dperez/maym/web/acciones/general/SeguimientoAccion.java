@@ -498,9 +498,10 @@ public class SeguimientoAccion implements Serializable {
                 if (!datosAdjunto[0].isEmpty()) {
                     TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
                     String extension = datosAdjunto[1];
-                    List<String> tipos = Arrays.asList("jpeg", "jpg", "png", "gif");
-                    if (!tipos.contains(extension.toLowerCase().trim())) {
-                        tipoAdjunto = TipoAdjunto.DOCUMENTO;
+                    switch(extension.toLowerCase().trim()){
+                        case "jpeg", "jpg", "png", "gif" -> tipoAdjunto = TipoAdjunto.IMAGEN;
+                        case "mp4", "m4a", "m4b" -> tipoAdjunto = TipoAdjunto.VIDEO;
+                        default -> tipoAdjunto = tipoAdjunto.DOCUMENTO;
                     }
                     if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
                         actualizarListaAdjuntos();

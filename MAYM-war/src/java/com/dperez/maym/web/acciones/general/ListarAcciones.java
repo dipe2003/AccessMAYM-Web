@@ -28,9 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -174,7 +172,7 @@ public class ListarAcciones implements Serializable {
         areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);        
         areasSeleccionadas = new String[areasEnRegistros.size()];
         for (int i = 0; i < areasEnRegistros.size(); i++) {
-            areasSeleccionadas[1] = areasEnRegistros.get(i).getNombre();
+            areasSeleccionadas[i] = areasEnRegistros.get(i).getNombre();
         }
     }
 
@@ -213,10 +211,10 @@ public class ListarAcciones implements Serializable {
      * Llena las listas para filtros con los valores originales.
      */
     private void ResetListasDeteccion() {
-        deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
+       deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
         deteccionesSeleccionadas = new String[deteccionesEnRegistros.size()];
         for (int i = 0; i < deteccionesEnRegistros.size(); i++) {
-            deteccionesSeleccionadas[1] = deteccionesEnRegistros.get(i).getNombre();
+            deteccionesSeleccionadas[i] = deteccionesEnRegistros.get(i).getNombre();
         }
     }
 
@@ -258,7 +256,7 @@ public class ListarAcciones implements Serializable {
         codificacionesEnRegistros = filtros.ExtraerCodificaciones(ListaCompletaAcciones);
         codificacionesSeleccionadas = new String[codificacionesEnRegistros.size()];
         for (int i = 0; i < codificacionesEnRegistros.size(); i++) {
-            codificacionesSeleccionadas[1] = codificacionesEnRegistros.get(i).getNombre();
+            codificacionesSeleccionadas[i] = codificacionesEnRegistros.get(i).getNombre();
         }
     }
 
@@ -756,7 +754,7 @@ public class ListarAcciones implements Serializable {
                 strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getEmpresa());
     }
 
-    public void pdfteaRegistro(int id) {
+    public void pdfteaRegistro(int id, boolean excluirComprobaciones) {
         PdfteameRegistro pdf = new PdfteameRegistro(sesionUsuario.getEmpresa());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
 
@@ -768,7 +766,7 @@ public class ListarAcciones implements Serializable {
                     .append(" - ")
                     .append(accionFiltrada.getDeteccionAccion().getNombre());
 
-            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada);
+            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada, excluirComprobaciones);
         }
     }
 

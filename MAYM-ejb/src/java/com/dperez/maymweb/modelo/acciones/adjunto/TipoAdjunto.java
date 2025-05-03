@@ -11,7 +11,8 @@ package com.dperez.maymweb.modelo.acciones.adjunto;
  */
 public enum TipoAdjunto {
     IMAGEN ("Imagen"),
-    DOCUMENTO ("Documento");
+    DOCUMENTO ("Documento"),
+    VIDEO ("Video/mp4");
     
     private final String Descripcion;  
      

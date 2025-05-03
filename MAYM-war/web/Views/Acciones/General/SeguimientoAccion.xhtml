@@ -561,6 +561,11 @@
                                                                         <c:when test="#{adjunto.value.tipoDeAdjunto == 'IMAGEN'}" >
                                                                             <a href="/datos#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="/datos#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
                                                                         </c:when>
+                                                                        <c:when test="#{adjunto.value.tipoDeAdjunto == 'VIDEO'}">
+                                                                            <video controls="true" width="250">
+                                                                                <source src="/datos#{adjunto.value.ubicacion}" type="video/mp4" />
+                                                                            </video>
+                                                                        </c:when>
                                                                         <c:otherwise>
                                                                             <a href="/datos#{adjunto.value.ubicacion}" target="blank" >Ver Documento</a>
                                                                         </c:otherwise> 
@@ -687,7 +692,7 @@
                                     <div class="form-group">
                                         <c:if test="#{not empty seguimientoAccion.tituloAdjunto}">
                                             <div class="form-group">
-                                                <h:inputFile id="input-adjunto"  value="#{seguimientoAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/x-png,image/gif,image/jpeg,application/pdf">
+                                                <h:inputFile id="input-adjunto"  value="#{seguimientoAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/png, image/gif, image/jpeg, application/pdf, video/mp4">
                                                     <f:ajax event="change" listener="#{seguimientoAccion.setArchivoAdjunto(seguimientoAccion.archivoAdjunto)}" />
                                                     <f:ajax event="change" listener="#{seguimientoAccion.agregarAdjunto()}" render="form_segumiento_accion:panel_lista_adjuntos form_segumiento_accion:panel_modal_adjunto" onevent="indicador"/>
                                                 </h:inputFile>

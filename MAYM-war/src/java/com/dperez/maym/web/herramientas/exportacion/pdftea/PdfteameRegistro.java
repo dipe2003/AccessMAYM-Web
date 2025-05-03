@@ -57,7 +57,7 @@ public class PdfteameRegistro implements Serializable {
         cArchivo = new CargarArchivo();
     }
 
-    public void ExportarRegistro(String nombreArchivo, String tituloListado, Accion accion) {
+    public void ExportarRegistro(String nombreArchivo, String tituloListado, Accion accion, boolean excluirComprobaciones) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -151,109 +151,110 @@ public class PdfteameRegistro implements Serializable {
             tablaActividades.setComplete(true);
             documento.add(tablaActividades);
 
-            documento.add(CrearTituloSeccion("Comprobacion de Implementación"));
+            if (excluirComprobaciones != true) {
+                documento.add(CrearTituloSeccion("Comprobacion de Implementación"));
 
-            PdfPTable tablaImplementacion = CrearTablaRegistro(3, new int[]{20, 20, 60});
+                PdfPTable tablaImplementacion = CrearTablaRegistro(3, new int[]{20, 20, 60});
 
-            tablaImplementacion.addCell(CrearCeldaTitulo("Fecha Estimada", 0));
-            tablaImplementacion.addCell(CrearCeldaTitulo("Fecha Comprobacion", 0));
-            tablaImplementacion.addCell(CrearCeldaTitulo("Responsable Comprobacion", 0));
+                tablaImplementacion.addCell(CrearCeldaTitulo("Fecha Estimada", 0));
+                tablaImplementacion.addCell(CrearCeldaTitulo("Fecha Comprobacion", 0));
+                tablaImplementacion.addCell(CrearCeldaTitulo("Responsable Comprobacion", 0));
 
-            String implementacion = "Sin Definir";
+                String implementacion = "Sin Definir";
 
-            if (accion.getComprobacionImplementacion() != null) {
-                if (accion.getComprobacionImplementacion().getFechaEstimada() != null) {
-                    implementacion = df.format(accion.getComprobacionImplementacion().getFechaEstimada());
+                if (accion.getComprobacionImplementacion() != null) {
+                    if (accion.getComprobacionImplementacion().getFechaEstimada() != null) {
+                        implementacion = df.format(accion.getComprobacionImplementacion().getFechaEstimada());
+                    }
+                    tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
+                    implementacion = "Sin Comprobar";
+
+                    if (accion.getComprobacionImplementacion().getFechaComprobacion() != null) {
+                        implementacion = df.format(accion.getComprobacionImplementacion().getFechaComprobacion());
+                    }
+                    tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
+                    implementacion = "Sin Definir";
+
+                    if (accion.getComprobacionImplementacion().getResponsableComprobacion() != null) {
+                        implementacion = accion.getComprobacionImplementacion().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
+                                + accion.getComprobacionImplementacion().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
+                    }
+                    tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
+                    implementacion = "Sin Definir";
+
+                    if (accion.getComprobacionImplementacion().getResultadoComprobacion() != null) {
+                        implementacion = accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion();
+                    }
+                    tablaImplementacion.addCell(CrearCeldaVacia(3, false));
+                    tablaImplementacion.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
+                    tablaImplementacion.addCell(CrearCeldaContenido(accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
+                            : accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion() + ": "
+                            + accion.getComprobacionImplementacion().getObservaciones(), false, 2, 0));
+                } else {
+                    tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 3, 0));
                 }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
-                implementacion = "Sin Comprobar";
 
-                if (accion.getComprobacionImplementacion().getFechaComprobacion() != null) {
-                    implementacion = df.format(accion.getComprobacionImplementacion().getFechaComprobacion());
-                }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
-                implementacion = "Sin Definir";
+                tablaImplementacion.setComplete(true);
+                documento.add(tablaImplementacion);
 
-                if (accion.getComprobacionImplementacion().getResponsableComprobacion() != null) {
-                    implementacion = accion.getComprobacionImplementacion().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
-                            + accion.getComprobacionImplementacion().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
-                }
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 0, 18));
-                implementacion = "Sin Definir";
+                documento.add(CrearTituloSeccion("Verificación de Eficacia"));
 
-                if (accion.getComprobacionImplementacion().getResultadoComprobacion() != null) {
-                    implementacion = accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion();
+                PdfPTable tablaEficacia = CrearTablaRegistro(3, new int[]{20, 20, 60});
+
+                tablaEficacia.addCell(CrearCeldaTitulo("Fecha Estimada", 0));
+                tablaEficacia.addCell(CrearCeldaTitulo("Fecha Verificacion", 0));
+                tablaEficacia.addCell(CrearCeldaTitulo("Responsable Verificacion", 0));
+
+                String eficacia = "Sin Definir";
+
+                if (accion.getComprobacionEficacia() != null) {
+                    if (accion.getComprobacionEficacia().getFechaEstimada() != null) {
+                        eficacia = df.format(accion.getComprobacionEficacia().getFechaEstimada());
+                    }
+                    tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
+                    eficacia = "Sin Verificar";
+
+                    if (accion.getComprobacionEficacia().getFechaComprobacion() != null) {
+                        eficacia = df.format(accion.getComprobacionEficacia().getFechaComprobacion());
+                    }
+                    tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
+                    eficacia = "Sin Definir";
+
+                    if (accion.getComprobacionEficacia().getResponsableComprobacion() != null) {
+                        eficacia = accion.getComprobacionEficacia().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
+                                + accion.getComprobacionEficacia().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
+                    }
+                    tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
+                    eficacia = "Sin Definir";
+                    if (accion.getComprobacionEficacia().getResultadoComprobacion() != null) {
+                        eficacia = accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion();
+                    }
+                    tablaEficacia.addCell(CrearCeldaVacia(3, false));
+                    tablaEficacia.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
+                    tablaEficacia.addCell(CrearCeldaContenido(accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
+                            : accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion() + ": "
+                            + accion.getComprobacionEficacia().getObservaciones(), false, 2, 0));
+                } else {
+                    tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 3, 0));
                 }
-                tablaImplementacion.addCell(CrearCeldaVacia(3, false));
-                tablaImplementacion.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
-                tablaImplementacion.addCell(CrearCeldaContenido(accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                        : accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion() + ": "
-                        + accion.getComprobacionImplementacion().getObservaciones(), false, 2, 0));
-            } else {
-                tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 3, 0));
+
+                tablaEficacia.setComplete(true);
+                documento.add(tablaEficacia);
+
+                documento.add(CrearTituloSeccion(""));
+                PdfPTable tablaEstado = CrearTablaRegistro(2, new int[]{20, 80});
+                Color colorFondo = ObtenerColor(accion.getEstadoDeAccion());
+                tablaEstado.addCell(CrearCeldaTitulo("Estado", 0));
+                tablaEstado.addCell(CrearCeldaContenido(accion.getEstadoDeAccion().getDescripcion(), false, colorFondo));
+
+                if (accion.getEstadoDeAccion() == Estado.DESESTIMADA) {
+                    tablaEstado.addCell(CrearCeldaTitulo("Motivo Desestimada", 0));
+                    tablaEstado.addCell(CrearCeldaContenido(accion.getObservacionesDesestimada(), false, 0, 20));
+                }
+
+                tablaEstado.setComplete(true);
+                documento.add(tablaEstado);
             }
-
-            tablaImplementacion.setComplete(true);
-            documento.add(tablaImplementacion);
-
-            documento.add(CrearTituloSeccion("Verificación de Eficacia"));
-
-            PdfPTable tablaEficacia = CrearTablaRegistro(3, new int[]{20, 20, 60});
-
-            tablaEficacia.addCell(CrearCeldaTitulo("Fecha Estimada", 0));
-            tablaEficacia.addCell(CrearCeldaTitulo("Fecha Verificacion", 0));
-            tablaEficacia.addCell(CrearCeldaTitulo("Responsable Verificacion", 0));
-
-            String eficacia = "Sin Definir";
-
-            if (accion.getComprobacionEficacia() != null) {
-                if (accion.getComprobacionEficacia().getFechaEstimada() != null) {
-                    eficacia = df.format(accion.getComprobacionEficacia().getFechaEstimada());
-                }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
-                eficacia = "Sin Verificar";
-
-                if (accion.getComprobacionEficacia().getFechaComprobacion() != null) {
-                    eficacia = df.format(accion.getComprobacionEficacia().getFechaComprobacion());
-                }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
-                eficacia = "Sin Definir";
-
-                if (accion.getComprobacionEficacia().getResponsableComprobacion() != null) {
-                    eficacia = accion.getComprobacionEficacia().getResponsableComprobacion().getUsuarioResponsable().getNombreCompleto() + " - "
-                            + accion.getComprobacionEficacia().getResponsableComprobacion().getResponsabilidadResponsable().getNombre();
-                }
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 0, 18));
-                eficacia = "Sin Definir";
-                if (accion.getComprobacionEficacia().getResultadoComprobacion() != null) {
-                    eficacia = accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion();
-                }
-                tablaEficacia.addCell(CrearCeldaVacia(3, false));
-                tablaEficacia.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
-                tablaEficacia.addCell(CrearCeldaContenido(accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                        : accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion() + ": "
-                        + accion.getComprobacionEficacia().getObservaciones(), false, 2, 0));
-            } else {
-                tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 3, 0));
-            }
-
-            tablaEficacia.setComplete(true);
-            documento.add(tablaEficacia);
-
-            documento.add(CrearTituloSeccion(""));
-            PdfPTable tablaEstado = CrearTablaRegistro(2, new int[]{20, 80});
-            Color colorFondo = ObtenerColor(accion.getEstadoDeAccion());
-            tablaEstado.addCell(CrearCeldaTitulo("Estado", 0));
-            tablaEstado.addCell(CrearCeldaContenido(accion.getEstadoDeAccion().getDescripcion(), false, colorFondo));
-
-            if (accion.getEstadoDeAccion() == Estado.DESESTIMADA) {
-                tablaEstado.addCell(CrearCeldaTitulo("Motivo Desestimada", 0));
-                tablaEstado.addCell(CrearCeldaContenido(accion.getObservacionesDesestimada(), false, 0, 20));
-            }
-
-            tablaEstado.setComplete(true);
-            documento.add(tablaEstado);
-
             documento.close();
             outputStream.flush();
             context.responseComplete();
