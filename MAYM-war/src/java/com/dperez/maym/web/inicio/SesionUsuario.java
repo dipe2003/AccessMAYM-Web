@@ -5,7 +5,6 @@
  */
 package com.dperez.maym.web.inicio;
 
-import com.dperez.maym.web.configuraciones.OpcionesSistema;
 import com.dperez.maym.web.empresa.Empresa;
 import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maymweb.facades.FacadeLectura;
@@ -52,9 +51,7 @@ public class SesionUsuario implements Serializable {
     private String NombreUsuario;
     private Map<Integer, Usuario> Usuarios;
 
-    private Usuario UsuarioLogueado;
-
-    private OpcionesSistema opcionesSistema;
+    private Usuario UsuarioLogueado;    
 
     // Sesion
     // Geters
@@ -132,18 +129,18 @@ public class SesionUsuario implements Serializable {
     }
 
     public void cargarColores() {
-        opcionesSistema = new OpcionesSistema();
+        
         Properties prop = new Properties();
         if (!ManejadorPropiedades.getPropiedades(ioProp.getDirectorio()).isEmpty()) {
             prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
         }
-        opcionesSistema.setColorSuperiorPanelTitulo(prop.getProperty("color-superior") != null ? prop.getProperty("color-superior") : "#2a2a2a");
-        opcionesSistema.setColorInferiorPanelTitulo(prop.getProperty("color-inferior") != null ? prop.getProperty("color-inferior") : "black");
-        opcionesSistema.setColorPanelTitulo(prop.getProperty("color-titulos") != null ? prop.getProperty("color-titulos") : "#337ab7");
-        opcionesSistema.setColorFuentePanelEncabezado(prop.getProperty("color-fuente-encabezado") != null ? prop.getProperty("color-fuente-encabezado") : "#cce8f6");
-        opcionesSistema.setColorFuentePanelTitulo(prop.getProperty("color-fuente-titulos") != null ? prop.getProperty("color-fuente-titulos") : "#cce8f6");
-        opcionesSistema.setColorBody(prop.getProperty("color-body") != null ? prop.getProperty("color-body") : "#ffffff");
-        opcionesSistema.setColorBoton(prop.getProperty("color-boton") != null ? prop.getProperty("color-boton") : "#337ab7");
+        empresa.getOpcionesSistema().setColorSuperiorPanelTitulo(prop.getProperty("color-superior") != null ? prop.getProperty("color-superior") : "#2a2a2a");
+        empresa.getOpcionesSistema().setColorInferiorPanelTitulo(prop.getProperty("color-inferior") != null ? prop.getProperty("color-inferior") : "black");
+        empresa.getOpcionesSistema().setColorPanelTitulo(prop.getProperty("color-titulos") != null ? prop.getProperty("color-titulos") : "#337ab7");
+        empresa.getOpcionesSistema().setColorFuentePanelEncabezado(prop.getProperty("color-fuente-encabezado") != null ? prop.getProperty("color-fuente-encabezado") : "#cce8f6");
+        empresa.getOpcionesSistema().setColorFuentePanelTitulo(prop.getProperty("color-fuente-titulos") != null ? prop.getProperty("color-fuente-titulos") : "#cce8f6");
+        empresa.getOpcionesSistema().setColorBody(prop.getProperty("color-body") != null ? prop.getProperty("color-body") : "#ffffff");
+        empresa.getOpcionesSistema().setColorBoton(prop.getProperty("color-boton") != null ? prop.getProperty("color-boton") : "#337ab7");
     }
 
     public void ingresar() throws IOException {
@@ -226,13 +223,4 @@ public class SesionUsuario implements Serializable {
             context.renderResponse();
         }
     }
-
-    public OpcionesSistema getOpcionesSistema() {
-        return opcionesSistema;
-    }
-
-    public void setOpcionesSistema(OpcionesSistema opcionesSistema) {
-        this.opcionesSistema = opcionesSistema;
-    }
-
 }

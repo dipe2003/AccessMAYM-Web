@@ -4,6 +4,10 @@
  */
 package com.dperez.maym.web.empresa;
 
+import com.dperez.maym.web.configuraciones.OpcionesSistema;
+import com.dperez.maym.web.herramientas.ManejadorPropiedades;
+import java.util.Properties;
+
 /**
  *
  * @author dipe2
@@ -18,6 +22,8 @@ public class Empresa {
     private String ubicacionLogo;
     private String ubicacionLogoInformes;
     
+    private OpcionesSistema opcionesSistema;
+    
     public Empresa(){}
 
     public Empresa(String nombre, String direccion, String telefono, String movil, String correo, String numHabilitacion) {
@@ -26,7 +32,8 @@ public class Empresa {
         this.telefono = telefono;
         this.movil = movil;
         this.correo = correo;
-        this.numHabilitacion = numHabilitacion;        
+        this.numHabilitacion = numHabilitacion;     
+        this.opcionesSistema = new OpcionesSistema();
     }
     
        public Empresa(String nombre, String direccion, String telefono, String movil, String correo, String numHabilitacion, String ubicacionLogo) {
@@ -37,6 +44,7 @@ public class Empresa {
         this.correo = correo;
         this.numHabilitacion = numHabilitacion;   
         this.ubicacionLogo = ubicacionLogo;
+        this.opcionesSistema = new OpcionesSistema();
     }
 
     public String getNombre() {
@@ -106,6 +114,14 @@ public class Empresa {
 
     public void setUbicacionLogoInformes(String ubicacionLogoInformes) {
         this.ubicacionLogoInformes = ubicacionLogoInformes;
+    }
+
+    public OpcionesSistema getOpcionesSistema() {
+        return opcionesSistema;
+    }
+
+    public void setOpcionesSistema(OpcionesSistema opcionesSistema) {
+        this.opcionesSistema = opcionesSistema;
     }
     
     

@@ -17,9 +17,15 @@ public class OpcionesSistema {
     private String colorFuentePanelTitulo;
     private String colorBody;
     private String colorBoton;
- 
 
     public OpcionesSistema() {
+        colorSuperiorPanelTitulo = "#2a2a2a";
+        colorInferiorPanelTitulo = "black";
+        colorPanelTitulo = "#337ab7";
+        colorFuentePanelEncabezado = "#cce8f6";
+        colorFuentePanelTitulo = "#cce8f6";
+        colorBody = "#ffffff";
+        colorBoton = "#337ab7";
     }
 
     public String getColorSuperiorPanelTitulo() {

@@ -381,7 +381,7 @@ public class ConfigGeneral implements Serializable {
         tls = prop.get("mail_tls") != null ? Boolean.parseBoolean(prop.get("mail_tls").toString()) : false;
         activarAlertas = prop.get("alertas_on") != null ? Boolean.parseBoolean(prop.get("alertas_on").toString()) : false;
 
-        ops = sesionUsuario.getOpcionesSistema();
+        ops = empresaGuardada.getOpcionesSistema();
         colorSuperior = ops.getColorSuperiorPanelTitulo();
         colorFuenteEncabezado = ops.getColorFuentePanelEncabezado();
         colorInferior = ops.getColorInferiorPanelTitulo();

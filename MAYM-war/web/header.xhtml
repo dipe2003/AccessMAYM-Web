@@ -9,7 +9,7 @@
     <ui:composition >
 
         <div class="container-fluid" >
-            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.opcionesSistema.colorSuperiorPanelTitulo}, #{sesionUsuario.opcionesSistema.colorInferiorPanelTitulo})">
+            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.empresa.opcionesSistema.colorSuperiorPanelTitulo}, #{sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo})">
                 <div class="col-sm-4">
                     <c:choose>
                         <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogo}">
@@ -22,7 +22,7 @@
 
                 </div>
                 <div class="col-sm-8">
-                    <h1 style="color: #{sesionUsuario.opcionesSistema.colorFuentePanelEncabezado}">M.A.Y.M.-Web App</h1>
+                    <h1 style="color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelEncabezado}">M.A.Y.M.-Web App</h1>
                 </div>
             </div>
 
