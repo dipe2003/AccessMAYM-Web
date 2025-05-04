@@ -302,10 +302,16 @@ public class PdfteameListado implements Serializable {
         celda.setColspan(colspan);
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-        celda.setBackgroundColor(new Color(102, 143, 212));
+        
+        Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
+        
+        celda.setBackgroundColor(color);
         celda.setFixedHeight(18);
         Phrase texto = new Phrase();
-        texto.setFont(FontFactory.getFont("arialbi", 8, Font.BOLD, Color.BLACK));
+        
+        color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
+        
+        texto.setFont(FontFactory.getFont("arialbi", 8, Font.BOLD, color));
         texto.add(textoTitulo);
         celda.setPhrase(texto);
         return celda;
@@ -468,13 +474,19 @@ public class PdfteameListado implements Serializable {
     /// <returns></returns>
     private PdfPCell CrearTituloImpresion(String titulo) {
         Phrase f = new Phrase();
-        f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, new Color(255, 255, 255)));
+        
+        Color color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelEncabezado());
+        
+        f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, color));
         f.add(titulo.toUpperCase());
 
         PdfPCell celda = new PdfPCell();
         celda.setColspan(4);
         celda.setPaddingTop(-5f);
-        celda.setBackgroundColor(new Color(4, 3, 89));
+        
+            color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
+        
+        celda.setBackgroundColor(color);
         celda.setFixedHeight(18);
         celda.setBorder(0);
         celda.setBorderWidth(0);

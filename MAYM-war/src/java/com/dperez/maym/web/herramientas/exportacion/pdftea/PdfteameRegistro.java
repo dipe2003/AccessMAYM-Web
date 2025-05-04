@@ -49,7 +49,7 @@ public class PdfteameRegistro implements Serializable {
     private Document documento = new Document(PageSize.A4, 17, 19, 72, 18);
 
     private final Font fuenteTituloSeccion = FontFactory.getFont("arialbi", 10, Font.BOLD, new Color(0, 0, 0));
-    private final Font fuenteTitulosCelda = FontFactory.getFont("arialbi", 9, Font.BOLD, new Color(0, 0, 0));
+    private Font fuenteTitulosCelda = FontFactory.getFont("arialbi", 9, Font.BOLD, new Color(0, 0, 0));
     private final Font fuenteContenidoCelda = FontFactory.getFont("arialbi", 8, Font.NORMAL, new Color(0, 0, 0));
 
     public PdfteameRegistro(Empresa empresa) {
@@ -290,8 +290,15 @@ public class PdfteameRegistro implements Serializable {
         celda.setColspan(colspan);
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-        celda.setBackgroundColor(new Color(102, 143, 212));
+        
+        Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
+        
+        celda.setBackgroundColor(color);
         Phrase texto = new Phrase();
+        
+        color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
+        fuenteTitulosCelda.setColor(color);
+        
         texto.setFont(fuenteTitulosCelda);
         texto.add(textoTitulo);
         celda.setPhrase(texto);
@@ -459,13 +466,17 @@ public class PdfteameRegistro implements Serializable {
     /// <returns></returns>
     private PdfPCell CrearTituloImpresion(String titulo) {
         Phrase f = new Phrase();
-        f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, new Color(255, 255, 255)));
+        Color color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelEncabezado());
+        f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, color));
         f.add(titulo.toUpperCase());
 
         PdfPCell celda = new PdfPCell();
         celda.setColspan(4);
         celda.setPaddingTop(-5f);
-        celda.setBackgroundColor(new Color(4, 3, 89));
+
+        color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
+
+        celda.setBackgroundColor(color);
         celda.setFixedHeight(18);
         celda.setBorder(0);
         celda.setBorderWidth(0);

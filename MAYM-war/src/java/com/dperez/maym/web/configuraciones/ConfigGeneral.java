@@ -9,6 +9,7 @@ import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.herramientas.IOPropiedades;
+import java.awt.Color;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
