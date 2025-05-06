@@ -12,6 +12,7 @@ import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,7 +20,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -41,8 +41,6 @@ public class CrearAccion implements Serializable {
     //<editor-fold desc="Atributos">
     private ModalDetecciones modalDetecciones;
 
-    private ProductoInvolucrado productoInvolucrado;
-
     private TipoAccion tipoDeAccion;
 
     private Date FechaDeteccion;
@@ -59,7 +57,8 @@ public class CrearAccion implements Serializable {
     private List<Area> ListaAreasSectores;
     private Integer AreaSectorAccionSeleccionada;
 
-    private Map<String, String> ListaProductosAfectados;
+    private List<Codificacion> ListaCodificaciones;
+    private Integer CodificacionSeleccionada;
 
     //</editor-fold>
     //<editor-fold desc="Getters">    
@@ -112,11 +111,15 @@ public class CrearAccion implements Serializable {
         return AreaSectorAccionSeleccionada;
     }
 
-    public Map<String, String> getListaProductosAfectados() {
-        return this.ListaProductosAfectados;
+    public List<Codificacion> getListaCodificaciones() {
+        return ListaCodificaciones;
     }
-    //</editor-fold>
 
+    public Integer getCodificacionSeleccionada() {
+        return CodificacionSeleccionada;
+    }
+
+    //</editor-fold>
     //<editor-fold desc="Setters>    
     public void setFechaDeteccion(Date FechaDeteccion) {
         this.FechaDeteccion = FechaDeteccion;
@@ -167,8 +170,12 @@ public class CrearAccion implements Serializable {
         this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;
     }
 
-    public void setListaProductosAfectados(Map<String, String> ListaProductosAfectados) {
-        this.ListaProductosAfectados = ListaProductosAfectados;
+    public void setListaCodificaciones(List<Codificacion> ListaCodificaciones) {
+        this.ListaCodificaciones = ListaCodificaciones;
+    }
+
+    public void setCodificacionSeleccionada(Integer CodificacionSeleccionada) {
+        this.CodificacionSeleccionada = CodificacionSeleccionada;
     }
 
     //</editor-fold>
@@ -188,9 +195,6 @@ public class CrearAccion implements Serializable {
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
         tipoDeAccion = TipoAccion.valueOf(request.getParameter("tipo"));
 
-        // Producto involucrado
-        productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
-
         //  Detecciones
         modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
         tiposDeteccion = TipoDeteccion.values();
@@ -199,6 +203,11 @@ public class CrearAccion implements Serializable {
 
         // Areas Sectores        
         ListaAreasSectores = fLectura.listarAreas().stream()
+                .sorted()
+                .collect(Collectors.toList());
+
+        //  Codificaciones
+        ListaCodificaciones = fLectura.listarCodificaciones().stream()
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -226,22 +235,12 @@ public class CrearAccion implements Serializable {
             Referencias = new String();
         }
         Accion accion = fDatos.nuevaAccion(tipoDeAccion, FechaDeteccion,
-                Descripcion, Referencias, AreaSectorAccionSeleccionada, DeteccionSeleccionada);
+                Descripcion, Referencias, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
 
-        if (accion != null) {
-            if (productoInvolucrado.getListaProductosAfectados() != null) {
-                ListaProductosAfectados = productoInvolucrado.getListaProductosAfectados();
-            }
-            // agrega los productos afectados
-            if (!ListaProductosAfectados.isEmpty()) {
-                for (Map.Entry entry : ListaProductosAfectados.entrySet()) {
-                    fDatos.agregarProductoInvolucrado(accion.getId(), (String) entry.getKey(), (String) entry.getValue());
-                }
-            }
+        if (accion != null) {//          
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            url += "/Views/Acciones/General/ListarAcciones.xhtml?pagina=1&tipo=" + tipoDeAccion;
-
+            url += "/Views/Acciones/General/Editar.xhtml?&id=" + accion.getId();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url);
         } else {
             FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion"));

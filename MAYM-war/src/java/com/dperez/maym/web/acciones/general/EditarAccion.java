@@ -33,7 +33,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +41,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
+import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -112,6 +112,11 @@ public class EditarAccion implements Serializable {
     private Comprobacion ComprobacionEficacia;
 
     private List<Responsable> ListaResponsables;
+
+    // Productos
+    private int IdProductoAfectado;
+    private String NombreProductoAfectado;
+    private String DatosProductoAfectado;
 
     //</editor-fold>
     //<editor-fold desc="Getters">
@@ -254,8 +259,20 @@ public class EditarAccion implements Serializable {
     public List<Responsable> getListaResponsables() {
         return ListaResponsables;
     }
-    //</editor-fold>
 
+    public int getIdProductoAfectado() {
+        return IdProductoAfectado;
+    }
+
+    public String getNombreProductoAfectado() {
+        return NombreProductoAfectado;
+    }
+
+    public String getDatosProductoAfectado() {
+        return DatosProductoAfectado;
+    }
+
+    //</editor-fold>
     //<editor-fold desc="Setters">
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {
         this.IdAccionSeleccionada = IdAccionSeleccionada;
@@ -392,8 +409,20 @@ public class EditarAccion implements Serializable {
     public void setListaResponsables(List<Responsable> ListaResponsables) {
         this.ListaResponsables = ListaResponsables;
     }
-    //</editor-fold>
 
+    public void setIdProductoAfectado(int IdProductoAfectado) {
+        this.IdProductoAfectado = IdProductoAfectado;
+    }
+
+    public void setNombreProductoAfectado(String NombreProductoAfectado) {
+        this.NombreProductoAfectado = NombreProductoAfectado;
+    }
+
+    public void setDatosProductoAfectado(String DatosProductoAfectado) {
+        this.DatosProductoAfectado = DatosProductoAfectado;
+    }
+
+    //</editor-fold>
     //<editor-fold desc="Metodos">
     /**
      * Carga de propiedades al inicio
@@ -415,23 +444,20 @@ public class EditarAccion implements Serializable {
         };
 
         if (IdAccionSeleccionada != 0) {
-            ProductoInvolucrado productoInvolucrado = context.getApplication().evaluateExpressionGet(context, "#{productoInvolucrado}", ProductoInvolucrado.class);
-            productoInvolucrado.setIdAccionSeleccionada(IdAccionSeleccionada);
-
             AccionSeleccionada = fLectura.GetAccion(IdAccionSeleccionada);
             tipoDeAccion = TipoAccion.valueOf(AccionSeleccionada.getClass().getSimpleName().toUpperCase());
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
             Referencias = AccionSeleccionada.getReferencias();
             AnalisisCausa = AccionSeleccionada.getAnalisisCausa();
+            ListaProductosAfectados = AccionSeleccionada.getProductosInvolucrados();
 
             //  Codificaciones
             ListaCodificaciones = fLectura.listarCodificaciones().stream()
                     .sorted()
                     .collect(Collectors.toList());
-            if (AccionSeleccionada.getCodificacionAccion() != null) {
-                CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
-            }
+
+            CodificacionSeleccionada = AccionSeleccionada.getCodificacionAccion().getId();
 
             //  Detecciones
             modalDetecciones = context.getApplication().evaluateExpressionGet(context, "#{modalDetecciones}", ModalDetecciones.class);
@@ -485,6 +511,14 @@ public class EditarAccion implements Serializable {
         }
     }
 
+    private void actualizarListaProductos(){
+         Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+        if (!accionSeguida.getProductosInvolucrados().isEmpty()) {
+            ListaProductosAfectados = accionSeguida.getProductosInvolucrados();            
+        }
+    }
+    
+    
     /**
      * Actualiza la lista de detecciones segun la seleccion de tipo de
      * deteccion.
@@ -516,10 +550,13 @@ public class EditarAccion implements Serializable {
                 if (!datosAdjunto[0].isEmpty()) {
                     TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
                     String extension = datosAdjunto[1];
-                    switch(extension.toLowerCase().trim()){
-                        case "jpeg", "jpg", "png", "gif" -> tipoAdjunto = TipoAdjunto.IMAGEN;
-                        case "mp4", "m4a", "m4b" -> tipoAdjunto = TipoAdjunto.VIDEO;
-                        default -> tipoAdjunto = tipoAdjunto.DOCUMENTO;
+                    switch (extension.toLowerCase().trim()) {
+                        case "jpeg", "jpg", "png", "gif" ->
+                            tipoAdjunto = TipoAdjunto.IMAGEN;
+                        case "mp4", "m4a", "m4b" ->
+                            tipoAdjunto = TipoAdjunto.VIDEO;
+                        default ->
+                            tipoAdjunto = tipoAdjunto.DOCUMENTO;
                     }
                     if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
                         actualizarListaAdjuntos();
@@ -650,6 +687,90 @@ public class EditarAccion implements Serializable {
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/Views/Acciones/General/ListarAcciones.xhtml?tipo=" + tipoDeAccion);
         }
+    }
+
+    /**
+     * Agrega un nuevo producto afectado a la lista de productos afectados para
+     * ser persistidos durante la creacion de la accion correctiva. Si el nombre
+     * del producto ya existe se sustituye Si el nombre o el datos estan vacios
+     * no se crea y se muestra el mensaje correspondiente. PRE: debe existir una
+     * accion correctiva ya creada
+     */
+    public void nuevoProductoAfectado() {
+        if (NombreProductoAfectado != null && DatosProductoAfectado != null) {
+            if (NombreProductoAfectado.isEmpty() || DatosProductoAfectado.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_FATAL, "No se pudo agregar producto", "No se pudo agregar producto"));
+                FacesContext.getCurrentInstance().renderResponse();
+            } else {
+                if (fDatos.agregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado) > 0) {
+                    actualizarListaProductos();
+                    limpiarModalProducto();
+                    FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_nuevo_producto", new FacesMessage(SEVERITY_INFO, "El producto fue agregado.", "El producto fue agregado."));
+                    FacesContext.getCurrentInstance().renderResponse();
+                }
+            }
+        }
+    }
+
+    /**
+     * Carga los datos del producto en los campos del formulario.Lo remueve de
+     * la lista.
+     *
+     * @param idProducto
+     */
+    public void cargarDatosProducto(int idProducto) {
+        IdProductoAfectado = idProducto;
+        Producto prod = ListaProductosAfectados.stream()
+                .filter(p -> p.getId() == idProducto)
+                .findFirst()
+                .orElse(null);
+        if (prod != null) {
+            this.NombreProductoAfectado = prod.getNombre();
+            this.DatosProductoAfectado = prod.getDatos();
+        }
+    }
+
+    /**
+     * Guarda los datos del producto de los campos del formulario. Remueve de la
+     * lista los datos del producto anterior. PRE: debe existir una accion
+     * correctiva ya creada
+     */
+    public void guardarCambiosProducto() {
+        Producto prod = ListaProductosAfectados.stream()
+                .filter(p -> p.getId() == IdProductoAfectado)
+                .findFirst()
+                .orElse(null);
+        if (prod != null) {
+            if (!NombreProductoAfectado.equals(prod.getNombre()) || !DatosProductoAfectado.equals(prod.getDatos())) {
+                if (fDatos.agregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado) > 0) {                   
+                    limpiarModalProducto();
+                    // remover producto anterior
+                    fDatos.removerProductoInvolucrado(IdAccionSeleccionada, prod.getId());
+                    actualizarListaProductos();
+                    FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue guardado.", "El producto fue guardado."));
+                    FacesContext.getCurrentInstance().renderResponse();
+                }
+            } else {
+                FacesContext.getCurrentInstance().renderResponse();
+            }
+        }
+    }
+
+    public void quitarProductoInvolucrado(int idProducto) {
+        if (fDatos.removerProductoInvolucrado(IdAccionSeleccionada, idProducto) == IdAccionSeleccionada) {
+            actualizarListaProductos();
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_INFO, "El producto fue quitado.", "El producto fue quitado."));
+            FacesContext.getCurrentInstance().renderResponse();
+        } else {
+            FacesContext.getCurrentInstance().addMessage("form_accion_modal:btn_editar_producto", new FacesMessage(SEVERITY_FATAL, "El producto no fue quitado.", "El producto no fue quitado."));
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+
+    public void limpiarModalProducto() {
+        this.NombreProductoAfectado = new String();
+        this.DatosProductoAfectado = new String();
+        this.IdProductoAfectado = 0;
     }
     //</editor-fold>
 }

@@ -6,6 +6,7 @@
 package com.dperez.maymweb.modelo.acciones;
 
 import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,8 +22,8 @@ public class Correctiva extends Accion implements Serializable {
     public Correctiva() {
     }
 
-    public Correctiva(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion) {
-        super(fechaDeteccion, descripcion, referencias, area, deteccion);        
+    public Correctiva(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion) {
+        super(fechaDeteccion, descripcion, referencias, area, deteccion, codificacion);        
     }
 
     

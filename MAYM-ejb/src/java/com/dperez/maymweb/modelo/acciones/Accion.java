@@ -100,7 +100,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.productosInvolucrados = new ArrayList<>();
     }
     
-    public Accion(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion) {
+    public Accion(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion) {
         this.estadoDeAccion = Estado.PENDIENTE;
         this.fechaDeteccion = fechaDeteccion;
         this.descripcion = descripcion;
@@ -109,6 +109,7 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.productosInvolucrados = new ArrayList<>();
         this.areaAccion = area;
         this.deteccionAccion = deteccion;
+        this.codificacionAccion = codificacion;
     }
     
     // Getters

@@ -35,13 +35,15 @@ public class FacadeDatos {
      * @param tipoAccion
      * @param fechaDeteccion
      * @param descripcion
+     * @param referencias
      * @param idAreaSector
      * @param idDeteccion
+     * @param idCodificacion
      * @return Null: si no se creo.
      */
     public Accion nuevaAccion(TipoAccion tipoAccion, Date fechaDeteccion, String descripcion,String referencias,
-            int idAreaSector, int idDeteccion){
-        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, referencias, idAreaSector, idDeteccion);
+            int idAreaSector, int idDeteccion, int idCodificacion){
+        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, referencias, idAreaSector, idDeteccion, idCodificacion);
     }
     
     /**

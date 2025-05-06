@@ -12,7 +12,7 @@
         <div class="container-fluid" style="padding: 1%">
             <h:form id="form_accion" enctype="multipart/form-data">
                 <div class="row">
-                    
+
                     <div class="col-sm-12">
                         <!-- Estado -->
                         <div class="panel panel-default">
@@ -119,9 +119,21 @@
                             <h:inputTextarea class="form-control" id="referencias" p:placeholder="Referencias al requisito o especificación."
                                              value="#{editarAccion.referencias}" required="false" />
                         </div>   
+                        <div class="form-group">
+                            <h:panelGroup id="panel_codificaciones" >
+                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                                <h:selectOneMenu id="codificacion" class="form-control" value="#{editarAccion.codificacionSeleccionada}">
+                                    <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                    <c:forEach items="#{editarAccion.listaCodificaciones}" var="codificacion">
+                                        <f:selectItem itemLabel="#{codificacion.nombre}" itemValue="#{codificacion.id}" />
+                                    </c:forEach>
+                                    <f:ajax execute="@this"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                        </div>
                         <h:panelGroup id="panel_producto_afectado">
                             <c:choose>
-                                <c:when test="#{empty productoInvolucrado.listaProductosAfectados}">
+                                <c:when test="#{empty editarAccion.listaProductosAfectados}">
                                     <div class="form-group">
                                         <strong><label for="producto_afectado">Hay Producto Involucrado?</label></strong>
                                         No
@@ -156,17 +168,17 @@
                                                     </tr>                                                
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach items="#{editarAccion.accionSeleccionada.productosInvolucrados}" var="producto">
+                                                    <c:forEach items="#{editarAccion.listaProductosAfectados}" var="producto">
                                                         <tr>
                                                             <td>#{producto.nombre}</td>
                                                             <td>#{producto.datos}</td>
                                                             <td><div class="btn-group">
                                                                     <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
-                                                                                   action="#{productoInvolucrado.cargarDatosProducto(producto.id)}">
+                                                                                   action="#{editarAccion.cargarDatosProducto(producto.id)}">
                                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                                         <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
                                                                     </h:commandLink>
-                                                                    <h:commandLink class="btn btn-danger"
+                                                                    <h:commandLink class="btn btn-danger" action="#{editarAccion.quitarProductoInvolucrado(producto.id)}"
                                                                                    onclick="if (!confirm('Seguro que va a eliminar este Producto? '))
                                                                                                return false">
                                                                         <span class="glyphicon glyphicon-trash"> </span>
@@ -196,18 +208,7 @@
                             <h:inputTextarea class="form-control" id="analisis_causa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
                                              value="#{editarAccion.analisisCausa}"/>
                         </div>
-                        <div class="form-group">
-                            <h:panelGroup id="panel_codificaciones" >
-                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
-                                <h:selectOneMenu id="codificacion" class="form-control" value="#{editarAccion.codificacionSeleccionada}">
-                                    <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
-                                    <c:forEach items="#{editarAccion.listaCodificaciones}" var="codificacion">
-                                        <f:selectItem itemLabel="#{codificacion.nombre}" itemValue="#{codificacion.id}" />
-                                    </c:forEach>
-                                    <f:ajax execute="@this"/>
-                                </h:selectOneMenu>
-                            </h:panelGroup>
-                        </div>
+
                     </div>
                 </div>
 
@@ -604,9 +605,6 @@
             <!-- Modal Nueva Deteccion -->
             <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>
 
-            <!-- Modal Producto Involucrado -->
-            <ui:include src="ProductoInvolucrado.xhtml"/>
-
             <!-- Modal Nuevo Archivo Adjunto -->
             <div id="modal_nuevo_adjunto" class="modal fade" style="padding-top: 15%;" role="dialog">
                 <div class="modal-dialog">
@@ -645,7 +643,137 @@
                     </h:panelGroup>
                 </div>
             </div>
-        </h:form>
 
+            <!-- Modal Nuevo Producto Involucrado -->
+            <div id="modal_nuevo_producto" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_producto">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Agregar Nuevo Producto Involucrado</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_nuevo_producto">Nombre</label></strong>
+                                    <h:inputText id="nombre_nuevo_producto" class="form-control" value="#{editarAccion.nombreProductoAfectado}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de producto" p:placeholder="Nombre de Producto." >
+                                        <f:ajax execute="@this" event="change" render="panel_modal_producto" />
+                                    </h:inputText>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="datos_nuevo_producto">Datos Adicionales</label></strong>
+                                    <h:inputText id="datos_nuevo_producto" class="form-control" value="#{editarAccion.datosProductoAfectado}"
+                                                 required="true" requiredMessage="Se deben ingresar datos adicionales" p:placeholder="Datos de Producto." >
+                                        <f:ajax execute="@this" event="change" render="panel_modal_producto" />
+                                    </h:inputText>
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_producto">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_nuevo_producto" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="datos_nuevo_producto" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_nuevo_producto" class="msj_info"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <c:choose>
+                                            <c:when test="#{editarAccion.nombreProductoAfectado == '' || editarAccion.datosProductoAfectado == '' and
+                                                            editarAccion.nombreProductoAfectado == null || editarAccion.datosProductoAfectado == null}">
+                                                <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" title="Nombre y Datos no pueden estar vacios." value="Guardar" disabled="true" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h:commandButton id="btn_nuevo_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccion.nuevoProductoAfectado()}" >
+                                                    <f:ajax onevent="indicador" />
+                                                    <f:ajax render="panel_mensajes_modal_producto" />
+                                                    <f:ajax render="form_accion:panel_producto_afectado" />                                            
+                                                </h:commandButton>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" action="#{editarAccion.limpiarModalProducto()}" >
+                                            <f:ajax render="panel_mensajes_modal_producto" />
+                                            <f:ajax render="form_accion:panel_producto_afectado" /> 
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+
+            <!-- Modal Editar Producto Involucrado -->
+            <div id="modal_editar_producto" class="modal fade" style="padding-top: 15%;" role="dialog">
+                <div class="modal-dialog">
+                    <h:panelGroup id="panel_modal_editar_producto">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: gray; color: white;">
+                                <h4 class="modal-title">Editar Producto Involucrado</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <strong><label for="nombre_editar_producto">Nombre</label></strong>
+                                    <h:inputText id="nombre_editar_producto" class="form-control" value="#{editarAccion.nombreProductoAfectado}" 
+                                                 required="true" requiredMessage="Se debe ingresar nombre de producto" p:placeholder="Nombre de Producto." >
+                                        <f:ajax execute="@this" event="change" render="panel_editar_modal_producto" />
+                                    </h:inputText>
+                                </div>
+                                <div class="form-group">
+                                    <strong><label for="datos_editar_producto">Datos Adicionales</label></strong>
+                                    <h:inputText id="datos_editar_producto" class="form-control" value="#{editarAccion.datosProductoAfectado}"
+                                                 required="true" requiredMessage="Se deben ingresar datos adicionales" p:placeholder="Datos de Producto." >
+                                        <f:ajax execute="@this" event="change" render="panel_editar_modal_producto" />
+                                    </h:inputText>
+                                </div>
+                                <h:panelGroup id="panel_mensajes_modal_editar_producto">
+                                    <div class="form-group-sm">
+                                        <h:message for="nombre_editar_producto" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="datos_editar_producto" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="btn_editar_producto" class="msj_info"/>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-sm-6" >
+                                        <c:choose>
+                                            <c:when test="#{editarAccion.nombreProductoAfectado == '' || editarAccion.datosProductoAfectado == '' and
+                                                            editarAccion.nombreProductoAfectado == null || editarAccion.datosProductoAfectado == null}">
+                                                <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" title="Nombre y Datos no pueden estar vacios." value="Guardar" disabled="true" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h:commandButton id="btn_editar_producto" style="width: 99%;" class="btn btn-primary" value="Guardar" action="#{editarAccion.guardarCambiosProducto()}" >
+                                                    <f:ajax onevent="indicador" />
+                                                    <f:ajax render="form_accion:panel_producto_afectado" />                                                        
+                                                    <f:ajax render="panel_mensajes_modal_editar_producto" />
+                                                </h:commandButton>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h:commandButton  class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar" action="#{editarAccion.limpiarModalProducto()}" >
+                                            <f:ajax render="panel_modal_editar_producto panel_mensajes_modal_editar_producto" />
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

@@ -89,69 +89,18 @@
                                              required="false" />
                         </div>
                         
-                        <h:panelGroup id="panel_producto_afectado">
-                            <c:choose>
-                                <c:when test="#{empty productoInvolucrado.listaProductosAfectados}">
-                                    <div class="form-group">
-                                        <strong><label for="producto_afectado">Hay Producto Involucrado?</label></strong>
-                                        No
-                                    </div>
-                                    <div class="form-group">
-                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
-                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
-                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
-                                        </h:commandLink> 
-                                    </div>   
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="form-group">
-                                        <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
-                                        Si
-                                    </div>
-                                    <div class="form-group">
-                                        <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_nuevo_producto" >
-                                            <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Agregar Producto</span>
-                                            <f:ajax delay="100" render="form_accion_modal:modal_nuevo_producto" />
-                                        </h:commandLink> 
-                                    </div>  
-                                    
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre del Producto:</th>
-                                                        <th>Datos del Producto:</th>
-                                                        <th></th>
-                                                    </tr>                                                
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach items="#{productoInvolucrado.listaProductosAfectados}" var="producto">
-                                                        <tr>
-                                                            <td>#{producto.nombre}</td>
-                                                            <td>#{producto.datos}</td>
-                                                            <td><div class="btn-group">
-                                                                    <h:commandLink class="btn btn-primary"  p:data-toggle="modal" p:data-target="#modal_editar_producto" 
-                                                                                   action="#{productoInvolucrado.cargarDatosProducto(producto.id)}">
-                                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                                        <f:ajax delay="400" render="form_accion_modal:panel_modal_editar_producto" />
-                                                                    </h:commandLink>
-                                                                    <h:commandLink class="btn btn-danger" action="#{productoInvolucrado.quitarProductoGenerico(producto.id)}" 
-                                                                                   onclick="if (! confirm('Seguro que va a eliminar este Producto? ')) return false">
-                                                                        <span class="glyphicon glyphicon-trash"> </span>
-                                                                        <f:ajax render="panel_producto_afectado panel_mensajes"/>
-                                                                    </h:commandLink>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>  
-                        </h:panelGroup>                       
+                        <div class="form-group">
+                            <h:panelGroup id="panel_codificaciones" >
+                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                                <h:selectOneMenu id="codificacion" class="form-control" value="#{crearAccion.codificacionSeleccionada}">
+                                    <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                    <c:forEach items="#{crearAccion.listaCodificaciones}" var="codificacion">
+                                        <f:selectItem itemLabel="#{codificacion.nombre}" itemValue="#{codificacion.id}" />
+                                    </c:forEach>
+                                    <f:ajax execute="@this"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                        </div>               
                     </div>
                 </div>   
                 
@@ -189,10 +138,8 @@
             </h:form>
             <h:form id="form_accion_modal">
                 <!-- Modal Nueva Deteccion -->
-                <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>    
-                
-                <!-- Panel de Producto Involucrado -->
-                <ui:include src="ProductoInvolucrado.xhtml"/>                
+                <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>   
+                          
             </h:form>
         </div>
     </ui:define>

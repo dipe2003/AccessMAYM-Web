@@ -13,6 +13,7 @@ import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.acciones.Estado;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
+import com.dperez.maymweb.modelo.acciones.adjunto.Adjunto;
 import com.dperez.maymweb.modelo.producto.Producto;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -65,6 +66,8 @@ public class VerAccion implements Serializable {
     
     private Estado Estado;
     
+    private List<Adjunto> ListaAdjuntos;
+    
     //<editor-fold desc="Getters">
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
@@ -94,6 +97,10 @@ public class VerAccion implements Serializable {
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     public TipoAccion getTipoDeAccion(){return this.tipoDeAccion;}
+
+    public List<Adjunto> getListaAdjuntos() {
+        return ListaAdjuntos;
+    }
     
     //</editor-fold>
     
@@ -125,6 +132,7 @@ public class VerAccion implements Serializable {
     public void setComprobacionImplementacion(Comprobacion ComprobacionImplementacion) {this.ComprobacionImplementacion = ComprobacionImplementacion;}
     public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
     public void setTipoDeAccion(TipoAccion tipo){this.tipoDeAccion = tipo;}
+    public void setListaAdjuntos(List<Adjunto> ListaAdjuntos) {this.ListaAdjuntos = ListaAdjuntos;}    
     //</editor-fold>
     
     //<editor-fold desc="Metodos">
@@ -162,7 +170,7 @@ public class VerAccion implements Serializable {
             if(!(AccionSeleccionada.getProductosInvolucrados().isEmpty())){
                 ListaProductos = AccionSeleccionada.getProductosInvolucrados();
             }
-
+            ListaAdjuntos = AccionSeleccionada.getAdjuntosDeAccion();
         }
     }
     //</editor-fold>

@@ -330,10 +330,15 @@
 
                 <!-- Adjuntos -->
                 <div class="panel panel-primary">
-                    <div class="panel-heading" >Archivos Adjuntos / Anexos:</div>
+                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
                     <div class="panel-body">
                         <c:choose>
-                            <c:when test="#{not empty verAccion.accionSeleccionada.adjuntosDeAccion}">
+                            <c:when test="#{empty editarAccion.mapAdjuntos}">
+                                <div class="alert alert-info">
+                                    <strong>Info!</strong> No se han cargado datos adjuntos.
+                                </div>                                   
+                            </c:when>
+                            <c:otherwise>                                   
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="table-responsive-sm">
@@ -342,33 +347,34 @@
                                                     <tr>
                                                         <th width="30%">Titulo del Adjunto:</th>
                                                         <th width="60%">Adjunto:</th>
+                                                        <th width="20%"></th>
                                                     </tr>                                                
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach items="#{verAccion.accionSeleccionada.adjuntosDeAccion}" var="adjunto">
+                                                    <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
                                                         <tr>
                                                             <td>#{adjunto.titulo}</td>
-                                                            <td>                                                       
+                                                            <td>
                                                                 <c:choose>
                                                                     <c:when test="#{adjunto.tipoDeAdjunto == 'IMAGEN'}" >
                                                                         <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
                                                                     </c:when>
+                                                                    <c:when test="#{adjunto.tipoDeAdjunto == 'VIDEO'}">
+                                                                        <video controls="true" width="250">
+                                                                            <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
+                                                                        </video>
+                                                                    </c:when>
                                                                     <c:otherwise>
-                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Documento</a>
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
                                                                     </c:otherwise> 
-                                                                </c:choose> 
-                                                            </td>
+                                                                </c:choose>                                                            
+                                                            </td>                                                                
                                                         </tr>
                                                     </c:forEach>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="alert alert-info">
-                                    <strong>Info!</strong> No se han agregado archivos adjuntos.
                                 </div>
                             </c:otherwise>
                         </c:choose>

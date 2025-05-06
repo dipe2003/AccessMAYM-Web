@@ -16,6 +16,7 @@ import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
 import com.dperez.maymweb.modelo.acciones.actividad.TipoActividad;
 import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import com.dperez.maymweb.modelo.producto.Producto;
@@ -35,16 +36,16 @@ public class ControladorRegistro {
     private final RepositorioPersistencia<Deteccion> repoDeteccion;
     private final RepositorioPersistencia<Responsable> repoResponsable;
     private final RepositorioPersistencia<Fortaleza> repoFortalezas;
-    
-    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
+    private final RepositorioPersistencia<Codificacion> repoCodificaciones;     
     
     //  Constructores
     public ControladorRegistro(){
-        repoAccion = fabricaRepositorio.getRespositorioAcciones();
-        repoArea = fabricaRepositorio.getRepositorioAreas();
-        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
-        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
-        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
+        repoAccion = FabricaRepositorio.getRespositorioAcciones();
+        repoArea = FabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = FabricaRepositorio.getRepositorioDetecciones();
+        repoResponsable = FabricaRepositorio.getRepositorioResponsables();
+        repoFortalezas = FabricaRepositorio.getRepositorioFortalezas();
+        repoCodificaciones = FabricaRepositorio.getRepositorioCodificaciones();
     }
     
     /**
@@ -56,17 +57,18 @@ public class ControladorRegistro {
      * @param idDeteccion
      * @return Null: si no se creo.
      */
-    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, String referencias, int idArea, int idDeteccion){
+    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, String referencias, int idArea, int idDeteccion, int idCodificacion){
         Area area = repoArea.find(idArea);
         Deteccion deteccion = repoDeteccion.find(idDeteccion);
+        Codificacion codificacion = repoCodificaciones.find(idCodificacion);
         
         Accion accion;
         switch(tipo){
-            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, referencias, area, deteccion);
+            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion);
             
-            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, referencias, area, deteccion);
+            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion);
             
-            default -> accion = new Preventiva(fechaDeteccion , descripcion, referencias,area, deteccion);
+            default -> accion = new Preventiva(fechaDeteccion , descripcion, referencias,area, deteccion, codificacion);
         }
         
         return repoAccion.create(accion);
@@ -82,8 +84,12 @@ public class ControladorRegistro {
     public int agregarProductoInvolucrado(int idAccion, String nombreProducto, String datosProducto){
         Accion accion =  repoAccion.find(idAccion);
         Producto producto = accion.crearProducto(nombreProducto, datosProducto);
-        repoAccion.update(accion);
-        return producto.getId();
+        repoAccion.update(accion);       
+        return accion.getProductosInvolucrados()
+                .stream()
+                .filter(p->p.getNombre().equals(nombreProducto))
+                .findFirst()
+                .orElse(producto).getId();
     }
     
     /**
