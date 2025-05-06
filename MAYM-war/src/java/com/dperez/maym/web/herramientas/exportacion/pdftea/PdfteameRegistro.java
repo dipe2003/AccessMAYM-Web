@@ -51,6 +51,7 @@ public class PdfteameRegistro implements Serializable {
     private final Font fuenteTituloSeccion = FontFactory.getFont("arialbi", 10, Font.BOLD, new Color(0, 0, 0));
     private final Font fuenteTitulosCelda = FontFactory.getFont("arialbi", 9, Font.BOLD, new Color(0, 0, 0));
     private final Font fuenteContenidoCelda = FontFactory.getFont("arialbi", 8, Font.NORMAL, new Color(0, 0, 0));
+    private final Color colorFilaImpar = new Color(245,245,245);
 
     public PdfteameRegistro(Empresa empresa) {
         this.empresa = empresa;
@@ -290,15 +291,15 @@ public class PdfteameRegistro implements Serializable {
         celda.setColspan(colspan);
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-        
+
         Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
-        
+
         celda.setBackgroundColor(color);
         Phrase texto = new Phrase();
-        
+
         color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
         fuenteTitulosCelda.setColor(color);
-        
+
         texto.setFont(fuenteTitulosCelda);
         texto.add(textoTitulo);
         celda.setPhrase(texto);
@@ -311,7 +312,7 @@ public class PdfteameRegistro implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         if (colorFondoPar) {
-            celda.setBackgroundColor(new Color(245,245,245));
+            celda.setBackgroundColor(colorFilaImpar);
         }
         celda.setMinimumHeight(25);
         if (minAltura != 0) {
@@ -330,10 +331,10 @@ public class PdfteameRegistro implements Serializable {
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         celda.setMinimumHeight(25);
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(245,245,245));
+            celda.setBackgroundColor(colorFilaImpar);
+        } else {
+            celda.setBackgroundColor(colorCelda);
         }
-        celda.setBackgroundColor(colorCelda);
-
         Phrase texto = new Phrase();
         texto.setFont(fuenteContenidoCelda);
         texto.add(textoContenido);
@@ -344,7 +345,7 @@ public class PdfteameRegistro implements Serializable {
     private PdfPCell CrearCeldaVacia(int colspan, boolean colorFondoImpar) {
         PdfPCell celda = new PdfPCell();
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
+            celda.setBackgroundColor(colorFilaImpar);
         }
         celda.setColspan(colspan);
         celda.setBorderWidthBottom(0);

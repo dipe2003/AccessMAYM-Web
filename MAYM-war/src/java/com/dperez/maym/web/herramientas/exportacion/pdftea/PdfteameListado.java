@@ -46,6 +46,7 @@ public class PdfteameListado implements Serializable {
     // 1 pulgada = 72
     private Document documento = new Document();
     private Empresa empresa;
+    private final Color colorFilaImpar = new Color(245,245,245);
 
     public PdfteameListado(Empresa empresa) {
         this.empresa = empresa;
@@ -117,7 +118,7 @@ public class PdfteameListado implements Serializable {
                     PdfPCell celda = new PdfPCell();
                     celda.setColspan(3);
                     if (impar) {
-                        celda.setBackgroundColor(new Color(216, 226, 242));
+                        celda.setBackgroundColor(colorFilaImpar);
                     }
                     //celda.setBorder(0);
                     celda.addElement(tablaActividades);
@@ -228,7 +229,7 @@ public class PdfteameListado implements Serializable {
                     PdfPCell celda = new PdfPCell();
                     celda.setColspan(3);
                     if (impar) {
-                        celda.setBackgroundColor(new Color(216, 226, 242));
+                        celda.setBackgroundColor(colorFilaImpar);
                     }
 
                     celda.addElement(tablaActividades);
@@ -323,7 +324,7 @@ public class PdfteameListado implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(245,245,245));
+            celda.setBackgroundColor(colorFilaImpar);
         }
 
         Phrase texto = new Phrase();
@@ -339,10 +340,10 @@ public class PdfteameListado implements Serializable {
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
 
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(245,245,245));
+            celda.setBackgroundColor(colorFilaImpar);
+        }else{
+            celda.setBackgroundColor(colorCelda);
         }
-        celda.setBackgroundColor(colorCelda);
-
         Phrase texto = new Phrase();
         texto.setFont(FontFactory.getFont("arialbi", 6, Font.NORMAL, Color.BLACK));
         texto.add(textoContenido);
