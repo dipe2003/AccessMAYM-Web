@@ -91,6 +91,9 @@ public class SeguimientoAccion implements Serializable {
     private String TituloAdjunto;
     private Map<Integer, Adjunto> MapAdjuntos;
     private Part ArchivoAdjunto;
+    private int totalImagenes;
+    private int totalVideos;
+    private int totalOtros;
 
     //</editor-fold>
     //<editor-fold desc="Getters">
@@ -196,6 +199,18 @@ public class SeguimientoAccion implements Serializable {
         return MapAdjuntos;
     }
 
+    public int getTotalImagenes() {
+        return totalImagenes;
+    }
+
+    public int getTotalVideos() {
+        return totalVideos;
+    }
+
+    public int getTotalOtros() {
+        return totalOtros;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Setters">
     public void setIdAccionSeleccionada(int id) {
@@ -294,6 +309,18 @@ public class SeguimientoAccion implements Serializable {
 
     public void setMapAdjuntos(Map<Integer, Adjunto> MapAdjuntos) {
         this.MapAdjuntos = MapAdjuntos;
+    }
+
+    public void setTotalImagenes(int totalImagenes) {
+        this.totalImagenes = totalImagenes;
+    }
+
+    public void setTotalVideos(int totalVideos) {
+        this.totalVideos = totalVideos;
+    }
+
+    public void setTotalOtros(int totalOtros) {
+        this.totalOtros = totalOtros;
     }
 
     //</editor-fold>
@@ -474,6 +501,7 @@ public class SeguimientoAccion implements Serializable {
             List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
             MapAdjuntos = listAdjuntos.stream()
                     .collect(Collectors.toMap(Adjunto::getIda, adjunto -> adjunto));
+            actualizarTotalesAdjuntos();
         }
     }
 
@@ -498,10 +526,13 @@ public class SeguimientoAccion implements Serializable {
                 if (!datosAdjunto[0].isEmpty()) {
                     TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
                     String extension = datosAdjunto[1];
-                    switch(extension.toLowerCase().trim()){
-                        case "jpeg", "jpg", "png", "gif" -> tipoAdjunto = TipoAdjunto.IMAGEN;
-                        case "mp4", "m4a", "m4b" -> tipoAdjunto = TipoAdjunto.VIDEO;
-                        default -> tipoAdjunto = tipoAdjunto.DOCUMENTO;
+                    switch (extension.toLowerCase().trim()) {
+                        case "jpeg", "jpg", "png", "gif" ->
+                            tipoAdjunto = TipoAdjunto.IMAGEN;
+                        case "mp4", "m4a", "m4b" ->
+                            tipoAdjunto = TipoAdjunto.VIDEO;
+                        default ->
+                            tipoAdjunto = tipoAdjunto.DOCUMENTO;
                     }
                     if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
                         actualizarListaAdjuntos();
@@ -525,7 +556,14 @@ public class SeguimientoAccion implements Serializable {
         if ((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto)) != -1) {
             cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
             this.MapAdjuntos.remove(IdAdjunto);
+            actualizarTotalesAdjuntos();
         }
+    }
+
+    private void actualizarTotalesAdjuntos() {
+        totalImagenes = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.IMAGEN).count()).intValue();
+        totalVideos = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.VIDEO).count()).intValue();
+        totalOtros = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.DOCUMENTO).count()).intValue();
     }
     //</editor-fold>
 }

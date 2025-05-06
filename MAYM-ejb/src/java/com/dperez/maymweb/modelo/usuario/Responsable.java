@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
  * 20/11/2019
  */
 @Entity
-public class Responsable implements Serializable{
+public class Responsable implements Serializable, Comparable<Responsable>{
     
     @Id@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -147,6 +147,11 @@ public class Responsable implements Serializable{
     
     public boolean isVigente(){
         return this.fechaBaja == null;
+    }
+
+    @Override
+    public int compareTo(Responsable o) {
+        return this.responsabilidadResponsable.getNombre().compareToIgnoreCase(o.getResponsabilidadResponsable().getNombre());
     }
     
 }

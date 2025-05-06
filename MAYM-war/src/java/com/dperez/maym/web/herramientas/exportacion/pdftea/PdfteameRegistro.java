@@ -49,7 +49,7 @@ public class PdfteameRegistro implements Serializable {
     private Document documento = new Document(PageSize.A4, 17, 19, 72, 18);
 
     private final Font fuenteTituloSeccion = FontFactory.getFont("arialbi", 10, Font.BOLD, new Color(0, 0, 0));
-    private Font fuenteTitulosCelda = FontFactory.getFont("arialbi", 9, Font.BOLD, new Color(0, 0, 0));
+    private final Font fuenteTitulosCelda = FontFactory.getFont("arialbi", 9, Font.BOLD, new Color(0, 0, 0));
     private final Font fuenteContenidoCelda = FontFactory.getFont("arialbi", 8, Font.NORMAL, new Color(0, 0, 0));
 
     public PdfteameRegistro(Empresa empresa) {
@@ -311,7 +311,7 @@ public class PdfteameRegistro implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         if (colorFondoPar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
+            celda.setBackgroundColor(new Color(245,245,245));
         }
         celda.setMinimumHeight(25);
         if (minAltura != 0) {
@@ -330,7 +330,7 @@ public class PdfteameRegistro implements Serializable {
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         celda.setMinimumHeight(25);
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
+            celda.setBackgroundColor(new Color(245,245,245));
         }
         celda.setBackgroundColor(colorCelda);
 

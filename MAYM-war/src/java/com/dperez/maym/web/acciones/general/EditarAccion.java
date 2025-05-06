@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,6 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_FATAL;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -53,7 +53,6 @@ import javax.servlet.http.Part;
 
 @Named
 @ViewScoped
-@ManagedBean
 public class EditarAccion implements Serializable {
 
     private FacadeAdministrador fAdmin;
@@ -84,6 +83,9 @@ public class EditarAccion implements Serializable {
     private String TituloAdjunto;
     private Map<Integer, Adjunto> MapAdjuntos;
     private Part ArchivoAdjunto;
+    private int totalImagenes;
+    private int totalVideos;
+    private int totalOtros;
 
     private TipoDeteccion[] TiposDeteccion;
     private TipoDeteccion TipoDeDeteccionSeleccionada;
@@ -272,6 +274,18 @@ public class EditarAccion implements Serializable {
         return DatosProductoAfectado;
     }
 
+    public int getTotalImagenes() {
+        return totalImagenes;
+    }
+
+    public int getTotalVideos() {
+        return totalVideos;
+    }
+
+    public int getTotalOtros() {
+        return totalOtros;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Setters">
     public void setIdAccionSeleccionada(int IdAccionSeleccionada) {
@@ -422,6 +436,18 @@ public class EditarAccion implements Serializable {
         this.DatosProductoAfectado = DatosProductoAfectado;
     }
 
+    public void setTotalImagenes(int totalImagenes) {
+        this.totalImagenes = totalImagenes;
+    }
+
+    public void setTotalVideos(int totalVideos) {
+        this.totalVideos = totalVideos;
+    }
+
+    public void setTotalOtros(int totalOtros) {
+        this.totalOtros = totalOtros;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Metodos">
     /**
@@ -482,6 +508,7 @@ public class EditarAccion implements Serializable {
             // Comprobaciones
             //  Llenar los responsables
             ListaResponsables = fLectura.listarResponsables(true);
+            ListaResponsables.sort(Comparator.naturalOrder());
 
             ComprobacionImplementacion = AccionSeleccionada.getComprobacionImplementacion();
             ComprobacionEficacia = AccionSeleccionada.getComprobacionEficacia();
@@ -508,17 +535,17 @@ public class EditarAccion implements Serializable {
             List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
             MapAdjuntos = listAdjuntos.stream()
                     .collect(Collectors.toMap(Adjunto::getIda, adjunto -> adjunto));
+             actualizarTotalesAdjuntos();
         }
     }
 
-    private void actualizarListaProductos(){
-         Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+    private void actualizarListaProductos() {
+        Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
         if (!accionSeguida.getProductosInvolucrados().isEmpty()) {
-            ListaProductosAfectados = accionSeguida.getProductosInvolucrados();            
+            ListaProductosAfectados = accionSeguida.getProductosInvolucrados();
         }
     }
-    
-    
+
     /**
      * Actualiza la lista de detecciones segun la seleccion de tipo de
      * deteccion.
@@ -580,6 +607,7 @@ public class EditarAccion implements Serializable {
         if ((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto)) != -1) {
             cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
             this.MapAdjuntos.remove(IdAdjunto);
+            actualizarTotalesAdjuntos();
         }
     }
 
@@ -742,7 +770,7 @@ public class EditarAccion implements Serializable {
                 .orElse(null);
         if (prod != null) {
             if (!NombreProductoAfectado.equals(prod.getNombre()) || !DatosProductoAfectado.equals(prod.getDatos())) {
-                if (fDatos.agregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado) > 0) {                   
+                if (fDatos.agregarProductoInvolucrado(IdAccionSeleccionada, NombreProductoAfectado, DatosProductoAfectado) > 0) {
                     limpiarModalProducto();
                     // remover producto anterior
                     fDatos.removerProductoInvolucrado(IdAccionSeleccionada, prod.getId());
@@ -771,6 +799,12 @@ public class EditarAccion implements Serializable {
         this.NombreProductoAfectado = new String();
         this.DatosProductoAfectado = new String();
         this.IdProductoAfectado = 0;
+    }
+
+    private void actualizarTotalesAdjuntos() {
+        totalImagenes = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.IMAGEN).count()).intValue();
+        totalVideos = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.VIDEO).count()).intValue();
+        totalOtros = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.DOCUMENTO).count()).intValue();
     }
     //</editor-fold>
 }

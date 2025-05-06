@@ -323,7 +323,7 @@ public class PdfteameListado implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
+            celda.setBackgroundColor(new Color(245,245,245));
         }
 
         Phrase texto = new Phrase();
@@ -339,7 +339,7 @@ public class PdfteameListado implements Serializable {
         celda.setHorizontalAlignment(Element.ALIGN_LEFT);
 
         if (colorFondoImpar) {
-            celda.setBackgroundColor(new Color(216, 226, 242));
+            celda.setBackgroundColor(new Color(245,245,245));
         }
         celda.setBackgroundColor(colorCelda);
 

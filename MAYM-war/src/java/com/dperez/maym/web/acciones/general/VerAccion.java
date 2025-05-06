@@ -14,6 +14,7 @@ import com.dperez.maymweb.modelo.acciones.Estado;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.acciones.adjunto.Adjunto;
+import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.producto.Producto;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -67,6 +68,9 @@ public class VerAccion implements Serializable {
     private Estado Estado;
     
     private List<Adjunto> ListaAdjuntos;
+    private int totalImagenes;
+    private int totalVideos;
+    private int totalOtros;
     
     //<editor-fold desc="Getters">
     public Date getFechaDeteccion() {return FechaDeteccion;}
@@ -97,10 +101,12 @@ public class VerAccion implements Serializable {
     public Comprobacion getComprobacionImplementacion() {return ComprobacionImplementacion;}
     public Comprobacion getComprobacionEficacia() {return ComprobacionEficacia;}
     public TipoAccion getTipoDeAccion(){return this.tipoDeAccion;}
-
-    public List<Adjunto> getListaAdjuntos() {
-        return ListaAdjuntos;
-    }
+    
+    public List<Adjunto> getListaAdjuntos() {return ListaAdjuntos;}
+    public int getTotalImagenes() {return totalImagenes;}
+    public int getTotalVideos() {return totalVideos;}
+    public int getTotalOtros() {return totalOtros;}
+    
     
     //</editor-fold>
     
@@ -133,6 +139,11 @@ public class VerAccion implements Serializable {
     public void setComprobacionEficacia(Comprobacion ComprobacionEficacia) {this.ComprobacionEficacia = ComprobacionEficacia;}
     public void setTipoDeAccion(TipoAccion tipo){this.tipoDeAccion = tipo;}
     public void setListaAdjuntos(List<Adjunto> ListaAdjuntos) {this.ListaAdjuntos = ListaAdjuntos;}    
+
+    public void setTotalImagenes(int totalImagenes) {this.totalImagenes = totalImagenes;}
+    public void setTotalVideos(int totalVideos) {this.totalVideos = totalVideos;}
+    public void setTotalOtros(int totalOtros) {this.totalOtros = totalOtros;}
+    
     //</editor-fold>
     
     //<editor-fold desc="Metodos">
@@ -171,7 +182,11 @@ public class VerAccion implements Serializable {
                 ListaProductos = AccionSeleccionada.getProductosInvolucrados();
             }
             ListaAdjuntos = AccionSeleccionada.getAdjuntosDeAccion();
+            totalImagenes = Long.valueOf(ListaAdjuntos.stream().filter(a->a.getTipoDeAdjunto() == TipoAdjunto.IMAGEN).count()).intValue();
+            totalVideos = Long.valueOf(ListaAdjuntos.stream().filter(a->a.getTipoDeAdjunto() == TipoAdjunto.VIDEO).count()).intValue();
+            totalOtros = Long.valueOf(ListaAdjuntos.stream().filter(a->a.getTipoDeAdjunto() == TipoAdjunto.DOCUMENTO).count()).intValue();
         }
     }
+    
     //</editor-fold>
 }
