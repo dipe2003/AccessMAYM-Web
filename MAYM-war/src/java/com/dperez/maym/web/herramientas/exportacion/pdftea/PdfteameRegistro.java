@@ -303,6 +303,7 @@ public class PdfteameRegistro implements Serializable {
         texto.setFont(fuenteTitulosCelda);
         texto.add(textoTitulo);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -322,6 +323,7 @@ public class PdfteameRegistro implements Serializable {
         texto.setFont(fuenteContenidoCelda);
         texto.add(textoContenido);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -339,6 +341,7 @@ public class PdfteameRegistro implements Serializable {
         texto.setFont(fuenteContenidoCelda);
         texto.add(textoContenido);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -367,6 +370,7 @@ public class PdfteameRegistro implements Serializable {
         tabla.getDefaultCell().setBorderWidthTop(1);
         tabla.getDefaultCell().setBorderWidthRight(1);
         tabla.getDefaultCell().setBorderWidthLeft(1);
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return tabla;
     }
 

@@ -4,6 +4,8 @@
  */
 package com.dperez.maym.web.configuraciones;
 
+import java.awt.Color;
+
 /**
  *
  * @author dipe2
@@ -82,6 +84,11 @@ public class OpcionesSistema {
 
     public void setColorBoton(String colorBoton) {
         this.colorBoton = colorBoton;
+    }
+    
+    public String getColorBrighter(String color){
+        Color colorBrighter = Color.decode(color).brighter();
+        return String.format("#%02x%02x%02x", colorBrighter.getRed(), colorBrighter.getGreen(), colorBrighter.getBlue()); 
     }
 
 }

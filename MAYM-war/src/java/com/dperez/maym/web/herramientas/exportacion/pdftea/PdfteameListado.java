@@ -106,6 +106,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getDeteccionAccion().getNombre(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
+                tabla.getDefaultCell().setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                 // Celda ACTIVIDADES
                 if (!a.getActividadesDeAccion().isEmpty()) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{17, 7, 4});
@@ -120,6 +121,7 @@ public class PdfteameListado implements Serializable {
                     if (impar) {
                         celda.setBackgroundColor(colorFilaImpar);
                     }
+                    celda.setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                     //celda.setBorder(0);
                     celda.addElement(tablaActividades);
                     tabla.addCell(celda);
@@ -142,7 +144,8 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(fechaEficacia, impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getCodificacionAccion().getNombre(), impar, 0));
                 Color colorFondo = ObtnerColor(a.getEstadoDeAccion());
-                tabla.addCell(CrearCeldaContenido(a.getEstadoDeAccion().getDescripcion(), impar, colorFondo));
+                // se llama con false para asegurarse que no se cambie el color obtenido para el estado
+                tabla.addCell(CrearCeldaContenido(a.getEstadoDeAccion().getDescripcion(), false, colorFondo));
                 contador++;
                 impar = contador % 2 == 0;
             }
@@ -208,6 +211,7 @@ public class PdfteameListado implements Serializable {
             tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
             tabla.addCell(CrearCeldaTitulo("Tipo", 0));
 
+            tabla.getDefaultCell().setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
             // FILAS RESTANTES - Datos de Acciones
             int contador = 0;
             boolean impar = true;
@@ -231,12 +235,12 @@ public class PdfteameListado implements Serializable {
                     if (impar) {
                         celda.setBackgroundColor(colorFilaImpar);
                     }
-
+                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                     celda.addElement(tablaActividades);
-                    tabla.addCell(celda);
+                    tabla.addCell(celda);                    
                     tabla.setComplete(true);
                 } else {
-                    tabla.addCell(CrearCeldaContenido("Sin Definir", impar, 3));
+                    tabla.addCell(CrearCeldaContenido("Sin Definir", impar, 3));                    
                     tabla.setComplete(true);
                 }
 
@@ -252,12 +256,11 @@ public class PdfteameListado implements Serializable {
                 }
                 tabla.addCell(CrearCeldaContenido(fechaEficacia, impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getCodificacionAccion().getNombre(), impar, 0));
-
                 tabla.addCell(CrearCeldaContenido(a.getClass().getSimpleName(), impar, 0));
                 contador++;
                 impar = contador % 2 == 0;
             }
-
+            
             tabla.completeRow();
             documento.add(tabla);
 
@@ -315,6 +318,7 @@ public class PdfteameListado implements Serializable {
         texto.setFont(FontFactory.getFont("arialbi", 8, Font.BOLD, color));
         texto.add(textoTitulo);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -331,6 +335,7 @@ public class PdfteameListado implements Serializable {
         texto.setFont(FontFactory.getFont("arialbi", 6, Font.NORMAL, Color.BLACK));
         texto.add(textoContenido);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -348,6 +353,7 @@ public class PdfteameListado implements Serializable {
         texto.setFont(FontFactory.getFont("arialbi", 6, Font.NORMAL, Color.BLACK));
         texto.add(textoContenido);
         celda.setPhrase(texto);
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -361,6 +367,7 @@ public class PdfteameListado implements Serializable {
         tabla.getDefaultCell().setBorderWidthTop(1);
         tabla.getDefaultCell().setBorderWidthRight(1);
         tabla.getDefaultCell().setBorderWidthLeft(1);
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return tabla;
     }
 
@@ -375,6 +382,7 @@ public class PdfteameListado implements Serializable {
         tabla.getDefaultCell().setBorderWidthLeft(0);
         tabla.getDefaultCell().setBorder(0);
         tabla.getDefaultCell().setPadding(0);
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
         return tabla;
     }
 

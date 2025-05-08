@@ -97,7 +97,8 @@ public class DatosFiltros implements Serializable {
      */
     public List<Accion> FiltrarAccionesPorFechas(List<Accion> acciones, Date fechaDesde, Date fechaHasta) {
         return acciones.stream()
-                .filter((accion) -> (accion.getFechaDeteccion().after(fechaDesde) && accion.getFechaDeteccion().before(fechaHasta)))
+                .filter((accion) -> ((accion.getFechaDeteccion().equals(fechaDesde) || accion.getFechaDeteccion().after(fechaDesde)) && 
+                        (accion.getFechaDeteccion().equals(fechaHasta) || accion.getFechaDeteccion().before(fechaHasta))))
                 .sorted()
                 .collect(Collectors.toList());
     }

@@ -696,31 +696,16 @@ public class ListarAcciones implements Serializable {
         ListaAcciones.sort(Comparator.reverseOrder());
     }
 
-    public void pdftea() {
+    public void pdfteaListado() {
         PdfteameListado pdf = new PdfteameListado(sesionUsuario.getEmpresa());
-        List<Accion> accionesFiltradas = ListaCompletaAcciones;
-        for (String filtro : filtrosAplicados) {
-            switch (filtro) {
-                case "estados" ->
-                    accionesFiltradas = filtrarPorEstado(accionesFiltradas);
-                case "areas" ->
-                    accionesFiltradas = filtrarPorArea(accionesFiltradas);
-                case "codificaciones" ->
-                    accionesFiltradas = filtrarPorCodificacion(accionesFiltradas);
-                case "detecciones" ->
-                    accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
-                case "busqueda" ->
-                    accionesFiltradas = filtrarTexto(accionesFiltradas);
-                default ->
-                    accionesFiltradas = ListaCompletaAcciones;
-            }
-        }
+        List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
+        
         StringBuilder titulo = new StringBuilder("Listado de ");
         switch (tipoDeAccion) {
             case CORRECTIVA ->
-                titulo.append("acciones correctivas.");
+                titulo.append("acciones correctivas");
             case PREVENTIVA ->
-                titulo.append("acciones Preventivas.");
+                titulo.append("acciones Preventivas");
             case MEJORA ->
                 titulo.append("Oportunidades de mejora");
         }
@@ -772,23 +757,7 @@ public class ListarAcciones implements Serializable {
 
     public void excelsea() {
         Excelsea excel = new Excelsea();
-        List<Accion> accionesFiltradas = ListaCompletaAcciones;
-        for (String filtro : filtrosAplicados) {
-            switch (filtro) {
-                case "estados" ->
-                    accionesFiltradas = filtrarPorEstado(accionesFiltradas);
-                case "areas" ->
-                    accionesFiltradas = filtrarPorArea(accionesFiltradas);
-                case "codificaciones" ->
-                    accionesFiltradas = filtrarPorCodificacion(accionesFiltradas);
-                case "detecciones" ->
-                    accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
-                case "busqueda" ->
-                    accionesFiltradas = filtrarTexto(accionesFiltradas);
-                default ->
-                    accionesFiltradas = ListaCompletaAcciones;
-            }
-        }
+        List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
         StringBuilder titulo = new StringBuilder("Listado de ");
         switch (tipoDeAccion) {
             case CORRECTIVA ->
@@ -801,9 +770,8 @@ public class ListarAcciones implements Serializable {
 
         excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), false);
     }
-
-    public void excelseaConActividades() {
-        Excelsea excel = new Excelsea();
+    
+    private List<Accion> obtenerAccionesParaExportar(){
         List<Accion> accionesFiltradas = ListaCompletaAcciones;
         for (String filtro : filtrosAplicados) {
             switch (filtro) {
@@ -817,10 +785,19 @@ public class ListarAcciones implements Serializable {
                     accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
                 case "busqueda" ->
                     accionesFiltradas = filtrarTexto(accionesFiltradas);
+                case "fechas"->
+                    accionesFiltradas = filtrarPorFechas(accionesFiltradas);
                 default ->
                     accionesFiltradas = ListaCompletaAcciones;
             }
         }
+        return accionesFiltradas;
+    }
+
+    public void excelseaConActividades() {
+        Excelsea excel = new Excelsea();
+        List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
+        
         StringBuilder titulo = new StringBuilder("Listado de ");
         switch (tipoDeAccion) {
             case CORRECTIVA ->

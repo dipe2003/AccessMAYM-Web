@@ -38,6 +38,11 @@
                 background-color: #{sesionUsuario.empresa.opcionesSistema.colorPanelTitulo} !important;
                 color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelTitulo} !important
             }
+            
+            /* fondo de opcion de menu seleccionada */
+             .navbar-nav > .open > a{
+                 background-color: #{sesionUsuario.empresa.opcionesSistema.getColorBrighter(sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo)} !important;
+             }
 
             /* fuente titulo de opcion de menu */
             .navbar-nav > li > a{
@@ -47,11 +52,6 @@
             /* fuente botón HOME */
             .navbar-inverse .navbar-brand {
                 color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelEncabezado} !important
-            }
-
-            /* fondo de opcion de menu seleccionada */
-            .navbar-nav > .open > a{
-                background-color:#666464 !important;
             }
 
             body {
