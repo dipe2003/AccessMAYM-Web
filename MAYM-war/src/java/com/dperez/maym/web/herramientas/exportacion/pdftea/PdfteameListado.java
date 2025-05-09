@@ -77,7 +77,7 @@ public class PdfteameListado implements Serializable {
             documento.open();
 
             // tabla listado de acciones, el total de columnas es fijo basado en los atributos que tiene la accion por defecto 11 (no inluye el tipo de Accion)            
-            PdfPTable tabla = CrearTablaListado(11, new int[]{4, 9, 7, 17, 17, 17, 7, 4, 4, 7, 7});
+            PdfPTable tabla = CrearTablaListado(11, new int[]{4, 9, 6, 17, 17, 17, 7, 4, 5, 7, 7});
 
             // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
             tabla.addCell(CrearCeldaTitulo("Fecha", 0));
@@ -91,7 +91,7 @@ public class PdfteameListado implements Serializable {
             tabla.addCell(CrearCeldaTitulo("Responsable", 0));
             tabla.addCell(CrearCeldaTitulo("Fecha", 0));
 
-            tabla.addCell(CrearCeldaTitulo("Fecha Ver. Eficacia", 0));
+            tabla.addCell(CrearCeldaTitulo("Eficacia", 0));
             tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
             tabla.addCell(CrearCeldaTitulo("Estado", 0));
 
@@ -207,7 +207,7 @@ public class PdfteameListado implements Serializable {
             tabla.addCell(CrearCeldaTitulo("Responsable", 0));
             tabla.addCell(CrearCeldaTitulo("Fecha", 0));
 
-            tabla.addCell(CrearCeldaTitulo("Fecha Ver. Eficacia", 0));
+            tabla.addCell(CrearCeldaTitulo("Eficacia", 0));
             tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
             tabla.addCell(CrearCeldaTitulo("Tipo", 0));
 
@@ -449,8 +449,8 @@ public class PdfteameListado implements Serializable {
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));
         Chunk texto;
-        if (empresa.getNumHabilitacion() != "") {
-            texto = new Chunk(empresa.getNombre() + " | Hab. " + empresa.getNumHabilitacion());
+        if (empresa.getNombreExtra()!=null && empresa.getNombreExtra() != "") {
+            texto = new Chunk(empresa.getNombre() + " | " + empresa.getNombreExtra());
         } else {
             texto = new Chunk(empresa.getNombre());
         }

@@ -437,8 +437,8 @@ public class PdfteameRegistro implements Serializable {
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));
         Chunk texto;
-        if (empresa.getNumHabilitacion() != "") {
-            texto = new Chunk(empresa.getNombre() + " | Hab. " + empresa.getNumHabilitacion());
+        if (empresa.getNombreExtra()!=null && empresa.getNombreExtra() != "") {
+            texto = new Chunk(empresa.getNombre() + " | " + empresa.getNombreExtra());
         } else {
             texto = new Chunk(empresa.getNombre());
         }

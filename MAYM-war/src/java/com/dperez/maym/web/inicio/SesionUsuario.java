@@ -174,7 +174,7 @@ public class SesionUsuario implements Serializable {
                     prop.getProperty("telefono"),
                     prop.getProperty("movil"),
                     prop.getProperty("correo"),
-                    prop.getProperty("numHabilitacion"));
+                    prop.getProperty("nombreExtra"));
             if (prop.get("logo_empresa") != null) {
                 empresa.setUbicacionLogo(prop.getProperty("logo_empresa"));
             }

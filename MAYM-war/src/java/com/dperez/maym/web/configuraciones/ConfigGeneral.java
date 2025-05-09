@@ -9,7 +9,6 @@ import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.herramientas.IOPropiedades;
-import java.awt.Color;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -59,7 +58,7 @@ public class ConfigGeneral implements Serializable {
     private String telefono;
     private String movil;
     private String correo;
-    private String habilitacion;
+    private String nombreExtra;
 
     private boolean tls;
     private boolean activarAlertas;
@@ -110,12 +109,12 @@ public class ConfigGeneral implements Serializable {
         this.correo = correo;
     }
 
-    public String getHabilitacion() {
-        return habilitacion;
+    public String getNombreExtra() {
+        return nombreExtra;
     }
 
-    public void setHabilitacion(String habilitacion) {
-        this.habilitacion = habilitacion;
+    public void setNombreExtra(String nombreExtra) {
+        this.nombreExtra = nombreExtra;
     }
 
     public boolean isTls() {
@@ -271,7 +270,7 @@ public class ConfigGeneral implements Serializable {
         props.put("telefono", telefono);
         props.put("movil", movil);
         props.put("correo", correo);
-        props.put("numHabilitacion", habilitacion);
+        props.put("nombreExtra", nombreExtra);
         try {
             ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
@@ -282,7 +281,7 @@ public class ConfigGeneral implements Serializable {
             sesionUsuario.getEmpresa().setDireccion(direccion);
             sesionUsuario.getEmpresa().setTelefono(telefono);
             sesionUsuario.getEmpresa().setMovil(movil);
-            sesionUsuario.getEmpresa().setNumHabilitacion(habilitacion);
+            sesionUsuario.getEmpresa().setNombreExtra(nombreExtra);
 
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Los datos no se guardaron."));
@@ -372,7 +371,7 @@ public class ConfigGeneral implements Serializable {
         telefono = empresaGuardada.getTelefono();
         movil = empresaGuardada.getMovil();
         correo = empresaGuardada.getCorreo();
-        habilitacion = empresaGuardada.getNumHabilitacion();
+        nombreExtra = empresaGuardada.getNombreExtra();
 
         Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
         from = prop.get("mail_from") != null ? prop.get("mail_from").toString() : "";

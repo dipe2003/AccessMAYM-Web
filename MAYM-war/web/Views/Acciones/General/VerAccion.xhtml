@@ -20,11 +20,13 @@
                                         <h:outputText value="#{sesionUsuario.empresa.nombre}"/>
                                     </div>
                                     <div class="col-sm-4">
+                                        <c:if test="#{sesionUsuario.empresa.nombreExtra != null and sesionUsuario.empresa.nombreExtra != ''}" >                                            
+                                            <h:outputText value="#{sesionUsuario.empresa.nombreExtra}"/>
+                                        </c:if>
+                                    </div>   
+                                    <div class="col-sm-4">
                                         <h:outputText value="#{sesionUsuario.empresa.direccion}"/>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <h:outputText value="Establecimiento Nº #{sesionUsuario.empresa.numHabilitacion}"/>
-                                    </div>                            
                                 </div>
                             </div> 
                         </div>

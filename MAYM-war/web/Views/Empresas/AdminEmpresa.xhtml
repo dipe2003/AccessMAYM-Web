@@ -23,6 +23,11 @@
                                     <h:inputText id="input-nombre-empresa" class="form-control" value="#{adminEmpresa.nombre}" required="true" requiredMessage="Requerido!" />
                                     <h:message for="input-nombre-empresa" class="msj_error"/>
                                 </div>
+                                <div class="col-xs-1">
+                                    <label>Habilitacion</label>
+                                    <h:inputText id="input-nombre-extra" class="form-control" value="#{adminEmpresa.nombreExtra}" required="false"  />
+                                    <h:message for="input-nombre-extra" class="msj_error"/>
+                                </div>
                                 <div class="col-xs-3">
                                     <label>Direccion:</label>
                                     <h:inputText id="input-direccion-empresa" class="form-control" value="#{adminEmpresa.direccion}" required="true" requiredMessage="Requerido!" />
@@ -42,12 +47,7 @@
                                     <label>Correo</label>
                                     <h:inputText id="input-correo-empresa" class="form-control" value="#{adminEmpresa.correo}" required="true" requiredMessage="Requerido!" />
                                     <h:message for="input-correo-empresa" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-1">
-                                    <label>Habilitacion</label>
-                                    <h:inputText id="input-numero-empresa" class="form-control" value="#{adminEmpresa.numHabilitacion}" required="true" requiredMessage="Requerido!" />
-                                    <h:message for="input-numero-empresa" class="msj_error"/>
-                                </div>
+                                </div>                                
                             </div>
                         </h:panelGroup>
                         <div>

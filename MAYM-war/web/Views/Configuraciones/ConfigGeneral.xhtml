@@ -26,6 +26,10 @@
                                                 <h:inputTextarea class="form-control" id="nombre" value="#{configGeneral.nombre}" required="true" requiredMessage="=bligatorio." />
                                                 <h:message for="nombre" class="msj_error"/>
                                             </div>
+                                            <div class="col-xs-1">
+                                                <label>Nombre Extra</label>
+                                                <h:inputTextarea class="form-control" id="nombreExtra" value="#{configGeneral.nombreExtra}" required="false" />
+                                            </div>
                                             <div class="col-xs-3">
                                                 <label>Direccion:</label>
                                                 <h:inputTextarea class="form-control" id="direccon" value="#{configGeneral.direccion}" required="true" requiredMessage="Oligatorio" />
@@ -44,11 +48,7 @@
                                                 <label>Correo</label>
                                                 <h:inputTextarea class="form-control" id="correo" value="#{configGeneral.correo}" required="true" requiredMessage="Obligatorio." />
                                                 <h:message for="correo" class="msj_error"/>
-                                            </div>
-                                            <div class="col-xs-1">
-                                                <label>Habilitacion</label>
-                                                <h:inputTextarea class="form-control" id="habilitacion" value="#{configGeneral.habilitacion}" required="false" />
-                                            </div>
+                                            </div>                                            
                                         </div>
                                         <div class="col-xs-1">
                                             <h:panelGroup id="panel-logo">

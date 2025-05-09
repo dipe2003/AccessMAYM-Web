@@ -5,8 +5,6 @@
 package com.dperez.maym.web.empresa;
 
 import com.dperez.maym.web.configuraciones.OpcionesSistema;
-import com.dperez.maym.web.herramientas.ManejadorPropiedades;
-import java.util.Properties;
 
 /**
  *
@@ -18,7 +16,7 @@ public class Empresa {
     private String telefono;
     private String movil;
     private String correo;
-    private String numHabilitacion;
+    private String nombreExtra;
     private String ubicacionLogo;
     private String ubicacionLogoInformes;
     
@@ -32,7 +30,7 @@ public class Empresa {
         this.telefono = telefono;
         this.movil = movil;
         this.correo = correo;
-        this.numHabilitacion = numHabilitacion;     
+        this.nombreExtra = numHabilitacion;     
         this.opcionesSistema = new OpcionesSistema();
     }
     
@@ -42,7 +40,7 @@ public class Empresa {
         this.telefono = telefono;
         this.movil = movil;
         this.correo = correo;
-        this.numHabilitacion = numHabilitacion;   
+        this.nombreExtra = numHabilitacion;   
         this.ubicacionLogo = ubicacionLogo;
         this.opcionesSistema = new OpcionesSistema();
     }
@@ -92,12 +90,12 @@ public class Empresa {
         this.correo = correo;
     }
 
-    public String getNumHabilitacion() {
-        return numHabilitacion;
+    public String getNombreExtra() {
+        return nombreExtra;
     }
 
-    public void setNumHabilitacion(String numHabilitacion) {
-        this.numHabilitacion = numHabilitacion;
+    public void setNombreExtra(String nombreExtra) {
+        this.nombreExtra = nombreExtra;
     }
 
     public String getUbicacionLogo() {

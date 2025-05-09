@@ -401,8 +401,8 @@
                                         <c:when test="#{listarAcciones.paginaActual !=1}" >
                                             <li>
                                                 <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
-                                                    <f:ajax delay="10" onevent="indicador"/>
-                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                                    <f:ajax delay="100" onevent="indicador"/>
+                                                    <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
                                                 </h:commandLink>    
                                             </li>                                           
                                         </c:when>
@@ -415,8 +415,8 @@
                                         <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
                                             <li>
                                                 <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
-                                                    <f:ajax delay="10" onevent="indicador"/>
-                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros"/>
+                                                    <f:ajax delay="100" onevent="indicador"/>
+                                                    <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
                                                 </h:commandLink>    
                                             </li>
 

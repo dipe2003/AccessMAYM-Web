@@ -33,7 +33,7 @@ public class AdminEmpresa implements Serializable {
     private String telefono;
     private String movil;
     private String correo;
-    private String numHabilitacion;
+    private String nombreExtra;
     
     //<editor-fold desc="getter y setters">
     public String getNombre() {
@@ -76,12 +76,12 @@ public class AdminEmpresa implements Serializable {
         this.correo = correo;
     }
     
-    public String getNumHabilitacion() {
-        return numHabilitacion;
+    public String getNombreExtra() {
+        return nombreExtra;
     }
     
-    public void setNumHabilitacion(String numHabilitacion) {
-        this.numHabilitacion = numHabilitacion;
+    public void setNombreExtra(String nombreExtra) {
+        this.nombreExtra = nombreExtra;
     }
     //</editor-fold>
     
@@ -92,7 +92,7 @@ public class AdminEmpresa implements Serializable {
         props.put("telefono", telefono);
         props.put("movil", movil);
         props.put("correo", correo);
-        props.put("numHabilitacion", numHabilitacion);
+        props.put("nombreExtra", nombreExtra);
         
         ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
         
