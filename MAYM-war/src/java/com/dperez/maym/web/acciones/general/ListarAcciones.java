@@ -761,9 +761,9 @@ public class ListarAcciones implements Serializable {
         StringBuilder titulo = new StringBuilder("Listado de ");
         switch (tipoDeAccion) {
             case CORRECTIVA ->
-                titulo.append("acciones correctivas.");
+                titulo.append("acciones correctivas");
             case PREVENTIVA ->
-                titulo.append("acciones Preventivas.");
+                titulo.append("acciones Preventivas");
             case MEJORA ->
                 titulo.append("Oportunidades de mejora");
         }

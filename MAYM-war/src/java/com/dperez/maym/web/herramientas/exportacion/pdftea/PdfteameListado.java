@@ -46,7 +46,7 @@ public class PdfteameListado implements Serializable {
     // 1 pulgada = 72
     private Document documento = new Document();
     private Empresa empresa;
-    private final Color colorFilaImpar = new Color(245,245,245);
+    private final Color colorFilaImpar = new Color(245, 245, 245);
 
     public PdfteameListado(Empresa empresa) {
         this.empresa = empresa;
@@ -79,21 +79,7 @@ public class PdfteameListado implements Serializable {
             // tabla listado de acciones, el total de columnas es fijo basado en los atributos que tiene la accion por defecto 11 (no inluye el tipo de Accion)            
             PdfPTable tabla = CrearTablaListado(11, new int[]{4, 9, 6, 17, 17, 17, 7, 4, 5, 7, 7});
 
-            // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
-            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
-            tabla.addCell(CrearCeldaTitulo("Area", 0));
-            tabla.addCell(CrearCeldaTitulo("Generada Por", 0));
-            tabla.addCell(CrearCeldaTitulo("Descripcion", 0));
-            tabla.addCell(CrearCeldaTitulo("Analisis de Causa", 0));
-
-            //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha            
-            tabla.addCell(CrearCeldaTitulo("Actividades", 0));
-            tabla.addCell(CrearCeldaTitulo("Responsable", 0));
-            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
-
-            tabla.addCell(CrearCeldaTitulo("Eficacia", 0));
-            tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
-            tabla.addCell(CrearCeldaTitulo("Estado", 0));
+             CrearFilaTitulo(tabla, false);
 
             // FILAS RESTANTES - Datos de Acciones
             int contador = 0;
@@ -106,7 +92,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getDeteccionAccion().getNombre(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
-                tabla.getDefaultCell().setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+                tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                 // Celda ACTIVIDADES
                 if (!a.getActividadesDeAccion().isEmpty()) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{17, 7, 4});
@@ -121,7 +107,7 @@ public class PdfteameListado implements Serializable {
                     if (impar) {
                         celda.setBackgroundColor(colorFilaImpar);
                     }
-                    celda.setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                     //celda.setBorder(0);
                     celda.addElement(tablaActividades);
                     tabla.addCell(celda);
@@ -196,22 +182,8 @@ public class PdfteameListado implements Serializable {
             // tabla listado de acciones, el total de columnas es fijo basado en los atributos que tiene la accion por defecto 11 (no inluye el tipo de Accion)            
             PdfPTable tabla = CrearTablaListado(10, new int[]{8, 7, 18, 18, 19, 7, 5, 5, 7, 6});
 
-            // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
-            tabla.addCell(CrearCeldaTitulo("Area", 0));
-            tabla.addCell(CrearCeldaTitulo("Referencias", 0));
-            tabla.addCell(CrearCeldaTitulo("Descripcion", 0));
-            tabla.addCell(CrearCeldaTitulo("Analisis de Causa", 0));
-
-            //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha            
-            tabla.addCell(CrearCeldaTitulo("Actividades", 0));
-            tabla.addCell(CrearCeldaTitulo("Responsable", 0));
-            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
-
-            tabla.addCell(CrearCeldaTitulo("Eficacia", 0));
-            tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
-            tabla.addCell(CrearCeldaTitulo("Tipo", 0));
-
-            tabla.getDefaultCell().setBorderColor( Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+            CrearFilaTitulo(tabla, true);
+            
             // FILAS RESTANTES - Datos de Acciones
             int contador = 0;
             boolean impar = true;
@@ -237,10 +209,10 @@ public class PdfteameListado implements Serializable {
                     }
                     celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
                     celda.addElement(tablaActividades);
-                    tabla.addCell(celda);                    
+                    tabla.addCell(celda);
                     tabla.setComplete(true);
                 } else {
-                    tabla.addCell(CrearCeldaContenido("Sin Definir", impar, 3));                    
+                    tabla.addCell(CrearCeldaContenido("Sin Definir", impar, 3));
                     tabla.setComplete(true);
                 }
 
@@ -260,7 +232,7 @@ public class PdfteameListado implements Serializable {
                 contador++;
                 impar = contador % 2 == 0;
             }
-            
+
             tabla.completeRow();
             documento.add(tabla);
 
@@ -280,6 +252,42 @@ public class PdfteameListado implements Serializable {
             System.out.println("Document Error: " + de.getMessage());
         }
 
+    }
+
+    private void CrearFilaTitulo(PdfPTable tabla, boolean esPlanAccion) {
+        // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
+        if (!esPlanAccion) {
+            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
+            tabla.addCell(CrearCeldaTitulo("Area", 0));
+            tabla.addCell(CrearCeldaTitulo("Generada Por", 0));
+            tabla.addCell(CrearCeldaTitulo("Descripcion", 0));
+            tabla.addCell(CrearCeldaTitulo("Analisis de Causa", 0));
+
+            //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha            
+            tabla.addCell(CrearCeldaTitulo("Actividades", 0));
+            tabla.addCell(CrearCeldaTitulo("Responsable", 0));
+            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
+
+            tabla.addCell(CrearCeldaTitulo("Fecha Eficacia", 0));
+            tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
+            tabla.addCell(CrearCeldaTitulo("Estado", 0));
+        } else {
+            // FILA 1 - Titulos (1 por cada columna): Fecha|Area|Generada Por|Descripcion|Analisis de Causa|Actividades(Descripion|Responsable|Fecha)|Fecha Verif Eficacia|Codificacion|TipoAccion|Estado 
+            tabla.addCell(CrearCeldaTitulo("Area", 0));
+            tabla.addCell(CrearCeldaTitulo("Referencias", 0));
+            tabla.addCell(CrearCeldaTitulo("Descripcion", 0));
+            tabla.addCell(CrearCeldaTitulo("Analisis de Causa", 0));
+
+            //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha            
+            tabla.addCell(CrearCeldaTitulo("Actividades", 0));
+            tabla.addCell(CrearCeldaTitulo("Responsable", 0));
+            tabla.addCell(CrearCeldaTitulo("Fecha", 0));
+
+            tabla.addCell(CrearCeldaTitulo("Fecha Eficacia", 0));
+            tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
+            tabla.addCell(CrearCeldaTitulo("Tipo", 0));
+        }
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
     }
 
     private Color ObtnerColor(Estado estado) {
@@ -306,15 +314,15 @@ public class PdfteameListado implements Serializable {
         celda.setColspan(colspan);
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-        
+
         Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
-        
+
         celda.setBackgroundColor(color);
-        celda.setFixedHeight(18);
+        celda.setFixedHeight(22);
         Phrase texto = new Phrase();
-        
+
         color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
-        
+
         texto.setFont(FontFactory.getFont("arialbi", 8, Font.BOLD, color));
         texto.add(textoTitulo);
         celda.setPhrase(texto);
@@ -346,7 +354,7 @@ public class PdfteameListado implements Serializable {
 
         if (colorFondoImpar) {
             celda.setBackgroundColor(colorFilaImpar);
-        }else{
+        } else {
             celda.setBackgroundColor(colorCelda);
         }
         Phrase texto = new Phrase();
@@ -449,7 +457,7 @@ public class PdfteameListado implements Serializable {
         Phrase frase = new Phrase();
         frase.setFont(FontFactory.getFont("arialbi", 8, Font.NORMAL, Color.BLACK));
         Chunk texto;
-        if (empresa.getNombreExtra()!=null && empresa.getNombreExtra() != "") {
+        if (empresa.getNombreExtra() != null && empresa.getNombreExtra() != "") {
             texto = new Chunk(empresa.getNombre() + " | " + empresa.getNombreExtra());
         } else {
             texto = new Chunk(empresa.getNombre());
@@ -483,18 +491,18 @@ public class PdfteameListado implements Serializable {
     /// <returns></returns>
     private PdfPCell CrearTituloImpresion(String titulo) {
         Phrase f = new Phrase();
-        
+
         Color color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelEncabezado());
-        
+
         f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, color));
         f.add(titulo.toUpperCase());
 
         PdfPCell celda = new PdfPCell();
         celda.setColspan(4);
         celda.setPaddingTop(-5f);
-        
-            color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
-        
+
+        color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
+
         celda.setBackgroundColor(color);
         celda.setFixedHeight(18);
         celda.setBorder(0);
