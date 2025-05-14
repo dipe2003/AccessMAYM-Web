@@ -140,9 +140,11 @@
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="btn-group">                                                    
-                                                                                    <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(correctiva.id, 'CORRECTIVA')}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                                        <f:ajax render="panel_medidas_correctivas" />
+                                                                                <div class="btn-group">
+                                                                                    <h:inputText id="fecha_implementacion_actividad_#{correctiva.id}" class="form-control calendario" value="#{seguimientoAccion.strFechaImplementacion}" />
+                                                                                    <h:commandButton id="btn_setFechaImplementacion_corr_#{correctiva.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(correctiva.id, 'CORRECTIVA')}" 
+                                                                                                     class="btn btn-primary"  value="Registrar" >                                                                                                     
+                                                                                        <f:ajax execute="fecha_implementacion_actividad_#{correctiva.id}" render="panel_medidas_correctivas" />
                                                                                     </h:commandButton>                                                            
                                                                                 </div>
                                                                             </c:otherwise>
@@ -213,9 +215,10 @@
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="btn-group">                                                    
-                                                                                    <h:commandButton id="btn_setFechaImplementacion_#{preventiva.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(preventiva.id, 'PREVENTIVA')}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                                        <f:ajax render="panel_medidas_preventivas" />
+                                                                                <div class="btn-group">
+                                                                                    <h:commandButton id="btn_setFechaImplementacion_#{preventiva.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(preventiva.id, 'PREVENTIVA')}" 
+                                                                                                     class="btn btn-primary" value="Registrar" >                                                                                                     
+                                                                                        <f:ajax execute="fecha_implementacion_actividad_#{preventiva.id}" render="panel_medidas_preventivas" />
                                                                                     </h:commandButton>                                                            
                                                                                 </div>
                                                                             </c:otherwise>
@@ -288,9 +291,11 @@
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="btn-group">                                                    
-                                                                                    <h:commandButton id="btn_setFechaImplementacion_act_#{actividad.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(actividad.id, 'MEJORA')}" class="btn btn-primary"  value="Comprobar" >                                                                                                     
-                                                                                        <f:ajax render="panel_actividades" />
+                                                                                <div class="btn-group">
+                                                                                    <h:inputText id="fecha_implementacion_actividad_#{actividad.id}" class="form-control calendario" value="#{seguimientoAccion.strFechaImplementacion}" />
+                                                                                    <h:commandButton id="btn_setFechaImplementacion_act_#{actividad.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(actividad.id, 'MEJORA')}" 
+                                                                                                     class="btn btn-primary"  value="Registrar" >                                                                                                     
+                                                                                        <f:ajax execute="fecha_implementacion_actividad_#{actividad.id}" render="panel_actividades" />
                                                                                     </h:commandButton>                                                            
                                                                                 </div>
                                                                             </c:otherwise>

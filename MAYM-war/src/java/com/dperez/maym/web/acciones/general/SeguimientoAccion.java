@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +64,7 @@ public class SeguimientoAccion implements Serializable {
     private List<Actividad> actividades;
 
     private Date FechaImplementacion;
+    private String strFechaImplementacion;
 
     private String ObservacionesImplementacion;
     private Date FechaComprobacionImplementacion;
@@ -133,6 +133,15 @@ public class SeguimientoAccion implements Serializable {
             return fDate.format(FechaComprobacionImplementacion);
         }
     }
+    
+    public String getStrFechaImplementacion() {
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyy");
+        if (FechaImplementacion == null) {
+            return this.strFechaImplementacion;
+        } else {
+            return fDate.format(FechaImplementacion);
+        }
+    }
 
     public ResultadoComprobacion[] getComprobaciones() {
         return Comprobaciones;
@@ -151,7 +160,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public String getStrFechaComprobacionEficacia() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyy");
         if (FechaComprobacionEficacia == null) {
             return this.strFechaComprobacionEficacia;
         } else {
@@ -242,12 +251,21 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionImplementacion(String strFechaComprobacionImplementacion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
         try {
             this.FechaComprobacionImplementacion = sdf.parse(strFechaComprobacionImplementacion);
         } catch (ParseException ex) {
         }
         this.strFechaComprobacionImplementacion = strFechaComprobacionImplementacion;
+    }
+    
+    public void setStrFechaImplementacion(String strFechaImplementacion) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+        try {
+            this.FechaImplementacion = sdf.parse(strFechaImplementacion);
+        } catch (ParseException ex) {
+        }
+        this.strFechaImplementacion = strFechaImplementacion;
     }
 
     public void setComprobaciones(ResultadoComprobacion[] Comprobaciones) {
@@ -267,7 +285,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionEficacia(String strFechaComprobacionEficacia) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
         try {
             this.FechaComprobacionEficacia = sdf.parse(strFechaComprobacionEficacia);
         } catch (ParseException ex) {
@@ -336,7 +354,6 @@ public class SeguimientoAccion implements Serializable {
      */
     public void setFechaImplementacionActividad(int IdActividad, String tipo) throws IOException {
         TipoActividad tipoActividad = TipoActividad.valueOf(tipo.toUpperCase());
-        FechaImplementacion = new Date();
         if ((fDatos.setFechaImplementacionActividad(FechaImplementacion, IdActividad, AccionSeleccionada.getId())) == -1) {
             switch (tipoActividad) {
                 case CORRECTIVA ->
