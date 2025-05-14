@@ -23,7 +23,6 @@ import javax.persistence.TemporalType;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
-import com.sun.mail.util.PropUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;

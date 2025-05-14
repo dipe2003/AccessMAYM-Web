@@ -35,19 +35,17 @@ public class ControladorConfiguracion {
     private final RepositorioPersistencia<Usuario> repoUsuario;
     private final RepositorioPersistencia<Responsable> repoResponsable;
     private final RepositorioPersistencia<Responsabilidad> repoResponsabilidades;
-    
-    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
-    
+        
     
     private final ControladorSeguridad cSeg;
     
     public ControladorConfiguracion() {
-        this.repoCodificacion = fabricaRepositorio.getRepositorioCodificaciones();
-        this.repoArea = fabricaRepositorio.getRepositorioAreas();
-        this.repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
-        this.repoUsuario = fabricaRepositorio.getRepositorioUsuarios();
-        this.repoResponsable = fabricaRepositorio.getRepositorioResponsables();
-        this.repoResponsabilidades = fabricaRepositorio.getRepositorioResponsabilidades();
+        this.repoCodificacion = FabricaRepositorio.getRepositorioCodificaciones();
+        this.repoArea = FabricaRepositorio.getRepositorioAreas();
+        this.repoDeteccion = FabricaRepositorio.getRepositorioDetecciones();
+        this.repoUsuario = FabricaRepositorio.getRepositorioUsuarios();
+        this.repoResponsable = FabricaRepositorio.getRepositorioResponsables();
+        this.repoResponsabilidades = FabricaRepositorio.getRepositorioResponsabilidades();
         cSeg = new ControladorSeguridad();
     }
     
