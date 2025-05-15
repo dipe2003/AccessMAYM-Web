@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.acciones.comprobaciones;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.usuario.Responsable;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -66,10 +67,18 @@ public abstract class Comprobacion implements Serializable{
     
     public int getId() {return id;}
     public Date getFechaComprobacion() {return fechaComprobacion;}
+    public String getStrFechaComprobacion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        return fDate.format(fechaComprobacion);
+    }
     public ResultadoComprobacion getResultadoComprobacion() {return resultadoComprobacion;}
     public String getObservaciones() {return observaciones;}
     public Responsable getResponsableComprobacion() {return responsableComprobacion;}
     public Date getFechaEstimada() {return fechaEstimada;}
+    public String getStrFechaEstimada(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        return fDate.format(fechaEstimada);
+    }
     public TipoComprobacion getTipoDeComprobacion() {return tipoDeComprobacion;}    
     
     public Accion getAccionComprobacion() {return accionComprobacion;}

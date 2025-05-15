@@ -21,6 +21,7 @@ import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public String getStrFechaComprobacionImplementacion() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaComprobacionImplementacion == null) {
             return this.strFechaComprobacionImplementacion;
         } else {
@@ -135,7 +136,7 @@ public class SeguimientoAccion implements Serializable {
     }
     
     public String getStrFechaImplementacion() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaImplementacion == null) {
             return this.strFechaImplementacion;
         } else {
@@ -160,7 +161,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public String getStrFechaComprobacionEficacia() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaComprobacionEficacia == null) {
             return this.strFechaComprobacionEficacia;
         } else {
@@ -251,7 +252,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionImplementacion(String strFechaComprobacionImplementacion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.FechaComprobacionImplementacion = sdf.parse(strFechaComprobacionImplementacion);
         } catch (ParseException ex) {
@@ -260,7 +261,7 @@ public class SeguimientoAccion implements Serializable {
     }
     
     public void setStrFechaImplementacion(String strFechaImplementacion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.FechaImplementacion = sdf.parse(strFechaImplementacion);
         } catch (ParseException ex) {
@@ -285,7 +286,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     public void setStrFechaComprobacionEficacia(String strFechaComprobacionEficacia) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.FechaComprobacionEficacia = sdf.parse(strFechaComprobacionEficacia);
         } catch (ParseException ex) {

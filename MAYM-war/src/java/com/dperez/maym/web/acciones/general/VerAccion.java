@@ -75,7 +75,7 @@ public class VerAccion implements Serializable {
     //<editor-fold desc="Getters">
     public Date getFechaDeteccion() {return FechaDeteccion;}
     public String getStrFechaDeteccion(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaDeteccion == null) {
             return this.strFechaDeteccion;
         }else{
@@ -113,7 +113,7 @@ public class VerAccion implements Serializable {
     //<editor-fold desc="Setters">
     public void setFechaDeteccion(Date FechaDeteccion) {this.FechaDeteccion = FechaDeteccion;}
     public void setStrFechaDeteccion(String strFechaDeteccion) {      
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try{
             this.FechaDeteccion = sdf.parse(strFechaDeteccion);
         }catch(ParseException ex){}

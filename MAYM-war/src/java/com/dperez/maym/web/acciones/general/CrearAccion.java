@@ -67,7 +67,7 @@ public class CrearAccion implements Serializable {
     }
 
     public String getStrFechaDeteccion() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaDeteccion == null) {
             return this.strFechaDeteccion;
         } else {
@@ -126,7 +126,7 @@ public class CrearAccion implements Serializable {
     }
 
     public void setStrFechaDeteccion(String strFechaDeteccion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.FechaDeteccion = sdf.parse(strFechaDeteccion);
         } catch (ParseException ex) {
@@ -240,7 +240,7 @@ public class CrearAccion implements Serializable {
         if (accion != null) {//          
             // redirigir a la edicion de la accion correctiva.
             String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            url += "/Views/Acciones/General/Editar.xhtml?&id=" + accion.getId();
+            url += "/Views/Acciones/General/EditarAccion.xhtml?&id=" + accion.getId();
             FacesContext.getCurrentInstance().getExternalContext().redirect(url);
         } else {
             FacesContext.getCurrentInstance().addMessage("form_accion:crear_accion", new FacesMessage(SEVERITY_ERROR, "No se pudo crear la Accion", "No se pudo crear la Accion"));

@@ -120,14 +120,14 @@
                                                         <c:forEach items="#{seguimientoAccion.medidasCorrectivas}" var="correctiva" >
                                                             <tr>
                                                                 <td>#{correctiva.descripcion}</td>
-                                                                <td>#{correctiva.fechaEstimadaImplementacion}</td>
+                                                                <td>#{correctiva.strFechaEstimadaImplementacion}</td>
                                                                 <td>#{correctiva.responsableImplementacion.responsabilidadResponsable.nombre} #{correctiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{correctiva.fechaImplementacion == null}" >
                                                                         Sin Implementar
                                                                     </c:if>
                                                                     <c:if test="#{correctiva.fechaImplementacion != null}" >
-                                                                        #{correctiva.fechaImplementacion}
+                                                                        #{correctiva.strFechaImplementacion}
                                                                     </c:if>
                                                                 </td>
 
@@ -195,14 +195,14 @@
                                                         <c:forEach items="#{seguimientoAccion.medidasPreventivas}" var="preventiva" >
                                                             <tr>
                                                                 <td>#{preventiva.descripcion}</td>
-                                                                <td>#{preventiva.fechaEstimadaImplementacion}</td>
+                                                                <td>#{preventiva.strFechaEstimadaImplementacion}</td>
                                                                 <td>#{preventiva.responsableImplementacion.responsabilidadResponsable.nombre} #{preventiva.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{preventiva.fechaImplementacion == null}" >
                                                                         Sin Implementar
                                                                     </c:if>
                                                                     <c:if test="#{preventiva.fechaImplementacion != null}" >
-                                                                        #{preventiva.fechaImplementacion}
+                                                                        #{preventiva.strFechaImplementacion}
                                                                     </c:if>
                                                                 </td>
 
@@ -216,6 +216,7 @@
                                                                             </c:when>
                                                                             <c:otherwise>
                                                                                 <div class="btn-group">
+                                                                                    <h:inputText id="fecha_implementacion_actividad_#{preventiva.id}" class="form-control calendario" value="#{seguimientoAccion.strFechaImplementacion}" />
                                                                                     <h:commandButton id="btn_setFechaImplementacion_#{preventiva.id}" action="#{seguimientoAccion.setFechaImplementacionActividad(preventiva.id, 'PREVENTIVA')}" 
                                                                                                      class="btn btn-primary" value="Registrar" >                                                                                                     
                                                                                         <f:ajax execute="fecha_implementacion_actividad_#{preventiva.id}" render="panel_medidas_preventivas" />
@@ -271,14 +272,14 @@
                                                         <c:forEach items="#{seguimientoAccion.actividades}" var="actividad" >
                                                             <tr>
                                                                 <td>#{actividad.descripcion}</td>
-                                                                <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                                <td>#{actividad.strFechaEstimadaImplementacion}</td>
                                                                 <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>
                                                                     <c:if test="#{actividad.fechaImplementacion == null}" >
                                                                         Sin Implementar
                                                                     </c:if>
                                                                     <c:if test="#{actividad.fechaImplementacion != null}" >
-                                                                        #{actividad.fechaImplementacion}
+                                                                        #{actividad.strFechaImplementacion}
                                                                     </c:if>
                                                                 </td>
 
@@ -403,16 +404,9 @@
 
                                         <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion != null and
                                                         seguimientoAccion.estaImplementada == true}">
-                                            Se comprobo la implementacion el dia #{seguimientoAccion.fechaComprobacionImplementacion} con resultado
-                                            <c:choose>
-                                                <c:when  test="#{seguimientoAccion.comprobacionSeleccionadaImplementacion == 'CORRECTA'}">
-                                                    Correcto
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Incorrecto
-                                                </c:otherwise>
-                                                Observaciones: #{seguimientoAccion.observacionesImplementacion}
-                                            </c:choose>
+                                            Se comprobo la implementacion el dia #{seguimientoAccion.strFechaComprobacionImplementacion} con resultado                                           
+                                            #{seguimientoAccion.comprobacionSeleccionadaImplementacion.descripcion}
+                                            Observaciones: #{seguimientoAccion.observacionesImplementacion}                                          
                                         </c:when> 
 
                                     </c:choose>
@@ -507,13 +501,8 @@
                                         <c:when test="#{seguimientoAccion.accionSeleccionada.comprobacionEficacia.fechaComprobacion != null and 
                                                         seguimientoAccion.accionSeleccionada.comprobacionImplementacion.fechaComprobacion != null and
                                                         seguimientoAccion.estaImplementada == true}">
-                                            Se comprobo la implementacion el dia #{seguimientoAccion.fechaComprobacionEficacia} con resultado
-                                            <c:if test="#{seguimientoAccion.comprobacionSeleccionadaEficacia == 'CORRECTA'}">
-                                                Correcto
-                                            </c:if>
-                                            <c:otherwise>
-                                                Incorrecto
-                                            </c:otherwise>
+                                            Se comprobo la implementacion el dia #{seguimientoAccion.strFechaComprobacionEficacia} con resultado
+                                            #{seguimientoAccion.comprobacionSeleccionadaEficacia.descripcion}
                                             Observaciones: #{seguimientoAccion.observacionesEficacia}
                                         </c:when>
                                     </c:choose>                                    

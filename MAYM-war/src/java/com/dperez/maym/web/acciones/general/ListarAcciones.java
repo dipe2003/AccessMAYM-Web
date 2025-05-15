@@ -449,7 +449,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public String getStrFechaInicial() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (fechaInicial == null) {
             return this.strFechaInicial;
         } else {
@@ -458,7 +458,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public String getStrFechaFinal() {
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (fechaFinal == null) {
             return this.strFechaFinal;
         } else {
@@ -533,7 +533,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void setStrFechaInicial(String strFechaInicial) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.fechaInicial = sdf.parse(strFechaInicial);
         } catch (ParseException ex) {
@@ -542,7 +542,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void setStrFechaFinal(String strFechaFinal) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
             this.fechaFinal = sdf.parse(strFechaFinal);
         } catch (ParseException ex) {
@@ -720,7 +720,7 @@ public class ListarAcciones implements Serializable {
         List<Accion> accionesPlan = fLectura.listarAcciones().stream()
                 .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
                 .collect(Collectors.toList());
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
         StringBuilder strTitulo = new StringBuilder();
         StringBuilder strIntroduccion = new StringBuilder();
 

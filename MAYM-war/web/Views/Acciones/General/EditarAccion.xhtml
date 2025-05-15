@@ -237,14 +237,14 @@
                                                 <tr>
                                                     <td>#{actividad.tipoDeActividad.descripcion}</td>
                                                     <td>#{actividad.descripcion}</td>
-                                                    <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                    <td>#{actividad.strFechaEstimadaImplementacion}</td>
                                                     <td>#{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                     <td>
                                                         <c:if test="#{actividad.fechaImplementacion == null}" >
                                                             Sin Implementar
                                                         </c:if>
                                                         <c:if test="#{actividad.fechaImplementacion != null}" >
-                                                            #{actividad.fechaImplementacion}
+                                                            #{actividad.strFechaImplementacion}
                                                         </c:if>
                                                     </td>
                                                     <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">                                                            
@@ -364,9 +364,9 @@
                                                                 </thead>
                                                                 <tbody>                                                
                                                                     <tr>
-                                                                        <td>#{editarAccion.comprobacionImplementacion.fechaEstimada}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.strFechaEstimada}</td>
                                                                         <td>#{editarAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{editarAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                        <td>#{editarAccion.comprobacionImplementacion.fechaComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionImplementacion.strFechaComprobacion}</td>
                                                                         <td>#{editarAccion.comprobacionImplementacion.resultadoComprobacion}</td>
                                                                         <td>#{editarAccion.comprobacionImplementacion.observaciones}</td>
                                                                     </tr>
@@ -441,9 +441,9 @@
                                                                 </thead>
                                                                 <tbody>                                                
                                                                     <tr>
-                                                                        <td>#{editarAccion.comprobacionEficacia.fechaEstimada}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.strFechaEstimada}</td>
                                                                         <td>#{editarAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{editarAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                        <td>#{editarAccion.comprobacionEficacia.fechaComprobacion}</td>
+                                                                        <td>#{editarAccion.comprobacionEficacia.strFechaComprobacion}</td>
                                                                         <td>#{editarAccion.comprobacionEficacia.resultadoComprobacion}</td>
                                                                         <td>#{editarAccion.comprobacionEficacia.observaciones}</td>
                                                                     </tr>

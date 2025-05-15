@@ -197,14 +197,14 @@
                                                         <tr>
                                                             <td>#{actividad.tipoDeActividad.descripcion}</td>
                                                             <td>#{actividad.descripcion}</td>
-                                                            <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                            <td>#{actividad.strFechaEstimadaImplementacion}</td>
                                                             <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                             <td>
                                                                 <c:if test="#{actividad.fechaImplementacion == null}" >
                                                                     Sin Implementar
                                                                 </c:if>
-                                                                <c:if test="#{actividad.fechaImplementacion != null}" >
-                                                                    #{actividad.fechaImplementacion}
+                                                                <c:if test="#{actividad.strFechaImplementacion != null}" >
+                                                                    #{actividad.strFechaImplementacion}
                                                                 </c:if>
                                                             </td>
                                                         </tr>                                            
@@ -256,10 +256,10 @@
                                                             </c:when>
                                                             <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
                                                                             verAccion.comprobacionImplementacion.fechaComprobacion != null}">
-                                                                <td>#{verAccion.comprobacionImplementacion.fechaEstimada}</td>
+                                                                <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
                                                                 <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.fechaComprobacion}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.resultadoComprobacion}</td>
+                                                                <td>#{verAccion.comprobacionImplementacion.strFechaComprobacion}</td>
+                                                                <td>#{verAccion.comprobacionImplementacion.resultadoComprobacion.descripcion}</td>
                                                                 <td>#{verAccion.comprobacionImplementacion.observaciones}</td>
                                                             </c:when>
                                                         </c:choose>
@@ -307,10 +307,10 @@
                                                             </c:when>
                                                             <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
                                                                             verAccion.comprobacionEficacia.fechaComprobacion != null}">
-                                                                <td>#{verAccion.comprobacionEficacia.fechaEstimada}</td>
+                                                                <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
                                                                 <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.fechaComprobacion}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.resultadoComprobacion}</td>
+                                                                <td>#{verAccion.comprobacionEficacia.strFechaComprobacion}</td>
+                                                                <td>#{verAccion.comprobacionEficacia.resultadoComprobacion.descripcion}</td>
                                                                 <td>#{verAccion.comprobacionEficacia.observaciones}</td>
                                                             </c:when>
                                                         </c:choose>

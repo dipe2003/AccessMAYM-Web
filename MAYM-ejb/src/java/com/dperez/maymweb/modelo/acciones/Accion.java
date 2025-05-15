@@ -24,6 +24,7 @@ import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.persistence.CascadeType;
@@ -109,11 +110,16 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.areaAccion = area;
         this.deteccionAccion = deteccion;
         this.codificacionAccion = codificacion;
+        this.referencias = referencias;
     }
     
     // Getters
     public int getId() {return this.id;}
     public Date getFechaDeteccion() {return this.fechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        return fDate.format(fechaDeteccion);
+    }
     public String getDescripcion() {return this.descripcion;}
     public String getReferencias(){return this.referencias;}
     public String getAnalisisCausa() {return this.analisisCausa;}

@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.acciones.actividad;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.usuario.Responsable;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,7 +58,15 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     // Getters
     public int getId() {return this.id;}
     public Date getFechaEstimadaImplementacion() {return this.fechaEstimadaImplementacion;}
+    public String getStrFechaEstimadaImplementacion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        return fDate.format(fechaEstimadaImplementacion);
+    }
     public Date getFechaImplementacion() {return this.fechaImplementacion;}
+    public String getStrFechaImplementacion(){
+        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        return fDate.format(fechaImplementacion);
+    }
     public String getDescripcion() {return this.descripcion;}
     public TipoActividad getTipoDeActividad() {return tipoDeActividad;}
     
