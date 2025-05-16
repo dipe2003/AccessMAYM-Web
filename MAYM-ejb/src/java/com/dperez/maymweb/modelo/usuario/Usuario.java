@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.usuario;
 import com.dperez.maymweb.modelo.area.Area;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +68,15 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     public String getCorreo() {return this.correo;}
     public boolean isRecibeAlertas() {return this.recibeAlertas;}
     public Date getFechaBaja(){return this.fechaBaja;}
-    
+    public String getStrFechaBaja(){
+        try {
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaBaja);
+        } catch (NullPointerException ex) {
+            ex.getMessage();
+        }
+     return "";
+    }
     public EnumPermiso getPermisoUsuario() {return permisoUsuario;}    
     public Credencial getCredencialUsuario() {return credencialUsuario;}    
     public Area getAreaUsuario(){return this.areaUsuario;}    

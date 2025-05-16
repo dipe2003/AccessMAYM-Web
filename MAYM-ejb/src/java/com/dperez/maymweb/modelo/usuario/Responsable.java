@@ -10,6 +10,7 @@ import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Comprobacion;
 import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,14 @@ public class Responsable implements Serializable, Comparable<Responsable>{
     
     public int getId() {return id;}
     public Date getFechaBaja(){return this.fechaBaja;}
+    public String getStrFechaBaja(){
+        try{
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+        }catch(NullPointerException ex){
+            ex.getMessage();
+        }
+        return "";
+    }
     
     public Responsabilidad getResponsabilidadResponsable(){return this.responsabilidadResponsable;}
     

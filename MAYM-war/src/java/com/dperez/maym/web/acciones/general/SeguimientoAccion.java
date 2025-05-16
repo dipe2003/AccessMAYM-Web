@@ -21,7 +21,6 @@ import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,7 +133,7 @@ public class SeguimientoAccion implements Serializable {
             return fDate.format(FechaComprobacionImplementacion);
         }
     }
-    
+
     public String getStrFechaImplementacion() {
         SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
         if (FechaImplementacion == null) {
@@ -259,7 +258,7 @@ public class SeguimientoAccion implements Serializable {
         }
         this.strFechaComprobacionImplementacion = strFechaComprobacionImplementacion;
     }
-    
+
     public void setStrFechaImplementacion(String strFechaImplementacion) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         try {
@@ -529,36 +528,43 @@ public class SeguimientoAccion implements Serializable {
      */
     public void agregarAdjunto() {
         String msj = "";
+        FacesContext ctx = FacesContext.getCurrentInstance();
         if (this.TituloAdjunto.isEmpty()) {
             msj = "El Titulo está vacío.";
         } else {
             if (this.MapAdjuntos.values().stream()
                     .anyMatch(a -> a.getTitulo().toLowerCase().equals(TituloAdjunto.toLowerCase()))) {
                 msj = "Ya existe un adjunto con ese nombre.";
-                FacesContext ctx = FacesContext.getCurrentInstance();
                 ctx.addMessage("form_segumiento_accion:input-adjunto", new FacesMessage(SEVERITY_ERROR, "No se pudo cargar.", msj));
                 ctx.renderResponse();
             } else {
+                try{
                 String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
-                // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
-                if (!datosAdjunto[0].isEmpty()) {
-                    TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
-                    String extension = datosAdjunto[1];
-                    switch (extension.toLowerCase().trim()) {
-                        case "jpeg", "jpg", "png", "gif" ->
-                            tipoAdjunto = TipoAdjunto.IMAGEN;
-                        case "mp4", "m4a", "m4b" ->
-                            tipoAdjunto = TipoAdjunto.VIDEO;
-                        default ->
-                            tipoAdjunto = tipoAdjunto.DOCUMENTO;
+                    // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
+                    if (!datosAdjunto[0].isEmpty()) {
+                        TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;
+                        String extension = datosAdjunto[1];
+                        switch (extension.toLowerCase().trim()) {
+                            case "jpeg", "jpg", "png", "gif" ->
+                                tipoAdjunto = TipoAdjunto.IMAGEN;
+                            case "mp4", "m4a", "m4b" ->
+                                tipoAdjunto = TipoAdjunto.VIDEO;
+                            default ->
+                                tipoAdjunto = tipoAdjunto.DOCUMENTO;
+                        }
+                        if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
+                            actualizarListaAdjuntos();
+                            this.TituloAdjunto = new String();
+                            this.ArchivoAdjunto = null;
+                        } else {
+                            cArchivo.BorrarArchivo(datosAdjunto[0]);
+                        }
                     }
-                    if ((fDatos.agregarArchivoAdjunto(IdAccionSeleccionada, TituloAdjunto, datosAdjunto[0], tipoAdjunto)) != -1) {
-                        actualizarListaAdjuntos();
-                        this.TituloAdjunto = new String();
-                        this.ArchivoAdjunto = null;
-                    } else {
-                        cArchivo.BorrarArchivo(datosAdjunto[0]);
-                    }
+                } catch (Exception ex) {
+                    ex.getMessage();
+                    msj = "No se pudo cargar, comprueba el titulo del adjunto o el archivo.";
+                    ctx.addMessage("form_accion_modal:input-adjunto", new FacesMessage(SEVERITY_ERROR, "No se pudo cargar.", msj));
+                    ctx.renderResponse();
                 }
             }
         }

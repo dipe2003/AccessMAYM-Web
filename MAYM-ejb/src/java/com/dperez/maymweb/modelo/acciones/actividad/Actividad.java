@@ -59,13 +59,23 @@ public class Actividad implements Serializable, Comparable<Actividad> {
     public int getId() {return this.id;}
     public Date getFechaEstimadaImplementacion() {return this.fechaEstimadaImplementacion;}
     public String getStrFechaEstimadaImplementacion(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
-        return fDate.format(fechaEstimadaImplementacion);
+        try {
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaEstimadaImplementacion);
+        } catch (NullPointerException ex) {
+            ex.getMessage();
+        }
+        return "";
     }
     public Date getFechaImplementacion() {return this.fechaImplementacion;}
     public String getStrFechaImplementacion(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
-        return fDate.format(fechaImplementacion);
+        try {
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaImplementacion);
+        } catch (NullPointerException ex) {
+            ex.getMessage();
+        }
+        return "";
     }
     public String getDescripcion() {return this.descripcion;}
     public TipoActividad getTipoDeActividad() {return tipoDeActividad;}

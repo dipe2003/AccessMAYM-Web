@@ -248,7 +248,7 @@
                                                         <c:choose>
                                                             <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
                                                                             verAccion.comprobacionImplementacion.fechaComprobacion == null}">
-                                                                <td>#{verAccion.comprobacionImplementacion.fechaEstimada}</td>
+                                                                <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
                                                                 <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td> Sin Comprobar </td>
                                                                 <td> Sin Comprobar </td>
@@ -260,7 +260,12 @@
                                                                 <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>#{verAccion.comprobacionImplementacion.strFechaComprobacion}</td>
                                                                 <td>#{verAccion.comprobacionImplementacion.resultadoComprobacion.descripcion}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.observaciones}</td>
+                                                                <c:if test="#{verAccion.comprobacionImplementacion.observaciones.blank}">
+                                                                    <td>Sin Observaciones</td>
+                                                                </c:if>
+                                                                <c:if test="#{not verAccion.comprobacionImplementacion.observaciones.blank}">
+                                                                    <td>#{verAccion.comprobacionImplementacion.observaciones}</td>
+                                                                </c:if>                                                                                                                                
                                                             </c:when>
                                                         </c:choose>
                                                     </tr>
@@ -299,7 +304,7 @@
                                                         <c:choose>
                                                             <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
                                                                             verAccion.comprobacionEficacia.fechaComprobacion == null}">
-                                                                <td>#{verAccion.comprobacionEficacia.fechaEstimada}</td>
+                                                                <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
                                                                 <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td> Sin Comprobar </td>
                                                                 <td> Sin Comprobar </td>
@@ -311,7 +316,12 @@
                                                                 <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
                                                                 <td>#{verAccion.comprobacionEficacia.strFechaComprobacion}</td>
                                                                 <td>#{verAccion.comprobacionEficacia.resultadoComprobacion.descripcion}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.observaciones}</td>
+                                                                <c:if test="#{verAccion.comprobacionEficacia.observaciones.blank}">
+                                                                    <td>Sin Observaciones</td>
+                                                                </c:if>
+                                                                <c:if test="#{not verAccion.comprobacionEficacia.observaciones.blank}">
+                                                                    <td>#{verAccion.comprobacionEficacia.observaciones}</td>
+                                                                </c:if> 
                                                             </c:when>
                                                         </c:choose>
                                                     </tr>

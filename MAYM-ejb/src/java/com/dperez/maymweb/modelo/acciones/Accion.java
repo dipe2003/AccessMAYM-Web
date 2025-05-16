@@ -117,8 +117,13 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public int getId() {return this.id;}
     public Date getFechaDeteccion() {return this.fechaDeteccion;}
     public String getStrFechaDeteccion(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
-        return fDate.format(fechaDeteccion);
+        try {
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaDeteccion);
+        } catch (NullPointerException ex) {
+            ex.getMessage();
+        }
+        return "";
     }
     public String getDescripcion() {return this.descripcion;}
     public String getReferencias(){return this.referencias;}

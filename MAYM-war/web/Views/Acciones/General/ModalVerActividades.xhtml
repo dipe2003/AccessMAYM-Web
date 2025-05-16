@@ -42,14 +42,14 @@ and open the template in the editor.
                                                     <c:forEach items="#{modalVerActividades.accionSeleccionada.actividadesDeAccion}" var="actividad" >
                                                         <tr>                                                           
                                                             <td>#{actividad.tipoDeActividad}: #{actividad.descripcion}</td>
-                                                            <td>#{actividad.fechaEstimadaImplementacion}</td>
+                                                            <td>#{actividad.strFechaEstimadaImplementacion}</td>
                                                             <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
                                                             <td>
                                                                 <c:if test="#{actividad.fechaImplementacion == null}" >
                                                                     Sin Implementar
                                                                 </c:if>
                                                                 <c:if test="#{actividad.fechaImplementacion != null}" >
-                                                                    #{actividad.fechaImplementacion}
+                                                                    #{actividad.strFechaImplementacion}
                                                                 </c:if>
                                                             </td>
                                                         </tr>                                            

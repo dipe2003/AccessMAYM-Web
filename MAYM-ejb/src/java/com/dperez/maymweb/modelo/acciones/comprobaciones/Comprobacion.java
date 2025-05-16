@@ -68,16 +68,27 @@ public abstract class Comprobacion implements Serializable{
     public int getId() {return id;}
     public Date getFechaComprobacion() {return fechaComprobacion;}
     public String getStrFechaComprobacion(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
-        return fDate.format(fechaComprobacion);
+        try{
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaComprobacion);
+        }catch(NullPointerException ex){
+            ex.getMessage();
+        }
+        return "";
     }
+    
     public ResultadoComprobacion getResultadoComprobacion() {return resultadoComprobacion;}
     public String getObservaciones() {return observaciones;}
     public Responsable getResponsableComprobacion() {return responsableComprobacion;}
     public Date getFechaEstimada() {return fechaEstimada;}
     public String getStrFechaEstimada(){
-        SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
-        return fDate.format(fechaEstimada);
+        try{
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaEstimada);
+        }catch(NullPointerException ex){
+            ex.getMessage();
+        }
+        return "";
     }
     public TipoComprobacion getTipoDeComprobacion() {return tipoDeComprobacion;}    
     

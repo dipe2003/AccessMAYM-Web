@@ -406,9 +406,13 @@
                                                         seguimientoAccion.estaImplementada == true}">
                                             Se comprobo la implementacion el dia #{seguimientoAccion.strFechaComprobacionImplementacion} con resultado                                           
                                             #{seguimientoAccion.comprobacionSeleccionadaImplementacion.descripcion}
-                                            Observaciones: #{seguimientoAccion.observacionesImplementacion}                                          
+                                            <c:if test="#{seguimientoAccion.observacionesImplementacion.blank}">
+                                                Sin Observaciones.
+                                            </c:if>
+                                            <c:if test="#{not seguimientoAccion.observacionesImplementacion.blank}">
+                                                Observaciones: #{seguimientoAccion.observacionesImplementacion}   
+                                            </c:if>
                                         </c:when> 
-
                                     </c:choose>
                                 </h:panelGroup>
                             </div>
@@ -503,7 +507,12 @@
                                                         seguimientoAccion.estaImplementada == true}">
                                             Se comprobo la implementacion el dia #{seguimientoAccion.strFechaComprobacionEficacia} con resultado
                                             #{seguimientoAccion.comprobacionSeleccionadaEficacia.descripcion}
-                                            Observaciones: #{seguimientoAccion.observacionesEficacia}
+                                            <c:if test="#{seguimientoAccion.observacionesEficacia.blank}">
+                                                Sin Observaciones
+                                            </c:if>
+                                            <c:if test="#{not seguimientoAccion.observacionesEficacia.blank}">
+                                                Observaciones: #{seguimientoAccion.observacionesEficacia}
+                                            </c:if>                                            
                                         </c:when>
                                     </c:choose>                                    
                                 </h:panelGroup>
@@ -800,9 +809,9 @@
                                             <div class="form-group">
                                                 <h:inputFile id="input-adjunto"  value="#{seguimientoAccion.archivoAdjunto}" class="btn btn-primary" p:accept="image/png, image/gif, image/jpeg, application/pdf, video/mp4">
                                                     <f:ajax event="change" listener="#{seguimientoAccion.setArchivoAdjunto(seguimientoAccion.archivoAdjunto)}" />
-                                                    <f:ajax event="change" listener="#{seguimientoAccion.agregarAdjunto()}" render="form_segumiento_accion:panel_lista_adjuntos form_segumiento_accion:panel_modal_adjunto" onevent="indicador"/>
+                                                    <f:ajax event="change" listener="#{seguimientoAccion.agregarAdjunto()}" render="form_segumiento_accion:panel_lista_adjuntos form_segumiento_accion:panel_modal_adjunto mensaje-error" onevent="indicador"/>
                                                 </h:inputFile>
-                                                <h:message for="input-adjunto" class="msj_error"/>
+                                                <h:message id="mensaje-error" for="input-adjunto" class="msj_error"/>
                                             </div>
                                         </c:if>
                                     </div>

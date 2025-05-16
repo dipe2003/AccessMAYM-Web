@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.fortaleza;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,6 +54,15 @@ public class Fortaleza implements Serializable, Comparable<Fortaleza> {
     // Getters
     public int getId() {return id;}
     public Date getFechaDeteccion() {return this.fechaDeteccion;}
+    public String getStrFechaDeteccion(){
+        try{
+            SimpleDateFormat fDate = new SimpleDateFormat("dd/MM/yy");
+            return fDate.format(fechaDeteccion);
+        }catch(NullPointerException ex){
+            ex.getMessage();
+        }
+        return "";
+    }
     public String getDescripcion() {return this.descripcion;}
     public Deteccion getDeteccionFortaleza() {return this.deteccionFortaleza;}
     public Area getAreaFortaleza() {return this.areaFortaleza;}
