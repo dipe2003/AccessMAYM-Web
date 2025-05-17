@@ -90,5 +90,10 @@ public class OpcionesSistema {
         Color colorBrighter = Color.decode(color).brighter();
         return String.format("#%02x%02x%02x", colorBrighter.getRed(), colorBrighter.getGreen(), colorBrighter.getBlue()); 
     }
+    
+    public String getColorDarker(String color){
+        Color colorDarker = Color.decode(color).darker();
+        return String.format("#%02x%02x%02x", colorDarker.getRed(), colorDarker.getGreen(), colorDarker.getBlue()); 
+    }
 
 }

@@ -40,6 +40,10 @@
                 font-weight: bold !important
             }
             
+            .panel-primary{
+             border-color: #{sesionUsuario.empresa.opcionesSistema.getColorDarker(sesionUsuario.empresa.opcionesSistema.colorPanelTitulo)} !important;    
+            }
+            
             /* fondo de opcion de menu seleccionada */
              .navbar-nav > .open > a{
                  background-color: #{sesionUsuario.empresa.opcionesSistema.getColorBrighter(sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo)} !important;

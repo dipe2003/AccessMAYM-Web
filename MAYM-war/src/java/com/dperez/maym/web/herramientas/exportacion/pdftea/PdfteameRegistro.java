@@ -129,7 +129,7 @@ public class PdfteameRegistro implements Serializable {
             documento.add(CrearTituloSeccion("Actividades"));
 
             //Actividades se divide en 3 columnas para Descripcion|Responsable|Fecha         
-            PdfPTable tablaActividades = CrearTablaRegistro(3, new int[]{17, 7, 4});
+            PdfPTable tablaActividades = CrearTablaRegistro(3, new int[]{19, 6, 3});
             tablaActividades.addCell(CrearCeldaTitulo("Actividades", 0));
             tablaActividades.addCell(CrearCeldaTitulo("Responsable", 0));
             tablaActividades.addCell(CrearCeldaTitulo("Fecha", 0));
