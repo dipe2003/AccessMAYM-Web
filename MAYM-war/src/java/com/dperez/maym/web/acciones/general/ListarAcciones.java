@@ -734,7 +734,7 @@ public class ListarAcciones implements Serializable {
                 .append(df.format(accionFiltrada.getFechaDeteccion()))
                 .append(" se presenta el siguiente Plan de Accion:");
 
-        df = new SimpleDateFormat("dd-MM-yyy");
+        df = new SimpleDateFormat("dd-MM-yy");
         pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
                 strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getEmpresa());
     }
@@ -744,14 +744,14 @@ public class ListarAcciones implements Serializable {
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
 
         if (accionFiltrada != null) {
-            StringBuilder titulo = new StringBuilder("MAYM Accion ")
-                    .append(accionFiltrada.getClass().getSimpleName())
-                    .append(" Id: ")
-                    .append(accionFiltrada.getId())
-                    .append(" - ")
-                    .append(accionFiltrada.getDeteccionAccion().getNombre());
+            String titulo = "MAYM Accion " + 
+                    accionFiltrada.getClass().getSimpleName() + 
+                    " Id: " + 
+                    accionFiltrada.getId() + 
+                    " - " + 
+                    accionFiltrada.getDeteccionAccion().getNombre();
 
-            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toString().toUpperCase(), accionFiltrada, excluirComprobaciones);
+            pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toUpperCase(), accionFiltrada, excluirComprobaciones);
         }
     }
 

@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <strong><label for="analisis_causa">Analisis de Causa</label></strong>
-                                 <h:outputText id="analisis_causa" class="form-control"  value="#{seguimientoAccion.accionSeleccionada.analisisCausa}" />
+                                 <h:inputTextarea id="analisis_causa" class="form-control" readonly="true" style="background-color: rgb(255,255,255)"  value="#{seguimientoAccion.accionSeleccionada.analisisCausa}" />
                             </div>
                         </div>
 
@@ -95,7 +95,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <strong><label for="codificacion_correctiva">Codificacion</label></strong>
-                                    <h:inputTextarea id="codificacion_correctiva" class="form-control" readonly="true" style="background-color: rgb(255,255,255)" value="#{seguimientoAccion.accionSeleccionada.codificacionAccion.nombre}" />
+                                    <h:outputText id="codificacion_correctiva" class="form-control" value="#{seguimientoAccion.accionSeleccionada.codificacionAccion.nombre}" />
                                 </div>
                             </div>
                         </div>                            

@@ -95,9 +95,9 @@ public class PdfteameRegistro implements Serializable {
             tablaGeneral.addCell(CrearCeldaTitulo("Descripcion", 2));
             tablaGeneral.addCell(CrearCeldaVacia(0, false));
             tablaGeneral.addCell(CrearCeldaTitulo("Analisis de Causa", 2));
-            tablaGeneral.addCell(CrearCeldaContenido(accion.getDescripcion(), false, 2, 150));
+            tablaGeneral.addCell(CrearCeldaContenido(accion.getDescripcion(), false, 2, 120));
             tablaGeneral.addCell(CrearCeldaVacia(0, false));
-            tablaGeneral.addCell(CrearCeldaContenido(accion.getAnalisisCausa().equals("") ? "Sin Definir" : accion.getAnalisisCausa(), false, 3, 150));
+            tablaGeneral.addCell(CrearCeldaContenido(accion.getAnalisisCausa().equals("") ? "Sin Definir" : accion.getAnalisisCausa(), false, 3, 120));
             tablaGeneral.addCell(CrearCeldaVacia(5, false));
             tablaGeneral.addCell(CrearCeldaTitulo("Referencias", 2));
             tablaGeneral.addCell(CrearCeldaContenido(accion.getReferencias().equals("") ? "--" : accion.getReferencias(), false, 3, 18));
