@@ -39,11 +39,12 @@ public class FacadeDatos {
      * @param idAreaSector
      * @param idDeteccion
      * @param idCodificacion
+     * @param idEmpresa
      * @return Null: si no se creo.
      */
     public Accion nuevaAccion(TipoAccion tipoAccion, Date fechaDeteccion, String descripcion,String referencias,
-            int idAreaSector, int idDeteccion, int idCodificacion){
-        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, referencias, idAreaSector, idDeteccion, idCodificacion);
+            int idAreaSector, int idDeteccion, int idCodificacion, int idEmpresa){
+        return cReg.nuevaAccion(tipoAccion, fechaDeteccion, descripcion, referencias, idAreaSector, idDeteccion, idCodificacion, idEmpresa);
     }
     
     /**
@@ -141,6 +142,7 @@ public class FacadeDatos {
      * @param idAccion
      * @param fechaDeteccion
      * @param descripcion
+     * @param referencias
      * @param analisisCausa
      * @param idArea
      * @param idDeteccion
@@ -181,10 +183,11 @@ public class FacadeDatos {
      * @param descripcion
      * @param idDeteccion
      * @param idAreaSector
+     * @param idEmpresa
      * @return Null: si no se creo.
      */
-    public Fortaleza nuevaFortaleza(Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector){
-        return cReg.nuevaFortaleza(fechaDeteccion, descripcion, idDeteccion, idAreaSector);
+    public Fortaleza nuevaFortaleza(Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector, int idEmpresa){
+        return cReg.nuevaFortaleza(fechaDeteccion, descripcion, idDeteccion, idAreaSector, idEmpresa);
     }
     
     /**

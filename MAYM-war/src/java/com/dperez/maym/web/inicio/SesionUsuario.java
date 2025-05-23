@@ -5,11 +5,12 @@
  */
 package com.dperez.maym.web.inicio;
 
-import com.dperez.maym.web.empresa.Empresa;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.herramientas.IOPropiedades;
+import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,8 +43,8 @@ public class SesionUsuario implements Serializable {
 
     @Inject
     private IOPropiedades ioProp;
-
-    private Empresa empresa;
+    
+    private OpcionesApariencia opsApariencia;
 
     private String UsuarioSeleccionado;
     private String PasswordUsuario;
@@ -83,14 +84,6 @@ public class SesionUsuario implements Serializable {
         return this.NombreUsuario;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
     //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {
         this.UsuarioSeleccionado = UsuarioSeleccionado;
@@ -110,7 +103,6 @@ public class SesionUsuario implements Serializable {
         fLectura = new FacadeLectura();
         facadeMain = new FacadeMain();
 
-        cargarEmpresa();
         this.Usuarios = new HashMap<>();
         // llenar la lista de usuarios que no se hayan dado de baja.
         Usuarios = fLectura.listarUsuarios(false).stream()
@@ -125,22 +117,14 @@ public class SesionUsuario implements Serializable {
         }
 
         cargarColores();
-
     }
 
-    public void cargarColores() {
-        
-        Properties prop = new Properties();
-        if (!ManejadorPropiedades.getPropiedades(ioProp.getDirectorio()).isEmpty()) {
-            prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
-        }
-        empresa.getOpcionesSistema().setColorSuperiorPanelTitulo(prop.getProperty("color-superior") != null ? prop.getProperty("color-superior") : "#2a2a2a");
-        empresa.getOpcionesSistema().setColorInferiorPanelTitulo(prop.getProperty("color-inferior") != null ? prop.getProperty("color-inferior") : "black");
-        empresa.getOpcionesSistema().setColorPanelTitulo(prop.getProperty("color-titulos") != null ? prop.getProperty("color-titulos") : "#337ab7");
-        empresa.getOpcionesSistema().setColorFuentePanelEncabezado(prop.getProperty("color-fuente-encabezado") != null ? prop.getProperty("color-fuente-encabezado") : "#cce8f6");
-        empresa.getOpcionesSistema().setColorFuentePanelTitulo(prop.getProperty("color-fuente-titulos") != null ? prop.getProperty("color-fuente-titulos") : "#cce8f6");
-        empresa.getOpcionesSistema().setColorBody(prop.getProperty("color-body") != null ? prop.getProperty("color-body") : "#ffffff");
-        empresa.getOpcionesSistema().setColorBoton(prop.getProperty("color-boton") != null ? prop.getProperty("color-boton") : "#337ab7");
+    public void cargarColores() {        
+        if (this.UsuarioLogueado != null) {
+            opsApariencia = this.UsuarioLogueado.getEmpresaUsuario().getOpcionesSistema().getOpcionesApariencia();
+        } else {
+            opsApariencia = new OpcionesApariencia();
+        }     
     }
 
     public void ingresar() throws IOException {
@@ -150,11 +134,12 @@ public class SesionUsuario implements Serializable {
         String url = context.getExternalContext().getRequestHeaderMap().get((String) ("Referer"));
         try {
             if (facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado), PasswordUsuario)) {
-                Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
+                Usuario usuario = fLectura.getUsuario(Integer.valueOf(UsuarioSeleccionado));
                 request.getSession().setAttribute("Usuario", usuario);
 
                 this.UsuarioLogueado = usuario;
                 this.PasswordUsuario = new String();
+                cargarColores();
                 context.getExternalContext().redirect(url);
             } else {
                 context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
@@ -164,31 +149,7 @@ public class SesionUsuario implements Serializable {
             context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             context.renderResponse();
         }
-    }
-
-    public void cargarEmpresa() {
-        if (!ManejadorPropiedades.getPropiedades(ioProp.getDirectorio()).isEmpty()) {
-            Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
-            empresa = new Empresa(prop.getProperty("nombre"),
-                    prop.getProperty("direccion"),
-                    prop.getProperty("telefono"),
-                    prop.getProperty("movil"),
-                    prop.getProperty("correo"),
-                    prop.getProperty("nombreExtra"));
-            if (prop.get("logo_empresa") != null) {
-                empresa.setUbicacionLogo(prop.getProperty("logo_empresa"));
-            }
-            if (prop.get("logo_informes_empresa") != null) {
-                empresa.setUbicacionLogoInformes(prop.getProperty("logo_informes_empresa"));
-            }
-        } else {
-            try {
-                String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/Views/Empresas/AdminEmpresa.xhtml");
-            } catch (IOException ex) {
-            }
-        }
-    }
+    }    
 
     public void logout() {
         try {
@@ -196,6 +157,7 @@ public class SesionUsuario implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             request.getSession().invalidate();
             this.UsuarioLogueado = null;
+            cargarColores();
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         } catch (Exception ex) {
             System.out.println("Error en logout: " + ex.getMessage());
@@ -222,5 +184,9 @@ public class SesionUsuario implements Serializable {
             context.addMessage("formlogin:usr", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             context.renderResponse();
         }
+    }
+    
+    public void cargarEmpresa(){
+        this.UsuarioLogueado.setEmpresaUsuario(fLectura.getEmpresa(this.UsuarioLogueado.getEmpresaUsuario().getId()));
     }
 }

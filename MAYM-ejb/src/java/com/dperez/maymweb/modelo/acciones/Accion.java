@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
 import java.io.Serializable;
@@ -82,6 +83,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     @JoinColumn(name="comprobacionEficacia_id")
     private Eficacia comprobacionEficacia;
     
+    @ManyToOne
+    @JoinColumn(name ="empresa_id")
+    private Empresa empresaAccion;
+    
     // Constructores
     public Accion(){
         this.estadoDeAccion = Estado.PENDIENTE;
@@ -90,17 +95,18 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.productosInvolucrados = new ArrayList<>();
     }
     
-    public Accion(Date fechaDeteccion, String descripcion, String referencias) {
+    public Accion(Date fechaDeteccion, String descripcion, String referencias, Empresa empresa) {
         this.estadoDeAccion = Estado.PENDIENTE;
         this.fechaDeteccion = fechaDeteccion;
         this.descripcion = descripcion;
         this.referencias = referencias;
+        this.empresaAccion = empresa;
         this.adjuntosDeAccion = new ArrayList<>();
         this.actividadesDeAccion = new ArrayList<>();
         this.productosInvolucrados = new ArrayList<>();
     }
     
-    public Accion(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion) {
+    public Accion(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion, Empresa empresa) {
         this.estadoDeAccion = Estado.PENDIENTE;
         this.fechaDeteccion = fechaDeteccion;
         this.descripcion = descripcion;
@@ -111,9 +117,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
         this.deteccionAccion = deteccion;
         this.codificacionAccion = codificacion;
         this.referencias = referencias;
+        this.empresaAccion = empresa;
     }
     
-    // Getters
+    //<editor-fod desc="GETTERS">
     public int getId() {return this.id;}
     public Date getFechaDeteccion() {return this.fechaDeteccion;}
     public String getStrFechaDeteccion(){
@@ -147,8 +154,12 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public Eficacia getComprobacionEficacia() {return comprobacionEficacia;}
     
     public List<Producto> getProductosInvolucrados() {return productosInvolucrados;}
+
+    public Empresa getEmpresaAccion() {return empresaAccion;}    
     
-    // Setters
+    //</editor-fold>
+    
+    //<editor-fold desc="SETTERS">
     public void setId(int id) {this.id = id;}
     public void setFechaDeteccion(Date fechaDeteccion) {this.fechaDeteccion = fechaDeteccion;}
     public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
@@ -173,6 +184,10 @@ public abstract class Accion implements Serializable, Comparable<Accion>{
     public void setCodificacionAccion(Codificacion codificacionAccion) {this.codificacionAccion = codificacionAccion;}
     
     public void setProductosInvolucrados(List<Producto> productosInvolucrados) {this.productosInvolucrados = productosInvolucrados;}
+
+    public void setEmpresaAccion(Empresa empresaAccion) {this.empresaAccion = empresaAccion;}
+    
+    //</editor-fold>
     
     /*
     Comprobaciones

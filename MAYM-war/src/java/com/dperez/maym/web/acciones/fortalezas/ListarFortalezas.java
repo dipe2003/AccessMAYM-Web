@@ -6,6 +6,7 @@
 package com.dperez.maym.web.acciones.fortalezas;
 
 import com.dperez.maym.web.herramientas.Presentacion;
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 @Named
 @ViewScoped
 public class ListarFortalezas implements Serializable{
+    @Inject
+    SesionUsuario sesionUsuario;
     
     private FacadeLectura fLectura;
     
@@ -67,7 +71,10 @@ public class ListarFortalezas implements Serializable{
         }
         
         ListaFortalezas = new ArrayList<>();
-        ListaCompletaFortalezas = fLectura.listarFortalezas();
+        ListaCompletaFortalezas = fLectura.listarFortalezas()
+                            .stream()
+                            .filter(a->a.getEmpresaFortaleza().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .toList();;
         
         CantidadPaginas =  Presentacion.calcularCantidadPaginas(ListaCompletaFortalezas.size(), MAX_ITEMS);
         

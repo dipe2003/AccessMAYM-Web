@@ -161,7 +161,7 @@ public class VerAccion implements Serializable {
             IdAccion = Integer.parseInt(request.getParameter("id"));
         }catch(Exception nEx){}
         if(IdAccion != 0){
-            AccionSeleccionada = fLectura.GetAccion(IdAccion);
+            AccionSeleccionada = fLectura.getAccion(IdAccion);
             tipoDeAccion = TipoAccion.valueOf(AccionSeleccionada.getClass().getSimpleName().toUpperCase());           
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             GeneradaPor = AccionSeleccionada.getDeteccionAccion();

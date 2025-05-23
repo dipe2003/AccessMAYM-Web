@@ -112,7 +112,7 @@ public class PerfilUsuario implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             if ((fMain.CambiarDatosUsuario(sesionUsuario.getUsuarioLogueado().getId(), nombre, apellido, correo, sesionUsuario.getUsuarioLogueado().getPermisoUsuario(),
                     recibeAlertas, idAreaSeleccionada)) != -1) {
-                sesionUsuario.setUsuarioLogueado(fLectura.GetUsuario(id));
+                sesionUsuario.setUsuarioLogueado(fLectura.getUsuario(id));
                 context.addMessage("form_perfil_usuario:btn_guardar_datos", new FacesMessage(FacesMessage.SEVERITY_INFO, "Pefil Actualizado", "Se actualizaron los datos del perfil."));
                 context.renderResponse();
             } else {

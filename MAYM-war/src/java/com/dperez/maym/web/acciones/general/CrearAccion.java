@@ -6,6 +6,7 @@
 package com.dperez.maym.web.acciones.general;
 
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.area.Area;
@@ -27,6 +28,7 @@ import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,6 +36,9 @@ import javax.servlet.http.HttpServletRequest;
 @ViewScoped
 @ManagedBean
 public class CrearAccion implements Serializable {
+    
+    @Inject
+    SesionUsuario sesion;
 
     private FacadeLectura fLectura;
     private FacadeDatos fDatos;
@@ -235,7 +240,8 @@ public class CrearAccion implements Serializable {
             Referencias = new String();
         }
         Accion accion = fDatos.nuevaAccion(tipoDeAccion, FechaDeteccion,
-                Descripcion, Referencias, AreaSectorAccionSeleccionada, DeteccionSeleccionada, CodificacionSeleccionada);
+                Descripcion, Referencias, AreaSectorAccionSeleccionada, DeteccionSeleccionada, 
+                CodificacionSeleccionada, sesion.getUsuarioLogueado().getEmpresaUsuario().getId());
 
         if (accion != null) {//          
             // redirigir a la edicion de la accion correctiva.

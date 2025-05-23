@@ -158,17 +158,19 @@ public class Usuarios implements Serializable {
         listaCompletaUsuariosFiltrable = new ArrayList<>();
         responsables = new HashMap<>();
         fLectura.listarUsuarios(false).stream()
-                 .forEach((Usuario u)->{
-                     listaCompletaUsuariosFiltrable.add(new ContenedorFiltrable<>(u.getNombreCompleto(), u));
-                     StringBuilder responsabilidades = new StringBuilder();
-                     int total = u.getResponsablesUsuario().size();
-                     for(int i = 0; i< total ; i++){
-                         responsabilidades.append(u.getResponsablesUsuario().get(i).getResponsabilidadResponsable().getNombre());
-                         if (i +1 < total )
-                             responsabilidades.append(", ");
-                     }
-                     responsables.put(u.getId(), responsabilidades.toString());
-                 });
+                .filter(u -> u.getEmpresaUsuario().getId() == sesion.getUsuarioLogueado().getEmpresaUsuario().getId())
+                .forEach((Usuario u) -> {
+                    listaCompletaUsuariosFiltrable.add(new ContenedorFiltrable<>(u.getNombreCompleto(), u));
+                    StringBuilder responsabilidades = new StringBuilder();
+                    int total = u.getResponsablesUsuario().size();
+                    for (int i = 0; i < total; i++) {
+                        responsabilidades.append(u.getResponsablesUsuario().get(i).getResponsabilidadResponsable().getNombre());
+                        if (i + 1 < total) {
+                            responsabilidades.append(", ");
+                        }
+                    }
+                    responsables.put(u.getId(), responsabilidades.toString());
+                });
         listaCompletaUsuariosFiltrable.stream().sorted();
         
         PermisosUsuario = EnumPermiso.values();
@@ -201,7 +203,7 @@ public class Usuarios implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if(Password.equals(PasswordConfirmacion)){
             if((fAdmin.nuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
-                    PermisoSeleccionado, AreaSeleccionada))!=null){
+                    PermisoSeleccionado, AreaSeleccionada, sesion.getUsuarioLogueado().getEmpresaUsuario().getId()))!=null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
             }else{
                 context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
@@ -222,7 +224,7 @@ public class Usuarios implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas, AreaSeleccionada))!=-1){
             if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
-                sesion.setUsuarioLogueado(fLectura.GetUsuario(IdUsuarioSeleccionado));
+                sesion.setUsuarioLogueado(fLectura.getUsuario(IdUsuarioSeleccionado));
             }
             context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina="+PaginaActual);
         }else{
@@ -446,7 +448,7 @@ public class Usuarios implements Serializable {
      * @param idUsuarioSeleccionado
      */
     public void actualizarResponsabilidadesSeleccionadas(int idUsuarioSeleccionado){
-        this.usuarioSeleccionado = fLectura.GetUsuario(idUsuarioSeleccionado);
+        this.usuarioSeleccionado = fLectura.getUsuario(idUsuarioSeleccionado);
         
         this.listaResponsabilidades.clear();
         this.responsabilidadesAEliminar.clear();

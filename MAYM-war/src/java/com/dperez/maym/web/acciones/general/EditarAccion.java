@@ -8,9 +8,9 @@ package com.dperez.maym.web.acciones.general;
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maym.web.inicio.SesionUsuario;
-import com.dperez.maymweb.herramientas.Evento;
-import com.dperez.maymweb.herramientas.ProgramadorEventos;
-import com.dperez.maymweb.herramientas.TipoEvento;
+import com.dperez.maym.web.herramientas.eventos.Evento;
+import com.dperez.maym.web.herramientas.eventos.ProgramadorEventos;
+import com.dperez.maym.web.herramientas.eventos.TipoEvento;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.comprobaciones.Comprobacion;
 import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
@@ -22,8 +22,8 @@ import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
-import com.dperez.maymweb.herramientas.EventoAccion;
-import com.dperez.maymweb.herramientas.EventoActividad;
+import com.dperez.maym.web.herramientas.eventos.EventoAccion;
+import com.dperez.maym.web.herramientas.eventos.EventoActividad;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.producto.Producto;
@@ -470,7 +470,7 @@ public class EditarAccion implements Serializable {
         };
 
         if (IdAccionSeleccionada != 0) {
-            AccionSeleccionada = fLectura.GetAccion(IdAccionSeleccionada);
+            AccionSeleccionada = fLectura.getAccion(IdAccionSeleccionada);
             tipoDeAccion = TipoAccion.valueOf(AccionSeleccionada.getClass().getSimpleName().toUpperCase());
             FechaDeteccion = AccionSeleccionada.getFechaDeteccion();
             Descripcion = AccionSeleccionada.getDescripcion();
@@ -530,7 +530,7 @@ public class EditarAccion implements Serializable {
     }
 
     private void actualizarListaAdjuntos() {
-        Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+        Accion accionSeguida = fLectura.getAccion(IdAccionSeleccionada);
         if (!accionSeguida.getAdjuntosDeAccion().isEmpty()) {
             List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
             MapAdjuntos = listAdjuntos.stream()
@@ -540,7 +540,7 @@ public class EditarAccion implements Serializable {
     }
 
     private void actualizarListaProductos() {
-        Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+        Accion accionSeguida = fLectura.getAccion(IdAccionSeleccionada);
         if (!accionSeguida.getProductosInvolucrados().isEmpty()) {
             ListaProductosAfectados = accionSeguida.getProductosInvolucrados();
         }
@@ -573,7 +573,8 @@ public class EditarAccion implements Serializable {
                 ctx.renderResponse();
             } else {
                 try {
-                    String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
+                    String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, 
+                            sesion.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
                     // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
                     if (!datosAdjunto[0].isEmpty()) {
                         TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;

@@ -9,20 +9,20 @@
     <ui:composition >
 
         <div class="container-fluid" >
-            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.empresa.opcionesSistema.colorSuperiorPanelTitulo}, #{sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo})">
+            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.opsApariencia.colorSuperiorPanelTitulo}, #{sesionUsuario.opsApariencia.colorInferiorPanelTitulo})">
                 <div class="col-sm-4">
                     <c:choose>
-                        <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogo}">
+                        <c:when test="#{sesionUsuario.usuarioLogueado == null or empty sesionUsuario.usuarioLogueado.empresaUsuario.ubicacionLogo}">
                             <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 80px; padding: 1%" alt="Logo sin cargar" />
                         </c:when>
                         <c:otherwise>
-                            <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogo}" class="img-responsive" style="height: 80px; padding: 1%"/>
+                            <img alt="Logo" src="/datos#{sesionUsuario.usuarioLogueado.empresaUsuario.ubicacionLogo}" class="img-responsive" style="height: 80px; padding: 1%"/>
                         </c:otherwise>
                     </c:choose>
 
                 </div>
                 <div class="col-sm-8">
-                    <h1 style="color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelEncabezado}">M.A.Y.M.-Web App</h1>
+                    <h1 style="color: #{sesionUsuario.opsApariencia.colorFuentePanelEncabezado}">M.A.Y.M.-Web App</h1>
                 </div>
             </div>
 
@@ -36,62 +36,64 @@
                 </button>
                 <a class="navbar-brand" href="#{facesContext.externalContext.requestContextPath}/index.xhtml"><span class="glyphicon glyphicon-home"></span> Inicio</a>
             </div>
-            <div class="collapse navbar-collapse" id="myNavbar" >
+            <div class="collapse navbar-collapse" id="myNavbar" >                
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=CORRECTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                            </c:if>
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=CORRECTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                            </c:if>
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                            </c:if>
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <c:if test="#{sesionUsuario.usuarioLogueado != null}">
-                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/CrearFortaleza.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
-                            </c:if>
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Estadisticas y Graficos<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml"><span class="glyphicon glyphicon-stats"></span> Graficos</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-search"></span> Buscar</a>
-                        <div class="dropdown-menu">
-                            <h:form id="formBuscar" class="form container-fluid">
-                                <div class="form-group" ><label for="buscarid">Id de Registro:</label>
-                                    <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
-                                </div>
-                                <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarAccionId()}">
-                                    <f:ajax execute="formBuscar" onevent="indicador" />
-                                </h:commandButton>
-                            </h:form>
-                        </div>
-                    </li>
+                    <c:if test="#{sesionUsuario.usuarioLogueado != null}">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Correctivas<span class="caret"></span></a>
+                            <ul class="dropdown-menu">     
+                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=CORRECTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                </c:if>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=CORRECTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Preventivas<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                </c:if>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=PREVENTIVA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mejoras<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/CrearAccion.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                </c:if>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/General/ListarAcciones.xhtml?tipo=MEJORA"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fortalezas<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/CrearFortaleza.xhtml"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+                                </c:if>
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Acciones/Fortalezas/ListarFortalezas.xhtml?pagina=1"><span class="glyphicon glyphicon-th-list"></span> Listado</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Estadisticas y Graficos<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Graficos/GraficosIndex.xhtml"><span class="glyphicon glyphicon-stats"></span> Graficos</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+                            <div class="dropdown-menu">
+                                <h:form id="formBuscar" class="form container-fluid">
+                                    <div class="form-group" ><label for="buscarid">Id de Registro:</label>
+                                        <h:inputText class="form-control" p:placeholder='Id de Accion' id="buscarid" value="#{datosFiltros.idAccionBuscada}"/>
+                                    </div>
+                                    <h:commandButton id="btn_buscar_id" class="btn btn-block" value="Buscar" action="#{datosFiltros.buscarAccionId()}">
+                                        <f:ajax execute="formBuscar" onevent="indicador" />
+                                    </h:commandButton>
+                                </h:form>
+                            </div>
+                        </li>
+                    </c:if>
                     <c:if test="#{sesionUsuario.usuarioLogueado != null}">
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Configuracion<span class="caret"></span></a>

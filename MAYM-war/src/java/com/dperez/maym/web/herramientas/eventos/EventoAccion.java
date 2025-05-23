@@ -4,7 +4,7 @@
 * and open the template in the editor.
 */
 
-package com.dperez.maymweb.herramientas;
+package com.dperez.maym.web.herramientas.eventos;
 
 import com.dperez.maymweb.modelo.acciones.Accion;
 import java.io.Serializable;

@@ -4,7 +4,7 @@
  */
 package com.dperez.maym.web.herramientas.exportacion.pdftea;
 
-import com.dperez.maym.web.empresa.Empresa;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.Estado;
@@ -292,18 +292,18 @@ public class PdfteameRegistro implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-        Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
+        Color color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo());
 
         celda.setBackgroundColor(color);
         Phrase texto = new Phrase();
 
-        color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
+        color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorFuentePanelTitulo());
         fuenteTitulosCelda.setColor(color);
 
         texto.setFont(fuenteTitulosCelda);
         texto.add(textoTitulo);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -323,7 +323,7 @@ public class PdfteameRegistro implements Serializable {
         texto.setFont(fuenteContenidoCelda);
         texto.add(textoContenido);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -341,7 +341,7 @@ public class PdfteameRegistro implements Serializable {
         texto.setFont(fuenteContenidoCelda);
         texto.add(textoContenido);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -370,7 +370,7 @@ public class PdfteameRegistro implements Serializable {
         tabla.getDefaultCell().setBorderWidthTop(1);
         tabla.getDefaultCell().setBorderWidthRight(1);
         tabla.getDefaultCell().setBorderWidthLeft(1);
-        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return tabla;
     }
 
@@ -407,7 +407,7 @@ public class PdfteameRegistro implements Serializable {
         Image logo = null;
         try {
             String realPath = cArchivo.getHome() + cArchivo.getSeparator() + "MAYMWEB" + cArchivo.getSeparator();
-            logo = Image.getInstance(realPath + empresa.getUbicacionLogoInformes());
+            logo = Image.getInstance(realPath + empresa.getUbicacionLogoAdicional());
         } catch (FileNotFoundException ex) {
             logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));
         } catch (IOException ex) {
@@ -471,7 +471,7 @@ public class PdfteameRegistro implements Serializable {
     /// <returns></returns>
     private PdfPCell CrearTituloImpresion(String titulo) {
         Phrase f = new Phrase();
-        Color color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelEncabezado());
+        Color color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorFuentePanelEncabezado());
         f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, color));
         f.add(titulo.toUpperCase());
 
@@ -479,7 +479,7 @@ public class PdfteameRegistro implements Serializable {
         celda.setColspan(4);
         celda.setPaddingTop(-5f);
 
-        color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
+        color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorInferiorPanelTitulo());
 
         celda.setBackgroundColor(color);
         celda.setFixedHeight(18);

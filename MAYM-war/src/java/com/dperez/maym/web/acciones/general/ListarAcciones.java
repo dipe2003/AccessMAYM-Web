@@ -650,7 +650,7 @@ public class ListarAcciones implements Serializable {
         ListaAcciones = new ArrayList<>();
         ListaCompletaAcciones = new ArrayList<>();
         if (id > 0) {
-            Accion accion = fLectura.GetAccion(id);
+            Accion accion = fLectura.getAccion(id);
             if (accion != null) {
                 ListaCompletaAcciones.add(accion);
                 cambiarPagina(true, PaginaActual);
@@ -668,11 +668,20 @@ public class ListarAcciones implements Serializable {
         } else {
             switch (tipoDeAccion) {
                 case CORRECTIVA ->
-                    ListaCompletaAcciones = fLectura.listarAccionesCorrectivas();
+                    ListaCompletaAcciones = fLectura.listarAccionesCorrectivas()
+                            .stream()
+                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .toList();
                 case PREVENTIVA ->
-                    ListaCompletaAcciones = fLectura.listarAccionesPreventivas();
+                    ListaCompletaAcciones = fLectura.listarAccionesPreventivas()
+                            .stream()
+                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .toList();
                 case MEJORA ->
-                    ListaCompletaAcciones = fLectura.listarAccionesMejoras();
+                    ListaCompletaAcciones = fLectura.listarAccionesMejoras()
+                            .stream()
+                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .toList();
             }
             ListaCompletaAcciones.sort(Comparator.reverseOrder());
             cargarPagina(ListaCompletaAcciones);
@@ -697,7 +706,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void pdfteaListado() {
-        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getEmpresa());
+        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
         List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
         
         StringBuilder titulo = new StringBuilder("Listado de ");
@@ -715,7 +724,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void pdfteaPlanAccion(int id) {
-        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getEmpresa());
+        PdfteameListado pdf = new PdfteameListado(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
         List<Accion> accionesPlan = fLectura.listarAcciones().stream()
                 .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
@@ -736,11 +745,11 @@ public class ListarAcciones implements Serializable {
 
         df = new SimpleDateFormat("dd-MM-yy");
         pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
-                strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getEmpresa());
+                strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
     }
 
     public void pdfteaRegistro(int id, boolean excluirComprobaciones) {
-        PdfteameRegistro pdf = new PdfteameRegistro(sesionUsuario.getEmpresa());
+        PdfteameRegistro pdf = new PdfteameRegistro(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
 
         if (accionFiltrada != null) {

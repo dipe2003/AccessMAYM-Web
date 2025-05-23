@@ -4,6 +4,7 @@ import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import com.dperez.maymweb.modelo.usuario.Responsable;
@@ -46,6 +47,10 @@ public class FabricaRepositorio {
     
     public static RepositorioPersistencia<Fortaleza> getRepositorioFortalezas(){
         return new RepositorioPersistencia<>(Fortaleza.class, entityManager);
-    }       
+    } 
+    
+    public static RepositorioPersistencia<Empresa> getRepositorioEmpresa(){
+        return new RepositorioPersistencia<>(Empresa.class, entityManager);
+    } 
   
 }

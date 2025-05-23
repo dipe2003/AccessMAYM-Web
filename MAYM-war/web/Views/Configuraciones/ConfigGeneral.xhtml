@@ -97,7 +97,7 @@
                                 <div class="panel-body">  
                                     <div class="form-group row">   
                                         <h:panelGroup id="panel-datos-correo">
-                                            <div class="col-xs-3">
+                                            <div class="col-xs-2">
                                                 <label>From:</label>
                                                 <h:inputText id="from" class="form-control" value="#{configGeneral.from}" required="true" requiredMessage="Requerido!"/>
                                                 <h:message for="from" class="msj_error"/>
@@ -105,6 +105,11 @@
                                             <div class="col-xs-1" style="text-align: center">
                                                 <label>Utilizar tls: </label>
                                                 <h:selectBooleanCheckbox class="form-control" value="#{configGeneral.tls}" title="Utilizar tls" requiredMessage="Requerido!"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <label>Puerto: </label>
+                                                <h:inputText id="host" class="form-control" value="#{configGeneral.host}" required="true" requiredMessage="Requerido!"/>
+                                                <h:message for="host" class="msj_error"/>
                                             </div>
                                             <div class="col-xs-2">
                                                 <label>Puerto: </label>

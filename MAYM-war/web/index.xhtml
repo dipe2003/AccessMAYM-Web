@@ -30,41 +30,41 @@
 
         <style>
             .navbar-inverse{
-                background-color:#{sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo}!important;
+                background-color:#{sesionUsuario.opsApariencia.colorInferiorPanelTitulo}!important;
                 border-width: 0px
             }
 
             .panel-heading{
-                background-color: #{sesionUsuario.empresa.opcionesSistema.colorPanelTitulo} !important;
-                color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelTitulo} !important;
+                background-color: #{sesionUsuario.opsApariencia.colorPanelTitulo} !important;
+                color: #{sesionUsuario.opsApariencia.colorFuentePanelTitulo} !important;
                 font-weight: bold !important
             }
             
             .panel-primary{
-             border-color: #{sesionUsuario.empresa.opcionesSistema.getColorDarker(sesionUsuario.empresa.opcionesSistema.colorPanelTitulo)} !important;    
+             border-color: #{sesionUsuario.opsApariencia.getColorDarker(sesionUsuario.empresa.opcionesSistema.colorPanelTitulo)} !important;    
             }
             
             /* fondo de opcion de menu seleccionada */
              .navbar-nav > .open > a{
-                 background-color: #{sesionUsuario.empresa.opcionesSistema.getColorBrighter(sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo)} !important;
+                 background-color: #{sesionUsuario.opsApariencia.getColorBrighter(sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo)} !important;
              }
 
             /* fuente titulo de opcion de menu */
             .navbar-nav > li > a{
-                color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelEncabezado} !important
+                color: #{sesionUsuario.opsApariencia.colorFuentePanelEncabezado} !important
             }
 
             /* fuente botón HOME */
             .navbar-inverse .navbar-brand {
-                color: #{sesionUsuario.empresa.opcionesSistema.colorFuentePanelEncabezado} !important
+                color: #{sesionUsuario.opsApariencia.colorFuentePanelEncabezado} !important
             }
 
             body {
-                background-color: #{sesionUsuario.empresa.opcionesSistema.colorBody} !important;
+                background-color: #{sesionUsuario.opsApariencia.colorBody} !important;
             }
 
             .btn-primary{
-                background-color: #{sesionUsuario.empresa.opcionesSistema.colorBoton} !important;
+                background-color: #{sesionUsuario.opsApariencia.colorBoton} !important;
             }
 
             /* sobreescribir valores del css de jquery */

@@ -9,9 +9,9 @@ import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.actividad.Actividad;
 import com.dperez.maymweb.facades.FacadeDatos;
 import com.dperez.maymweb.facades.FacadeLectura;
-import com.dperez.maymweb.herramientas.Evento;
-import com.dperez.maymweb.herramientas.EventoActividad;
-import com.dperez.maymweb.herramientas.ProgramadorEventos;
+import com.dperez.maym.web.herramientas.eventos.Evento;
+import com.dperez.maym.web.herramientas.eventos.EventoActividad;
+import com.dperez.maym.web.herramientas.eventos.ProgramadorEventos;
 import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.acciones.actividad.TipoActividad;
 import com.dperez.maymweb.modelo.usuario.Responsable;
@@ -240,7 +240,7 @@ public class ActividadesAccion implements Serializable {
             IdActividadEditar = 0;
         }
         if (idAccion != 0) {
-            AccionSeleccionada = fLectura.GetAccion(idAccion);
+            AccionSeleccionada = fLectura.getAccion(idAccion);
             definirTiposActividad();
             tipoDeActividad = tiposDeActividad[0];
             if (IdActividadEditar > 0) {

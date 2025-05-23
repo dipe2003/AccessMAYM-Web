@@ -41,6 +41,8 @@ public class EditarFortaleza implements Serializable {
     private ModalDetecciones modalDetecciones;
 
     private int IdFortaleza;
+    
+    private Fortaleza FortalezaSeleccionada;
 
     private Date FechaDeteccion;
     private String strFechaDeteccion;
@@ -100,6 +102,10 @@ public class EditarFortaleza implements Serializable {
         return AreaSectorAccionSeleccionada;
     }
 
+    public Fortaleza getFortalezaSeleccionada() {
+        return FortalezaSeleccionada;
+    }
+
     //  Setters
     public void serIdAccionCorrectiva(int IdAccionCorrectiva) {
         this.IdFortaleza = IdAccionCorrectiva;
@@ -145,7 +151,9 @@ public class EditarFortaleza implements Serializable {
     public void setAreaSectorAccionSeleccionada(Integer AreaSectorAccionSeleccionada) {
         this.AreaSectorAccionSeleccionada = AreaSectorAccionSeleccionada;
     }
-
+    public void setFortalezaSeleccionada(Fortaleza FortalezaSeleccionada) {
+        this.FortalezaSeleccionada = FortalezaSeleccionada;
+    }
     //  Metodos
     /**
      * Carga de propiedades al inicio
@@ -161,7 +169,7 @@ public class EditarFortaleza implements Serializable {
         // recuperar el id para llenar datos de la accion de mejora y el resto de las propiedades.
         IdFortaleza = Integer.parseInt(request.getParameter("id"));
         if (IdFortaleza != 0) {
-            Fortaleza FortalezaSeleccionada = fLectura.getFortaleza(IdFortaleza);
+            FortalezaSeleccionada = fLectura.getFortaleza(IdFortaleza);
             FechaDeteccion = FortalezaSeleccionada.getFechaDeteccion();
             Descripcion = FortalezaSeleccionada.getDescripcion();
 

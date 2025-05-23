@@ -18,6 +18,7 @@ import com.dperez.maymweb.modelo.acciones.adjunto.TipoAdjunto;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
@@ -37,6 +38,7 @@ public class ControladorRegistro {
     private final RepositorioPersistencia<Responsable> repoResponsable;
     private final RepositorioPersistencia<Fortaleza> repoFortalezas;
     private final RepositorioPersistencia<Codificacion> repoCodificaciones;     
+    private final RepositorioPersistencia<Empresa> repoEmpresa;  
     
     //  Constructores
     public ControladorRegistro(){
@@ -46,6 +48,7 @@ public class ControladorRegistro {
         repoResponsable = FabricaRepositorio.getRepositorioResponsables();
         repoFortalezas = FabricaRepositorio.getRepositorioFortalezas();
         repoCodificaciones = FabricaRepositorio.getRepositorioCodificaciones();
+        repoEmpresa = FabricaRepositorio.getRepositorioEmpresa();
     }
     
     /**
@@ -53,22 +56,26 @@ public class ControladorRegistro {
      * @param tipo
      * @param fechaDeteccion
      * @param descripcion
+     * @param referencias
      * @param idArea
      * @param idDeteccion
+     * @param idCodificacion
+     * @param idEmpresa
      * @return Null: si no se creo.
      */
-    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, String referencias, int idArea, int idDeteccion, int idCodificacion){
+    public Accion nuevaAccion(TipoAccion tipo, Date fechaDeteccion, String descripcion, String referencias, int idArea, int idDeteccion, int idCodificacion, int idEmpresa){
         Area area = repoArea.find(idArea);
         Deteccion deteccion = repoDeteccion.find(idDeteccion);
         Codificacion codificacion = repoCodificaciones.find(idCodificacion);
+        Empresa empresa = repoEmpresa.find(idEmpresa);
         
         Accion accion;
         switch(tipo){
-            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion);
+            case CORRECTIVA -> accion = new Correctiva(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion, empresa);
             
-            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion);
+            case MEJORA ->accion = new Mejora(fechaDeteccion , descripcion, referencias, area, deteccion, codificacion, empresa);
             
-            default -> accion = new Preventiva(fechaDeteccion , descripcion, referencias,area, deteccion, codificacion);
+            default -> accion = new Preventiva(fechaDeteccion , descripcion, referencias,area, deteccion, codificacion, empresa);
         }
         
         return repoAccion.create(accion);
@@ -219,12 +226,14 @@ public class ControladorRegistro {
      * @param descripcion
      * @param idDeteccion
      * @param idAreaSector
+     * @param idEmpresa
      * @return Null: si no se creo.
      */
-    public Fortaleza nuevaFortaleza(Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector){
+    public Fortaleza nuevaFortaleza(Date fechaDeteccion, String descripcion, int idDeteccion, int idAreaSector, int idEmpresa){
         Area area = repoArea.find(idAreaSector);
         Deteccion deteccion = repoDeteccion.find(idDeteccion);
-        Fortaleza fortaleza = new Fortaleza(fechaDeteccion, descripcion, area, deteccion);
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        Fortaleza fortaleza = new Fortaleza(fechaDeteccion, descripcion, area, deteccion, empresa);
         
         repoFortalezas.create(fortaleza);
         if(fortaleza.getId() > 0)

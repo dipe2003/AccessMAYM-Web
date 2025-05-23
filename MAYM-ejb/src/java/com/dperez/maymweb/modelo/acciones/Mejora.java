@@ -8,6 +8,7 @@ package com.dperez.maymweb.modelo.acciones;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -20,8 +21,8 @@ import javax.persistence.Entity;
 public class Mejora extends Accion implements Serializable {
 
     // Constructores
-    public Mejora(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion){
-        super(fechaDeteccion, descripcion, referencias, area, deteccion, codificacion);
+    public Mejora(Date fechaDeteccion, String descripcion, String referencias, Area area, Deteccion deteccion, Codificacion codificacion, Empresa empresa){
+        super(fechaDeteccion, descripcion, referencias, area, deteccion, codificacion, empresa);
     }
     public Mejora(){}
 

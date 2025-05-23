@@ -4,7 +4,7 @@
  */
 package com.dperez.maym.web.herramientas.exportacion.pdftea;
 
-import com.dperez.maym.web.empresa.Empresa;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.acciones.Estado;
@@ -92,7 +92,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getDeteccionAccion().getNombre(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
-                tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+                tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
                 // Celda ACTIVIDADES
                 if (!a.getActividadesDeAccion().isEmpty()) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{17, 7, 4});
@@ -107,7 +107,7 @@ public class PdfteameListado implements Serializable {
                     if (impar) {
                         celda.setBackgroundColor(colorFilaImpar);
                     }
-                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
                     //celda.setBorder(0);
                     celda.addElement(tablaActividades);
                     tabla.addCell(celda);
@@ -207,7 +207,7 @@ public class PdfteameListado implements Serializable {
                     if (impar) {
                         celda.setBackgroundColor(colorFilaImpar);
                     }
-                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+                    celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
                     celda.addElement(tablaActividades);
                     tabla.addCell(celda);
                     tabla.setComplete(true);
@@ -287,7 +287,7 @@ public class PdfteameListado implements Serializable {
             tabla.addCell(CrearCeldaTitulo("Codificacion", 0));
             tabla.addCell(CrearCeldaTitulo("Tipo", 0));
         }
-        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
     }
 
     private Color ObtnerColor(Estado estado) {
@@ -315,18 +315,18 @@ public class PdfteameListado implements Serializable {
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-        Color color = Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo());
+        Color color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo());
 
         celda.setBackgroundColor(color);
         celda.setFixedHeight(22);
         Phrase texto = new Phrase();
 
-        color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelTitulo());
+        color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorFuentePanelTitulo());
 
         texto.setFont(FontFactory.getFont("arialbi", 8, Font.BOLD, color));
         texto.add(textoTitulo);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -343,7 +343,7 @@ public class PdfteameListado implements Serializable {
         texto.setFont(FontFactory.getFont("arialbi", 6, Font.NORMAL, Color.BLACK));
         texto.add(textoContenido);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -361,7 +361,7 @@ public class PdfteameListado implements Serializable {
         texto.setFont(FontFactory.getFont("arialbi", 6, Font.NORMAL, Color.BLACK));
         texto.add(textoContenido);
         celda.setPhrase(texto);
-        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        celda.setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return celda;
     }
 
@@ -375,7 +375,7 @@ public class PdfteameListado implements Serializable {
         tabla.getDefaultCell().setBorderWidthTop(1);
         tabla.getDefaultCell().setBorderWidthRight(1);
         tabla.getDefaultCell().setBorderWidthLeft(1);
-        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return tabla;
     }
 
@@ -390,7 +390,7 @@ public class PdfteameListado implements Serializable {
         tabla.getDefaultCell().setBorderWidthLeft(0);
         tabla.getDefaultCell().setBorder(0);
         tabla.getDefaultCell().setPadding(0);
-        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getColorPanelTitulo()).darker());
+        tabla.getDefaultCell().setBorderColor(Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorPanelTitulo()).darker());
         return tabla;
     }
 
@@ -427,7 +427,7 @@ public class PdfteameListado implements Serializable {
         Image logo = null;
         try {
             String realPath = cArchivo.getHome() + cArchivo.getSeparator() + "MAYMWEB" + cArchivo.getSeparator();
-            logo = Image.getInstance(realPath + empresa.getUbicacionLogoInformes());
+            logo = Image.getInstance(realPath + empresa.getUbicacionLogoAdicional());
         } catch (FileNotFoundException ex) {
             logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));
         } catch (IOException ex) {
@@ -492,7 +492,7 @@ public class PdfteameListado implements Serializable {
     private PdfPCell CrearTituloImpresion(String titulo) {
         Phrase f = new Phrase();
 
-        Color color = Color.decode(empresa.getOpcionesSistema().getColorFuentePanelEncabezado());
+        Color color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorFuentePanelEncabezado());
 
         f.setFont(FontFactory.getFont("arialbi", 10, Font.BOLD, color));
         f.add(titulo.toUpperCase());
@@ -501,7 +501,7 @@ public class PdfteameListado implements Serializable {
         celda.setColspan(4);
         celda.setPaddingTop(-5f);
 
-        color = Color.decode(empresa.getOpcionesSistema().getColorInferiorPanelTitulo());
+        color = Color.decode(empresa.getOpcionesSistema().getOpcionesApariencia().getColorInferiorPanelTitulo());
 
         celda.setBackgroundColor(color);
         celda.setFixedHeight(18);

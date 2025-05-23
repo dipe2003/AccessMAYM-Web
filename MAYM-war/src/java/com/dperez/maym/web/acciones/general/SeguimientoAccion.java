@@ -464,7 +464,7 @@ public class SeguimientoAccion implements Serializable {
         // recuperar el id para llenar datos de la accion y el resto de las propiedades.
         IdAccionSeleccionada = Integer.parseInt(request.getParameter("id"));
         if (IdAccionSeleccionada != 0) {
-            AccionSeleccionada = fLectura.GetAccion(IdAccionSeleccionada);
+            AccionSeleccionada = fLectura.getAccion(IdAccionSeleccionada);
             actividades = AccionSeleccionada.getActividadesDeAccion().stream()
                     .collect(Collectors.toList());
             tipoDeAccion = TipoAccion.valueOf(AccionSeleccionada.getClass().getSimpleName().toUpperCase());
@@ -513,7 +513,7 @@ public class SeguimientoAccion implements Serializable {
     }
 
     private void actualizarListaAdjuntos() {
-        Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
+        Accion accionSeguida = fLectura.getAccion(IdAccionSeleccionada);
         if (!accionSeguida.getAdjuntosDeAccion().isEmpty()) {
             List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
             MapAdjuntos = listAdjuntos.stream()
@@ -539,7 +539,8 @@ public class SeguimientoAccion implements Serializable {
                 ctx.renderResponse();
             } else {
                 try{
-                String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, sesion.getEmpresa().getNombreDeArchivo());
+                String datosAdjunto[] = cArchivo.guardarArchivo("Accion_" + String.valueOf(IdAccionSeleccionada), ArchivoAdjunto, TituloAdjunto, 
+                        sesion.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
                     // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
                     if (!datosAdjunto[0].isEmpty()) {
                         TipoAdjunto tipoAdjunto = TipoAdjunto.IMAGEN;

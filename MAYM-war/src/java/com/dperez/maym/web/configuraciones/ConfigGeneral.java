@@ -4,11 +4,15 @@
  */
 package com.dperez.maym.web.configuraciones;
 
-import com.dperez.maym.web.empresa.Empresa;
+import com.dperez.maymweb.modelo.empresa.OpcionesSistema;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maym.web.herramientas.CargarArchivo;
 import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maym.web.inicio.SesionUsuario;
+import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.herramientas.IOPropiedades;
+import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
+import com.dperez.maymweb.modelo.empresa.OpcionesCorreo;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -34,6 +38,8 @@ public class ConfigGeneral implements Serializable {
     @Inject
     SesionUsuario sesionUsuario;
 
+    private FacadeAdministrador fAdmin = new FacadeAdministrador();
+
     @Inject
     private CargarArchivo cArchivo;
 
@@ -42,9 +48,7 @@ public class ConfigGeneral implements Serializable {
     @Inject
     private IOPropiedades ioProp;
 
-    private Empresa empresaGuardada;
-
-    private OpcionesSistema ops;
+    private OpcionesApariencia ops;
     private String colorSuperior;
     private String colorInferior;
     private String colorFuenteEncabezado;
@@ -62,7 +66,7 @@ public class ConfigGeneral implements Serializable {
 
     private boolean tls;
     private boolean activarAlertas;
-    private String puerto;
+    private int puerto;
     private String host;
     private String from;
     private String usuario;
@@ -133,11 +137,11 @@ public class ConfigGeneral implements Serializable {
         this.activarAlertas = activarAlertas;
     }
 
-    public String getPuerto() {
+    public int getPuerto() {
         return puerto;
     }
 
-    public void setPuerto(String puerto) {
+    public void setPuerto(int puerto) {
         this.puerto = puerto;
     }
 
@@ -189,19 +193,11 @@ public class ConfigGeneral implements Serializable {
         this.ArchivoLogoInforme = ArchivoLogoInforme;
     }
 
-    public Empresa getEmpresaGuardada() {
-        return empresaGuardada;
-    }
-
-    public void setEmpresaGuardada(Empresa empresaGuardada) {
-        this.empresaGuardada = empresaGuardada;
-    }
-
-    public OpcionesSistema getOps() {
+    public OpcionesApariencia getOps() {
         return ops;
     }
 
-    public void setOps(OpcionesSistema ops) {
+    public void setOps(OpcionesApariencia ops) {
         this.ops = ops;
     }
 
@@ -264,44 +260,24 @@ public class ConfigGeneral implements Serializable {
     //</editor-fold>
     //<editor-fold desc="Metodos">
     public void guardarDatosEmpresa() throws IOException {
-        Map<String, String> props = new HashMap<>();
-        props.put("nombre", nombre);
-        props.put("direccion", direccion);
-        props.put("telefono", telefono);
-        props.put("movil", movil);
-        props.put("correo", correo);
-        props.put("nombreExtra", nombreExtra);
-        try {
-            ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+        if (fAdmin.cambiarDatosEmpresa(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), nombre, direccion, telefono, movil, correo, nombreExtra) > 0) {
+            sesionUsuario.cargarEmpresa();
+            sesionUsuario.cargarColores();
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
             FacesContext.getCurrentInstance().renderResponse();
-
-            sesionUsuario.getEmpresa().setCorreo(correo);
-            sesionUsuario.getEmpresa().setNombre(nombre);
-            sesionUsuario.getEmpresa().setDireccion(direccion);
-            sesionUsuario.getEmpresa().setTelefono(telefono);
-            sesionUsuario.getEmpresa().setMovil(movil);
-            sesionUsuario.getEmpresa().setNombreExtra(nombreExtra);
-
-        } catch (Exception ex) {
+        } else {
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-datos", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Los datos no se guardaron."));
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
 
     public void guardarDatosCorreo() throws IOException {
-        Map<String, String> props = new HashMap<>();
-        props.put("mail_from", from);
-        props.put("mail_user", usuario);
-        props.put("mail_pass", password);
-        props.put("mail_port", puerto);
-        props.put("mail_tls", String.valueOf(tls));
-        props.put("alertas_on", String.valueOf(activarAlertas));
-        try {
-            ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+        if (fAdmin.setConfiguracionCorreo(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), from, usuario, password, host, puerto, tls) > 0) {
+            fAdmin.setAlertas(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), activarAlertas);
+            sesionUsuario.cargarEmpresa();
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-grupo1", new FacesMessage(SEVERITY_INFO, "Guardado", "Los datos se guardaron correctamente."));
             FacesContext.getCurrentInstance().renderResponse();
-        } catch (Exception ex) {
+        } else {
             FacesContext.getCurrentInstance().addMessage("form_config_general:boton-guardar-grupo1", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Los datos no se guardaron."));
             FacesContext.getCurrentInstance().renderResponse();
         }
@@ -309,14 +285,13 @@ public class ConfigGeneral implements Serializable {
 
     public void guardarLogo() throws IOException {
         if (ArchivoAdjunto != null) {
-            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoAdjunto, empresaGuardada.getNombreDeArchivo());
+            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoAdjunto, sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
             // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
             if (!ubicacion.isEmpty()) {
                 Map<String, String> props = new HashMap<>();
                 props.put("logo_empresa", ubicacion);
                 ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
                 sesionUsuario.cargarEmpresa();
-                empresaGuardada.setUbicacionLogo(ubicacion);
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 String url = ctx.getExternalContext().getRequestContextPath();
                 ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
@@ -328,14 +303,13 @@ public class ConfigGeneral implements Serializable {
 
     public void guardarLogoInformes() throws IOException {
         if (ArchivoLogoInforme != null) {
-            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoLogoInforme, "_informes_" + empresaGuardada.getNombreDeArchivo());
+            String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoLogoInforme, "_informes_" + sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
             // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
             if (!ubicacion.isEmpty()) {
                 Map<String, String> props = new HashMap<>();
                 props.put("logo_informes_empresa", ubicacion);
                 ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
-                sesionUsuario.cargarEmpresa();
-                empresaGuardada.setUbicacionLogo(ubicacion);
+                sesionUsuario.cargarEmpresa();                
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 String url = ctx.getExternalContext().getRequestContextPath();
                 ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
@@ -346,25 +320,19 @@ public class ConfigGeneral implements Serializable {
     }
 
     public void guardarColor() throws IOException {
-        Map<String, String> props = new HashMap<>();
-        props.put("color-superior", !colorSuperior.isEmpty() ? colorSuperior : ops.getColorSuperiorPanelTitulo());
-        props.put("color-inferior", !colorInferior.isEmpty() ? colorInferior : ops.getColorInferiorPanelTitulo());
-        props.put("color-titulos", !colorTitulo.isEmpty() ? colorTitulo : ops.getColorPanelTitulo());
-        props.put("color-fuente-encabezado", !colorFuenteEncabezado.isEmpty() ? colorFuenteEncabezado : ops.getColorFuentePanelEncabezado());
-        props.put("color-fuente-titulos", !colorFuenteTitulo.isEmpty() ? colorFuenteTitulo : ops.getColorFuentePanelTitulo());
-        props.put("color-body", !colorFondo.isEmpty() ? colorFondo : ops.getColorBody());
-        props.put("color-boton", !colorBoton.isEmpty() ? colorBoton : ops.getColorBoton());
-        ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
-        sesionUsuario.cargarColores();
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        String url = ctx.getExternalContext().getRequestContextPath();
-        ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
+        if (fAdmin.setConfiguracionApariencia(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), colorSuperior, colorInferior,
+                colorFuenteEncabezado, colorTitulo, colorFuenteTitulo, colorFondo, colorBoton) > 0) {
+            sesionUsuario.cargarColores();
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            String url = ctx.getExternalContext().getRequestContextPath();
+            ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
+        }
     }
 
     //</editor-fold>
     @PostConstruct
     public void init() {
-        empresaGuardada = sesionUsuario.getEmpresa();
+        Empresa empresaGuardada = sesionUsuario.getUsuarioLogueado().getEmpresaUsuario();
 
         nombre = empresaGuardada.getNombre();
         direccion = empresaGuardada.getDireccion();
@@ -372,16 +340,18 @@ public class ConfigGeneral implements Serializable {
         movil = empresaGuardada.getMovil();
         correo = empresaGuardada.getCorreo();
         nombreExtra = empresaGuardada.getNombreExtra();
+        
+        OpcionesCorreo opsMail = empresaGuardada.getOpcionesSistema().getOpcionesCorreo();
+        
+        from = opsMail.getMailFrom();
+        usuario = opsMail.getMailUser();
+        password = opsMail.getMailPass();
+        puerto = opsMail.getMailPort();
+        tls = opsMail.isMailTLS();
+        host = opsMail.getMailHostSMTP();
+        activarAlertas = opsMail.isAlertasActivadas();
 
-        Properties prop = ManejadorPropiedades.getPropiedades(ioProp.getDirectorio());
-        from = prop.get("mail_from") != null ? prop.get("mail_from").toString() : "";
-        usuario = prop.get("mail_user") != null ? prop.get("mail_user").toString() : "";
-        password = prop.get("mail_pass") != null ? prop.get("mail_pass").toString() : "";
-        puerto = prop.get("mail_port") != null ? prop.get("mail_port").toString() : "";
-        tls = prop.get("mail_tls") != null ? Boolean.parseBoolean(prop.get("mail_tls").toString()) : false;
-        activarAlertas = prop.get("alertas_on") != null ? Boolean.parseBoolean(prop.get("alertas_on").toString()) : false;
-
-        ops = empresaGuardada.getOpcionesSistema();
+        ops = empresaGuardada.getOpcionesSistema().getOpcionesApariencia();
         colorSuperior = ops.getColorSuperiorPanelTitulo();
         colorFuenteEncabezado = ops.getColorFuentePanelEncabezado();
         colorInferior = ops.getColorInferiorPanelTitulo();

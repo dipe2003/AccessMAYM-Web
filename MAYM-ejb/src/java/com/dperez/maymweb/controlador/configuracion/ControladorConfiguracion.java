@@ -2,13 +2,16 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package com.dperez.maymweb.controlador.configuracion;
 
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
+import com.dperez.maymweb.modelo.empresa.Empresa;
+import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
+import com.dperez.maymweb.modelo.empresa.OpcionesCorreo;
 import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import com.dperez.maymweb.modelo.usuario.ControladorSeguridad;
 import com.dperez.maymweb.modelo.usuario.Credencial;
@@ -28,17 +31,17 @@ import javax.inject.Named;
  */
 @Named
 public class ControladorConfiguracion {
-    
+
     private final RepositorioPersistencia<Area> repoArea;
     private final RepositorioPersistencia<Deteccion> repoDeteccion;
     private final RepositorioPersistencia<Codificacion> repoCodificacion;
     private final RepositorioPersistencia<Usuario> repoUsuario;
     private final RepositorioPersistencia<Responsable> repoResponsable;
     private final RepositorioPersistencia<Responsabilidad> repoResponsabilidades;
-        
-    
+    private final RepositorioPersistencia<Empresa> repoEmpresa;
+
     private final ControladorSeguridad cSeg;
-    
+
     public ControladorConfiguracion() {
         this.repoCodificacion = FabricaRepositorio.getRepositorioCodificaciones();
         this.repoArea = FabricaRepositorio.getRepositorioAreas();
@@ -46,28 +49,177 @@ public class ControladorConfiguracion {
         this.repoUsuario = FabricaRepositorio.getRepositorioUsuarios();
         this.repoResponsable = FabricaRepositorio.getRepositorioResponsables();
         this.repoResponsabilidades = FabricaRepositorio.getRepositorioResponsabilidades();
+        this.repoEmpresa = FabricaRepositorio.getRepositorioEmpresa();
         cSeg = new ControladorSeguridad();
     }
-    
-    /*
-    USUARIO
-    */
+
+    //<editor-fold desc="EMPRESA">
     /**
-     * Crea un nuevo usuario y lo persiste en la base de datos.El usuario
-     * creado no recibe alertas.
+     * Crea un nueva Empresa y lo persiste en la base de datos.
+     *
+     * @param nombre
+     * @param direccion
+     * @param telefono
+     * @param movil
+     * @param correo
+     * @param nombreExtra
+     * @return null si no se creo.
+     */
+    public Empresa nuevaEmpresa(String nombre, String direccion, String telefono, String movil, String correo, String nombreExtra) {
+        Empresa empresa = new Empresa(nombre, direccion, telefono, movil, correo, nombreExtra);
+        int id = repoEmpresa.create(empresa).getId();
+        return id > 0 ? empresa : null;
+    }
+
+    /**
+     * Setea los datos de la empresa.
+     *
+     * @param idEmpresa
+     * @param nombre
+     * @param direccion
+     * @param telefono
+     * @param movil
+     * @param correo
+     * @param nombreExtra
+     * @return -1 si no se actualizo.
+     */
+    public int cambiarDatosEmpresa(int idEmpresa, String nombre, String direccion, String telefono, String movil,
+            String correo, String nombreExtra) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            empresa.setNombre(nombre);
+            empresa.setDireccion(direccion);
+            empresa.setTelefono(telefono);
+            empresa.setMovil(movil);
+            empresa.setCorreo(correo);
+            empresa.setNombre(nombre);
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+
+    /**
+     * Setea la ubicacion del logo de la empresa.
+     *
+     * @param idEmpresa
+     * @param ubicacionLogo
+     * @return
+     */
+    public int setUbicacionLogoEmpresa(int idEmpresa, String ubicacionLogo) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            empresa.setUbicacionLogo(ubicacionLogo);
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+
+    /**
+     * Setea la ubicacion del logo adicional de la empresa.
+     *
+     * @param idEmpresa
+     * @param ubicacionLogo
+     * @return
+     */
+    public int setUbicacionLogoAdicionaleEmpresa(int idEmpresa, String ubicacionLogo) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            empresa.setUbicacionLogoAdicional(ubicacionLogo);
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+
+    /**
+     * Setea las opciones de apariencia del sistema asociadas a la Empresa.
+     * @param idEmpresa
+     * @param colorSuperiorPanelTitulo
+     * @param colorInferiorPanelTitulo
+     * @param colorFuentePanelEncabezado
+     * @param colorPanelTitulo
+     * @param colorFuentePanelTitulo
+     * @param colorBody
+     * @param colorBoton
+     * @return 
+     */
+    public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo,
+            String colorFuentePanelEncabezado, String colorPanelTitulo, String colorFuentePanelTitulo, String colorBody, String colorBoton) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            OpcionesApariencia ops = empresa.getOpcionesSistema().getOpcionesApariencia();
+            ops.setColorBody(colorBody);
+            ops.setColorBoton(colorBoton);
+            ops.setColorFuentePanelEncabezado(colorFuentePanelEncabezado);
+            ops.setColorFuentePanelTitulo(colorFuentePanelTitulo);
+            ops.setColorInferiorPanelTitulo(colorInferiorPanelTitulo);
+            ops.setColorPanelTitulo(colorPanelTitulo);
+            ops.setColorSuperiorPanelTitulo(colorSuperiorPanelTitulo);            
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+    
+    /**
+     * Setea las opciones de apariencia del sistema asociadas a la Empresa.
+     * @param idEmpresa
+     * @param mailFrom
+     * @param mailUser
+     * @param mailPass
+     * @param mailPort
+     * @param mailTLS
+
+     * @return 
+     */
+    public int setConfiguracionCorreo(int idEmpresa, String mailFrom, String mailUser, String mailPass, String mailHostSMTP,int mailPort, boolean mailTLS) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            OpcionesCorreo ops = empresa.getOpcionesSistema().getOpcionesCorreo();
+            ops.setMailFrom(mailFrom);
+            ops.setMailPass(mailPass);
+            ops.setMailHostSMTP(mailHostSMTP);
+            ops.setMailPort(mailPort);
+            ops.setMailTLS(mailTLS);
+            ops.setMailUser(mailUser);
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+    
+    /**
+     * Setea estado de alertas.
+     * @param idEmpresa
+     * @param setAlertas
+     * @return 
+     */
+    public int setAlertas(int idEmpresa, boolean setAlertas){
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        if (empresa != null) {
+            OpcionesCorreo ops = empresa.getOpcionesSistema().getOpcionesCorreo();
+            ops.setAlertasActivadas(setAlertas);
+            return repoEmpresa.update(empresa).getId();
+        }
+        return -1;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="USUARIOS y CREDENCIALES">
+    /**
+     * Crea un nuevo usuario y lo persiste en la base de datos.El usuario creado
+     * no recibe alertas.
      *
      * @param idUsuario
      * @param nombreUsuario
      * @param apellidoUsuario
-     * @param orreoUcsuario
+     * @param correoUsuario
      * @param password
      * @param permisoUsuario
      * @param idArea
      * @return null si no se creo.
      */
-    public Usuario nuevoUsuario(int idUsuario, String nombreUsuario, String apellidoUsuario, String orreoUcsuario,
-            String password, EnumPermiso permisoUsuario, int idArea) {
-        Usuario usuario = new Usuario(nombreUsuario, apellidoUsuario, orreoUcsuario, false, permisoUsuario);
+    public Usuario nuevoUsuario(int idUsuario, String nombreUsuario, String apellidoUsuario, String correoUsuario,
+            String password, EnumPermiso permisoUsuario, int idArea, int idEmpresa) {
+        Empresa empresa = repoEmpresa.find(idEmpresa);
+        Usuario usuario = new Usuario(nombreUsuario, apellidoUsuario, correoUsuario, false, permisoUsuario, empresa);
         String[] pass = cSeg.getPasswordSeguro(password);
         // pass[0] corresponde al password | pass[1] corresponde al salt
         Credencial credencial = new Credencial(pass[1], pass[0]);
@@ -83,7 +235,7 @@ public class ControladorConfiguracion {
             return null;
         }
     }
-    
+
     /**
      * Comprueba si existe el usuario con id especificado.
      *
@@ -93,7 +245,7 @@ public class ControladorConfiguracion {
     public boolean existeUsuario(int idUsuario) {
         return repoUsuario.find(idUsuario) != null;
     }
-    
+
     /**
      * Setea los datos del usuario y actualiza la base de datos. No se realiza
      * comprobacion de password. Para cambiar password utilizar metodo
@@ -123,7 +275,7 @@ public class ControladorConfiguracion {
         }
         return repoUsuario.update(usuario).getId();
     }
-    
+
     /**
      * Comprueba la validez del password ingresado con el correspondiente del
      * usuario en la base de datos.
@@ -137,7 +289,7 @@ public class ControladorConfiguracion {
         String PasswordStored = cSeg.getPasswordSeguro(password, usuario.getCredencialUsuario().getPasswordKey());
         return PasswordStored.equals(usuario.getCredencialUsuario().getPassword());
     }
-    
+
     /**
      * Cambia la credencial (password y password key) del usuario especificado y
      * actualiza la base de datos. Si el password ingresado no coincide con el
@@ -165,7 +317,7 @@ public class ControladorConfiguracion {
             return null;
         }
     }
-    
+
     /**
      * Cambia la credencial (password y password key) del usuario especificado y
      * actualiza la base de datos. El metodo debe ser utilizado por un
@@ -189,7 +341,7 @@ public class ControladorConfiguracion {
             return null;
         }
     }
-    
+
     /**
      * Elimina el usuario indicado por su id. Si el usuario esta relacionado con
      * comprobaciones o actividades no se elimina.
@@ -202,7 +354,7 @@ public class ControladorConfiguracion {
         repoUsuario.delete(usuario);
         return 1;
     }
-    
+
     /**
      * Cambia el estado de un usuario: da de alta o de baja. Baja de usuario
      * setea la fecha actual como fecha de baja.
@@ -220,11 +372,9 @@ public class ControladorConfiguracion {
         }
         return repoUsuario.update(usuario).getId();
     }
-    
-    /*
-    AREA
-    */
-    
+
+    //</editor-fold>
+    //<editor-fold desc="AREAS">
     /**
      * *
      * Crea una nueva area/sector y la persiste en la base de datos. Se verifica
@@ -244,7 +394,7 @@ public class ControladorConfiguracion {
         }
         return null;
     }
-    
+
     /**
      * Cambia los valores de area y actualiza la base de datos. Se verifica si
      * existe el nombre del area en la base de datos.
@@ -263,7 +413,7 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
      * Elimina el area de la base de datos. Actualiza la relaciones Empesa. Se
      * comprueba que no tenga acciones y fortalezas relacionadas.
@@ -280,7 +430,7 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
      * Comprueba si el nombre especificado para el area ya existe en la base de
      * datos. Se ignoan las mayusculas y minusculas.
@@ -293,7 +443,7 @@ public class ControladorConfiguracion {
         return repoArea.findAll().stream()
                 .anyMatch(area -> area.getNombre().equalsIgnoreCase(nombreArea) && area.getId() != idArea);
     }
-    
+
     /**
      * Comprueba si el nombre especificado para el area ya existe en la base de
      * datos. Se ignoan las mayusculas y minusculas.
@@ -305,10 +455,9 @@ public class ControladorConfiguracion {
         return repoArea.findAll().stream()
                 .anyMatch(area -> area.getNombre().equalsIgnoreCase(nombreArea));
     }
-    
-    /*
-    CODIFICACION
-    */
+
+    //</editor-fold>
+    //<editor-fold desc="CODIFICACIONES">
     /**
      * *
      * Crea una nueva codificacion y la persiste en la base de datos. Se
@@ -328,7 +477,7 @@ public class ControladorConfiguracion {
         }
         return null;
     }
-    
+
     /**
      * Cambia los valores de Codificacion y actualiza la base de datos. Se
      * verifica si existe el nombre de la codificacion en la base de datos.
@@ -348,10 +497,12 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
-     * Elimina la codificacion de la base de datos.
-     * Se comprueba que no tenga acciones relacionadas.     *
+     * Elimina la codificacion de la base de datos. Se comprueba que no tenga
+     * acciones relacionadas.
+     *
+     *
      * @param idCodificacion
      * @return Retorna el id de la codificacion si se elimino. Retorna -1 si no
      * se elimino.
@@ -364,7 +515,7 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
      * Comprueba si el nombre especificado para la codificacion ya existe en la
      * base de datos. Se ignoar las mayusculas y minusculas.
@@ -377,7 +528,7 @@ public class ControladorConfiguracion {
         return repoCodificacion.findAll().stream()
                 .anyMatch(codificacion -> codificacion.getNombre().equalsIgnoreCase(nombreCodificacion) && codificacion.getId() != idCodificacion);
     }
-    
+
     /**
      * Comprueba si el nombre especificado para la codificacion ya existe en la
      * base de datos. Se ignoar las mayusculas y minusculas.
@@ -389,10 +540,9 @@ public class ControladorConfiguracion {
         return repoCodificacion.findAll().stream()
                 .anyMatch(codificacion -> codificacion.getNombre().equalsIgnoreCase(nombreCodificacion));
     }
-    
-    /*
-    DETECCION Y TIPO DE DETECCION
-    */
+
+    //</editor-fold>
+    //<editor-fold desc="DETECCION Y TIPO DE DETECCION">
     /**
      * *
      * Crea una nueva deteccion y la persiste en la base de datos. * Se
@@ -413,7 +563,7 @@ public class ControladorConfiguracion {
         }
         return null;
     }
-    
+
     /**
      * Cambia los valores de Deteccion y actualiza la base de datos. Se
      * comprueba que no existe una deteccion con el mismo nombre.
@@ -436,7 +586,7 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
      * Elimina la deteccion de la base de datos. Se comprueba que no tenga
      * acciones y fortalezas relacionadas.
@@ -453,7 +603,7 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
      * Comprueba si el nombre especificado para la deteccion ya existe en la
      * base de datos. Se ignoar las mayusculas y minusculas.
@@ -466,7 +616,7 @@ public class ControladorConfiguracion {
         return repoDeteccion.findAll().stream()
                 .anyMatch(deteccion -> deteccion.getNombre().equalsIgnoreCase(nombreDeteccion) && deteccion.getId() != idDeteccion);
     }
-    
+
     /**
      * Comprueba si el nombre especificado para la deteccion ya existe en la
      * base de datos. Se ignoar las mayusculas y minusculas.
@@ -478,44 +628,50 @@ public class ControladorConfiguracion {
         return repoDeteccion.findAll().stream()
                 .anyMatch(deteccion -> deteccion.getNombre().equalsIgnoreCase(nombreDeteccion));
     }
-    
-    public Responsabilidad crearResponsabilidad(String nombre){
+
+    //</editor-fold>
+    //<editor-fold desc="RESPONSABLES Y RESPONSABILIDADES">
+    public Responsabilidad crearResponsabilidad(String nombre) {
         Responsabilidad responsabilidad = new Responsabilidad(nombre);
         return repoResponsabilidades.create(responsabilidad);
     }
-    
-    public int editarResponsabilidad(int idResponsabilidad, String nuevoNombre){
+
+    public int editarResponsabilidad(int idResponsabilidad, String nuevoNombre) {
         Responsabilidad responsabilidad = repoResponsabilidades.find(idResponsabilidad);
         responsabilidad.setNombre(nuevoNombre);
-        try{
+        try {
             repoResponsabilidades.update(responsabilidad);
             return 1;
-        }catch(Exception ex){}
-        return -1;
-    }
-    //TODO: revisar metodo, no se esta enlazando al usuario y en la base de datos se crea doble
-    public Responsable crearResponsable(int idResponsabilidad, int idUsuario){
-        Usuario usuario = repoUsuario.find(idUsuario);
-        Responsabilidad responsabilidad= repoResponsabilidades.find(idResponsabilidad);
-        Responsable responsable = responsabilidad.crearResponsable(usuario);
-        try{
-            repoUsuario.update(usuario);
-            return responsable;
-        }catch(Exception ex){}
-        return null;
-    }
-    
-    public int darBajaResponsable(int idResponsabilidad, int idResponsable){
-        Responsabilidad responsabilidad = repoResponsabilidades.find(idResponsabilidad);
-        if(responsabilidad.darBajaResponsable(idResponsable, new Date()) == 1){
-            try{
-                repoResponsabilidades.update(responsabilidad);
-                return 1;
-            }catch(Exception ex){}
+        } catch (Exception ex) {
         }
         return -1;
     }
-    
+
+    //TODO: revisar metodo, no se esta enlazando al usuario y en la base de datos se crea doble
+    public Responsable crearResponsable(int idResponsabilidad, int idUsuario) {
+        Usuario usuario = repoUsuario.find(idUsuario);
+        Responsabilidad responsabilidad = repoResponsabilidades.find(idResponsabilidad);
+        Responsable responsable = responsabilidad.crearResponsable(usuario);
+        try {
+            repoUsuario.update(usuario);
+            return responsable;
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    public int darBajaResponsable(int idResponsabilidad, int idResponsable) {
+        Responsabilidad responsabilidad = repoResponsabilidades.find(idResponsabilidad);
+        if (responsabilidad.darBajaResponsable(idResponsable, new Date()) == 1) {
+            try {
+                repoResponsabilidades.update(responsabilidad);
+                return 1;
+            } catch (Exception ex) {
+            }
+        }
+        return -1;
+    }
+
     public int eliminarResponsable(int idResponsable) {
         Responsable responsable = repoResponsable.find(idResponsable);
         if (responsable.getActividadesResponsable().isEmpty() && responsable.getComprobacionesResponsable().isEmpty()) {
@@ -524,9 +680,9 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     public int eliminarResponsabilidad(int idResponsabilidadSeleccionada) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+    //</editor-fold>
 }

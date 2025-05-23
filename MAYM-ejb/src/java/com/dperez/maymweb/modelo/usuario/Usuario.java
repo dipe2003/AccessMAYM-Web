@@ -6,6 +6,7 @@
 package com.dperez.maymweb.modelo.usuario;
 
 import com.dperez.maymweb.modelo.area.Area;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -48,20 +50,25 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     @OneToMany(mappedBy="usuarioResponsable", cascade = CascadeType.ALL)
     private List<Responsable> responsablesUsuario;
     
+    @ManyToOne
+    @JoinColumn(name ="empresa_id")
+    private Empresa empresaUsuario;
+    
     // Constructores
     public Usuario(){
         
     }
-    public Usuario(String nombreUsuario, String apellidoUsuario, String correoUsuario, boolean recibeAlertas, EnumPermiso permisoUsuario){
+    public Usuario(String nombreUsuario, String apellidoUsuario, String correoUsuario, boolean recibeAlertas, EnumPermiso permisoUsuario, Empresa empresa){
         this.nombre = nombreUsuario;
         this.apellido = apellidoUsuario;
         this.correo = correoUsuario;
         this.recibeAlertas = recibeAlertas;
         this.permisoUsuario = permisoUsuario;
+        this.empresaUsuario = empresa;
         this.responsablesUsuario = new ArrayList<>();
     }
     
-    // Getters
+    //<editor-fold desc="GETTERS">
     public int getId() {return this.id;}
     public String getNombre() {return this.nombre;}
     public String getApellido() {return this.apellido;}
@@ -81,30 +88,24 @@ public class Usuario implements Serializable, Comparable<Usuario> {
     public Credencial getCredencialUsuario() {return credencialUsuario;}    
     public Area getAreaUsuario(){return this.areaUsuario;}    
     public List<Responsable> getResponsablesUsuario() {return responsablesUsuario;}
+    public Empresa getEmpresaUsuario() {return empresaUsuario;}
     
-    // Setters
+    //</editor-fold>
+    
+    //<editor-fold desc="SETTERS">
     public void setId(int id) {this.id = id;}
     public void setNombre(String nombre) {this.nombre = nombre;}
     public void setApellido(String apellido) {this.apellido = apellido;}
     public void setCorreo(String correo) {this.correo = correo;}
     public void setRecibeAlertas(boolean recibeAlertas) {this.recibeAlertas = recibeAlertas;}
     public void setFechaBaja(Date fechaBaja){this.fechaBaja = fechaBaja;}
+    public void setPermisoUsuario(EnumPermiso permisoUsuario) {this.permisoUsuario = permisoUsuario;}    
+    public void setCredencialUsuario(Credencial credencialUsuario) {this.credencialUsuario = credencialUsuario;}    
+    public void setAreaUsuario(Area areaUsuario){this.areaUsuario = areaUsuario;}    
+    public void setResponsablesUsuario(List<Responsable> responsablesUsuario) {this.responsablesUsuario = responsablesUsuario;}
+    public void setEmpresaUsuario(Empresa empresaUsuario) {this.empresaUsuario = empresaUsuario;}
     
-    public void setPermisoUsuario(EnumPermiso permisoUsuario) {
-        this.permisoUsuario = permisoUsuario;
-    }
-    
-    public void setCredencialUsuario(Credencial credencialUsuario) {
-        this.credencialUsuario = credencialUsuario;
-    }
-    
-    public void setAreaUsuario(Area areaUsuario){
-        this.areaUsuario = areaUsuario;
-    }
-    
-    public void setResponsablesUsuario(List<Responsable> responsablesUsuario) {
-        this.responsablesUsuario = responsablesUsuario;
-    }
+    //</editor-fold>
     
     // Metodos
     public void addRepsonsable(Responsable responsable){

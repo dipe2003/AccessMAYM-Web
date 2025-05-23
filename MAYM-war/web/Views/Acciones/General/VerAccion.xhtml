@@ -7,492 +7,497 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"                    
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:define name="page_content">        
-        <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_verAccion">
-                <div class="row">
-                    <div class="col-sm-10">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading" >Empresa</div>
-                            <div class="panel-body">   
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <h:outputText value="#{sesionUsuario.empresa.nombre}"/>
+    <ui:define name="page_content">  
+        <c:when test="#{sesionUsuario.usuarioLogueado.empresaUsuario.id != verAccion.accionSeleccionada.empresaAccion.id}">
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:when>
+        <c:otherwise> 
+            <div class="container-fluid" style="padding: 1%">
+                <h:form id="form_verAccion">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" >Empresa</div>
+                                <div class="panel-body">   
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <h:outputText value="#{sesionUsuario.empresa.nombre}"/>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <c:if test="#{sesionUsuario.empresa.nombreExtra != null and sesionUsuario.empresa.nombreExtra != ''}" >                                            
+                                                <h:outputText value="#{sesionUsuario.empresa.nombreExtra}"/>
+                                            </c:if>
+                                        </div>   
+                                        <div class="col-sm-4">
+                                            <h:outputText value="#{sesionUsuario.empresa.direccion}"/>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <c:if test="#{sesionUsuario.empresa.nombreExtra != null and sesionUsuario.empresa.nombreExtra != ''}" >                                            
-                                            <h:outputText value="#{sesionUsuario.empresa.nombreExtra}"/>
-                                        </c:if>
-                                    </div>   
-                                    <div class="col-sm-4">
-                                        <h:outputText value="#{sesionUsuario.empresa.direccion}"/>
-                                    </div>
-                                </div>
-                            </div> 
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <!-- Estado -->
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" >Estado:</div>
+                                <c:choose>
+                                    <c:when test="#{verAccion.estado == 'PENDIENTE'}">
+                                        <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
+                                            #{verAccion.estado.descripcion}
+                                        </div>
+                                    </c:when>
+                                    <c:when test="#{verAccion.estado == 'CERRADA'}" >
+                                        <div class="panel-body" style="background-image:linear-gradient(#008000,#003300); color: white">
+                                            #{verAccion.estado.descripcion}
+                                        </div>
+                                    </c:when>
+                                    <c:when test="#{verAccion.estado == 'DESESTIMADA'}" >
+                                        <div class="panel-body" style="background-image: linear-gradient(gray, black); color: white">
+                                            #{verAccion.estado.descripcion}
+                                        </div>
+                                    </c:when>
+                                    <c:when test="#{verAccion.estado == 'PROCESO_IMP'}" >
+                                        <div class="panel-body" style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
+                                            #{verAccion.estado.descripcion}
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="panel-body" style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
+                                            Proceso Verificacion
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <!-- Estado -->
+
+                    <c:if test="#{verAccion.estado == 'DESESTIMADA'}">
                         <div class="panel panel-primary">
-                            <div class="panel-heading" >Estado:</div>
+                            <div class="panel-heading" style="background-color: black; color: white">OBSERVACIONES DE ESTADO DESESTIMADA:</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive-sm">
+                                            <strong>Info!</strong> #{verAccion.observacionesDesestimada}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+
+                    <!-- Descripcion -->                
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" >Descripcion</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                        <h:outputText id="fecha_deteccion" class="form-control" value="#{verAccion.strFechaDeteccion}" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <strong><label for="area">Area / Sector:</label></strong>
+                                        <h:outputText id="area" class="form-control" value="#{verAccion.areaSector.nombre}" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                                        <h:outputText id="tipo_deteccion" class="form-control" value="#{verAccion.generadaPor.tipoDeDeteccion.descripcion}" />
+                                    </div> 
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <strong><label for="deteccion">Generada Por:</label></strong>
+                                        <h:outputText id="deteccion" class="form-control" value="#{verAccion.generadaPor.nombre}" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <strong><label for="descripcion">Descripcion:</label></strong>   
+                                <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" value="#{verAccion.descripcion}" />
+                            </div>
+                            <div class="form-group">
+                                <strong><label for="referencias">Referencias:</label></strong>   
+                                <h:inputTextarea readonly="true" id="referencias" class="form-control" style="background-color: white;" value="#{verAccion.referencias}" />
+                            </div>
+                            <div class="form-group">
+                                <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
+                                <c:choose>
+                                    <c:when test="#{not empty verAccion.listaProductos}">
+                                        Si
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="table-responsive-sm">
+                                                    <table class="table table-hover table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nombre del Producto:</th>
+                                                                <th>Datos del Producto:</th>
+                                                            </tr>                                                
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach items="#{verAccion.listaProductos}" var="producto">
+                                                                <tr>
+                                                                    <td>#{producto.nombre}</td>
+                                                                    <td>#{producto.datos}</td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        No
+                                    </c:otherwise>
+                                </c:choose>                            
+                            </div>                        
+                        </div>
+                    </div> 
+                    <!-- Analisis de Causa -->                
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" >Analisis de Causa</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
+                                <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;" value="#{verAccion.analisisCausa}" />
+                            </div>
+                            <div class="form-group">
+                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                                <h:outputText id="codificacion" class="form-control" style="background-color: white;" value="#{verAccion.accionSeleccionada.codificacionAccion.nombre}" />
+                            </div>                        
+                        </div>
+                    </div>
+
+                    <!-- ACTIVIDADES -->
+                    <!-- Medidas Correctivas y Preventivas -->    
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- Actividades -->
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" >Actividades</div>
+                                <div class="panel-body">
+                                    <c:choose>
+                                        <c:when test="#{not empty verAccion.accionSeleccionada.actividadesDeAccion}">
+                                            <div class="table-responsive-sm">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tipo:</th>
+                                                            <th>Descripcion:</th>
+                                                            <th>Fecha Estimada:</th>
+                                                            <th>Responsable Implementacion:</th>
+                                                            <th>Implementada:</th>
+                                                        </tr>                                                
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="#{verAccion.accionSeleccionada.actividadesDeAccion}" var="actividad" >
+                                                            <tr>
+                                                                <td>#{actividad.tipoDeActividad.descripcion}</td>
+                                                                <td>#{actividad.descripcion}</td>
+                                                                <td>#{actividad.strFechaEstimadaImplementacion}</td>
+                                                                <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
+                                                                <td>
+                                                                    <c:if test="#{actividad.fechaImplementacion == null}" >
+                                                                        Sin Implementar
+                                                                    </c:if>
+                                                                    <c:if test="#{actividad.strFechaImplementacion != null}" >
+                                                                        #{actividad.strFechaImplementacion}
+                                                                    </c:if>
+                                                                </td>
+                                                            </tr>                                            
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="alert alert-info">
+                                                <strong>Info!</strong> No se definieron medidas preventivas.
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comprobacion de implementacion y Eficacia-->                
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" >Comprobacion de Implementacion:</div>
+                                <div class="panel-body">
+                                    <c:choose>
+                                        <c:when test="#{verAccion.comprobacionImplementacion != null}">
+                                            <div class="table-responsive-sm">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Fecha Estimada:</th>
+                                                            <th>Responsable: </th>
+                                                            <th>Fecha Comprobacion:</th>
+                                                            <th>Resultado:</th>
+                                                            <th>Observaciones:</th>
+                                                        </tr>                                                
+                                                    </thead>
+                                                    <tbody>                                                
+                                                        <tr>
+                                                            <c:choose>
+                                                                <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
+                                                                                verAccion.comprobacionImplementacion.fechaComprobacion == null}">
+                                                                    <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
+                                                                    <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                    <td> Sin Comprobar </td>
+                                                                    <td> Sin Comprobar </td>
+                                                                    <td> Sin Comprobar </td>
+                                                                </c:when>
+                                                                <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
+                                                                                verAccion.comprobacionImplementacion.fechaComprobacion != null}">
+                                                                    <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
+                                                                    <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                    <td>#{verAccion.comprobacionImplementacion.strFechaComprobacion}</td>
+                                                                    <td>#{verAccion.comprobacionImplementacion.resultadoComprobacion.descripcion}</td>
+                                                                    <c:if test="#{verAccion.comprobacionImplementacion.observaciones.blank}">
+                                                                        <td>Sin Observaciones</td>
+                                                                    </c:if>
+                                                                    <c:if test="#{not verAccion.comprobacionImplementacion.observaciones.blank}">
+                                                                        <td>#{verAccion.comprobacionImplementacion.observaciones}</td>
+                                                                    </c:if>                                                                                                                                
+                                                                </c:when>
+                                                            </c:choose>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="alert alert-info">
+                                                <strong>Info!</strong> No han definido plazos de comprobacion de implementacion.
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" >Comprobacion de Eficacia</div>
+                                <div class="panel-body">
+                                    <c:choose>
+                                        <c:when test="#{verAccion.comprobacionEficacia != null}">
+                                            <div class="table-responsive-sm">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Fecha Estimada:</th>
+                                                            <th>Responsable: </th>
+                                                            <th>Fecha Comprobacion:</th>
+                                                            <th>Resultado:</th>
+                                                            <th>Observaciones:</th>
+                                                        </tr>                                                
+                                                    </thead>
+                                                    <tbody>                                                
+                                                        <tr>
+                                                            <c:choose>
+                                                                <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
+                                                                                verAccion.comprobacionEficacia.fechaComprobacion == null}">
+                                                                    <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
+                                                                    <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                    <td> Sin Comprobar </td>
+                                                                    <td> Sin Comprobar </td>
+                                                                    <td> Sin Comprobar </td>
+                                                                </c:when>
+                                                                <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
+                                                                                verAccion.comprobacionEficacia.fechaComprobacion != null}">
+                                                                    <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
+                                                                    <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
+                                                                    <td>#{verAccion.comprobacionEficacia.strFechaComprobacion}</td>
+                                                                    <td>#{verAccion.comprobacionEficacia.resultadoComprobacion.descripcion}</td>
+                                                                    <c:if test="#{verAccion.comprobacionEficacia.observaciones.blank}">
+                                                                        <td>Sin Observaciones</td>
+                                                                    </c:if>
+                                                                    <c:if test="#{not verAccion.comprobacionEficacia.observaciones.blank}">
+                                                                        <td>#{verAccion.comprobacionEficacia.observaciones}</td>
+                                                                    </c:if> 
+                                                                </c:when>
+                                                            </c:choose>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="alert alert-info">
+                                                <strong>Info!</strong> No han definido plazos de comprobacion de eficacia.
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adjuntos -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
+                        <div class="panel-body">
                             <c:choose>
-                                <c:when test="#{verAccion.estado == 'PENDIENTE'}">
-                                    <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
-                                        #{verAccion.estado.descripcion}
-                                    </div>
+                                <c:when test="#{empty editarAccion.mapAdjuntos}">
+                                    <div class="alert alert-info">
+                                        <strong>Info!</strong> No se han cargado datos adjuntos.
+                                    </div>                                   
                                 </c:when>
-                                <c:when test="#{verAccion.estado == 'CERRADA'}" >
-                                    <div class="panel-body" style="background-image:linear-gradient(#008000,#003300); color: white">
-                                        #{verAccion.estado.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:when test="#{verAccion.estado == 'DESESTIMADA'}" >
-                                    <div class="panel-body" style="background-image: linear-gradient(gray, black); color: white">
-                                        #{verAccion.estado.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:when test="#{verAccion.estado == 'PROCESO_IMP'}" >
-                                    <div class="panel-body" style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
-                                        #{verAccion.estado.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="panel-body" style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
-                                        Proceso Verificacion
+                                <c:otherwise>    
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <c:if test="#{verAccion.totalImagenes == 0}">
+                                                        Imágenes 
+                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalImagenes}</span>
+                                                    </c:if>
+                                                    <c:if test="#{verAccion.totalImagenes > 0}">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Imágenes 
+                                                            <span class="badge" style="background-color: #398439"> #{verAccion.totalImagenes}</span>
+                                                        </a>
+                                                    </c:if>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse1" class="panel-collapse collapse">
+                                                <div class="panel-body">                                               
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="30%">Titulo</th>
+                                                                <th width="60%">Adjunto</th>
+                                                                <th width="20%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
+                                                                <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            #{adjunto.titulo}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
+                                                                        </td>
+                                                                        <td>
+                                                                        </td>                                                                    
+                                                                    </tr>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <c:if test="#{verAccion.totalVideos == 0}">
+                                                        Videos 
+                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalVideos}</span>
+                                                    </c:if>
+                                                    <c:if test="#{verAccion.totalVideos > 0}">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Videos 
+                                                            <span class="badge" style="background-color: #398439"> #{verAccion.totalVideos}</span>
+                                                        </a>
+                                                    </c:if>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse2" class="panel-collapse collapse">
+                                                <div class="panel-body">                                               
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="30%">Titulo</th>
+                                                                <th width="60%">Adjunto</th>
+                                                                <th width="20%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
+                                                                <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            #{adjunto.titulo}
+                                                                        </td>
+                                                                        <td>
+                                                                            <video controls="true" width="250">
+                                                                                <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
+                                                                            </video>
+                                                                        </td>
+                                                                        <td>
+                                                                        </td>                                                                    
+                                                                    </tr>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <c:if test="#{verAccion.totalOtros == 0}">
+                                                        Otros Documentos 
+                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalOtros}</span>
+                                                    </c:if>
+                                                    <c:if test="#{verAccion.totalOtros >0}">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Otros Documentos 
+                                                            <span class="badge" style="background-color: #398439"> #{verAccion.totalOtros}</span>
+                                                        </a>
+                                                    </c:if>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse3" class="panel-collapse collapse">
+                                                <div class="panel-body">                                               
+                                                    <table class="table table-striped table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="30%">Titulo</th>
+                                                                <th width="60%">Adjunto</th>
+                                                                <th width="20%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="font-size: 11px">
+                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
+                                                                <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            #{adjunto.titulo}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                        </td>
+                                                                        <td>
+                                                                        </td>                                                                    
+                                                                    </tr>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </tbody>                                            
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
                         </div>
                     </div>
-                </div>
-
-                <c:if test="#{verAccion.estado == 'DESESTIMADA'}">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading" style="background-color: black; color: white">OBSERVACIONES DE ESTADO DESESTIMADA:</div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="table-responsive-sm">
-                                        <strong>Info!</strong> #{verAccion.observacionesDesestimada}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </c:if>
-
-                <!-- Descripcion -->                
-                <div class="panel panel-primary">
-                    <div class="panel-heading" >Descripcion</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                                    <h:outputText id="fecha_deteccion" class="form-control" value="#{verAccion.strFechaDeteccion}" />
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <strong><label for="area">Area / Sector:</label></strong>
-                                    <h:outputText id="area" class="form-control" value="#{verAccion.areaSector.nombre}" />
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                    <h:outputText id="tipo_deteccion" class="form-control" value="#{verAccion.generadaPor.tipoDeDeteccion.descripcion}" />
-                                </div> 
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <strong><label for="deteccion">Generada Por:</label></strong>
-                                    <h:outputText id="deteccion" class="form-control" value="#{verAccion.generadaPor.nombre}" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <strong><label for="descripcion">Descripcion:</label></strong>   
-                            <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" value="#{verAccion.descripcion}" />
-                        </div>
-                        <div class="form-group">
-                            <strong><label for="referencias">Referencias:</label></strong>   
-                            <h:inputTextarea readonly="true" id="referencias" class="form-control" style="background-color: white;" value="#{verAccion.referencias}" />
-                        </div>
-                        <div class="form-group">
-                            <strong><label for="producto_afectado">Hay Producto Afectado?</label></strong>
-                            <c:choose>
-                                <c:when test="#{not empty verAccion.listaProductos}">
-                                    Si
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="table-responsive-sm">
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nombre del Producto:</th>
-                                                            <th>Datos del Producto:</th>
-                                                        </tr>                                                
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="#{verAccion.listaProductos}" var="producto">
-                                                            <tr>
-                                                                <td>#{producto.nombre}</td>
-                                                                <td>#{producto.datos}</td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    No
-                                </c:otherwise>
-                            </c:choose>                            
-                        </div>                        
-                    </div>
-                </div> 
-                <!-- Analisis de Causa -->                
-                <div class="panel panel-primary">
-                    <div class="panel-heading" >Analisis de Causa</div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;" value="#{verAccion.analisisCausa}" />
-                        </div>
-                        <div class="form-group">
-                            <strong><label for="codificacion">Codificacion:</label></strong>                                    
-                            <h:outputText id="codificacion" class="form-control" style="background-color: white;" value="#{verAccion.accionSeleccionada.codificacionAccion.nombre}" />
-                        </div>                        
-                    </div>
-                </div>
-
-                <!-- ACTIVIDADES -->
-                <!-- Medidas Correctivas y Preventivas -->    
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <!-- Actividades -->
-                        <div class="panel panel-primary">
-                            <div class="panel-heading" >Actividades</div>
-                            <div class="panel-body">
-                                <c:choose>
-                                    <c:when test="#{not empty verAccion.accionSeleccionada.actividadesDeAccion}">
-                                        <div class="table-responsive-sm">
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tipo:</th>
-                                                        <th>Descripcion:</th>
-                                                        <th>Fecha Estimada:</th>
-                                                        <th>Responsable Implementacion:</th>
-                                                        <th>Implementada:</th>
-                                                    </tr>                                                
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach items="#{verAccion.accionSeleccionada.actividadesDeAccion}" var="actividad" >
-                                                        <tr>
-                                                            <td>#{actividad.tipoDeActividad.descripcion}</td>
-                                                            <td>#{actividad.descripcion}</td>
-                                                            <td>#{actividad.strFechaEstimadaImplementacion}</td>
-                                                            <td>#{actividad.responsableImplementacion.responsabilidadResponsable.nombre} #{actividad.responsableImplementacion.usuarioResponsable.nombreCompleto}</td>
-                                                            <td>
-                                                                <c:if test="#{actividad.fechaImplementacion == null}" >
-                                                                    Sin Implementar
-                                                                </c:if>
-                                                                <c:if test="#{actividad.strFechaImplementacion != null}" >
-                                                                    #{actividad.strFechaImplementacion}
-                                                                </c:if>
-                                                            </td>
-                                                        </tr>                                            
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No se definieron medidas preventivas.
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comprobacion de implementacion y Eficacia-->                
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading" >Comprobacion de Implementacion:</div>
-                            <div class="panel-body">
-                                <c:choose>
-                                    <c:when test="#{verAccion.comprobacionImplementacion != null}">
-                                        <div class="table-responsive-sm">
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha Estimada:</th>
-                                                        <th>Responsable: </th>
-                                                        <th>Fecha Comprobacion:</th>
-                                                        <th>Resultado:</th>
-                                                        <th>Observaciones:</th>
-                                                    </tr>                                                
-                                                </thead>
-                                                <tbody>                                                
-                                                    <tr>
-                                                        <c:choose>
-                                                            <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
-                                                                            verAccion.comprobacionImplementacion.fechaComprobacion == null}">
-                                                                <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td> Sin Comprobar </td>
-                                                                <td> Sin Comprobar </td>
-                                                                <td> Sin Comprobar </td>
-                                                            </c:when>
-                                                            <c:when test="#{verAccion.comprobacionImplementacion.fechaEstimada != null and 
-                                                                            verAccion.comprobacionImplementacion.fechaComprobacion != null}">
-                                                                <td>#{verAccion.comprobacionImplementacion.strFechaEstimada}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionImplementacion.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.strFechaComprobacion}</td>
-                                                                <td>#{verAccion.comprobacionImplementacion.resultadoComprobacion.descripcion}</td>
-                                                                <c:if test="#{verAccion.comprobacionImplementacion.observaciones.blank}">
-                                                                    <td>Sin Observaciones</td>
-                                                                </c:if>
-                                                                <c:if test="#{not verAccion.comprobacionImplementacion.observaciones.blank}">
-                                                                    <td>#{verAccion.comprobacionImplementacion.observaciones}</td>
-                                                                </c:if>                                                                                                                                
-                                                            </c:when>
-                                                        </c:choose>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No han definido plazos de comprobacion de implementacion.
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading" >Comprobacion de Eficacia</div>
-                            <div class="panel-body">
-                                <c:choose>
-                                    <c:when test="#{verAccion.comprobacionEficacia != null}">
-                                        <div class="table-responsive-sm">
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha Estimada:</th>
-                                                        <th>Responsable: </th>
-                                                        <th>Fecha Comprobacion:</th>
-                                                        <th>Resultado:</th>
-                                                        <th>Observaciones:</th>
-                                                    </tr>                                                
-                                                </thead>
-                                                <tbody>                                                
-                                                    <tr>
-                                                        <c:choose>
-                                                            <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
-                                                                            verAccion.comprobacionEficacia.fechaComprobacion == null}">
-                                                                <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td> Sin Comprobar </td>
-                                                                <td> Sin Comprobar </td>
-                                                                <td> Sin Comprobar </td>
-                                                            </c:when>
-                                                            <c:when test="#{verAccion.comprobacionEficacia.fechaEstimada != null and 
-                                                                            verAccion.comprobacionEficacia.fechaComprobacion != null}">
-                                                                <td>#{verAccion.comprobacionEficacia.strFechaEstimada}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.responsableComprobacion.responsabilidadResponsable.nombre} #{verAccion.comprobacionEficacia.responsableComprobacion.usuarioResponsable.nombreCompleto}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.strFechaComprobacion}</td>
-                                                                <td>#{verAccion.comprobacionEficacia.resultadoComprobacion.descripcion}</td>
-                                                                <c:if test="#{verAccion.comprobacionEficacia.observaciones.blank}">
-                                                                    <td>Sin Observaciones</td>
-                                                                </c:if>
-                                                                <c:if test="#{not verAccion.comprobacionEficacia.observaciones.blank}">
-                                                                    <td>#{verAccion.comprobacionEficacia.observaciones}</td>
-                                                                </c:if> 
-                                                            </c:when>
-                                                        </c:choose>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="alert alert-info">
-                                            <strong>Info!</strong> No han definido plazos de comprobacion de eficacia.
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Adjuntos -->
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
-                    <div class="panel-body">
-                        <c:choose>
-                            <c:when test="#{empty editarAccion.mapAdjuntos}">
-                                <div class="alert alert-info">
-                                    <strong>Info!</strong> No se han cargado datos adjuntos.
-                                </div>                                   
-                            </c:when>
-                            <c:otherwise>    
-                                <div class="panel-group" id="accordion">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <c:if test="#{verAccion.totalImagenes == 0}">
-                                                    Imágenes 
-                                                    <span class="badge" style="background-color: #398439"> #{verAccion.totalImagenes}</span>
-                                                </c:if>
-                                                <c:if test="#{verAccion.totalImagenes > 0}">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Imágenes 
-                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalImagenes}</span>
-                                                    </a>
-                                                </c:if>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse1" class="panel-collapse collapse">
-                                            <div class="panel-body">                                               
-                                                <table class="table table-striped table-responsive-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="30%">Titulo</th>
-                                                            <th width="60%">Adjunto</th>
-                                                            <th width="20%"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                            <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
-                                                                <tr>
-                                                                    <td>
-                                                                        #{adjunto.titulo}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
-                                                                    </td>
-                                                                    <td>
-                                                                    </td>                                                                    
-                                                                </tr>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <c:if test="#{verAccion.totalVideos == 0}">
-                                                    Videos 
-                                                    <span class="badge" style="background-color: #398439"> #{verAccion.totalVideos}</span>
-                                                </c:if>
-                                                <c:if test="#{verAccion.totalVideos > 0}">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Videos 
-                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalVideos}</span>
-                                                    </a>
-                                                </c:if>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse2" class="panel-collapse collapse">
-                                            <div class="panel-body">                                               
-                                                <table class="table table-striped table-responsive-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="30%">Titulo</th>
-                                                            <th width="60%">Adjunto</th>
-                                                            <th width="20%"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                            <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
-                                                                <tr>
-                                                                    <td>
-                                                                        #{adjunto.titulo}
-                                                                    </td>
-                                                                    <td>
-                                                                        <video controls="true" width="250">
-                                                                            <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
-                                                                        </video>
-                                                                    </td>
-                                                                    <td>
-                                                                    </td>                                                                    
-                                                                </tr>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <c:if test="#{verAccion.totalOtros == 0}">
-                                                    Otros Documentos 
-                                                    <span class="badge" style="background-color: #398439"> #{verAccion.totalOtros}</span>
-                                                </c:if>
-                                                <c:if test="#{verAccion.totalOtros >0}">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Otros Documentos 
-                                                        <span class="badge" style="background-color: #398439"> #{verAccion.totalOtros}</span>
-                                                    </a>
-                                                </c:if>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse3" class="panel-collapse collapse">
-                                            <div class="panel-body">                                               
-                                                <table class="table table-striped table-responsive-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="30%">Titulo</th>
-                                                            <th width="60%">Adjunto</th>
-                                                            <th width="20%"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody style="font-size: 11px">
-                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                            <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
-                                                                <tr>
-                                                                    <td>
-                                                                        #{adjunto.titulo}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
-                                                                    </td>
-                                                                    <td>
-                                                                    </td>                                                                    
-                                                                </tr>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </tbody>                                            
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-            </h:form>
-        </div>
+                </h:form>
+            </div>
+        </c:otherwise>
     </ui:define>
 </ui:composition>
 

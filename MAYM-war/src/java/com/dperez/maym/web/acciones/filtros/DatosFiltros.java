@@ -56,7 +56,7 @@ public class DatosFiltros implements Serializable {
     //**********************************************************************
     public void buscarAccionId() throws IOException {
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        Accion accion = fLectura.GetAccion(idAccionBuscada);
+        Accion accion = fLectura.getAccion(idAccionBuscada);
         TipoAccion tipoDefault = TipoAccion.CORRECTIVA;
         if (accion != null) {
             tipoDefault = TipoAccion.valueOf(accion.getClass().getSimpleName().toUpperCase());

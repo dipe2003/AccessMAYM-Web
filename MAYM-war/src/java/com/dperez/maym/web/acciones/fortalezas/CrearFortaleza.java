@@ -6,6 +6,7 @@
 package com.dperez.maym.web.acciones.fortalezas;
 
 import com.dperez.maym.web.configuraciones.ModalDetecciones;
+import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.deteccion.TipoDeteccion;
 import com.dperez.maymweb.facades.FacadeDatos;
@@ -25,6 +26,7 @@ import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -34,6 +36,9 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class CrearFortaleza implements Serializable {
+
+    @Inject
+    SesionUsuario sesionUsuario;
 
     private FacadeLectura fLectura;
     private FacadeDatos fDatos;
@@ -179,7 +184,8 @@ public class CrearFortaleza implements Serializable {
      */
     public void crearFortaleza() throws IOException {
 
-        Fortaleza fortaleza = fDatos.nuevaFortaleza(FechaDeteccion, Descripcion, DeteccionSeleccionada, AreaSectorAccionSeleccionada);
+        Fortaleza fortaleza = fDatos.nuevaFortaleza(FechaDeteccion, Descripcion, DeteccionSeleccionada, 
+                AreaSectorAccionSeleccionada, sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId());
 
         if (fortaleza != null) {
             // redirigir a la lista de fortalezas.
