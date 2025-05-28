@@ -41,12 +41,12 @@
             }
             
             .panel-primary{
-             border-color: #{sesionUsuario.opsApariencia.getColorDarker(sesionUsuario.empresa.opcionesSistema.colorPanelTitulo)} !important;    
+             border-color: #{sesionUsuario.opsApariencia.getColorDarker(sesionUsuario.opsApariencia.colorPanelTitulo)} !important;    
             }
             
             /* fondo de opcion de menu seleccionada */
              .navbar-nav > .open > a{
-                 background-color: #{sesionUsuario.opsApariencia.getColorBrighter(sesionUsuario.empresa.opcionesSistema.colorInferiorPanelTitulo)} !important;
+                 background-color: #{sesionUsuario.opsApariencia.getColorBrighter(sesionUsuario.opsApariencia.colorInferiorPanelTitulo)} !important;
              }
 
             /* fuente titulo de opcion de menu */
@@ -92,7 +92,7 @@
                     <div class="container-fluid">
                         <div class="jumbotron">
                             <h1>Bienvenido a <abbr title="Medicion Analisis y Mejora" >M.A.Y.M.</abbr> - Web App </h1>      
-                            <p>Este es el sitio de inicio selecciona una opcion del menú para ver los registros generados.</p> 
+                            <p>Este es el sitio de inicio debes ser un usuario registrado para acceder al sistema.</p> 
                             <c:if test="${sesionUsuario.usuarioLogueado == null}">
                                 <p><small>Para mas informacion o utilizar todas las funciones del sistema inicia sesion.</small></p>   
                             </c:if>

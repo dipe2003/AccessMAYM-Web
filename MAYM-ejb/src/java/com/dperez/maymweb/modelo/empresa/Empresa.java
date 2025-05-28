@@ -7,19 +7,25 @@ package com.dperez.maymweb.modelo.empresa;
 import com.dperez.maymweb.modelo.acciones.Accion;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import com.dperez.maymweb.modelo.usuario.Usuario;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author dipe2
  */
-public class Empresa {
+@Entity
+@Table(name = "Empresas")
+public class Empresa implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +36,11 @@ public class Empresa {
     private String movil;
     private String correo;
     private String nombreExtra;
-    private String ubicacionLogo;
-    private String ubicacionLogoAdicional;
+    private String ubicacionLogo ="";
+    private String ubicacionLogoAdicional="";
 
-    private OpcionesSistema opcionesSistema;
+    @OneToOne(mappedBy= "empresaOpciones" ,orphanRemoval = true, cascade = CascadeType.ALL)
+    private OpcionesSistema opcionesSistema = new OpcionesSistema();        
 
     @OneToMany(mappedBy = "empresaUsuario", cascade = CascadeType.ALL)
     private List<Usuario> usuariosEmpresa = new ArrayList();
@@ -45,6 +52,8 @@ public class Empresa {
     private List<Fortaleza> fortalezasEmpresa = new ArrayList();
 
     public Empresa() {
+        this.opcionesSistema = new OpcionesSistema();
+        this.opcionesSistema.setEmpresaOpciones(this);
     }
 
     public Empresa(String nombre, String direccion, String telefono, String movil, String correo, String nombreExtra) {
@@ -55,6 +64,7 @@ public class Empresa {
         this.correo = correo;
         this.nombreExtra = nombreExtra;
         this.opcionesSistema = new OpcionesSistema();
+        this.opcionesSistema.setEmpresaOpciones(this);
     }
 
     //<editor-fold desc="GETTERS">

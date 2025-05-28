@@ -20,6 +20,10 @@
     <class>com.dperez.maymweb.modelo.usuario.Responsable</class>
     <class>com.dperez.maymweb.modelo.usuario.Usuario</class>
     <class>com.dperez.maymweb.modelo.responsabilidad.Responsabilidad</class>
+    <class>com.dperez.maymweb.modelo.empresa.Empresa</class>
+    <class>com.dperez.maymweb.modelo.empresa.OpcionesApariencia</class>
+    <class>com.dperez.maymweb.modelo.empresa.OpcionesCorreo</class>
+    <class>com.dperez.maymweb.modelo.empresa.OpcionesSistema</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
     </properties>

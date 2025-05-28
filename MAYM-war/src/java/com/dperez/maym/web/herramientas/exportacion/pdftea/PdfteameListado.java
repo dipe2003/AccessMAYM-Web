@@ -429,9 +429,11 @@ public class PdfteameListado implements Serializable {
             String realPath = cArchivo.getHome() + cArchivo.getSeparator() + "MAYMWEB" + cArchivo.getSeparator();
             logo = Image.getInstance(realPath + empresa.getUbicacionLogoAdicional());
         } catch (FileNotFoundException ex) {
-            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo_work.jpg"));
+            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo-maym-wider.png"));
         } catch (IOException ex) {
             ex.getMessage();
+            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo-maym-wider.png"));            
+        }catch(Exception ex){
             frase.add("[No se pudo cargar logo]");
         }
         if (logo != null) {

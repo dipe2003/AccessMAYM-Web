@@ -4,20 +4,14 @@
  */
 package com.dperez.maym.web.configuraciones;
 
-import com.dperez.maymweb.modelo.empresa.OpcionesSistema;
 import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maym.web.herramientas.CargarArchivo;
-import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.facades.FacadeAdministrador;
-import com.dperez.maymweb.herramientas.IOPropiedades;
 import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
 import com.dperez.maymweb.modelo.empresa.OpcionesCorreo;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
@@ -38,16 +32,15 @@ public class ConfigGeneral implements Serializable {
     @Inject
     SesionUsuario sesionUsuario;
 
-    private FacadeAdministrador fAdmin = new FacadeAdministrador();
+    private FacadeAdministrador fAdmin;
 
     @Inject
     private CargarArchivo cArchivo;
 
     private Part ArchivoAdjunto;
     private Part ArchivoLogoInforme;
-    @Inject
-    private IOPropiedades ioProp;
 
+    private Empresa empresaGuardada;
     private OpcionesApariencia ops;
     private String colorSuperior;
     private String colorInferior;
@@ -257,6 +250,14 @@ public class ConfigGeneral implements Serializable {
         this.colorBoton = colorBoton;
     }
 
+    public Empresa getEmpresaGuardada() {
+        return empresaGuardada;
+    }
+
+    public void setEmpresaGuardada(Empresa empresaGuardada) {
+        this.empresaGuardada = empresaGuardada;
+    }
+
     //</editor-fold>
     //<editor-fold desc="Metodos">
     public void guardarDatosEmpresa() throws IOException {
@@ -288,9 +289,7 @@ public class ConfigGeneral implements Serializable {
             String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoAdjunto, sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
             // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
             if (!ubicacion.isEmpty()) {
-                Map<String, String> props = new HashMap<>();
-                props.put("logo_empresa", ubicacion);
-                ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
+                fAdmin.setUbicacionLogoEmpresa(empresaGuardada.getId(), ubicacion);
                 sesionUsuario.cargarEmpresa();
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 String url = ctx.getExternalContext().getRequestContextPath();
@@ -306,10 +305,8 @@ public class ConfigGeneral implements Serializable {
             String ubicacion = cArchivo.guardarLogoEmpresa(ArchivoLogoInforme, "_informes_" + sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getNombreDeArchivo());
             // datosAdjunto[0]: ubicacion | datosAdjunto[1]: extension
             if (!ubicacion.isEmpty()) {
-                Map<String, String> props = new HashMap<>();
-                props.put("logo_informes_empresa", ubicacion);
-                ManejadorPropiedades.setPropiedades(ioProp.getDirectorio(), props);
-                sesionUsuario.cargarEmpresa();                
+               fAdmin.setUbicacionLogoAdicionaleEmpresa(empresaGuardada.getId(), ubicacion);
+                sesionUsuario.cargarEmpresa();
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 String url = ctx.getExternalContext().getRequestContextPath();
                 ctx.getExternalContext().redirect(url + "/Views/Configuraciones/ConfigGeneral.xhtml");
@@ -332,7 +329,8 @@ public class ConfigGeneral implements Serializable {
     //</editor-fold>
     @PostConstruct
     public void init() {
-        Empresa empresaGuardada = sesionUsuario.getUsuarioLogueado().getEmpresaUsuario();
+        fAdmin = new FacadeAdministrador();
+        empresaGuardada = sesionUsuario.getUsuarioLogueado().getEmpresaUsuario();
 
         nombre = empresaGuardada.getNombre();
         direccion = empresaGuardada.getDireccion();
@@ -340,9 +338,12 @@ public class ConfigGeneral implements Serializable {
         movil = empresaGuardada.getMovil();
         correo = empresaGuardada.getCorreo();
         nombreExtra = empresaGuardada.getNombreExtra();
-        
-        OpcionesCorreo opsMail = empresaGuardada.getOpcionesSistema().getOpcionesCorreo();
-        
+        OpcionesCorreo opsMail = null;
+        if (empresaGuardada.getOpcionesSistema() != null && empresaGuardada.getOpcionesSistema().getOpcionesCorreo()!=null) {
+            opsMail = empresaGuardada.getOpcionesSistema().getOpcionesCorreo();
+        } else {
+            opsMail = new OpcionesCorreo();
+        }
         from = opsMail.getMailFrom();
         usuario = opsMail.getMailUser();
         password = opsMail.getMailPass();
@@ -351,7 +352,11 @@ public class ConfigGeneral implements Serializable {
         host = opsMail.getMailHostSMTP();
         activarAlertas = opsMail.isAlertasActivadas();
 
-        ops = empresaGuardada.getOpcionesSistema().getOpcionesApariencia();
+        if (empresaGuardada.getOpcionesSistema()!=null && empresaGuardada.getOpcionesSistema().getOpcionesApariencia()!=null) {
+            ops = empresaGuardada.getOpcionesSistema().getOpcionesApariencia();
+        } else {
+            ops = new OpcionesApariencia();
+        }
         colorSuperior = ops.getColorSuperiorPanelTitulo();
         colorFuenteEncabezado = ops.getColorFuentePanelEncabezado();
         colorInferior = ops.getColorInferiorPanelTitulo();

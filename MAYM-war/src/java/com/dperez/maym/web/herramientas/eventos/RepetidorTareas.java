@@ -5,10 +5,9 @@
 */
 package com.dperez.maym.web.herramientas.eventos;
 
+import com.dperez.maym.web.herramientas.alertas.AlertasAcciones;
 import com.dperez.maym.web.herramientas.alertas.ControladorAlertas;
 import com.dperez.maymweb.facades.FacadeLectura;
-import com.dperez.maym.web.herramientas.alertas.AlertasCorrectivas;
-import com.dperez.maym.web.herramientas.alertas.AlertasMejoras;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -35,9 +34,9 @@ public class RepetidorTareas {
     //@Schedule(month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "0/2", second = "0")
     public void RenviarAlertasEventos() {
         // Acciones Correctivas
-        Thread tCorrectivas = new Thread(new AlertasCorrectivas(fLectura.listarAccionesCorrectivas(), cAlertas) );
+        Thread tCorrectivas = new Thread(new AlertasAcciones(fLectura.listarAccionesCorrectivas(), cAlertas) );
         // Acciones de Mejora
-        Thread tMejoras = new Thread(new AlertasMejoras(fLectura.listarAccionesMejoras(), cAlertas));
+        Thread tMejoras = new Thread(new AlertasAcciones(fLectura.listarAccionesMejoras(), cAlertas));
         
         tCorrectivas.start();       
         tMejoras.start();

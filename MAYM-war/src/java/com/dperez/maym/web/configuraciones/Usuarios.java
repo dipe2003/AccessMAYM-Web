@@ -13,6 +13,7 @@ import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.facades.FacadeAdministrador;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
+import com.dperez.maymweb.modelo.empresa.Empresa;
 import com.dperez.maymweb.modelo.responsabilidad.Responsabilidad;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import com.dperez.maymweb.modelo.usuario.EnumPermiso;
@@ -72,6 +73,9 @@ public class Usuarios implements Serializable {
     private List<Area> ListaAreas;
     private int AreaSeleccionada;
     
+    private List<Empresa> ListaEmpresas;
+    private int EmpresaSeleccionada;
+    
     private String textoBusqueda;
     
     // Pagination
@@ -103,6 +107,15 @@ public class Usuarios implements Serializable {
     public int getAreaSeleccionada() {return AreaSeleccionada;}
     
     public String getTextoBusqueda(){return this.textoBusqueda;}
+
+    public List<Empresa> getListaEmpresas() {
+        return ListaEmpresas;
+    }
+
+    public int getEmpresaSeleccionada() {
+        return EmpresaSeleccionada;
+    }
+    
     //</editor-fold>
     
     // Paginacion
@@ -136,6 +149,15 @@ public class Usuarios implements Serializable {
     public void setAreaSeleccionada(int AreaSeleccionada) {this.AreaSeleccionada = AreaSeleccionada;}
     
     public void setTextoBusqueda(String textoBusqueda){this.textoBusqueda = textoBusqueda;}
+
+    public void setListaEmpresas(List<Empresa> ListaEmpresas) {
+        this.ListaEmpresas = ListaEmpresas;
+    }
+
+    public void setEmpresaSeleccionada(int EmpresaSeleccionada) {
+        this.EmpresaSeleccionada = EmpresaSeleccionada;
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="Metodos">
@@ -157,6 +179,7 @@ public class Usuarios implements Serializable {
         listaUsuariosFiltrable = new ArrayList<>();
         listaCompletaUsuariosFiltrable = new ArrayList<>();
         responsables = new HashMap<>();
+        ListaEmpresas = fLectura.listarEmpresas();
         fLectura.listarUsuarios(false).stream()
                 .filter(u -> u.getEmpresaUsuario().getId() == sesion.getUsuarioLogueado().getEmpresaUsuario().getId())
                 .forEach((Usuario u) -> {
@@ -203,7 +226,7 @@ public class Usuarios implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if(Password.equals(PasswordConfirmacion)){
             if((fAdmin.nuevoUsuario(NumeroNuevoUsuario, Nombre,Apellido,CorreoElectronico, Password,
-                    PermisoSeleccionado, AreaSeleccionada, sesion.getUsuarioLogueado().getEmpresaUsuario().getId()))!=null){
+                    PermisoSeleccionado, AreaSeleccionada, EmpresaSeleccionada))!=null){
                 context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/Views/Configuraciones/Usuarios.xhtml?pagina=1");
             }else{
                 context.addMessage("form_usuarios:btn_nuevo_usuario", new FacesMessage(SEVERITY_FATAL, "No se pudo crear nuevo usuario", "No se pudo crear nuevo usuario" ));
@@ -222,7 +245,8 @@ public class Usuarios implements Serializable {
      */
     public void editarUsuario() throws IOException{
         FacesContext context = FacesContext.getCurrentInstance();
-        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, RecibeAlertas, AreaSeleccionada))!=-1){
+        if((fMain.CambiarDatosUsuario(IdUsuarioSeleccionado, Nombre, Apellido, CorreoElectronico, PermisoSeleccionado, 
+                RecibeAlertas, AreaSeleccionada, EmpresaSeleccionada))!=-1){
             if(sesion.getUsuarioLogueado().getId() == IdUsuarioSeleccionado){
                 sesion.setUsuarioLogueado(fLectura.getUsuario(IdUsuarioSeleccionado));
             }
@@ -334,6 +358,7 @@ public class Usuarios implements Serializable {
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
             this.AreaSeleccionada = -1;
+            this.EmpresaSeleccionada = -1;
         }else{
 
             Usuario usrSeleccionado = listaUsuariosFiltrable.stream()
@@ -352,6 +377,7 @@ public class Usuarios implements Serializable {
             this.PasswordNuevo = new String();
             this.PasswordConfirmacion= new String();
             this.AreaSeleccionada = usrSeleccionado.getAreaUsuario().getId();
+            this.EmpresaSeleccionada = usrSeleccionado.getEmpresaUsuario().getId();
             
             // verifica que no tenga registros relacionados
             // la lista de comprobaciones y de actividades deben estar vacias => False

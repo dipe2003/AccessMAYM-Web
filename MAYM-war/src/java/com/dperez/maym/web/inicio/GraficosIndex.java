@@ -433,12 +433,13 @@ public class GraficosIndex implements Serializable {
         fLectura = new FacadeLectura();
         // llenar los valores de estado.
         listaTotalAcciones = fLectura.listarAcciones();
-        List<Accion> lstAcciones;
+        List<Accion> lstAcciones = new ArrayList();
 
         // calcular fechas
-        fechaInicial = calcularFechaInicial(listaTotalAcciones);
-        fechaFinal = calcularFechaFinal(listaTotalAcciones);
-
+        if (!listaTotalAcciones.isEmpty()) {
+            fechaInicial = calcularFechaInicial(listaTotalAcciones);
+            fechaFinal = calcularFechaFinal(listaTotalAcciones);
+        }
         lstAcciones = filtrarFechasAcciones(listaTotalAcciones, fechaInicial, fechaFinal);
 
         // total por tipo de deteccion

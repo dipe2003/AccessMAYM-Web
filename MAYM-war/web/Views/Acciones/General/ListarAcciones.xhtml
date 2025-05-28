@@ -10,728 +10,733 @@
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="page_content">
-        <div class="row">
-            <h:form id="listado-correctivas">                
-                <!-- FILTROS -->
-                <h:panelGroup rendered="#{listarAcciones.esBusqueda == false}">
-                    <div class="col-md-12">
-                        <div class="container-fluid">
-                            <div class="panel-body">
-                                <div class="panel-group" id="accordion">
-                                    <div class="panel panel-primary" >
-                                        <div class="panel-heading" >
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltroExportar">
-                                                    Filtrar y Exportar (#{listarAcciones.tipoDeAccion.descripcion}) <span class="caret"></span>
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseFiltroExportar" class="panel-collapse collapse">
-                                            <div class="table-responsive-sm">
-                                                <h:panelGroup id="panel_filtros" >
-                                                    <table class="table table-hover">                        
-                                                        <tbody style="font-size: 11px">
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-2">
-                                                                            <label for="fecha_inicial">Desde:</label>
-                                                                            <h:panelGroup id="drop-filtro-fecha-inicial">
-                                                                                <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarAcciones.strFechaInicial}" >
-                                                                                    <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
-                                                                                            render="form_tabla_acciones panel_filtros"/>
+        <c:if test="#{sesionUsuario.usuarioLogueado == null }">
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:if>
+        <c:if test="#{sesionUsuario.usuarioLogueado != null}"> 
+            <div class="row">
+                <h:form id="listado-correctivas">                
+                    <!-- FILTROS -->
+                    <h:panelGroup rendered="#{listarAcciones.esBusqueda == false}">
+                        <div class="col-md-12">
+                            <div class="container-fluid">
+                                <div class="panel-body">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-primary" >
+                                            <div class="panel-heading" >
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltroExportar">
+                                                        Filtrar y Exportar (#{listarAcciones.tipoDeAccion.descripcion}) <span class="caret"></span>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseFiltroExportar" class="panel-collapse collapse">
+                                                <div class="table-responsive-sm">
+                                                    <h:panelGroup id="panel_filtros" >
+                                                        <table class="table table-hover">                        
+                                                            <tbody style="font-size: 11px">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-2">
+                                                                                <label for="fecha_inicial">Desde:</label>
+                                                                                <h:panelGroup id="drop-filtro-fecha-inicial">
+                                                                                    <h:inputText id="fecha_inicial" class="form-control calendario" value="#{listarAcciones.strFechaInicial}" >
+                                                                                        <f:ajax execute="@this" event="change" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
+                                                                                                render="form_tabla_acciones panel_filtros"/>
+                                                                                    </h:inputText>
+                                                                                </h:panelGroup>                                            
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <label for="fecha_final">Hasta:</label>
+                                                                                <h:panelGroup id="drop-filtro-fecha-final">
+                                                                                    <h:inputText id="fecha_final" class="form-control calendario" value="#{listarAcciones.strFechaFinal}" >
+                                                                                        <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
+                                                                                                render="form_tabla_acciones panel_filtros"/>
+                                                                                    </h:inputText>
+                                                                                </h:panelGroup>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_areas" >
+                                                                                    Areas <span class="glyphicon glyphicon-filter"></span>
+                                                                                    <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_areas"/>
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_detecciones" >
+                                                                                    Detecciones <span class="glyphicon glyphicon-filter"></span>
+                                                                                    <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_detecciones"/>
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_codificaciones" >
+                                                                                    Codificaciones <span class="glyphicon glyphicon-filter"></span>
+                                                                                    <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_codificaciones"/>
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <div class="col-sm-2">
+                                                                                <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_estados" >
+                                                                                    Estados <span class="glyphicon glyphicon-filter"></span>
+                                                                                    <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_estados"/>
+                                                                                </h:commandLink>
+                                                                            </div>                                                             
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">
+                                                                                <h:inputText id="texto_busqueda" class="form-control" value="#{listarAcciones.textoBusqueda}" 
+                                                                                             p:placeholder="Buscar texto en Descripcion">
+                                                                                    <f:ajax execute="@this" event="valueChange" />
                                                                                 </h:inputText>
-                                                                            </h:panelGroup>                                            
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <label for="fecha_final">Hasta:</label>
-                                                                            <h:panelGroup id="drop-filtro-fecha-final">
-                                                                                <h:inputText id="fecha_final" class="form-control calendario" value="#{listarAcciones.strFechaFinal}" >
-                                                                                    <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorFecha(event)}" 
-                                                                                            render="form_tabla_acciones panel_filtros"/>
-                                                                                </h:inputText>
-                                                                            </h:panelGroup>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_areas" >
-                                                                                Areas <span class="glyphicon glyphicon-filter"></span>
-                                                                                <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_areas"/>
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_detecciones" >
-                                                                                Detecciones <span class="glyphicon glyphicon-filter"></span>
-                                                                                <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_detecciones"/>
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_codificaciones" >
-                                                                                Codificaciones <span class="glyphicon glyphicon-filter"></span>
-                                                                                <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_codificaciones"/>
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <h:commandLink class="btn btn-primary" style="width: 100%" p:data-toggle="modal" p:data-target="#modal_aplicar_filtros_estados" >
-                                                                                Estados <span class="glyphicon glyphicon-filter"></span>
-                                                                                <f:ajax delay="400" execute="@this" render="form_filtros:panel_modal_filtros_estados"/>
-                                                                            </h:commandLink>
-                                                                        </div>                                                             
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="row">
-                                                                        <div class="col-md-3">
-                                                                            <h:inputText id="texto_busqueda" class="form-control" value="#{listarAcciones.textoBusqueda}" 
-                                                                                         p:placeholder="Buscar texto en Descripcion">
-                                                                                <f:ajax execute="@this" event="valueChange" />
-                                                                            </h:inputText>
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.filtrarTexto()}" 
-                                                                                           ><img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-search-48.png" style='height: 20px' /> Buscar
-                                                                                <f:ajax delay="10" render="form_tabla_acciones panel_filtros" onevent="indicador" />                                                                           
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                        <div class="col-md-1" style="font-size:14px">
-                                                                            <strong>Filtros actuales:</strong>
-                                                                        </div>
-                                                                        <div class="col-md-4" style="font-size:13px">
-                                                                            <c:choose >
-                                                                                <c:when test="#{listarAcciones.filtrosAplicados.size() == 0}">
-                                                                                    <div class="alert-info">
-                                                                                        <strong>[No hay filtros Aplicados]</strong>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <c:forEach items="#{listarAcciones.filtrosAplicados}" var="filtro" varStatus="conteo">
-                                                                                        <h:commandLink action="#{listarAcciones.quitarFiltro(filtro)}" value="#{filtro}" style="background-color: #d9edf7">
-                                                                                            <f:ajax delay="10" render="form_tabla_acciones 
-                                                                                                    panel_filtros                                                                                                                    
-                                                                                                    form_filtros:modal_aplicar_filtros_areas 
-                                                                                                    form_filtros:panel_modal_filtros_areas 
-                                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                                    form_filtros:panel_modal_filtros_detecciones 
-                                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                                    form_filtros:panel_modal_filtros_codificaciones
-                                                                                                    form_filtros:modal_aplicar_filtros_estados 
-                                                                                                    form_filtros:panel_modal_filtros_estados"
-                                                                                                    onevent="indicador"/>
-                                                                                        </h:commandLink>                                                          
-                                                                                        <c:if test="#{not conteo.last}">
-                                                                                            &#62;
-                                                                                        </c:if> 
-                                                                                    </c:forEach>
-                                                                                </c:otherwise>
-                                                                            </c:choose>                                                                
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <h:commandLink class="btn btn-primary" style="width: 100%" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltros()}" 
-                                                                                           value="Quitar Filtros">
-                                                                                <f:ajax delay="10" render="form_tabla_acciones 
-                                                                                        panel_filtros                                                                                                                    
-                                                                                        form_filtros:modal_aplicar_filtros_areas 
-                                                                                        form_filtros:panel_modal_filtros_areas 
-                                                                                        form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                        form_filtros:panel_modal_filtros_detecciones 
-                                                                                        form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                        form_filtros:panel_modal_filtros_codificaciones
-                                                                                        form_filtros:modal_aplicar_filtros_estados 
-                                                                                        form_filtros:panel_modal_filtros_estados"
-                                                                                        onevent="indicador"/>                                                                     
-                                                                            </h:commandLink>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>  
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-2">
-                                                                            <div class="btn-group">
-                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                                    <span class="glyphicon glyphicon-save-file"></span>
-                                                                                    Exportar
-                                                                                    <span class="caret"></span>
-                                                                                </button>
-                                                                                <ul class="dropdown-menu" role="menu">
-                                                                                    <li>
-                                                                                        <h:commandLink class="dropdown-item"  action="#{listarAcciones.pdfteaListado()}" immediate="true">
-                                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                                            Listado completo (Pdf)
-                                                                                        </h:commandLink>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <h:commandLink class="dropdown-item"  action="#{listarAcciones.excelseaConActividades()}" immediate="true">
-                                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
-                                                                                            Listado completo (Excel)
-                                                                                        </h:commandLink>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <h:commandLink class="dropdown-item" action="#{listarAcciones.excelsea()}" immediate="true">
-                                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
-                                                                                            Listado compacto (Excel)
-                                                                                        </h:commandLink>
-                                                                                    </li>
-                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.filtrarTexto()}" 
+                                                                                               ><img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-search-48.png" style='height: 20px' /> Buscar
+                                                                                    <f:ajax delay="10" render="form_tabla_acciones panel_filtros" onevent="indicador" />                                                                           
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <div class="col-md-1" style="font-size:14px">
+                                                                                <strong>Filtros actuales:</strong>
+                                                                            </div>
+                                                                            <div class="col-md-4" style="font-size:13px">
+                                                                                <c:choose >
+                                                                                    <c:when test="#{listarAcciones.filtrosAplicados.size() == 0}">
+                                                                                        <div class="alert-info">
+                                                                                            <strong>[No hay filtros Aplicados]</strong>
+                                                                                        </div>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                        <c:forEach items="#{listarAcciones.filtrosAplicados}" var="filtro" varStatus="conteo">
+                                                                                            <h:commandLink action="#{listarAcciones.quitarFiltro(filtro)}" value="#{filtro}" style="background-color: #d9edf7">
+                                                                                                <f:ajax delay="10" render="form_tabla_acciones 
+                                                                                                        panel_filtros                                                                                                                    
+                                                                                                        form_filtros:modal_aplicar_filtros_areas 
+                                                                                                        form_filtros:panel_modal_filtros_areas 
+                                                                                                        form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                                        form_filtros:panel_modal_filtros_detecciones 
+                                                                                                        form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                                        form_filtros:panel_modal_filtros_codificaciones
+                                                                                                        form_filtros:modal_aplicar_filtros_estados 
+                                                                                                        form_filtros:panel_modal_filtros_estados"
+                                                                                                        onevent="indicador"/>
+                                                                                            </h:commandLink>                                                          
+                                                                                            <c:if test="#{not conteo.last}">
+                                                                                                &#62;
+                                                                                            </c:if> 
+                                                                                        </c:forEach>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>                                                                
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <h:commandLink class="btn btn-primary" style="width: 100%" role="menuitem" tabindex="-1" action="#{listarAcciones.quitarFiltros()}" 
+                                                                                               value="Quitar Filtros">
+                                                                                    <f:ajax delay="10" render="form_tabla_acciones 
+                                                                                            panel_filtros                                                                                                                    
+                                                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                                                            form_filtros:panel_modal_filtros_areas 
+                                                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                            form_filtros:panel_modal_filtros_codificaciones
+                                                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                                                            form_filtros:panel_modal_filtros_estados"
+                                                                                            onevent="indicador"/>                                                                     
+                                                                                </h:commandLink>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td><div class="col-sm-2">
-                                                                        <div class="btn-group">
-
+                                                                    </td>
+                                                                </tr>  
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="col-sm-2">
+                                                                                <div class="btn-group">
+                                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                                        <span class="glyphicon glyphicon-save-file"></span>
+                                                                                        Exportar
+                                                                                        <span class="caret"></span>
+                                                                                    </button>
+                                                                                    <ul class="dropdown-menu" role="menu">
+                                                                                        <li>
+                                                                                            <h:commandLink class="dropdown-item"  action="#{listarAcciones.pdfteaListado()}" immediate="true">
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                                                Listado completo (Pdf)
+                                                                                            </h:commandLink>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <h:commandLink class="dropdown-item"  action="#{listarAcciones.excelseaConActividades()}" immediate="true">
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
+                                                                                                Listado completo (Excel)
+                                                                                            </h:commandLink>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <h:commandLink class="dropdown-item" action="#{listarAcciones.excelsea()}" immediate="true">
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
+                                                                                                Listado compacto (Excel)
+                                                                                            </h:commandLink>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </h:panelGroup>
+                                                                    </td>
+                                                                    <td><div class="col-sm-2">
+                                                                            <div class="btn-group">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </h:panelGroup>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </h:panelGroup>
-            </h:form>
-        </div>
+                    </h:panelGroup>
+                </h:form>
+            </div>
 
-        <div class="container-fluid" style="padding: 1%">
-            <!-- TABLA ACCIONES -->
-            <h:form id="form_tabla_acciones" >
-                <c:choose>
-                    <c:when test="#{empty listarAcciones.listaAcciones}">
-                        <div class="alert alert-info">
-                            <strong>Info!</strong> No hay registros para listar con el criterio seleccionado.
-                        </div>
-                    </c:when>
-                    <c:otherwise> 
-                        <div class="table-responsive-sm">
-                            <table class="table table-hover table-striped">
-                                <thead style="font-size: 12px">
-                                    <tr>
-                                        <th style="width: 5%">Fecha</th>
-                                        <th style="width: 5%">Area</th>
-                                        <th style="width: 11%">Generada Por</th>
-                                        <th style="width: 25%">Descripcion</th>
-                                        <th style="width: 25%">Analisis de Causa</th>
-                                        <th style="width: 5%">Actividades</th> 
-                                        <th style="width: 5%">Codificacion</th>
-                                        <th style="width: 5%">Estado</th>
-                                        <th style="width: 13%"></th>
-                                    </tr>                                    
-                                </thead>
-
-                                <tbody style="font-size: 11px">
-                                    <c:forEach items="#{listarAcciones.listaAcciones}" var="accion">
+            <div class="container-fluid" style="padding: 1%">
+                <!-- TABLA ACCIONES -->
+                <h:form id="form_tabla_acciones" >
+                    <c:choose>
+                        <c:when test="#{empty listarAcciones.listaAcciones}">
+                            <div class="alert alert-info">
+                                <strong>Info!</strong> No hay registros para listar con el criterio seleccionado.
+                            </div>
+                        </c:when>
+                        <c:otherwise> 
+                            <div class="table-responsive-sm">
+                                <table class="table table-hover table-striped">
+                                    <thead style="font-size: 12px">
                                         <tr>
-                                            <td>
-                                                #{accion.strFechaDeteccion}
-                                            </td>
-                                            <td>
-                                                #{accion.areaAccion.nombre}
-                                            </td>
-                                            <td>
-                                                #{accion.deteccionAccion.nombre}
-                                            </td>
-                                            <td>
-                                                #{accion.descripcion}
-                                            </td>
-                                            <td>
-                                                #{accion.analisisCausa}
-                                            </td>
-                                            <c:choose>
-                                                <c:when test="#{accion.actividadesDeAccion.size()>0}">
-                                                    <td>                                                        
-                                                        <div class="form-group-sm">
-                                                            <h:commandLink p:data-toggle="modal" p:data-target="#modal_ver_actividades" action="#{listarAcciones.SeleccionarAccion(accion.id)}">
-                                                                Ver...
-                                                                <f:ajax delay="400" execute="@this" render="form_accion_modal:panel_modal"/>
-                                                            </h:commandLink>
-                                                        </div>
-                                                    </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <td>                                                        
-                                                        <div class="form-group-sm">
-                                                            Sin Definir
-                                                        </div>
-                                                    </td>
-                                                </c:otherwise>
-                                            </c:choose>                                                
+                                            <th style="width: 5%">Fecha</th>
+                                            <th style="width: 5%">Area</th>
+                                            <th style="width: 11%">Generada Por</th>
+                                            <th style="width: 25%">Descripcion</th>
+                                            <th style="width: 25%">Analisis de Causa</th>
+                                            <th style="width: 5%">Actividades</th> 
+                                            <th style="width: 5%">Codificacion</th>
+                                            <th style="width: 5%">Estado</th>
+                                            <th style="width: 13%"></th>
+                                        </tr>                                    
+                                    </thead>
 
-                                            <td>
-                                                <c:if test="#{accion.codificacionAccion != null}">
-                                                    #{accion.codificacionAccion.nombre}
-                                                </c:if>                                               
-                                            </td>
-                                            <c:choose>
-                                                <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                    <td style="background-image: linear-gradient(red, #b32d00); color: white">
-                                                        #{accion.estadoDeAccion.descripcion}
-                                                    </td>
-                                                </c:when>
-                                                <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                    <td style="background-image:linear-gradient(#008000,#003300); color: white">
-                                                        #{accion.estadoDeAccion.descripcion}
-                                                    </td>
-                                                </c:when>
-                                                <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                    <td style="background-image: linear-gradient(gray, black); color: white">
-                                                        #{accion.estadoDeAccion.descripcion}
-                                                    </td>
-                                                </c:when>
-                                                <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                    <td style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
-                                                        #{accion.estadoDeAccion.descripcion}
-                                                    </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <td style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
-                                                        #{accion.estadoDeAccion.descripcion}
-                                                    </td>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <td>
+                                    <tbody style="font-size: 11px">
+                                        <c:forEach items="#{listarAcciones.listaAcciones}" var="accion">
+                                            <tr>
+                                                <td>
+                                                    #{accion.strFechaDeteccion}
+                                                </td>
+                                                <td>
+                                                    #{accion.areaAccion.nombre}
+                                                </td>
+                                                <td>
+                                                    #{accion.deteccionAccion.nombre}
+                                                </td>
+                                                <td>
+                                                    #{accion.descripcion}
+                                                </td>
+                                                <td>
+                                                    #{accion.analisisCausa}
+                                                </td>
                                                 <c:choose>
-                                                    <c:when test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}" >
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu">
-                                                                <li>
-                                                                    <h:link outcome="VerAccion.xhtml?id=#{accion.id}" >
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
-                                                                        Ver Accion Web
-                                                                    </h:link>
-                                                                </li>
-                                                                <li>
-                                                                    <h:link outcome="EditarAccion.xhtml?id=#{accion.id}" >
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-editar-128.png" style='height: 20px' />
-                                                                        Editar Datos
-                                                                    </h:link>
-                                                                </li>
-                                                                <c:if test="#{accion.estadoDeAccion != 'CERRADA'}">
-                                                                    <c:if test="#{accion.estadoDeAccion != 'DESESTIMADA'}">
-                                                                        <li>                                                            
-                                                                            <h:link outcome="ActividadesAccion.xhtml?id=#{accion.id}&amp;editar=0">
-                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-agregar-página-web-64.png" style='height: 20px' />
-                                                                                Agregar Actividad
-                                                                            </h:link>
-                                                                        </li>  
-                                                                    </c:if>
-                                                                    <li><h:link outcome="SeguimientoAccion.xhtml?id=#{accion.id}" >
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-huellas-30.png" style='height: 20px' />
-                                                                            Realizar Seguimiento
-                                                                        </h:link>
-                                                                    </li>
-                                                                </c:if>
-                                                                <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                        Ver Accion (pdf)
-                                                                    </h:commandLink>  
-                                                                </li>
-                                                                 <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                        Ver Accion sin Estado (pdf)
-                                                                    </h:commandLink>  
-                                                                </li>
-                                                                <li>
-                                                                    <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                        Crear Plan de Accion (pdf)
-                                                                    </h:commandLink>   
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                                    <c:when test="#{accion.actividadesDeAccion.size()>0}">
+                                                        <td>                                                        
+                                                            <div class="form-group-sm">
+                                                                <h:commandLink p:data-toggle="modal" p:data-target="#modal_ver_actividades" action="#{listarAcciones.SeleccionarAccion(accion.id)}">
+                                                                    Ver...
+                                                                    <f:ajax delay="400" execute="@this" render="form_accion_modal:panel_modal"/>
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </td>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                                <span class="glyphicon glyphicon-eye-open"></span>
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu">
-                                                                <li>
-                                                                    <h:link class="dropdown-item" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">                                                                        
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
-                                                                        Ver Accion Web
-                                                                    </h:link>
-                                                                </li>
-                                                                <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                        Ver Accion (pdf)
-                                                                    </h:commandLink>  
-                                                                </li>
-                                                                <li>
-                                                                    <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                       Ver Accion sin Estado (pdf)
-                                                                    </h:commandLink>  
-                                                                </li>
-                                                                <li>
-                                                                    <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">
-                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                        Crear Plan de Accion (pdf)
-                                                                    </h:commandLink>   
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                                        <td>                                                        
+                                                            <div class="form-group-sm">
+                                                                Sin Definir
+                                                            </div>
+                                                        </td>
+                                                    </c:otherwise>
+                                                </c:choose>                                                
+
+                                                <td>
+                                                    <c:if test="#{accion.codificacionAccion != null}">
+                                                        #{accion.codificacionAccion.nombre}
+                                                    </c:if>                                               
+                                                </td>
+                                                <c:choose>
+                                                    <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
+                                                        <td style="background-image: linear-gradient(red, #b32d00); color: white">
+                                                            #{accion.estadoDeAccion.descripcion}
+                                                        </td>
+                                                    </c:when>
+                                                    <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
+                                                        <td style="background-image:linear-gradient(#008000,#003300); color: white">
+                                                            #{accion.estadoDeAccion.descripcion}
+                                                        </td>
+                                                    </c:when>
+                                                    <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
+                                                        <td style="background-image: linear-gradient(gray, black); color: white">
+                                                            #{accion.estadoDeAccion.descripcion}
+                                                        </td>
+                                                    </c:when>
+                                                    <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
+                                                        <td style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
+                                                            #{accion.estadoDeAccion.descripcion}
+                                                        </td>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <td style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
+                                                            #{accion.estadoDeAccion.descripcion}
+                                                        </td>
                                                     </c:otherwise>
                                                 </c:choose>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>  
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}" >
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li>
+                                                                        <h:link outcome="VerAccion.xhtml?id=#{accion.id}" >
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
+                                                                            Ver Accion Web
+                                                                        </h:link>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:link outcome="EditarAccion.xhtml?id=#{accion.id}" >
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-editar-128.png" style='height: 20px' />
+                                                                            Editar Datos
+                                                                        </h:link>
+                                                                    </li>
+                                                                    <c:if test="#{accion.estadoDeAccion != 'CERRADA'}">
+                                                                        <c:if test="#{accion.estadoDeAccion != 'DESESTIMADA'}">
+                                                                            <li>                                                            
+                                                                                <h:link outcome="ActividadesAccion.xhtml?id=#{accion.id}&amp;editar=0">
+                                                                                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-agregar-página-web-64.png" style='height: 20px' />
+                                                                                    Agregar Actividad
+                                                                                </h:link>
+                                                                            </li>  
+                                                                        </c:if>
+                                                                        <li><h:link outcome="SeguimientoAccion.xhtml?id=#{accion.id}" >
+                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-huellas-30.png" style='height: 20px' />
+                                                                                Realizar Seguimiento
+                                                                            </h:link>
+                                                                        </li>
+                                                                    </c:if>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Ver Accion (pdf)
+                                                                        </h:commandLink>  
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Ver Accion sin Estado (pdf)
+                                                                        </h:commandLink>  
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Crear Plan de Accion (pdf)
+                                                                        </h:commandLink>   
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li>
+                                                                        <h:link class="dropdown-item" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">                                                                        
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
+                                                                            Ver Accion Web
+                                                                        </h:link>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Ver Accion (pdf)
+                                                                        </h:commandLink>  
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Ver Accion sin Estado (pdf)
+                                                                        </h:commandLink>  
+                                                                    </li>
+                                                                    <li>
+                                                                        <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            Crear Plan de Accion (pdf)
+                                                                        </h:commandLink>   
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>  
+                            </div>
+                            <h:panelGroup id="panel-pagination" rendered="#{listarAcciones.esBusqueda == false}">
+                                <div class="container-fluid text-center" style="padding: 1%">
+                                    <ul class="pagination"> 
+                                        <c:choose>
+                                            <c:when test="#{listarAcciones.paginaActual !=1}" >
+                                                <li>
+                                                    <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
+                                                        <f:ajax delay="100" onevent="indicador"/>
+                                                        <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
+                                                    </h:commandLink>    
+                                                </li>                                           
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="disabled"><a>&#60;</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
+                                        <c:choose>
+                                            <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
+                                                <li>
+                                                    <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
+                                                        <f:ajax delay="100" onevent="indicador"/>
+                                                        <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
+                                                    </h:commandLink>    
+                                                </li>
+
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="disabled"><a>&#62;</a></li>
+                                            </c:otherwise>
+                                        </c:choose>                                    
+                                    </ul>                
+                                </div>
+                            </h:panelGroup>
+                        </c:otherwise>
+                    </c:choose>
+                </h:form>
+
+                <h:form id="form_filtros">
+                    <!-- APLICAR FILTRO POR AREAS -->
+                    <div id="modal_aplicar_filtros_areas" class="modal fade" style="padding-top: 15%" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_filtros_areas">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Aplicar Filtros de Area</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <!-- Filtros -->
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive-sm">
+                                                            <h:panelGroup id="drop-filtro-areas">
+                                                                <div>
+                                                                    <label for="areas-disponibles">Areas Disponibles:</label>
+                                                                </div>
+                                                                <div>
+                                                                    <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
+                                                                        <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
+                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}" />
+                                                                            <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
+                                                                                    render="form_tabla_acciones 
+                                                                                    form_filtros:modal_aplicar_filtros_areas 
+                                                                                    form_filtros:panel_modal_filtros_areas 
+                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                    form_filtros:panel_modal_filtros_detecciones 
+                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                    form_filtros:panel_modal_filtros_codificaciones 
+                                                                                    form_filtros:modal_aplicar_filtros_estados 
+                                                                                    form_filtros:panel_modal_filtros_estados 
+                                                                                    listado-correctivas:panel_filtros"/>
+                                                                        </c:forEach>
+                                                                    </h:selectManyListbox>
+                                                                </div>
+                                                            </h:panelGroup>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                        
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
+                                                    <f:ajax render="panel_modal_filtros_areas listado-correctivas:panel_filtros" />
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
                         </div>
-                        <h:panelGroup id="panel-pagination" rendered="#{listarAcciones.esBusqueda == false}">
-                            <div class="container-fluid text-center" style="padding: 1%">
-                                <ul class="pagination"> 
-                                    <c:choose>
-                                        <c:when test="#{listarAcciones.paginaActual !=1}" >
-                                            <li>
-                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual -1)}" value="&#60;" > 
-                                                    <f:ajax delay="100" onevent="indicador"/>
-                                                    <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
-                                                </h:commandLink>    
-                                            </li>                                           
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="disabled"><a>&#60;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <li class="active"><a>#{listarAcciones.paginaActual} / #{listarAcciones.cantidadPaginas}</a></li>
-                                    <c:choose>
-                                        <c:when test="#{listarAcciones.paginaActual lt listarAcciones.cantidadPaginas}" >
-                                            <li>
-                                                <h:commandLink class="active" action="#{listarAcciones.cambiarPagina(true, listarAcciones.paginaActual +1)}" value="&#62;" >
-                                                    <f:ajax delay="100" onevent="indicador"/>
-                                                    <f:ajax delay="100" render="form_tabla_acciones panel_filtros"/>
-                                                </h:commandLink>    
-                                            </li>
+                    </div>
 
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="disabled"><a>&#62;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>                                    
-                                </ul>                
-                            </div>
-                        </h:panelGroup>
-                    </c:otherwise>
-                </c:choose>
-            </h:form>
 
-            <h:form id="form_filtros">
-                <!-- APLICAR FILTRO POR AREAS -->
-                <div id="modal_aplicar_filtros_areas" class="modal fade" style="padding-top: 15%" role="dialog">
-                    <div class="modal-dialog">
-                        <h:panelGroup id="panel_modal_filtros_areas">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: gray; color: white;">
-                                    <h4 class="modal-title">Aplicar Filtros de Area</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <!-- Filtros -->
-                                            <div class="panel panel-primary">
-                                                <div class="panel-body">
-                                                    <div class="table-responsive-sm">
-                                                        <h:panelGroup id="drop-filtro-areas">
-                                                            <div>
-                                                                <label for="areas-disponibles">Areas Disponibles:</label>
-                                                            </div>
-                                                            <div>
-                                                                <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                    <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}" />
-                                                                        <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
-                                                                                render="form_tabla_acciones 
-                                                                                form_filtros:modal_aplicar_filtros_areas 
-                                                                                form_filtros:panel_modal_filtros_areas 
-                                                                                form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                form_filtros:panel_modal_filtros_detecciones 
-                                                                                form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                form_filtros:panel_modal_filtros_codificaciones 
-                                                                                form_filtros:modal_aplicar_filtros_estados 
-                                                                                form_filtros:panel_modal_filtros_estados 
-                                                                                listado-correctivas:panel_filtros"/>
-                                                                    </c:forEach>
-                                                                </h:selectManyListbox>
-                                                            </div>
-                                                        </h:panelGroup>
+                    <!-- APLICAR FILTRO POR DETECCION -->
+                    <div id="modal_aplicar_filtros_detecciones" class="modal fade" style="padding-top: 15%" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_filtros_detecciones">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Aplicar Filtros por Deteccion</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <!-- Filtros -->
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive-sm">
+                                                            <h:panelGroup id="drop-filtro-detecciones">
+                                                                <div>
+                                                                    <label for="detecciones-disponibles">Detecciones Disponibles</label>
+                                                                </div>
+                                                                <div>
+                                                                    <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
+                                                                        <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
+                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
+                                                                                    render="form_tabla_acciones 
+                                                                                    form_filtros:modal_aplicar_filtros_areas 
+                                                                                    form_filtros:panel_modal_filtros_areas 
+                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                    form_filtros:panel_modal_filtros_detecciones 
+                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                    form_filtros:panel_modal_filtros_codificaciones 
+                                                                                    form_filtros:modal_aplicar_filtros_estados 
+                                                                                    form_filtros:panel_modal_filtros_estados 
+                                                                                    listado-correctivas:panel_filtros"/>
+                                                                        </c:forEach>
+                                                                    </h:selectManyListbox>
+                                                                </div>
+                                                            </h:panelGroup>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
-                                                <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
-                                                        form_filtros:modal_aplicar_filtros_areas 
-                                                        form_filtros:panel_modal_filtros_areas 
-                                                        form_filtros:modal_aplicar_filtros_detecciones 
-                                                        form_filtros:panel_modal_filtros_detecciones 
-                                                        form_filtros:modal_aplicar_filtros_codificaciones 
-                                                        form_filtros:panel_modal_filtros_codificaciones 
-                                                        form_filtros:modal_aplicar_filtros_estados 
-                                                        form_filtros:panel_modal_filtros_estados 
-                                                        listado-correctivas:panel_filtros"/>                                                                        
-                                            </h:commandLink>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
-                                                <f:ajax render="panel_modal_filtros_areas listado-correctivas:panel_filtros" />
-                                            </h:commandButton>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                          
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
+                                                    <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
+                                                </h:commandButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
                     </div>
-                </div>
 
-
-                <!-- APLICAR FILTRO POR DETECCION -->
-                <div id="modal_aplicar_filtros_detecciones" class="modal fade" style="padding-top: 15%" role="dialog">
-                    <div class="modal-dialog">
-                        <h:panelGroup id="panel_modal_filtros_detecciones">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: gray; color: white;">
-                                    <h4 class="modal-title">Aplicar Filtros por Deteccion</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <!-- Filtros -->
-                                            <div class="panel panel-primary">
-                                                <div class="panel-body">
-                                                    <div class="table-responsive-sm">
-                                                        <h:panelGroup id="drop-filtro-detecciones">
-                                                            <div>
-                                                                <label for="detecciones-disponibles">Detecciones Disponibles</label>
-                                                            </div>
-                                                            <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                    <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                        <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
-                                                                                render="form_tabla_acciones 
-                                                                                form_filtros:modal_aplicar_filtros_areas 
-                                                                                form_filtros:panel_modal_filtros_areas 
-                                                                                form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                form_filtros:panel_modal_filtros_detecciones 
-                                                                                form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                form_filtros:panel_modal_filtros_codificaciones 
-                                                                                form_filtros:modal_aplicar_filtros_estados 
-                                                                                form_filtros:panel_modal_filtros_estados 
-                                                                                listado-correctivas:panel_filtros"/>
-                                                                    </c:forEach>
-                                                                </h:selectManyListbox>
-                                                            </div>
-                                                        </h:panelGroup>
+                    <!-- APLICAR FILTRO POR CODIFICACION -->
+                    <div id="modal_aplicar_filtros_codificaciones" class="modal fade" style="padding-top: 15%" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_filtros_codificaciones">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Aplicar Filtros por Codificacion</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <!-- Filtros -->
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive-sm">
+                                                            <h:panelGroup id="drop-filtro-codificaciones">
+                                                                <div>
+                                                                    <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
+                                                                </div>
+                                                                <div>
+                                                                    <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
+                                                                        <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
+                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
+                                                                                    render="form_tabla_acciones 
+                                                                                    form_filtros:modal_aplicar_filtros_areas 
+                                                                                    form_filtros:panel_modal_filtros_areas 
+                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                    form_filtros:panel_modal_filtros_detecciones 
+                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                    form_filtros:panel_modal_filtros_codificaciones 
+                                                                                    form_filtros:modal_aplicar_filtros_estados 
+                                                                                    form_filtros:panel_modal_filtros_estados 
+                                                                                    listado-correctivas:panel_filtros"/>
+                                                                        </c:forEach>
+                                                                    </h:selectManyListbox>
+                                                                </div>
+                                                            </h:panelGroup>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
-                                                <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
-                                                        form_filtros:modal_aplicar_filtros_areas 
-                                                        form_filtros:panel_modal_filtros_areas 
-                                                        form_filtros:modal_aplicar_filtros_detecciones 
-                                                        form_filtros:panel_modal_filtros_detecciones 
-                                                        form_filtros:modal_aplicar_filtros_codificaciones 
-                                                        form_filtros:panel_modal_filtros_codificaciones 
-                                                        form_filtros:modal_aplicar_filtros_estados 
-                                                        form_filtros:panel_modal_filtros_estados 
-                                                        listado-correctivas:panel_filtros"/>                                                                          
-                                            </h:commandLink>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
-                                                <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
-                                            </h:commandButton>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                          
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
+                                                    <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
+                                                </h:commandButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
                     </div>
-                </div>
 
-                <!-- APLICAR FILTRO POR CODIFICACION -->
-                <div id="modal_aplicar_filtros_codificaciones" class="modal fade" style="padding-top: 15%" role="dialog">
-                    <div class="modal-dialog">
-                        <h:panelGroup id="panel_modal_filtros_codificaciones">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: gray; color: white;">
-                                    <h4 class="modal-title">Aplicar Filtros por Codificacion</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <!-- Filtros -->
-                                            <div class="panel panel-primary">
-                                                <div class="panel-body">
-                                                    <div class="table-responsive-sm">
-                                                        <h:panelGroup id="drop-filtro-codificaciones">
-                                                            <div>
-                                                                <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
-                                                            </div>
-                                                            <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                    <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                        <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
-                                                                                render="form_tabla_acciones 
-                                                                                form_filtros:modal_aplicar_filtros_areas 
-                                                                                form_filtros:panel_modal_filtros_areas 
-                                                                                form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                form_filtros:panel_modal_filtros_detecciones 
-                                                                                form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                form_filtros:panel_modal_filtros_codificaciones 
-                                                                                form_filtros:modal_aplicar_filtros_estados 
-                                                                                form_filtros:panel_modal_filtros_estados 
-                                                                                listado-correctivas:panel_filtros"/>
-                                                                    </c:forEach>
-                                                                </h:selectManyListbox>
-                                                            </div>
-                                                        </h:panelGroup>
+                    <!-- APLICAR FILTRO POR ESTADO -->
+                    <div id="modal_aplicar_filtros_estados" class="modal fade" style="padding-top: 15%" role="dialog">
+                        <div class="modal-dialog">
+                            <h:panelGroup id="panel_modal_filtros_estados">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: gray; color: white;">
+                                        <h4 class="modal-title">Aplicar Filtros por Estados</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <!-- Filtros -->
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive-sm">
+                                                            <h:panelGroup id="drop-filtro-estados">
+                                                                <div>
+                                                                    <label for="estados-disponibles">Estados Disponibles:</label>
+                                                                </div>
+                                                                <div>
+                                                                    <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >
+                                                                        <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
+                                                                            <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorEstado(event)}" 
+                                                                                    render="form_tabla_acciones 
+                                                                                    form_filtros:modal_aplicar_filtros_areas 
+                                                                                    form_filtros:panel_modal_filtros_areas 
+                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
+                                                                                    form_filtros:panel_modal_filtros_detecciones 
+                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
+                                                                                    form_filtros:panel_modal_filtros_codificaciones 
+                                                                                    form_filtros:modal_aplicar_filtros_estados 
+                                                                                    form_filtros:panel_modal_filtros_estados 
+                                                                                    listado-correctivas:panel_filtros"/>
+                                                                        </c:forEach>
+                                                                    </h:selectManyListbox>
+                                                                </div>
+                                                            </h:panelGroup>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
-                                                <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
-                                                        form_filtros:modal_aplicar_filtros_areas 
-                                                        form_filtros:panel_modal_filtros_areas 
-                                                        form_filtros:modal_aplicar_filtros_detecciones 
-                                                        form_filtros:panel_modal_filtros_detecciones 
-                                                        form_filtros:modal_aplicar_filtros_codificaciones 
-                                                        form_filtros:panel_modal_filtros_codificaciones 
-                                                        form_filtros:modal_aplicar_filtros_estados 
-                                                        form_filtros:panel_modal_filtros_estados 
-                                                        listado-correctivas:panel_filtros"/>                                                                          
-                                            </h:commandLink>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
-                                                <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
-                                            </h:commandButton>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </h:panelGroup>
-                    </div>
-                </div>
-
-                <!-- APLICAR FILTRO POR ESTADO -->
-                <div id="modal_aplicar_filtros_estados" class="modal fade" style="padding-top: 15%" role="dialog">
-                    <div class="modal-dialog">
-                        <h:panelGroup id="panel_modal_filtros_estados">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: gray; color: white;">
-                                    <h4 class="modal-title">Aplicar Filtros por Estados</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <!-- Filtros -->
-                                            <div class="panel panel-primary">
-                                                <div class="panel-body">
-                                                    <div class="table-responsive-sm">
-                                                        <h:panelGroup id="drop-filtro-estados">
-                                                            <div>
-                                                                <label for="estados-disponibles">Estados Disponibles:</label>
-                                                            </div>
-                                                            <div>
-                                                                <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                    <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
-                                                                        <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
-                                                                        <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorEstado(event)}" 
-                                                                                render="form_tabla_acciones 
-                                                                                form_filtros:modal_aplicar_filtros_areas 
-                                                                                form_filtros:panel_modal_filtros_areas 
-                                                                                form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                form_filtros:panel_modal_filtros_detecciones 
-                                                                                form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                form_filtros:panel_modal_filtros_codificaciones 
-                                                                                form_filtros:modal_aplicar_filtros_estados 
-                                                                                form_filtros:panel_modal_filtros_estados 
-                                                                                listado-correctivas:panel_filtros"/>
-                                                                    </c:forEach>
-                                                                </h:selectManyListbox>
-                                                            </div>
-                                                        </h:panelGroup>
-                                                    </div>
-                                                </div>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                         
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
+                                                    <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
+                                                </h:commandButton>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
-                                                <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
-                                                        form_filtros:modal_aplicar_filtros_areas 
-                                                        form_filtros:panel_modal_filtros_areas 
-                                                        form_filtros:modal_aplicar_filtros_detecciones 
-                                                        form_filtros:panel_modal_filtros_detecciones 
-                                                        form_filtros:modal_aplicar_filtros_codificaciones 
-                                                        form_filtros:panel_modal_filtros_codificaciones 
-                                                        form_filtros:modal_aplicar_filtros_estados 
-                                                        form_filtros:panel_modal_filtros_estados 
-                                                        listado-correctivas:panel_filtros"/>                                                                         
-                                            </h:commandLink>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
-                                                <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
-                                            </h:commandButton>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
                     </div>
-                </div>
 
-            </h:form>
+                </h:form>
 
-            <h:form id="form_accion_modal">                
-                <!-- Panel de actividades -->
-                <ui:include src="ModalVerActividades.xhtml"/>                
-            </h:form>
-        </div>
+                <h:form id="form_accion_modal">                
+                    <!-- Panel de actividades -->
+                    <ui:include src="ModalVerActividades.xhtml"/>                
+                </h:form>
+            </div>
+        </c:if>
     </ui:define>
 </ui:composition>

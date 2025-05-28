@@ -9,11 +9,11 @@
     <ui:composition >
 
         <div class="container-fluid" >
-            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.opsApariencia.colorSuperiorPanelTitulo}, #{sesionUsuario.opsApariencia.colorInferiorPanelTitulo})">
+            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.opsApariencia.colorSuperiorPanelTitulo}, #{sesionUsuario.opsApariencia.colorInferiorPanelTitulo})!important">
                 <div class="col-sm-4">
                     <c:choose>
                         <c:when test="#{sesionUsuario.usuarioLogueado == null or empty sesionUsuario.usuarioLogueado.empresaUsuario.ubicacionLogo}">
-                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 80px; padding: 1%" alt="Logo sin cargar" />
+                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo-maym-wider-contrast.png" style="height: 80px; padding: 1%" alt="Logo sin cargar" />
                         </c:when>
                         <c:otherwise>
                             <img alt="Logo" src="/datos#{sesionUsuario.usuarioLogueado.empresaUsuario.ubicacionLogo}" class="img-responsive" style="height: 80px; padding: 1%"/>
@@ -105,6 +105,7 @@
                                 <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/Usuarios.xhtml">Usuarios</a></li>
                                 <c:if test="#{sesionUsuario.usuarioLogueado != null and sesionUsuario.usuarioLogueado.permisoUsuario == 'ADMINISTRADOR'}">
                                     <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Configuraciones/ConfigGeneral.xhtml">General</a></li>
+                                    <li><a href="#{facesContext.externalContext.requestContextPath}/Views/Empresas/AdminEmpresa.xhtml">Crear Empresa</a></li>
                                 </c:if>
                             </ul>
                         </li>

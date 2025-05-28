@@ -2,94 +2,106 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Cargando.css"/>
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/Resources/CSS/Mensajes.css"/>
-        
+
         <title>M.A.Y.M. - Web Administration Tool</title>
     </h:head>
-    <h:body>        
-        <h:form id="frm-datos-empresa">
-            <div class="container-fluid" style="padding: 1%">  
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Creacion de Empresa</div>
-                    <div class="panel-body">
-                        <h:panelGroup id="panel-datos-empresa">
-                            <div class="form-group row">
-                                <div class="col-xs-2">
-                                    <label>Nombre:</label>
-                                    <h:inputText id="input-nombre-empresa" class="form-control" value="#{adminEmpresa.nombre}" required="true" requiredMessage="Requerido!" />
-                                    <h:message for="input-nombre-empresa" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-1">
-                                    <label>Habilitacion</label>
-                                    <h:inputText id="input-nombre-extra" class="form-control" value="#{adminEmpresa.nombreExtra}" required="false"  />
-                                    <h:message for="input-nombre-extra" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-3">
-                                    <label>Direccion:</label>
-                                    <h:inputText id="input-direccion-empresa" class="form-control" value="#{adminEmpresa.direccion}" required="true" requiredMessage="Requerido!" />
-                                    <h:message for="input-direccion-empresa" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-2">
-                                    <label>Telefono:</label>
-                                    <h:inputText id="input-telefono-empresa" class="form-control" value="#{adminEmpresa.telefono}" required="true" requiredMessage="Requerido!"  />
-                                    <h:message for="input-telefono-empresa" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-2">
-                                    <label>Movil:</label>
-                                    <h:inputText id="input-movil-empresa" class="form-control" value="#{adminEmpresa.movil}" required="true" requiredMessage="Requerido!" /> 
-                                    <h:message for="input-movil-empresa" class="msj_error"/>
-                                </div>
-                                <div class="col-xs-2">
-                                    <label>Correo</label>
-                                    <h:inputText id="input-correo-empresa" class="form-control" value="#{adminEmpresa.correo}" required="true" requiredMessage="Requerido!" />
-                                    <h:message for="input-correo-empresa" class="msj_error"/>
-                                </div>                                
+    <c:choose>        
+        <c:when test="#{sesionUsuario.usuarioLogueado == null and adminEmpresa.primerEmpresa == false}">           
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:when>
+        <c:when test="#{sesionUsuario.usuarioLogueado != null and sesionUsuario.usuarioLogueado.permisoUsuario != 'ADMINISTRADOR'}">
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:when>
+        <c:otherwise>
+            <h:body>  
+                <h:form id="frm-datos-empresa">
+                    <div class="container-fluid" style="padding: 1%">  
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Creacion de Empresa</div>
+                            <div class="panel-body">
+                                <h:panelGroup id="panel-datos-empresa">
+                                    <div class="form-group row">
+                                        <div class="col-xs-2">
+                                            <label>Nombre:</label>
+                                            <h:inputText id="input-nombre-empresa" class="form-control" value="#{adminEmpresa.nombre}" required="true" requiredMessage="Requerido!" />
+                                            <h:message for="input-nombre-empresa" class="msj_error"/>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <label>Nombre Extra</label>
+                                            <h:inputText id="input-nombre-extra" class="form-control" value="#{adminEmpresa.nombreExtra}" required="false"  />
+                                            <h:message for="input-nombre-extra" class="msj_error"/>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <label>Direccion:</label>
+                                            <h:inputText id="input-direccion-empresa" class="form-control" value="#{adminEmpresa.direccion}" required="true" requiredMessage="Requerido!" />
+                                            <h:message for="input-direccion-empresa" class="msj_error"/>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <label>Telefono:</label>
+                                            <h:inputText id="input-telefono-empresa" class="form-control" value="#{adminEmpresa.telefono}" required="true" requiredMessage="Requerido!"  />
+                                            <h:message for="input-telefono-empresa" class="msj_error"/>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <label>Movil:</label>
+                                            <h:inputText id="input-movil-empresa" class="form-control" value="#{adminEmpresa.movil}" required="true" requiredMessage="Requerido!" /> 
+                                            <h:message for="input-movil-empresa" class="msj_error"/>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <label>Correo</label>
+                                            <h:inputText id="input-correo-empresa" class="form-control" value="#{adminEmpresa.correo}" required="true" requiredMessage="Requerido!" />
+                                            <h:message for="input-correo-empresa" class="msj_error"/>
+                                        </div>                                
+                                    </div>
+                                </h:panelGroup>
+                                <div>
+                                    <h:commandButton id="button-registrar-empresa" class="btn btn-primary" value="Guardar" action="#{adminEmpresa.registrarEmpresa()}" >
+                                        <f:ajax execute="frm-datos-empresa:panel-datos-empresa" event="click" onevent="indicador" />
+                                        <f:ajax render="frm-datos-empresa:panel-mensajes-datos-empresa" />
+                                        <f:ajax render="frm-datos-empresa:panel-datos-empresa" />
+                                    </h:commandButton>
+                                    <h:panelGroup id="panel-mensajes-datos-empresa">                                   
+                                        <div class="form-group-sm">
+                                            <h:message for="button-registrar-empresa" class="msj_info"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>    
                             </div>
-                        </h:panelGroup>
-                        <div>
-                            <h:commandButton id="button-registrar-empresa" class="btn btn-primary" value="Guardar" action="#{adminEmpresa.registrarEmpresa()}" >
-                                <f:ajax execute="frm-datos-empresa:panel-datos-empresa" event="click" onevent="indicador" />
-                                <f:ajax render="frm-datos-empresa:panel-mensajes-datos-empresa" />
-                                <f:ajax render="frm-datos-empresa:panel-datos-empresa" />
-                            </h:commandButton>
-                            <h:panelGroup id="panel-mensajes-datos-empresa">                                   
-                                <div class="form-group-sm">
-                                    <h:message for="button-registrar-empresa" class="msj_info"/>
-                                </div>
-                            </h:panelGroup>
-                        </div>    
+                        </div>                      
                     </div>
-                </div>                      
-            </div>
-        </h:form>
-        <footer style="position: relative; top: 207px !important; text-align: center; vertical-align: middle;background-color: #cbe8f6;">
-            <div class="row">
-                <div class="col-sm-3" style="text-align: right !important;padding-left: 1.5%">
-                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 60px' />
-                </div>
-                <div class="col-sm-6">
-                    <div>
-                        MAYM-Web(C) -  2025
-                    </div>    
-                    <div>
-                        <h:outputLink value="mailto:dipejperez@gmail.com">
-                             <span class="glyphicon glyphicon-envelope"></span> 
-                        </h:outputLink>
-                        Diego Perez
+                </h:form>
+                <footer style="position: relative; top: 207px !important; text-align: center; vertical-align: middle;background-color: #cbe8f6;">
+                    <div class="row">
+                        <div class="col-sm-3" style="text-align: right !important;padding-left: 1.5%">
+                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo-maym-wider-contrast.png" style='height: 60px; padding: 0.5%' />
+                        </div>
+                        <div class="col-sm-6">
+                            <div>
+                                MAYM-Web(C) -  2025
+                            </div>    
+                            <div>
+                                <h:outputLink value="mailto:dipejperez@gmail.com">
+                                    <span class="glyphicon glyphicon-envelope"></span> 
+                                </h:outputLink>
+                                Diego Perez
+                            </div>
+                            <div>    
+                                Iconos de <h:outputLink value="http://www.icons8.com"  >Icons8</h:outputLink>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" style="text-align: left !important;padding-right: 1.5%">
+                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo-maym-wider.png" style='height: 60px; padding: 0.5%' />
+                        </div>
                     </div>
-                    <div>    
-                        Iconos de <h:outputLink value="http://www.icons8.com"  >Icons8</h:outputLink>
-                    </div>
-                </div>
-                <div class="col-sm-3" style="text-align: left !important;padding-right: 1.5%">
-                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_maym.jpg" style='height: 60px' />
-                </div>
-            </div>
-        </footer>
-    </h:body>
+                </footer>
+            </h:body>
+        </c:otherwise>>
+        
+    </c:choose>
 </html>
 

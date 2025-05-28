@@ -23,7 +23,7 @@
                                         <div class="col-xs-12"> 
                                             <div class="col-xs-4">
                                                 <label>Nombre:</label>
-                                                <h:inputTextarea class="form-control" id="nombre" value="#{configGeneral.nombre}" required="true" requiredMessage="=bligatorio." />
+                                                <h:inputTextarea class="form-control" id="nombre" value="#{configGeneral.nombre}" required="true" readonly="true" requiredMessage="=bligatorio." />
                                                 <h:message for="nombre" class="msj_error"/>
                                             </div>
 
@@ -42,7 +42,7 @@
                                                     <h:commandLink p:data-toggle="modal" p:data-target="#modal_cargar_logo">
                                                         <c:choose>
                                                             <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogo}">
-                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
+                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo-maym-wider-contrast.png" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogo}" class="img-responsive img-thumbnail" style="height: 100px"/>
@@ -314,11 +314,11 @@
                                                                         <h:panelGroup id="panel-logo-informes">
                                                                             <h:commandLink p:data-toggle="modal" p:data-target="#modal_cargar_logo_informes">
                                                                                 <c:choose>
-                                                                                    <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogoInformes}">
-                                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo_work.jpg" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
+                                                                                    <c:when test="#{empty configGeneral.empresaGuardada.ubicacionLogoAdicional}">
+                                                                                        <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/logo-maym-wider.png" class="img-responsive img-thumbnail" style="height: 100px" alt="Logo sin cargar" />
                                                                                     </c:when>
                                                                                     <c:otherwise>
-                                                                                        <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogoInformes}" class="img-responsive img-thumbnail" style="height: 40px"/>
+                                                                                        <img alt="Logo" src="/datos#{configGeneral.empresaGuardada.ubicacionLogoAdicional}" class="img-responsive img-thumbnail" style="height: 40px"/>
                                                                                     </c:otherwise>
                                                                                 </c:choose>
                                                                                 <f:ajax delay="100" render="form-color:modal_cargar_logo-informe" /> 

@@ -8,10 +8,10 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">  
-        <c:when test="#{sesionUsuario.usuarioLogueado.empresaUsuario.id != verAccion.accionSeleccionada.empresaAccion.id}">
+        <c:if test="#{sesionUsuario.usuarioLogueado == null and sesionUsuario.usuarioLogueado.empresaUsuario.id != verAccion.accionSeleccionada.empresaAccion.id }">
             <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
-        </c:when>
-        <c:otherwise> 
+        </c:if>
+        <c:if test="#{sesionUsuario.usuarioLogueado != null }"> 
             <div class="container-fluid" style="padding: 1%">
                 <h:form id="form_verAccion">
                     <div class="row">
@@ -21,15 +21,15 @@
                                 <div class="panel-body">   
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            <h:outputText value="#{sesionUsuario.empresa.nombre}"/>
+                                            <h:outputText value="#{sesionUsuario.usuarioLogueado.empresaUsuario.nombre}"/>
                                         </div>
                                         <div class="col-sm-4">
-                                            <c:if test="#{sesionUsuario.empresa.nombreExtra != null and sesionUsuario.empresa.nombreExtra != ''}" >                                            
-                                                <h:outputText value="#{sesionUsuario.empresa.nombreExtra}"/>
+                                            <c:if test="#{sesionUsuario.usuarioLogueado.empresaUsuario.nombreExtra != null and sesionUsuario.usuarioLogueado.empresaUsuario.nombreExtra != ''}" >                                            
+                                                <h:outputText value="#{sesionUsuario.usuarioLogueado.empresaUsuario.nombreExtra}"/>
                                             </c:if>
                                         </div>   
                                         <div class="col-sm-4">
-                                            <h:outputText value="#{sesionUsuario.empresa.direccion}"/>
+                                            <h:outputText value="#{sesionUsuario.usuarioLogueado.empresaUsuario.direccion}"/>
                                         </div>
                                     </div>
                                 </div> 
@@ -497,7 +497,7 @@
                     </div>
                 </h:form>
             </div>
-        </c:otherwise>
+        </c:if>
     </ui:define>
 </ui:composition>
 

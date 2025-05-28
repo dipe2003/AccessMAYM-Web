@@ -4,15 +4,22 @@
  */
 package com.dperez.maymweb.modelo.empresa;
 
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author dipe2
  */
-public class OpcionesCorreo {
+@Entity
+@Table(name = "OpcionesCorreo")
+public class OpcionesCorreo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,12 +33,14 @@ public class OpcionesCorreo {
     private boolean mailTLS = false;
 
     private boolean alertasActivadas = false;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private OpcionesSistema opcionesOpcionesCorreo;
 
     public OpcionesCorreo() {
     }
 
-    public OpcionesCorreo(int id, String mailFrom, String mailUser, String mailPass,String mailHostSMTP, int mailPort, boolean mailTLS) {
-        this.id = id;
+    public OpcionesCorreo(String mailFrom, String mailUser, String mailPass,String mailHostSMTP, int mailPort, boolean mailTLS) {
         this.mailFrom = mailFrom;
         this.mailUser = mailUser;
         this.mailPass = mailPass;
@@ -72,6 +81,12 @@ public class OpcionesCorreo {
     public boolean isAlertasActivadas() {
         return alertasActivadas;
     }
+
+    public OpcionesSistema getOpcionesOpcionesCorreo() {
+        return opcionesOpcionesCorreo;
+    }
+    
+    
     //</editor-fold>
 
     //<editor-fold desc="SETTERS">
@@ -106,5 +121,10 @@ public class OpcionesCorreo {
     public void setAlertasActivadas(boolean alertasActivadas) {
         this.alertasActivadas = alertasActivadas;
     }
+    
     //</editor-fold>
+
+    public void setOpcionesOpcionesCorreo(OpcionesSistema opcionesOpcionesCorreo) {
+        this.opcionesOpcionesCorreo = opcionesOpcionesCorreo;
+    }
 }

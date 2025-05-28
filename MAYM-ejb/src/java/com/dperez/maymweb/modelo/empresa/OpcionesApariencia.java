@@ -4,15 +4,23 @@
  */
 package com.dperez.maymweb.modelo.empresa;
 
+import java.awt.Color;
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author dipe2
  */
-public class OpcionesApariencia {
+@Entity
+@Table(name = "OpcionesApariencia")
+public class OpcionesApariencia implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,10 +33,13 @@ public class OpcionesApariencia {
     private String colorFuentePanelTitulo;
     private String colorBody;
     private String colorBoton;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private OpcionesSistema opcionesOpcionesSistema;
 
     public OpcionesApariencia() {
         colorSuperiorPanelTitulo = "#2a2a2a";
-        colorInferiorPanelTitulo = "black";
+        colorInferiorPanelTitulo = "#000000";
         colorPanelTitulo = "#337ab7";
         colorFuentePanelEncabezado = "#cce8f6";
         colorFuentePanelTitulo = "#cce8f6";
@@ -36,7 +47,8 @@ public class OpcionesApariencia {
         colorBoton = "#337ab7";
     }
 
-    public OpcionesApariencia(String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo, String colorFuentePanelEncabezado, String colorPanelTitulo, String colorFuentePanelTitulo, String colorBody, String colorBoton) {
+    public OpcionesApariencia(String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo, String colorFuentePanelEncabezado, String colorPanelTitulo, 
+            String colorFuentePanelTitulo, String colorBody, String colorBoton) {
         this.colorSuperiorPanelTitulo = colorSuperiorPanelTitulo;
         this.colorInferiorPanelTitulo = colorInferiorPanelTitulo;
         this.colorFuentePanelEncabezado = colorFuentePanelEncabezado;
@@ -74,6 +86,16 @@ public class OpcionesApariencia {
     public String getColorBoton() {
         return colorBoton;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public OpcionesSistema getOpcionesOpcionesSistema() {
+        return opcionesOpcionesSistema;
+    }
+    
+    
     //</editor-fold>
 
     //<editor-fold desc="SETTERS">
@@ -105,5 +127,25 @@ public class OpcionesApariencia {
         this.colorBoton = colorBoton;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setOpcionesOpcionesSistema(OpcionesSistema opcionesOpcionesSistema) {
+        this.opcionesOpcionesSistema = opcionesOpcionesSistema;
+    }
+
     //</editor-fold>
+    
+    //<editor-fold desc="METODOS">
+    public String getColorBrighter(String color) {
+        Color colorBrighter = Color.decode(color).brighter();
+        return String.format("#%02x%02x%02x", colorBrighter.getRed(), colorBrighter.getGreen(), colorBrighter.getBlue());
+    }
+
+    public String getColorDarker(String color) {
+        Color colorDarker = Color.decode(color).darker();
+        return String.format("#%02x%02x%02x", colorDarker.getRed(), colorDarker.getGreen(), colorDarker.getBlue());
+    }
+//</editor-fold>
 }

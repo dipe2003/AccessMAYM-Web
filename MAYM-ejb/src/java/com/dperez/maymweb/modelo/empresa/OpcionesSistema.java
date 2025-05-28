@@ -4,30 +4,41 @@
  */
 package com.dperez.maymweb.modelo.empresa;
 
-import java.awt.Color;
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author dipe2
  */
-public class OpcionesSistema {
+@Entity
+@Table(name = "OpcionesSistema")
+public class OpcionesSistema implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private Empresa empresaOpciones;
 
+    @OneToOne(mappedBy = "opcionesOpcionesSistema", orphanRemoval = true, cascade = CascadeType.ALL)
     private OpcionesApariencia opcionesApariencia;
 
+    @OneToOne(mappedBy = "opcionesOpcionesCorreo", orphanRemoval = true, cascade = CascadeType.ALL)
     private OpcionesCorreo opcionesCorreo;
 
     public OpcionesSistema() {
         opcionesApariencia = new OpcionesApariencia();
+        opcionesApariencia.setOpcionesOpcionesSistema(this);
         opcionesCorreo = new OpcionesCorreo();
+        opcionesCorreo.setOpcionesOpcionesCorreo(this);
     }
 
     //<editor-fold desc="GETTERS">
@@ -66,16 +77,4 @@ public class OpcionesSistema {
     }
 
     //</editor-fold>
-    
-    //<editor-fold desc="METODOS">
-    public String getColorBrighter(String color) {
-        Color colorBrighter = Color.decode(color).brighter();
-        return String.format("#%02x%02x%02x", colorBrighter.getRed(), colorBrighter.getGreen(), colorBrighter.getBlue());
-    }
-
-    public String getColorDarker(String color) {
-        Color colorDarker = Color.decode(color).darker();
-        return String.format("#%02x%02x%02x", colorDarker.getRed(), colorDarker.getGreen(), colorDarker.getBlue());
-    }
-//</editor-fold>
 }

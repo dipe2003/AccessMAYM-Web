@@ -5,8 +5,6 @@
  */
 package com.dperez.maym.web.inicio;
 
-import com.dperez.maymweb.modelo.empresa.Empresa;
-import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.herramientas.IOPropiedades;
@@ -17,7 +15,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -43,7 +40,7 @@ public class SesionUsuario implements Serializable {
 
     @Inject
     private IOPropiedades ioProp;
-    
+
     private OpcionesApariencia opsApariencia;
 
     private String UsuarioSeleccionado;
@@ -52,7 +49,7 @@ public class SesionUsuario implements Serializable {
     private String NombreUsuario;
     private Map<Integer, Usuario> Usuarios;
 
-    private Usuario UsuarioLogueado;    
+    private Usuario UsuarioLogueado;
 
     // Sesion
     // Geters
@@ -60,9 +57,17 @@ public class SesionUsuario implements Serializable {
         return UsuarioLogueado;
     }
 
+    public OpcionesApariencia getOpsApariencia() {
+        return opsApariencia;
+    }
+
     // Setters
     public void setUsuarioLogueado(Usuario UsuarioLogueado) {
         this.UsuarioLogueado = UsuarioLogueado;
+    }
+
+    public void setOpsApariencia(OpcionesApariencia opsApariencia) {
+        this.opsApariencia = opsApariencia;
     }
 
     // Metodos
@@ -100,38 +105,40 @@ public class SesionUsuario implements Serializable {
     //  Metodos
     @PostConstruct
     public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
         fLectura = new FacadeLectura();
         facadeMain = new FacadeMain();
-
-        this.Usuarios = new HashMap<>();
-        // llenar la lista de usuarios que no se hayan dado de baja.
-        Usuarios = fLectura.listarUsuarios(false).stream()
-                .sorted()
-                .collect(Collectors.toMap(Usuario::getId, usuario -> usuario));
-        if (Usuarios.isEmpty()) {
-            try {
-                String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/Views/Configuraciones/Usuarios.xhtml");
-            } catch (IOException ex) {
-            }
-        }
-
         cargarColores();
+        if (fLectura.listarEmpresas().isEmpty()) {
+            String url = context.getExternalContext().getRequestContextPath();
+            try {
+                context.getExternalContext().redirect(url + "/Views/Empresas/AdminEmpresa.xhtml");
+            } catch (Exception ex) {
+                ex.getMessage();
+            }
+        } else {
+            this.Usuarios = new HashMap<>();
+            // llenar la lista de usuarios que no se hayan dado de baja.
+            Usuarios = fLectura.listarUsuarios(false).stream()
+                    .sorted()
+                    .collect(Collectors.toMap(Usuario::getId, usuario -> usuario));
+        }
     }
 
-    public void cargarColores() {        
-        if (this.UsuarioLogueado != null) {
+    public void cargarColores() {
+        try {
             opsApariencia = this.UsuarioLogueado.getEmpresaUsuario().getOpcionesSistema().getOpcionesApariencia();
-        } else {
+        } catch (NullPointerException ex) {
             opsApariencia = new OpcionesApariencia();
-        }     
+        }
     }
 
     public void ingresar() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        //RequestHeaderMap.key("Referer"): contiene la url desde donde se hace el pedido.
-        String url = context.getExternalContext().getRequestHeaderMap().get((String) ("Referer"));
+
         try {
             if (facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado), PasswordUsuario)) {
                 Usuario usuario = fLectura.getUsuario(Integer.valueOf(UsuarioSeleccionado));
@@ -140,7 +147,8 @@ public class SesionUsuario implements Serializable {
                 this.UsuarioLogueado = usuario;
                 this.PasswordUsuario = new String();
                 cargarColores();
-                context.getExternalContext().redirect(url);
+                String url = context.getExternalContext().getRequestContextPath();
+                context.getExternalContext().redirect(url + "/index.xhtml");
             } else {
                 context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
                 context.renderResponse();
@@ -149,7 +157,7 @@ public class SesionUsuario implements Serializable {
             context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
             context.renderResponse();
         }
-    }    
+    }
 
     public void logout() {
         try {
@@ -185,8 +193,8 @@ public class SesionUsuario implements Serializable {
             context.renderResponse();
         }
     }
-    
-    public void cargarEmpresa(){
+
+    public void cargarEmpresa() {
         this.UsuarioLogueado.setEmpresaUsuario(fLectura.getEmpresa(this.UsuarioLogueado.getEmpresaUsuario().getId()));
     }
 }

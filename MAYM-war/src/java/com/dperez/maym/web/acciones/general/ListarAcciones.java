@@ -169,7 +169,7 @@ public class ListarAcciones implements Serializable {
      * Llena las listas para filtros con los valores originales.
      */
     private void ResetListasAreas() {
-        areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);        
+        areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);
         areasSeleccionadas = new String[areasEnRegistros.size()];
         for (int i = 0; i < areasEnRegistros.size(); i++) {
             areasSeleccionadas[i] = areasEnRegistros.get(i).getNombre();
@@ -211,7 +211,7 @@ public class ListarAcciones implements Serializable {
      * Llena las listas para filtros con los valores originales.
      */
     private void ResetListasDeteccion() {
-       deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
+        deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
         deteccionesSeleccionadas = new String[deteccionesEnRegistros.size()];
         for (int i = 0; i < deteccionesEnRegistros.size(); i++) {
             deteccionesSeleccionadas[i] = deteccionesEnRegistros.get(i).getNombre();
@@ -323,7 +323,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void filtrarTexto() {
-        if (textoBusqueda!= null && !textoBusqueda.isEmpty()) {
+        if (textoBusqueda != null && !textoBusqueda.isEmpty()) {
             if (!filtrosAplicados.contains("busqueda")) {
                 filtrosAplicados.add("busqueda");
             }
@@ -670,20 +670,22 @@ public class ListarAcciones implements Serializable {
                 case CORRECTIVA ->
                     ListaCompletaAcciones = fLectura.listarAccionesCorrectivas()
                             .stream()
-                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
-                            .toList();
+                            .filter(a -> a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .collect(Collectors.toList());
                 case PREVENTIVA ->
                     ListaCompletaAcciones = fLectura.listarAccionesPreventivas()
                             .stream()
-                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
-                            .toList();
+                            .filter(a -> a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .collect(Collectors.toList());
                 case MEJORA ->
                     ListaCompletaAcciones = fLectura.listarAccionesMejoras()
                             .stream()
-                            .filter(a->a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
-                            .toList();
+                            .filter(a -> a.getEmpresaAccion().getId() == sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())
+                            .collect(Collectors.toList());
             }
-            ListaCompletaAcciones.sort(Comparator.reverseOrder());
+            if (!ListaCompletaAcciones.isEmpty()) {
+                ListaCompletaAcciones.sort(Comparator.reverseOrder());
+            }
             cargarPagina(ListaCompletaAcciones);
             // reset datos filtros
             ResetFechasAcciones();
@@ -708,7 +710,7 @@ public class ListarAcciones implements Serializable {
     public void pdfteaListado() {
         PdfteameListado pdf = new PdfteameListado(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
         List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
-        
+
         StringBuilder titulo = new StringBuilder("Listado de ");
         switch (tipoDeAccion) {
             case CORRECTIVA ->
@@ -718,34 +720,37 @@ public class ListarAcciones implements Serializable {
             case MEJORA ->
                 titulo.append("Oportunidades de mejora");
         }
-
-        pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
+        if (!accionesFiltradas.isEmpty()) {
+            pdf.ExportarListado("Listado de Acciones (tipo " + tipoDeAccion + ").pdf", titulo.toString().toUpperCase(), accionesFiltradas);
+        }
 
     }
 
     public void pdfteaPlanAccion(int id) {
         PdfteameListado pdf = new PdfteameListado(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
-        List<Accion> accionesPlan = fLectura.listarAcciones().stream()
-                .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
-                .collect(Collectors.toList());
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
-        StringBuilder strTitulo = new StringBuilder();
-        StringBuilder strIntroduccion = new StringBuilder();
+        if (accionFiltrada != null) {
+            List<Accion> accionesPlan = fLectura.listarAcciones().stream()
+                    .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
+                    .collect(Collectors.toList());
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+            StringBuilder strTitulo = new StringBuilder();
+            StringBuilder strIntroduccion = new StringBuilder();
 
-        strTitulo.append("PLAN DE ACCION: ")
-                .append(accionFiltrada.getDeteccionAccion().getNombre())
-                .append(" - ")
-                .append(df.format(accionFiltrada.getFechaDeteccion()));
-        strIntroduccion.append("En respuesta a los hallazgos detectados por ")
-                .append(accionFiltrada.getDeteccionAccion().getNombre())
-                .append(" en el dia ")
-                .append(df.format(accionFiltrada.getFechaDeteccion()))
-                .append(" se presenta el siguiente Plan de Accion:");
+            strTitulo.append("PLAN DE ACCION: ")
+                    .append(accionFiltrada.getDeteccionAccion().getNombre())
+                    .append(" - ")
+                    .append(df.format(accionFiltrada.getFechaDeteccion()));
+            strIntroduccion.append("En respuesta a los hallazgos detectados por ")
+                    .append(accionFiltrada.getDeteccionAccion().getNombre())
+                    .append(" en el dia ")
+                    .append(df.format(accionFiltrada.getFechaDeteccion()))
+                    .append(" se presenta el siguiente Plan de Accion:");
 
-        df = new SimpleDateFormat("dd-MM-yy");
-        pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
-                strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
+            df = new SimpleDateFormat("dd-MM-yy");
+            pdf.ExportarPlanAccion("Plan De Accion " + accionFiltrada.getDeteccionAccion().getNombre() + " (" + df.format(accionFiltrada.getFechaDeteccion()) + ").pdf",
+                    strTitulo.toString(), accionesPlan, strIntroduccion.toString(), sesionUsuario.getUsuarioLogueado().getEmpresaUsuario());
+        }
     }
 
     public void pdfteaRegistro(int id, boolean excluirComprobaciones) {
@@ -753,12 +758,12 @@ public class ListarAcciones implements Serializable {
         Accion accionFiltrada = ListaCompletaAcciones.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
 
         if (accionFiltrada != null) {
-            String titulo = "MAYM Accion " + 
-                    accionFiltrada.getClass().getSimpleName() + 
-                    " Id: " + 
-                    accionFiltrada.getId() + 
-                    " - " + 
-                    accionFiltrada.getDeteccionAccion().getNombre();
+            String titulo = "MAYM Accion "
+                    + accionFiltrada.getClass().getSimpleName()
+                    + " Id: "
+                    + accionFiltrada.getId()
+                    + " - "
+                    + accionFiltrada.getDeteccionAccion().getNombre();
 
             pdf.ExportarRegistro("Registro MAYM Id " + accionFiltrada.getId() + ".pdf", titulo.toUpperCase(), accionFiltrada, excluirComprobaciones);
         }
@@ -767,20 +772,21 @@ public class ListarAcciones implements Serializable {
     public void excelsea() {
         Excelsea excel = new Excelsea();
         List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
-        StringBuilder titulo = new StringBuilder("Listado de ");
-        switch (tipoDeAccion) {
-            case CORRECTIVA ->
-                titulo.append("acciones correctivas");
-            case PREVENTIVA ->
-                titulo.append("acciones Preventivas");
-            case MEJORA ->
-                titulo.append("Oportunidades de mejora");
+        if (!accionesFiltradas.isEmpty()) {
+            StringBuilder titulo = new StringBuilder("Listado de ");
+            switch (tipoDeAccion) {
+                case CORRECTIVA ->
+                    titulo.append("acciones correctivas");
+                case PREVENTIVA ->
+                    titulo.append("acciones Preventivas");
+                case MEJORA ->
+                    titulo.append("Oportunidades de mejora");
+            }
+            excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), false);
         }
-
-        excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), false);
     }
-    
-    private List<Accion> obtenerAccionesParaExportar(){
+
+    private List<Accion> obtenerAccionesParaExportar() {
         List<Accion> accionesFiltradas = ListaCompletaAcciones;
         for (String filtro : filtrosAplicados) {
             switch (filtro) {
@@ -794,7 +800,7 @@ public class ListarAcciones implements Serializable {
                     accionesFiltradas = filtrarPorDeteccion(accionesFiltradas);
                 case "busqueda" ->
                     accionesFiltradas = filtrarTexto(accionesFiltradas);
-                case "fechas"->
+                case "fechas" ->
                     accionesFiltradas = filtrarPorFechas(accionesFiltradas);
                 default ->
                     accionesFiltradas = ListaCompletaAcciones;
@@ -806,17 +812,17 @@ public class ListarAcciones implements Serializable {
     public void excelseaConActividades() {
         Excelsea excel = new Excelsea();
         List<Accion> accionesFiltradas = obtenerAccionesParaExportar();
-        
-        StringBuilder titulo = new StringBuilder("Listado de ");
-        switch (tipoDeAccion) {
-            case CORRECTIVA ->
-                titulo.append("acciones correctivas");
-            case PREVENTIVA ->
-                titulo.append("acciones Preventivas");
-            case MEJORA ->
-                titulo.append("Oportunidades de mejora");
+        if (!accionesFiltradas.isEmpty()) {
+            StringBuilder titulo = new StringBuilder("Listado de ");
+            switch (tipoDeAccion) {
+                case CORRECTIVA ->
+                    titulo.append("acciones correctivas");
+                case PREVENTIVA ->
+                    titulo.append("acciones Preventivas");
+                case MEJORA ->
+                    titulo.append("Oportunidades de mejora");
+            }
+            excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), true);
         }
-
-        excel.ExportarLibroExcel(accionesFiltradas, titulo.toString(), true);
     }
 }

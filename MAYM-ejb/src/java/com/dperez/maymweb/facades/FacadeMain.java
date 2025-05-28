@@ -33,11 +33,12 @@ public class FacadeMain {
      * @param PermisoUsuario
      * @param RecibeAlertas
      * @param IdArea
+     * @param idEmpresa
      * @return -1 si no se actualizo.
      */
     public int CambiarDatosUsuario(int IdUsuario, String NombreUsuario, String ApellidoUsuario, String CorreoUsuario,
-            EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea){
-        return cConfig.cambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea);
+            EnumPermiso PermisoUsuario, boolean RecibeAlertas, int IdArea, int idEmpresa){
+        return cConfig.cambiarDatosUsuario(IdUsuario, NombreUsuario, ApellidoUsuario, CorreoUsuario, PermisoUsuario, RecibeAlertas, IdArea, idEmpresa);
     }
     
     

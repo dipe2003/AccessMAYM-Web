@@ -132,6 +132,7 @@ public class ControladorConfiguracion {
 
     /**
      * Setea las opciones de apariencia del sistema asociadas a la Empresa.
+     *
      * @param idEmpresa
      * @param colorSuperiorPanelTitulo
      * @param colorInferiorPanelTitulo
@@ -140,37 +141,52 @@ public class ControladorConfiguracion {
      * @param colorFuentePanelTitulo
      * @param colorBody
      * @param colorBoton
-     * @return 
+     * @return
      */
     public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo,
             String colorFuentePanelEncabezado, String colorPanelTitulo, String colorFuentePanelTitulo, String colorBody, String colorBoton) {
         Empresa empresa = repoEmpresa.find(idEmpresa);
         if (empresa != null) {
             OpcionesApariencia ops = empresa.getOpcionesSistema().getOpcionesApariencia();
-            ops.setColorBody(colorBody);
-            ops.setColorBoton(colorBoton);
-            ops.setColorFuentePanelEncabezado(colorFuentePanelEncabezado);
-            ops.setColorFuentePanelTitulo(colorFuentePanelTitulo);
-            ops.setColorInferiorPanelTitulo(colorInferiorPanelTitulo);
-            ops.setColorPanelTitulo(colorPanelTitulo);
-            ops.setColorSuperiorPanelTitulo(colorSuperiorPanelTitulo);            
+            if (!colorBody.isBlank()) {
+                ops.setColorBody(colorBody);
+            }
+            if (!colorBoton.isBlank()) {
+                ops.setColorBoton(colorBoton);
+            }
+            if (!colorFuentePanelEncabezado.isBlank()) {
+                ops.setColorFuentePanelEncabezado(colorFuentePanelEncabezado);
+            }
+            if (!colorFuentePanelTitulo.isBlank()) {
+                ops.setColorFuentePanelTitulo(colorFuentePanelTitulo);
+            }
+            if (!colorInferiorPanelTitulo.isBlank()) {
+                ops.setColorInferiorPanelTitulo(colorInferiorPanelTitulo);
+            }
+            if (!colorPanelTitulo.isBlank()) {
+                ops.setColorPanelTitulo(colorPanelTitulo);
+            }
+            if (!colorSuperiorPanelTitulo.isBlank()) {
+                ops.setColorSuperiorPanelTitulo(colorSuperiorPanelTitulo);
+            }
             return repoEmpresa.update(empresa).getId();
         }
         return -1;
     }
-    
+
     /**
      * Setea las opciones de apariencia del sistema asociadas a la Empresa.
+     *
      * @param idEmpresa
      * @param mailFrom
      * @param mailUser
      * @param mailPass
      * @param mailPort
      * @param mailTLS
-
-     * @return 
+     *
+     * @return
      */
-    public int setConfiguracionCorreo(int idEmpresa, String mailFrom, String mailUser, String mailPass, String mailHostSMTP,int mailPort, boolean mailTLS) {
+    public int setConfiguracionCorreo(int idEmpresa, String mailFrom, String mailUser, String mailPass, String mailHostSMTP, int mailPort, boolean mailTLS) {
         Empresa empresa = repoEmpresa.find(idEmpresa);
         if (empresa != null) {
             OpcionesCorreo ops = empresa.getOpcionesSistema().getOpcionesCorreo();
@@ -184,19 +200,25 @@ public class ControladorConfiguracion {
         }
         return -1;
     }
-    
+
     /**
-     * Setea estado de alertas.
+     * Setea estado de alertas. PRE: las opciones de correo deben estar
+     * seteadas.
+     *
      * @param idEmpresa
      * @param setAlertas
-     * @return 
+     * @return
      */
-    public int setAlertas(int idEmpresa, boolean setAlertas){
+    public int setAlertas(int idEmpresa, boolean setAlertas) {
         Empresa empresa = repoEmpresa.find(idEmpresa);
         if (empresa != null) {
-            OpcionesCorreo ops = empresa.getOpcionesSistema().getOpcionesCorreo();
-            ops.setAlertasActivadas(setAlertas);
-            return repoEmpresa.update(empresa).getId();
+
+            if (empresa.getOpcionesSistema() != null && empresa.getOpcionesSistema().getOpcionesCorreo() != null) {
+                OpcionesCorreo ops = empresa.getOpcionesSistema().getOpcionesCorreo();
+                ops = empresa.getOpcionesSistema().getOpcionesCorreo();
+                ops.setAlertasActivadas(setAlertas);
+                return repoEmpresa.update(empresa).getId();
+            }
         }
         return -1;
     }
@@ -258,10 +280,11 @@ public class ControladorConfiguracion {
      * @param permisoUsuario
      * @param recibeAlertas
      * @param idArea
+     * @param idEmpresa
      * @return -1 si no se actualizo.
      */
     public int cambiarDatosUsuario(int idUsuario, String nombreUsuario, String apellidoUsuario, String correoUsuario,
-            EnumPermiso permisoUsuario, boolean recibeAlertas, int idArea) {
+            EnumPermiso permisoUsuario, boolean recibeAlertas, int idArea, int idEmpresa) {
         Usuario usuario = repoUsuario.find(idUsuario);
         usuario.setNombre(nombreUsuario);
         usuario.setApellido(apellidoUsuario);
@@ -272,6 +295,11 @@ public class ControladorConfiguracion {
             Area area = repoArea.find(idArea);
             usuario.setAreaUsuario(area);
             repoArea.update(area);
+        }
+        if(usuario.getEmpresaUsuario().getId()!= idEmpresa){
+            Empresa empresa = repoEmpresa.find(idEmpresa);
+            usuario.setEmpresaUsuario(empresa);
+            repoEmpresa.update(empresa);
         }
         return repoUsuario.update(usuario).getId();
     }

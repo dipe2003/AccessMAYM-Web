@@ -9,7 +9,10 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
     <ui:define name="page_content">
-        
+        <c:if test="#{sesionUsuario.usuarioLogueado == null}">
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:if>
+        <c:if test="#{sesionUsuario.usuarioLogueado != null }"> 
         <div class="container-fluid">
             <div class="panel panel-primary">
                 <div class="panel-heading" >Listado</div>
@@ -96,6 +99,6 @@
                 </c:choose>
             </h:form>
         </div>
-        
+        </c:if>
     </ui:define>
 </ui:composition>

@@ -4,14 +4,13 @@
  */
 package com.dperez.maym.web.empresa;
 
-import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maym.web.inicio.SesionUsuario;
 import com.dperez.maymweb.facades.FacadeAdministrador;
+import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.herramientas.IOPropiedades;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -29,8 +28,11 @@ public class AdminEmpresa implements Serializable {
     private IOPropiedades ioProp;
     @Inject
     private SesionUsuario sesion;
+    
+    private boolean primerEmpresa;
 
     private FacadeAdministrador fAdmin = new FacadeAdministrador();
+    private FacadeLectura fLectura = new FacadeLectura();
 
     private String nombre;
     private String direccion;
@@ -87,7 +89,21 @@ public class AdminEmpresa implements Serializable {
     public void setNombreExtra(String nombreExtra) {
         this.nombreExtra = nombreExtra;
     }
+
+    public boolean isPrimerEmpresa() {
+        return primerEmpresa;
+    }
+
+    public void setPrimerEmpresa(boolean primerEmpresa) {
+        this.primerEmpresa = primerEmpresa;
+    }
+    
     //</editor-fold>
+    
+     @PostConstruct
+     public void init(){
+         primerEmpresa = fLectura.listarEmpresas().isEmpty();
+     }
 
     public void registrarEmpresa() throws IOException {
         if (fAdmin.nuevaEmpresa(nombre, direccion, telefono, movil, correo, nombreExtra).getId() > 0) {

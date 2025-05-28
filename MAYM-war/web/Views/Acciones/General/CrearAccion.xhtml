@@ -8,140 +8,145 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="page_content">
-        <div class="container-fluid" style="padding: 1%"> 
-            <div class="panel panel-primary">
-                <div class="panel-heading" >Crear #{crearAccion.tipoDeAccion.descripcion}</div>
-                <div class="panel-body">
-                    Todos los campos son obligatorios.
-                </div>                  
-            </div>
-        </div>
-        <div class="container-fluid" style="padding: 1%">
-            <h:form id="form_accion" enctype="multipart/form-data">
-                <!-- Descripcion -->
+        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario == 'LECTURA'}">
+            <meta http-equiv="refresh" content="0;url=#{facesContext.externalContext.requestContextPath}/Views/Errores/Error_500.xhtml"></meta>
+        </c:if>
+        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
+            <div class="container-fluid" style="padding: 1%"> 
                 <div class="panel panel-primary">
-                    <div class="panel-heading" >Descripcion</div>
+                    <div class="panel-heading" >Crear #{crearAccion.tipoDeAccion.descripcion}</div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-6" >
-                                <div class="form-group">
-                                    <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
-                                    <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion." 
-                                                 value="#{crearAccion.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
+                        Todos los campos son obligatorios.
+                    </div>                  
+                </div>
+            </div>
+            <div class="container-fluid" style="padding: 1%">
+                <h:form id="form_accion" enctype="multipart/form-data">
+                    <!-- Descripcion -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" >Descripcion</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6" >
+                                    <div class="form-group">
+                                        <strong><label for="fecha_deteccion">Fecha Deteccion:</label></strong>
+                                        <h:inputText id="fecha_deteccion" class="form-control calendario" p:placeholder="Fecha de deteccion." 
+                                                     value="#{crearAccion.strFechaDeteccion}" required="true" requiredMessage="No se ingreso fecha de deteccion."/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6" >
-                                <div class="form-group">
-                                    <strong><label for="area">Area / Sector:</label></strong>
-                                    <h:selectOneMenu id="area" class="form-control" value="#{crearAccion.areaSectorAccionSeleccionada}"
-                                                     required="true" requiredMessage="No se selecciono area">
-                                        <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
-                                        <c:forEach items="#{crearAccion.listaAreasSectores}" var="area">
-                                            <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
-                                        </c:forEach>
-                                    </h:selectOneMenu>
+                                <div class="col-sm-6" >
+                                    <div class="form-group">
+                                        <strong><label for="area">Area / Sector:</label></strong>
+                                        <h:selectOneMenu id="area" class="form-control" value="#{crearAccion.areaSectorAccionSeleccionada}"
+                                                         required="true" requiredMessage="No se selecciono area">
+                                            <f:selectItem itemLabel="-- Seleccionar Area ---" itemDisabled="true"  noSelectionOption="true"  />
+                                            <c:forEach items="#{crearAccion.listaAreasSectores}" var="area">
+                                                <f:selectItem itemLabel="#{area.nombre}" itemValue="#{area.id}" />
+                                            </c:forEach>
+                                        </h:selectOneMenu>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <h:panelGroup id="panel_tipodeteccion">
-                                        <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
-                                        <h:selectOneRadio id="tipo_deteccion" value="#{crearAccion.tipoDeDeteccionSeleccionada}" >
-                                            <c:forEach items="#{crearAccion.tiposDeteccion}" var="tipo">
-                                                <div class="radio" >
-                                                    <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
-                                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <h:panelGroup id="panel_tipodeteccion">
+                                            <strong><label for="tipo_deteccion">Tipo de Deteccion:</label></strong>                                    
+                                            <h:selectOneRadio id="tipo_deteccion" value="#{crearAccion.tipoDeDeteccionSeleccionada}" >
+                                                <c:forEach items="#{crearAccion.tiposDeteccion}" var="tipo">
+                                                    <div class="radio" >
+                                                        <f:selectItem itemLabel="#{tipo.descripcion}" itemValue="#{tipo}" />
+                                                    </div>
+                                                </c:forEach>
+                                                <f:ajax execute="@this"/>
+                                                <f:ajax render="form_accion:deteccion panel_tipodeteccion" listener="#{crearAccion.actualizarDeteccion()}" onevent="indicador"/>
+                                            </h:selectOneRadio>
+                                        </h:panelGroup>
+                                    </div> 
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <strong><label for="deteccion">Generada Por:</label></strong>                                    
+                                        <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccion.deteccionSeleccionada}" 
+                                                         required="true" requiredMessage="No se selecciono Deteccion.">
+                                            <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                            <c:forEach items="#{crearAccion.listaDetecciones}" var="deteccion">
+                                                <f:selectItem itemLabel="#{deteccion.nombre}" itemValue="#{deteccion.id}" />
                                             </c:forEach>
                                             <f:ajax execute="@this"/>
-                                            <f:ajax render="form_accion:deteccion panel_tipodeteccion" listener="#{crearAccion.actualizarDeteccion()}" onevent="indicador"/>
-                                        </h:selectOneRadio>
-                                    </h:panelGroup>
-                                </div> 
+                                        </h:selectOneMenu>                                    
+                                    </div>
+                                    <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" >
+                                        <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
+                                        <f:ajax delay="100" render="modal_nueva" />
+                                    </h:commandLink> 
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                    <strong><label for="deteccion">Generada Por:</label></strong>                                    
-                                    <h:selectOneMenu id="deteccion" class="form-control" value="#{crearAccion.deteccionSeleccionada}" 
-                                                     required="true" requiredMessage="No se selecciono Deteccion.">
-                                        <f:selectItem itemLabel="-- Seleccionar Deteccion ---" itemDisabled="true"  noSelectionOption="false"  />
-                                        <c:forEach items="#{crearAccion.listaDetecciones}" var="deteccion">
-                                            <f:selectItem itemLabel="#{deteccion.nombre}" itemValue="#{deteccion.id}" />
+                            <div class="form-group">
+                                <strong><label for="descripcion">Descripcion:</label></strong>                                    
+                                <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion." value="#{crearAccion.descripcion}" 
+                                                 required="true" requiredMessage="No se ingreso descripcion."/>
+                            </div>
+                            <div class="form-group">
+                                <strong><label for="referencias">Referencias:</label></strong>                                    
+                                <h:inputTextarea class="form-control" id="referencias" p:placeholder="Referencias al requisito o especificación." value="#{crearAccion.referencias}" 
+                                                 required="false" />
+                            </div>
+
+                            <div class="form-group">
+                                <h:panelGroup id="panel_codificaciones" >
+                                    <strong><label for="codificacion">Codificacion:</label></strong>                                    
+                                    <h:selectOneMenu id="codificacion" class="form-control" value="#{crearAccion.codificacionSeleccionada}">
+                                        <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
+                                        <c:forEach items="#{crearAccion.listaCodificaciones}" var="codificacion">
+                                            <f:selectItem itemLabel="#{codificacion.nombre}" itemValue="#{codificacion.id}" />
                                         </c:forEach>
                                         <f:ajax execute="@this"/>
-                                    </h:selectOneMenu>                                    
-                                </div>
-                                <h:commandLink class="btn btn-primary" p:data-toggle="modal" p:data-target="#modal_Nueva" >
-                                    <span class="glyphicon glyphicon-plus" style="font-family: sans-serif;"> Nueva</span>
-                                    <f:ajax delay="100" render="modal_nueva" />
-                                </h:commandLink> 
-                            </div>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </div>               
                         </div>
-                        <div class="form-group">
-                            <strong><label for="descripcion">Descripcion:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="descripcion" p:placeholder="Descripcion de la situacion." value="#{crearAccion.descripcion}" 
-                                             required="true" requiredMessage="No se ingreso descripcion."/>
+                    </div>   
+
+                    <h:panelGroup id="panel_mensajes">
+                        <div class="form-group-sm">
+                            <h:message for="fecha_deteccion" class="msj_error"/>
                         </div>
-                        <div class="form-group">
-                            <strong><label for="referencias">Referencias:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="referencias" p:placeholder="Referencias al requisito o especificación." value="#{crearAccion.referencias}" 
-                                             required="false" />
+                        <div class="form-group-sm">
+                            <h:message for="area" class="msj_error"/>
                         </div>
-                        
-                        <div class="form-group">
-                            <h:panelGroup id="panel_codificaciones" >
-                                <strong><label for="codificacion">Codificacion:</label></strong>                                    
-                                <h:selectOneMenu id="codificacion" class="form-control" value="#{crearAccion.codificacionSeleccionada}">
-                                    <f:selectItem itemLabel="-- Seleccionar Codificacion ---" itemDisabled="true"  noSelectionOption="false"  />
-                                    <c:forEach items="#{crearAccion.listaCodificaciones}" var="codificacion">
-                                        <f:selectItem itemLabel="#{codificacion.nombre}" itemValue="#{codificacion.id}" />
-                                    </c:forEach>
-                                    <f:ajax execute="@this"/>
-                                </h:selectOneMenu>
-                            </h:panelGroup>
-                        </div>               
+                        <div class="form-group-sm">
+                            <h:message for="deteccion" class="msj_error"/>
+                        </div>                    
+                        <div class="form-group-sm">
+                            <h:message for="descripcion" class="msj_error"/>
+                        </div> 
+                        <div class="form-group-sm">
+                            <h:message for="referencias" class="msj_error"/>
+                        </div>                    
+                        <div class="form-group-sm">
+                            <h:message for="crear_accion" class="msj_error"/>
+                        </div>
+                    </h:panelGroup>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h:commandButton id="crear_accion" class="btn btn-success" style="width: 99%" value="Guardar" action="#{crearAccion.crearAccionCorrectiva()}">
+                                <f:ajax execute="deteccion descripcion referencias fecha_deteccion area" onevent="indicador" render="panel_mensajes"/>
+                            </h:commandButton>
+                        </div>
+                        <div class="col-sm-6">
+                            <h:button class="btn btn-default" value="Reset" style="width: 99%" p:type="reset" />
+                        </div>
                     </div>
-                </div>   
-                
-                <h:panelGroup id="panel_mensajes">
-                    <div class="form-group-sm">
-                        <h:message for="fecha_deteccion" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="area" class="msj_error"/>
-                    </div>
-                    <div class="form-group-sm">
-                        <h:message for="deteccion" class="msj_error"/>
-                    </div>                    
-                    <div class="form-group-sm">
-                        <h:message for="descripcion" class="msj_error"/>
-                    </div> 
-                    <div class="form-group-sm">
-                        <h:message for="referencias" class="msj_error"/>
-                    </div>                    
-                    <div class="form-group-sm">
-                        <h:message for="crear_accion" class="msj_error"/>
-                    </div>
-                </h:panelGroup>
-                
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h:commandButton id="crear_accion" class="btn btn-success" style="width: 99%" value="Guardar" action="#{crearAccion.crearAccionCorrectiva()}">
-                            <f:ajax execute="deteccion descripcion referencias fecha_deteccion area" onevent="indicador" render="panel_mensajes"/>
-                        </h:commandButton>
-                    </div>
-                    <div class="col-sm-6">
-                        <h:button class="btn btn-default" value="Reset" style="width: 99%" p:type="reset" />
-                    </div>
-                </div>
-            </h:form>
-            <h:form id="form_accion_modal">
-                <!-- Modal Nueva Deteccion -->
-                <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>   
-                          
-            </h:form>
-        </div>
+                </h:form>
+                <h:form id="form_accion_modal">
+                    <!-- Modal Nueva Deteccion -->
+                    <ui:include src="../../Configuraciones/ModalDetecciones.xhtml"/>   
+
+                </h:form>
+            </div>
+        </c:if>
     </ui:define>
 </ui:composition>
 

@@ -131,10 +131,10 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="#{elemento.contenido.fechaBaja != null}">
-                                                        #{elemento.contenido.fechaBaja}
+                                                    #{elemento.contenido.strFechaBaja}
                                                     </c:when>
                                                     <c:otherwise>
-                                                        ---
+                                                    ---
                                                     </c:otherwise>
                                                 </c:choose> 
                                             </td>
@@ -157,7 +157,7 @@
                                                             </h:commandLink>
                                                         </div>
                                                     </c:if>
-                                                    <c:if test="#{elemento.contenido.fechaBaja != null}">
+                                                    <c:if test="#{elemento.contenido.strFechaBaja != null}">
                                                         <div class="btn-group">
                                                             <h:commandLink id="btn_alta_#{elemento.contenido.id}" class="btn btn-default" title="Dar de alta al Usuario." >
                                                                 <span class="glyphicon glyphicon-ok"  ></span>
@@ -212,13 +212,30 @@
                                 <h4 class="modal-title">Usuario</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <strong><label for="numero_nuevo_usuario">Numero</label></strong>
-                                    <h:inputText id="numero_nuevo_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
-                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario." p:placeholder="Numero (unico) de Usuario" >
-                                        <f:ajax delay="100" execute="@this" event="change" listener="#{usuarios.comprobarNumeroNuevoOperario()}" render="panel_mensajes_modal_nuevo" />
-                                    </h:inputText>                                    
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="numero_nuevo_usuario">Numero</label></strong>
+                                            <h:inputText id="numero_nuevo_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
+                                                         required="true" requiredMessage="Se debe ingresar numero (unico) de usuario." p:placeholder="Numero (unico) de Usuario" >
+                                                <f:ajax delay="100" execute="@this" event="change" listener="#{usuarios.comprobarNumeroNuevoOperario()}" render="panel_mensajes_modal_nuevo" />
+                                            </h:inputText>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="empresa_nuevo_usuario">Empresa:</label></strong>
+                                            <h:selectOneMenu id="empresa_nuevo_usuario" class="form-control" value="#{usuarios.empresaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono Empresa">
+                                                <f:selectItem itemLabel="-- Seleccionar Empresa ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaEmpresas}" var="empresa">
+                                                    <f:selectItem itemLabel="#{empresa.nombre}" itemValue="#{empresa.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -254,7 +271,7 @@
                                                 </c:forEach>
                                             </h:selectOneMenu>
                                         </div> 
-                                    </div>
+                                    </div>                                    
                                 </div>                                
 
                                 <div class="row">
@@ -287,6 +304,9 @@
                                 <h:panelGroup id="panel_mensajes_modal_nuevo">
                                     <div class="form-group-sm">
                                         <h:message for="numero_nuevo_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="empresa_nuevo_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="nombre_nuevo_usuario" class="msj_error"/>
@@ -339,11 +359,28 @@
                                 <h4 class="modal-title">Usuario</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <strong><label for="numero_editar_usuario">Numero</label></strong>
-                                    <h:inputText id="numero_editar_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
-                                                 required="true" requiredMessage="Se debe ingresar numero (unico) de usuario" p:placeholder="Numero (unico) de Usuario" />
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="numero_editar_usuario">Numero</label></strong>
+                                            <h:inputText id="numero_editar_usuario" class="form-control" value="#{usuarios.numeroNuevoUsuario}" 
+                                                         required="true" requiredMessage="Se debe ingresar numero (unico) de usuario" p:placeholder="Numero (unico) de Usuario" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <strong><label for="empresa_editar_usuario">Empresa:</label></strong>
+                                            <h:selectOneMenu id="empresa_editar_usuario" class="form-control" value="#{usuarios.empresaSeleccionada}"
+                                                             required="true" requiredMessage="No se selecciono Empresa">
+                                                <f:selectItem itemLabel="-- Seleccionar Empresa ---" itemDisabled="true"  noSelectionOption="true"  />
+                                                <c:forEach items="#{usuarios.listaEmpresas}" var="empresa">
+                                                    <f:selectItem itemLabel="#{empresa.nombre}" itemValue="#{empresa.id}" />
+                                                </c:forEach>
+                                            </h:selectOneMenu>
+                                        </div> 
+                                    </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -451,6 +488,9 @@
                                 <h:panelGroup id="panel_mensajes_modal_editar">
                                     <div class="form-group-sm">
                                         <h:message for="numero_editar_usuario" class="msj_error"/>
+                                    </div>
+                                    <div class="form-group-sm">
+                                        <h:message for="empresa_editar_usuario" class="msj_error"/>
                                     </div>
                                     <div class="form-group-sm">
                                         <h:message for="nombre_editar_usuario" class="msj_error"/>

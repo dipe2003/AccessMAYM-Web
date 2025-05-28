@@ -111,7 +111,7 @@ public class PerfilUsuario implements Serializable {
                 || sesionUsuario.getUsuarioLogueado().getCorreo() != correo || sesionUsuario.getUsuarioLogueado().isRecibeAlertas() == recibeAlertas) {
             FacesContext context = FacesContext.getCurrentInstance();
             if ((fMain.CambiarDatosUsuario(sesionUsuario.getUsuarioLogueado().getId(), nombre, apellido, correo, sesionUsuario.getUsuarioLogueado().getPermisoUsuario(),
-                    recibeAlertas, idAreaSeleccionada)) != -1) {
+                    recibeAlertas, idAreaSeleccionada, sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId())) != -1) {
                 sesionUsuario.setUsuarioLogueado(fLectura.getUsuario(id));
                 context.addMessage("form_perfil_usuario:btn_guardar_datos", new FacesMessage(FacesMessage.SEVERITY_INFO, "Pefil Actualizado", "Se actualizaron los datos del perfil."));
                 context.renderResponse();

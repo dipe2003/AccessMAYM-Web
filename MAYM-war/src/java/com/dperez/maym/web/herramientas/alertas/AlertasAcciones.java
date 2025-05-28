@@ -12,6 +12,7 @@ import com.dperez.maym.web.herramientas.eventos.Evento;
 import com.dperez.maym.web.herramientas.eventos.EventoAccion;
 import com.dperez.maym.web.herramientas.eventos.EventoActividad;
 import com.dperez.maym.web.herramientas.eventos.TipoEvento;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,32 +21,32 @@ import java.util.List;
  *
  * @author dperez
  */
-public class AlertasMejoras implements Runnable {
+
+public class AlertasAcciones implements Serializable, Runnable {
     
     private ControladorAlertas cAlertas;
-       
-    private final List<Accion> AccionesMejora;
     
-    public AlertasMejoras(){
-        this.AccionesMejora = new ArrayList<>();
+    private final List<Accion> acciones;
+    
+    public AlertasAcciones(){
+        this.acciones = new ArrayList<>();
     }
     
-    public AlertasMejoras(List<Accion> AccionesMejora, ControladorAlertas cAlertas){
-        this.AccionesMejora = AccionesMejora;
+    public AlertasAcciones(List<Accion> acciones, ControladorAlertas cAlertas){
+        this.acciones = acciones;
         this.cAlertas = cAlertas;
-    }    
+    }
     
     /**
-     * Envia las alertas para las acciones Mejora.
+     * Envia las alertas para las acciones.
      * Recorrer las acciones que no esten desestimadas o cerradas.
      * Si la accion esta implementada, comprueba las fechas de implementacion y eficacia y envia,sino recorre las actividades, comprueba
      * las fechas de implementacion y envia las alertas.
-     * @param AccionesMejora
      */
-    private void enviarAlertasMejora(){
+    private void enviarAlertasCorrectivas(){
         Date Hoy = new Date();
-        for(Accion accion: AccionesMejora){
-            if(accion.getEstadoDeAccion() != Estado.CERRADA && accion.getEstadoDeAccion() != Estado.DESESTIMADA && 
+        for(Accion accion: acciones){
+            if(accion.getEstadoDeAccion() != Estado.CERRADA && accion.getEstadoDeAccion() != Estado.DESESTIMADA &&
                     accion.getComprobacionImplementacion() != null && accion.getComprobacionEficacia() != null){
                 // Primero Si esta implementada
                 if(accion.estaImplementadaAlgunaActividad()){
@@ -65,7 +66,7 @@ public class AlertasMejoras implements Runnable {
                 }else{
                     List<Actividad> Actividades = accion.getActividadesDeAccion();
                     for(Actividad actividad: Actividades){
-                        if(actividad.getFechaImplementacion() == null && actividad.getFechaEstimadaImplementacion().compareTo(Hoy)<0){
+                        if(actividad.getFechaImplementacion() == null || actividad.getFechaEstimadaImplementacion().compareTo(Hoy)<0){
                             Evento evento = new EventoActividad(actividad);
                             cAlertas.EnviarAlerta(evento);
                         }
@@ -74,9 +75,10 @@ public class AlertasMejoras implements Runnable {
             }
         }
     }
+    
     @Override
     public void run() {
-        enviarAlertasMejora();
+        enviarAlertasCorrectivas();
     }
     
 }
