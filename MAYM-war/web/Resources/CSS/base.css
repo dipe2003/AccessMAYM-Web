@@ -33,11 +33,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background-image: linear-gradient(gray, black); 
     color: white;
 }
-.estado-PROCESO_VER{
+.estado-PROCESO_IMP{
     background-image: linear-gradient(#ffcc00,  #ff9933); 
     color: black;
 }
-.estado-PROCESO_IMP{
+.estado-PROCESO_VER{
     background-image: linear-gradient(#ffff00, #e6e600); 
     color: black;
 }
