@@ -217,9 +217,8 @@
                                                                                 #{preventiva.strFechaImplementacion}
                                                                             </c:if>
                                                                         </td>
-
-                                                                        <td>
-                                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
+                                                                            <td>
                                                                                 <c:choose>
                                                                                     <c:when test="#{preventiva.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                         <div class="btn-group">                                                    
@@ -235,9 +234,9 @@
                                                                                             </h:commandButton>                                                            
                                                                                         </div>
                                                                                     </c:otherwise>
-                                                                                </c:choose>                                                            
-                                                                            </c:if>
-                                                                        </td>                                                    
+                                                                                </c:choose>   
+                                                                            </td> 
+                                                                        </c:if>
                                                                     </tr> 
                                                                     <h:panelGroup >
                                                                         <div class="form-group-sm">
@@ -294,10 +293,9 @@
                                                                                 #{actividad.strFechaImplementacion}
                                                                             </c:if>
                                                                         </td>
-
-                                                                        <td>
-                                                                            <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
-                                                                                <c:choose>
+                                                                        <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
+                                                                            <c:choose>
+                                                                                <td>
                                                                                     <c:when test="#{actividad.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                         <div class="btn-group">                                                    
                                                                                             <h:commandButton class="btn btn-primary disabled" title="Solo lo puede comprobar el usuario responsable." value="Comprobar" />        
@@ -312,9 +310,9 @@
                                                                                             </h:commandButton>                                                            
                                                                                         </div>
                                                                                     </c:otherwise>
-                                                                                </c:choose>                                                            
-                                                                            </c:if>
-                                                                        </td>                                                    
+                                                                            </c:choose> 
+                                                                            </td>
+                                                                        </c:if>
                                                                     </tr> 
                                                                     <h:panelGroup >
                                                                         <div class="form-group-sm">
