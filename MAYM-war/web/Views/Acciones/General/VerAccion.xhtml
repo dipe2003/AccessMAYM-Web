@@ -38,34 +38,10 @@
                         <div class="col-sm-2">
                             <!-- Estado -->
                             <div class="panel panel-primary">
-                                <div class="panel-heading" >Estado:</div>
-                                <c:choose>
-                                    <c:when test="#{verAccion.estado == 'PENDIENTE'}">
-                                        <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
-                                            #{verAccion.estado.descripcion}
-                                        </div>
-                                    </c:when>
-                                    <c:when test="#{verAccion.estado == 'CERRADA'}" >
-                                        <div class="panel-body" style="background-image:linear-gradient(#008000,#003300); color: white">
-                                            #{verAccion.estado.descripcion}
-                                        </div>
-                                    </c:when>
-                                    <c:when test="#{verAccion.estado == 'DESESTIMADA'}" >
-                                        <div class="panel-body" style="background-image: linear-gradient(gray, black); color: white">
-                                            #{verAccion.estado.descripcion}
-                                        </div>
-                                    </c:when>
-                                    <c:when test="#{verAccion.estado == 'PROCESO_IMP'}" >
-                                        <div class="panel-body" style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
-                                            #{verAccion.estado.descripcion}
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="panel-body" style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
-                                            Proceso Verificacion
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
+                                <div class="panel-heading" >Estado:</div>                              
+                                <div class="panel-body estado-#{verAccion.estado}">
+                                    #{verAccion.estado.descripcion}
+                                </div>                                    
                             </div>
                         </div>
                     </div>
@@ -119,7 +95,7 @@
                             <div class="form-group">
                                 <strong><label for="descripcion">Descripcion:</label></strong>   
                                 <h:inputTextarea readonly="true" id="descripcion" class="form-control" style="background-color: white;" 
-                                                  rows="4" value="#{verAccion.descripcion}" />
+                                                 rows="4" value="#{verAccion.descripcion}" />
                             </div>
                             <div class="form-group">
                                 <strong><label for="referencias">Referencias:</label></strong>   
@@ -167,7 +143,7 @@
                             <div class="form-group">
                                 <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
                                 <h:inputTextarea readonly="true" id="analisis_causa" class="form-control" style="background-color: white;"
-                                                  rows="4" value="#{verAccion.analisisCausa}" />
+                                                 rows="4" value="#{verAccion.analisisCausa}" />
                             </div>
                             <div class="form-group">
                                 <strong><label for="codificacion">Codificacion:</label></strong>                                    

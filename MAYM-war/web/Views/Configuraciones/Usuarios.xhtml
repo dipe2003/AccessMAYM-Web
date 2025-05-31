@@ -116,27 +116,10 @@
                                                 </c:choose> 
                                             </td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="#{elemento.contenido.permisoUsuario == 'ADMINISTRADOR'}">
-                                                        #{elemento.contenido.permisoUsuario.descripcion}
-                                                    </c:when>
-                                                    <c:when test="#{elemento.contenido.permisoUsuario == 'DATOS'}">
-                                                        #{elemento.contenido.permisoUsuario.descripcion}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        #{elemento.contenido.permisoUsuario.descripcion}
-                                                    </c:otherwise>
-                                                </c:choose> 
+                                                #{elemento.contenido.permisoUsuario.descripcion}                                                   
                                             </td>
                                             <td>
-                                                <c:choose>
-                                                    <c:when test="#{elemento.contenido.fechaBaja != null}">
-                                                    #{elemento.contenido.strFechaBaja}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                    ---
-                                                    </c:otherwise>
-                                                </c:choose> 
+                                                #{elemento.contenido.strFechaBaja}
                                             </td>
                                             <td>
                                                 #{usuarios.responsables.get(elemento.contenido.id)}
@@ -157,7 +140,7 @@
                                                             </h:commandLink>
                                                         </div>
                                                     </c:if>
-                                                    <c:if test="#{elemento.contenido.strFechaBaja != null}">
+                                                    <c:if test="#{elemento.contenido.fechaBaja != null}">
                                                         <div class="btn-group">
                                                             <h:commandLink id="btn_alta_#{elemento.contenido.id}" class="btn btn-default" title="Dar de alta al Usuario." >
                                                                 <span class="glyphicon glyphicon-ok"  ></span>
