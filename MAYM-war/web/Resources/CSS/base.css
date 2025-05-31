@@ -20,3 +20,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     width: 100%;
     text-align: center !important;
 }
+
+.estado-PENDIENTE{
+    background-image: linear-gradient(red, #b32d00);
+    color: white;
+}
+
+
+.estado-CERRADA{
+    background-image:linear-gradient(#008000,#003300); 
+    color: white;
+}
+
+
+.estado-DESESTIMADA{
+    background-image: linear-gradient(gray, black); 
+    color: white;
+}
+
+.estado-PROCESO_VER{
+    background-image: linear-gradient(#ffcc00,  #ff9933); 
+    color: black;
+}
+
+.estado-PROCESO_IMP{
+    background-image: linear-gradient(#ffff00, #e6e600); 
+    color: black;
+}

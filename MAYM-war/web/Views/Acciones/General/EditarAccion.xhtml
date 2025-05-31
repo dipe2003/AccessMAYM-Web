@@ -17,33 +17,9 @@
                         <!-- Estado -->
                         <div class="panel panel-default">
                             <div class="panel-heading" >Estado:</div>
-                            <c:choose>
-                                <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'PENDIENTE'}">
-                                    <div class="panel-body" style="background-image: linear-gradient(red, #b32d00); color: white">
-                                        #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'CERRADA'}" >
-                                    <div class="panel-body" style="background-image:linear-gradient(#008000,#003300); color: white">
-                                        #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'DESESTIMADA'}" >
-                                    <div class="panel-body" style="background-image: linear-gradient(gray, black); color: white">
-                                        #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:when test="#{editarAccion.accionSeleccionada.estadoDeAccion == 'PROCESO_IMP'}" >
-                                    <div class="panel-body" style="background-image: linear-gradient(#ffcc00,  #ff9933); color: black">
-                                        #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="panel-body" style="background-image: linear-gradient(#ffff00, #e6e600); color: black">
-                                        #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="panel-body estado-#{editarAccion.accionSeleccionada.estadoDeAccion}" >
+                                #{editarAccion.accionSeleccionada.estadoDeAccion.descripcion}More actions
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -539,7 +515,7 @@
                                                                                 <td>
                                                                                     <div class="btn-group">
                                                                                         <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                            return false">
+                                                                                                    return false">
                                                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                                                             <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                                         </h:commandLink>
@@ -592,7 +568,7 @@
                                                                                 <td>
                                                                                     <div class="btn-group">
                                                                                         <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                            return false">
+                                                                                                    return false">
                                                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                                                             <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                                         </h:commandLink>
@@ -643,7 +619,7 @@
                                                                                 <td>
                                                                                     <div class="btn-group">
                                                                                         <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                            return false">
+                                                                                                    return false">
                                                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                                                             <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                                         </h:commandLink>
