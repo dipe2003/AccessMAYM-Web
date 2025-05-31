@@ -142,7 +142,7 @@ public class PdfteameRegistro implements Serializable {
 
                     tablaActividades.addCell(CrearCeldaContenido(act.getTipoDeActividad().getDescripcion() + ": " + act.getDescripcion(), filaPar, 0, 0));
                     tablaActividades.addCell(CrearCeldaContenido(act.getResponsableImplementacion().getResponsabilidadResponsable().getNombre(), filaPar, 0, 0));
-                    tablaActividades.addCell(CrearCeldaContenido(act.getFechaImplementacion() != null ? df.format(act.getFechaImplementacion()) : "Sin Definir", filaPar, 0, 0));
+                    tablaActividades.addCell(CrearCeldaContenido(act.getFechaImplementacion() != null ? df.format(act.getFechaImplementacion()) : "Sin Implementar", filaPar, 0, 0));
                     contador++;
                     filaPar = contador % 2 == 0;
                 }

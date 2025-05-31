@@ -80,14 +80,16 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <strong><label for="descripcion_correctiva">Descripcion de la Accion Correctiva</label></strong>
-                                <h:inputTextarea id="descripcion_correctiva" class="form-control" readonly="true" style="background-color: rgb(255,255,255)" value="#{seguimientoAccion.accionSeleccionada.descripcion}" />
+                                <h:inputTextarea id="descripcion_correctiva" class="form-control" readonly="true" style="background-color: rgb(255,255,255)"
+                                                 rows="4" value="#{seguimientoAccion.accionSeleccionada.descripcion}" />
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="form-group">
                                 <strong><label for="analisis_causa">Analisis de Causa</label></strong>
-                                 <h:inputTextarea id="analisis_causa" class="form-control" readonly="true" style="background-color: rgb(255,255,255)"  value="#{seguimientoAccion.accionSeleccionada.analisisCausa}" />
+                                <h:inputTextarea id="analisis_causa" class="form-control" readonly="true" style="background-color: rgb(255,255,255)" 
+                                                 rows="4" value="#{seguimientoAccion.accionSeleccionada.analisisCausa}" />
                             </div>
                         </div>
 
@@ -120,7 +122,6 @@
                                                             <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}">
                                                                 <th></th>
                                                             </c:if>
-
                                                         </tr>                                                
                                                     </thead>
                                                     <tbody>
@@ -138,8 +139,9 @@
                                                                     </c:if>
                                                                 </td>
 
-                                                                <td>
-                                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.fechaImplementacion == null}">
+
+                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and correctiva.fechaImplementacion == null}">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="#{correctiva.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
@@ -156,8 +158,8 @@
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
-                                                                    </c:if>
-                                                                </td>                                                                
+                                                                    </td>  
+                                                                </c:if>                                               
                                                             </tr>   
                                                             <h:panelGroup >
                                                                 <div class="form-group-sm">
@@ -212,9 +214,8 @@
                                                                         #{preventiva.strFechaImplementacion}
                                                                     </c:if>
                                                                 </td>
-
-                                                                <td>
-                                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
+                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and preventiva.fechaImplementacion == null}">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="#{preventiva.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
@@ -230,9 +231,9 @@
                                                                                     </h:commandButton>                                                            
                                                                                 </div>
                                                                             </c:otherwise>
-                                                                        </c:choose>                                                            
-                                                                    </c:if>
-                                                                </td>                                                    
+                                                                        </c:choose>  
+                                                                    </td>      
+                                                                </c:if>                                                                                                              
                                                             </tr> 
                                                             <h:panelGroup >
                                                                 <div class="form-group-sm">
@@ -289,9 +290,8 @@
                                                                         #{actividad.strFechaImplementacion}
                                                                     </c:if>
                                                                 </td>
-
-                                                                <td>
-                                                                    <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
+                                                                <c:if test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA' and actividad.fechaImplementacion == null}">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="#{actividad.responsableImplementacion.usuarioResponsable.id != sesionUsuario.usuarioLogueado.id}">
                                                                                 <div class="btn-group">                                                    
@@ -307,10 +307,10 @@
                                                                                     </h:commandButton>                                                            
                                                                                 </div>
                                                                             </c:otherwise>
-                                                                        </c:choose>                                                            
-                                                                    </c:if>
-                                                                </td>                                                    
-                                                            </tr> 
+                                                                        </c:choose>  
+                                                                    </td> 
+                                                                </c:if>
+                                                            </tr>
                                                             <h:panelGroup >
                                                                 <div class="form-group-sm">
                                                                     <h:message for="btn_setFechaImplementacion_act_#{actividad.id}" class="msj_error"/>
