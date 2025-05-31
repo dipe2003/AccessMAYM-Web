@@ -38,7 +38,7 @@ public class Detecciones implements Serializable {
     
     private boolean ContieneAcciones;
     
-    private TipoDeteccion[] TiposDeteccion;
+    private TipoDeteccion[] TiposDeteccion = TipoDeteccion.values();
     private TipoDeteccion TipoDeDeteccionSeleccionada;
     
     private String textoBusqueda;
