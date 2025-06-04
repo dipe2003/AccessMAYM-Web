@@ -327,7 +327,7 @@
                         <div class="panel-heading">Archivos Adjuntos / Anexos:</div>
                         <div class="panel-body">
                             <c:choose>
-                                <c:when test="#{empty editarAccion.mapAdjuntos}">
+                                <c:when test="#{empty verAccion.listaAdjuntos}">
                                     <div class="alert alert-info">
                                         <strong>Info!</strong> No se han cargado datos adjuntos.
                                     </div>                                   
@@ -349,32 +349,36 @@
                                                 </h4>
                                             </div>
                                             <div id="collapse1" class="panel-collapse collapse">
-                                                <div class="panel-body">                                               
-                                                    <table class="table table-striped table-responsive-sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="30%">Titulo</th>
-                                                                <th width="60%">Adjunto</th>
-                                                                <th width="20%"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody style="font-size: 11px">
-                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                                <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
-                                                                    <tr>
-                                                                        <td>
-                                                                            #{adjunto.titulo}
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>
-                                                                        </td>
-                                                                        <td>
-                                                                        </td>                                                                    
-                                                                    </tr>
+                                                <div class="panel-body">                                                     
+                                                    <ul class="nav nav-tabs">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <li class="active"><a data-toggle="tab" href="##{contador.index}"> #{adjunto.titulo}</a></li>
                                                                 </c:if>
-                                                            </c:forEach>
-                                                        </tbody>                                            
-                                                    </table>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <li><a data-toggle="tab" href="##{contador.index}"> #{adjunto.titulo}</a></li>
+                                                                </c:if>
+
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <div id="#{contador.index}" class="tab-pane fade in active">
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>  
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <div id="#{contador.index}" class="tab-pane fade">
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>  
+                                                                    </div>
+                                                                </c:if>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -393,34 +397,40 @@
                                                 </h4>
                                             </div>
                                             <div id="collapse2" class="panel-collapse collapse">
-                                                <div class="panel-body">                                               
-                                                    <table class="table table-striped table-responsive-sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="30%">Titulo</th>
-                                                                <th width="60%">Adjunto</th>
-                                                                <th width="20%"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody style="font-size: 11px">
-                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                                <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
-                                                                    <tr>
-                                                                        <td>
-                                                                            #{adjunto.titulo}
-                                                                        </td>
-                                                                        <td>
-                                                                            <video controls="true" width="250">
-                                                                                <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
-                                                                            </video>
-                                                                        </td>
-                                                                        <td>
-                                                                        </td>                                                                    
-                                                                    </tr>
+                                                <div class="panel-body">  
+                                                    <ul class="nav nav-tabs">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <li class="active"><a data-toggle="tab" href="#video#{contador.index}"> #{adjunto.titulo}</a></li>
                                                                 </c:if>
-                                                            </c:forEach>
-                                                        </tbody>                                            
-                                                    </table>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <li><a data-toggle="tab" href="#video#{contador.index}"> #{adjunto.titulo}</a></li>
+                                                                </c:if>
+
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <div id="video#{contador.index}" class="tab-pane fade in active">
+                                                                        <video controls="true" width="250">
+                                                                            <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
+                                                                        </video>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <div id="video#{contador.index}" class="tab-pane fade">
+                                                                        <video controls="true" width="250">
+                                                                            <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
+                                                                        </video>
+                                                                    </div>
+                                                                </c:if>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -439,32 +449,35 @@
                                                 </h4>
                                             </div>
                                             <div id="collapse3" class="panel-collapse collapse">
-                                                <div class="panel-body">                                               
-                                                    <table class="table table-striped table-responsive-sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="30%">Titulo</th>
-                                                                <th width="60%">Adjunto</th>
-                                                                <th width="20%"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody style="font-size: 11px">
-                                                            <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto">
-                                                                <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
-                                                                    <tr>
-                                                                        <td>
-                                                                            #{adjunto.titulo}
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
-                                                                        </td>
-                                                                        <td>
-                                                                        </td>                                                                    
-                                                                    </tr>
+                                                <div class="panel-body">   
+                                                    <ul class="nav nav-tabs">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <li class="active"><a data-toggle="tab" href="#documento#{contador.index}"> #{adjunto.titulo}</a></li>
                                                                 </c:if>
-                                                            </c:forEach>
-                                                        </tbody>                                            
-                                                    </table>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <li><a data-toggle="tab" href="#documento#{contador.index}"> #{adjunto.titulo}</a></li>
+                                                                </c:if>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <c:forEach items="#{verAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                            <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
+                                                                <c:if test="#{contador.index == 0}">
+                                                                    <div id="documento#{contador.index}" class="tab-pane fade in active">
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="#{contador.index > 0}">
+                                                                    <div id="documento#{contador.index}" class="tab-pane fade">
+                                                                        <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                    </div>
+                                                                </c:if>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>                                                     
                                                 </div>
                                             </div>
                                         </div>
