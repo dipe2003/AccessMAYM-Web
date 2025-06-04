@@ -629,8 +629,8 @@
                                                             <table class="table table-striped table-responsive-sm">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th width="30%">Titulo</th>
-                                                                        <th width="60%">Adjunto</th>
+                                                                        <th width="60%">Titulo</th>
+                                                                        <th width="30%">Tipo</th>
                                                                         <th width="20%"></th>
                                                                     </tr>
                                                                 </thead>
@@ -639,10 +639,10 @@
                                                                         <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
                                                                             <tr>
                                                                                 <td>
-                                                                                    #{adjunto.titulo}
+                                                                                    <a href="/datos#{adjunto.ubicacion}" target="blank" >#{adjunto.titulo}</a>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                                    #{adjunto.extension}
                                                                                 </td>
                                                                                 <td>
                                                                                     <div class="btn-group">
