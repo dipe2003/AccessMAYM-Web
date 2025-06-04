@@ -455,7 +455,7 @@
                             <div class="panel-body">                        
                                 <h:panelGroup id="panel_lista_adjuntos">
                                     <c:choose>
-                                        <c:when test="#{empty editarAccion.mapAdjuntos}">
+                                        <c:when test="#{empty editarAccion.listaAdjuntos}">
                                             <div class="alert alert-info">
                                                 <strong>Info!</strong> No se han cargado datos adjuntos.
                                             </div>
@@ -491,31 +491,31 @@
                                                     <div id="collapse1" class="panel-collapse collapse">
                                                         <div class="panel-body">   
                                                             <ul class="nav nav-tabs">
-                                                                <c:forEach items="#{editarAccion.mapAdjuntos}" var="adjunto" varStatus="contador">
-                                                                    <c:if test="#{adjunto.value.tipoDeAdjunto =='IMAGEN'}">
+                                                                <c:forEach items="#{editarAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                                    <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
                                                                         <c:if test="#{contador.index == 0}">
-                                                                            <li class="active"><a data-toggle="tab" href="##{contador.index}"> #{adjunto.value.titulo}</a></li>
+                                                                            <li class="active"><a data-toggle="tab" href="##{contador.index}"> #{adjunto.titulo}</a></li>
                                                                         </c:if>
                                                                         <c:if test="#{contador.index > 0}">
-                                                                            <li><a data-toggle="tab" href="##{contador.index}"> #{adjunto.value.titulo}</a></li>
+                                                                            <li><a data-toggle="tab" href="##{contador.index}"> #{adjunto.titulo}</a></li>
                                                                         </c:if>
 
                                                                     </c:if>
                                                                 </c:forEach>
                                                             </ul>
                                                             <div class="tab-content">
-                                                                <c:forEach items="#{editarAccion.mapAdjuntos}" var="adjunto" varStatus="contador">
-                                                                    <c:if test="#{adjunto.value.tipoDeAdjunto =='IMAGEN'}">
+                                                                <c:forEach items="#{editarAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                                    <c:if test="#{adjunto.tipoDeAdjunto =='IMAGEN'}">
                                                                         <c:if test="#{contador.index == 0}">
                                                                             <div id="#{contador.index}" class="tab-pane fade in active">
                                                                                 <div>
-                                                                                    <a href="/datos#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="/datos#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>   
+                                                                                    <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>   
                                                                                 </div>                                                                                        
                                                                                 <div class="btn-group">
-                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
                                                                                                 return false">
                                                                                         <span class="glyphicon glyphicon-trash"> </span>
-                                                                                        <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
+                                                                                        <f:ajax render="form_accion:panel_lista_adjuntos"  onevent="indicador"/>
                                                                                     </h:commandLink>
                                                                                 </div>
                                                                             </div>
@@ -523,13 +523,13 @@
                                                                         <c:if test="#{contador.index > 0}">
                                                                             <div id="#{contador.index}" class="tab-pane fade">
                                                                                 <div>
-                                                                                    <a href="/datos#{adjunto.value.ubicacion}" target="blank"><img alt="#{adjunto.value.ubicacion}" src="/datos#{adjunto.value.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>   
+                                                                                    <a href="/datos#{adjunto.ubicacion}" target="blank"><img alt="#{adjunto.ubicacion}" src="/datos#{adjunto.ubicacion}" class="img-responsive img-thumbnail" width="10%"/></a>   
                                                                                 </div>                                                                                        
                                                                                 <div class="btn-group">
-                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
                                                                                                 return false">
                                                                                         <span class="glyphicon glyphicon-trash"> </span>
-                                                                                        <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
+                                                                                        <f:ajax render="form_accion:panel_lista_adjuntos"  onevent="indicador"/>
                                                                                     </h:commandLink>
                                                                                 </div>
                                                                             </div>
@@ -557,30 +557,30 @@
                                                     <div id="collapse2" class="panel-collapse collapse">
                                                         <div class="panel-body"> 
                                                             <ul class="nav nav-tabs">
-                                                                <c:forEach items="#{editarAccion.mapAdjuntos}" var="adjunto" varStatus="contador">
-                                                                    <c:if test="#{adjunto.value.tipoDeAdjunto =='VIDEO'}">
+                                                                <c:forEach items="#{editarAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                                    <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
                                                                         <c:if test="#{contador.index == 0}">
-                                                                            <li class="active"><a data-toggle="tab" href="#video-#{contador.index}"> #{adjunto.value.titulo}</a></li>
+                                                                            <li class="active"><a data-toggle="tab" href="#video-#{contador.index}"> #{adjunto.titulo}</a></li>
                                                                         </c:if>
                                                                         <c:if test="#{contador.index > 0}">
-                                                                            <li><a data-toggle="tab" href="#video-#{contador.index}"> #{adjunto.value.titulo}</a></li>
+                                                                            <li><a data-toggle="tab" href="#video-#{contador.index}"> #{adjunto.titulo}</a></li>
                                                                         </c:if>
 
                                                                     </c:if>
                                                                 </c:forEach>
                                                             </ul>
                                                             <div class="tab-content">
-                                                                <c:forEach items="#{editarAccion.mapAdjuntos}" var="adjunto" varStatus="contador">
-                                                                    <c:if test="#{adjunto.value.tipoDeAdjunto =='VIDEO'}">
+                                                                <c:forEach items="#{editarAccion.listaAdjuntos}" var="adjunto" varStatus="contador">
+                                                                    <c:if test="#{adjunto.tipoDeAdjunto =='VIDEO'}">
                                                                         <c:if test="#{contador.index == 0}">
                                                                             <div id="video-#{contador.index}" class="tab-pane fade in active">
                                                                                 <div>
                                                                                     <video controls="true" width="250">
-                                                                                        <source src="/datos#{adjunto.value.ubicacion}" type="video/mp4" />
+                                                                                        <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
                                                                                     </video>
                                                                                 </div>                                                                                        
                                                                                 <div class="btn-group">
-                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
                                                                                                 return false">
                                                                                         <span class="glyphicon glyphicon-trash"> </span>
                                                                                         <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
@@ -592,11 +592,11 @@
                                                                             <div id="video-#{contador.index}" class="tab-pane fade">
                                                                                 <div>
                                                                                     <video controls="true" width="250">
-                                                                                        <source src="/datos#{adjunto.value.ubicacion}" type="video/mp4" />
+                                                                                        <source src="/datos#{adjunto.ubicacion}" type="video/mp4" />
                                                                                     </video>
                                                                                 </div>                                                                                        
                                                                                 <div class="btn-group">
-                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                    <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
                                                                                                 return false">
                                                                                         <span class="glyphicon glyphicon-trash"> </span>
                                                                                         <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
@@ -635,18 +635,18 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody style="font-size: 11px">
-                                                                    <c:forEach items="#{editarAccion.mapAdjuntos}" var="adjunto">
-                                                                        <c:if test="#{adjunto.value.tipoDeAdjunto =='DOCUMENTO'}">
+                                                                    <c:forEach items="#{editarAccion.listaAdjuntos}" var="adjunto">
+                                                                        <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
                                                                             <tr>
                                                                                 <td>
-                                                                                    #{adjunto.value.titulo}
+                                                                                    #{adjunto.titulo}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href="/datos#{adjunto.value.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                                    <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
                                                                                 </td>
                                                                                 <td>
                                                                                     <div class="btn-group">
-                                                                                        <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.key)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
+                                                                                        <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
                                                                                                     return false">
                                                                                             <span class="glyphicon glyphicon-trash"> </span>
                                                                                             <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
