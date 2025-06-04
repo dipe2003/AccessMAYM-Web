@@ -35,9 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -81,7 +79,7 @@ public class EditarAccion implements Serializable {
     private String Cliente;
 
     private String TituloAdjunto;
-    private Map<Integer, Adjunto> MapAdjuntos;
+    private List<Adjunto> listaAdjuntos;
     private Part ArchivoAdjunto;
     private int totalImagenes;
     private int totalVideos;
@@ -171,8 +169,8 @@ public class EditarAccion implements Serializable {
         return ArchivoAdjunto;
     }
 
-    public Map<Integer, Adjunto> getMapAdjuntos() {
-        return MapAdjuntos;
+    public List<Adjunto> getListaAdjuntos() {
+        return listaAdjuntos;
     }
 
     public List<Codificacion> getListaCodificaciones() {
@@ -333,8 +331,8 @@ public class EditarAccion implements Serializable {
         this.ArchivoAdjunto = ArchivoAdjunto;
     }
 
-    public void setMapAdjuntos(Map<Integer, Adjunto> MapAdjuntos) {
-        this.MapAdjuntos = MapAdjuntos;
+    public void setListaAdjuntos(List<Adjunto> listaAdjuntos) {
+        this.listaAdjuntos = listaAdjuntos;
     }
 
     public void setListaCodificaciones(List<Codificacion> ListaCodificaciones) {
@@ -502,7 +500,7 @@ public class EditarAccion implements Serializable {
                     .collect(Collectors.toList());
             AreaSectorAccionSeleccionada = AccionSeleccionada.getAreaAccion().getId();
 
-            MapAdjuntos = new HashMap<>();
+            listaAdjuntos = new ArrayList<>();
             actualizarListaAdjuntos();
 
             // Comprobaciones
@@ -532,9 +530,7 @@ public class EditarAccion implements Serializable {
     private void actualizarListaAdjuntos() {
         Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
         if (!accionSeguida.getAdjuntosDeAccion().isEmpty()) {
-            List<Adjunto> listAdjuntos = accionSeguida.getAdjuntosDeAccion();
-            MapAdjuntos = listAdjuntos.stream()
-                    .collect(Collectors.toMap(Adjunto::getIda, adjunto -> adjunto));
+            listaAdjuntos= accionSeguida.getAdjuntosDeAccion();
             actualizarTotalesAdjuntos();
         }
     }
@@ -566,7 +562,7 @@ public class EditarAccion implements Serializable {
         if (this.TituloAdjunto.isEmpty()) {
             msj = "El Titulo está vacío.";
         } else {
-            if (this.MapAdjuntos.values().stream()
+            if (this.listaAdjuntos.stream()
                     .anyMatch(a -> a.getTitulo().toLowerCase().equals(TituloAdjunto.toLowerCase()))) {
                 msj = "Ya existe un adjunto con ese nombre.";
                 ctx.addMessage("form_accion_modal:input-adjunto", new FacesMessage(SEVERITY_ERROR, "No se pudo cargar.", msj));
@@ -611,10 +607,18 @@ public class EditarAccion implements Serializable {
      * @throws IOException
      */
     public void quitarAdjunto(int IdAdjunto) throws IOException {
-        if ((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto)) != -1) {
-            cArchivo.BorrarArchivo(this.MapAdjuntos.get(IdAdjunto).getUbicacion());
-            this.MapAdjuntos.remove(IdAdjunto);
-            actualizarTotalesAdjuntos();
+        try {
+            Adjunto adjunto = this.listaAdjuntos.stream()
+                    .filter(a -> a.getIda() == IdAdjunto)
+                    .findFirst().get();
+            if ((fDatos.removerAdjunto(IdAccionSeleccionada, IdAdjunto)) != -1) {
+                if (adjunto != null) {
+                    cArchivo.BorrarArchivo(adjunto.getUbicacion());
+                    this.listaAdjuntos.remove(adjunto);
+                    actualizarTotalesAdjuntos();
+                }
+            }
+        } catch (Exception ex) {
         }
     }
 
@@ -711,8 +715,8 @@ public class EditarAccion implements Serializable {
             FacesContext.getCurrentInstance().renderResponse();
         } else {
             // Eliminar todos los archivos adjuntos del disco.
-            if (!MapAdjuntos.isEmpty()) {
-                MapAdjuntos.values().forEach((adjunto) -> {
+            if (!listaAdjuntos.isEmpty()) {
+                listaAdjuntos.forEach((adjunto) -> {
                     cArchivo.BorrarArchivo(adjunto.getUbicacion());
                 });
             }
@@ -809,9 +813,9 @@ public class EditarAccion implements Serializable {
     }
 
     private void actualizarTotalesAdjuntos() {
-        totalImagenes = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.IMAGEN).count()).intValue();
-        totalVideos = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.VIDEO).count()).intValue();
-        totalOtros = Long.valueOf(MapAdjuntos.values().stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.DOCUMENTO).count()).intValue();
+        totalImagenes = Long.valueOf(listaAdjuntos.stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.IMAGEN).count()).intValue();
+        totalVideos = Long.valueOf(listaAdjuntos.stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.VIDEO).count()).intValue();
+        totalOtros = Long.valueOf(listaAdjuntos.stream().filter(a -> a.getTipoDeAdjunto() == TipoAdjunto.DOCUMENTO).count()).intValue();
     }
     //</editor-fold>
 }
