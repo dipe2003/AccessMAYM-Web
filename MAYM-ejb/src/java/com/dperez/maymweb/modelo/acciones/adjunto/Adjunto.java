@@ -47,6 +47,9 @@ public class Adjunto implements Serializable{
     public String getUbicacion() {return this.ubicacion;}
     public Accion getAccionAdjunto() {return accionAdjunto;}
     public TipoAdjunto getTipoDeAdjunto(){return this.tipoDeAdjunto;}
+    public String getExtension(){
+        return this.ubicacion.substring(ubicacion.lastIndexOf("."));
+    }
     
     // Setters
     public void setIda(int Ida) {this.Ida = Ida;}

@@ -567,7 +567,7 @@
                                                                         </div>                                                                                        
                                                                         <div class="btn-group">
                                                                             <h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                return false">
+                                                                                        return false">
                                                                                 <span class="glyphicon glyphicon-trash"> </span>
                                                                                 <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                             </h:commandLink>
@@ -581,7 +581,7 @@
                                                                         </div>                                                                                        
                                                                         <div class="btn-group">
                                                                             <h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                return false">
+                                                                                        return false">
                                                                                 <span class="glyphicon glyphicon-trash"> </span>
                                                                                 <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                             </h:commandLink>
@@ -635,7 +635,7 @@
                                                                         </div>                                                                                        
                                                                         <div class="btn-group">
                                                                             <h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                return false">
+                                                                                        return false">
                                                                                 <span class="glyphicon glyphicon-trash"> </span>
                                                                                 <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                             </h:commandLink>
@@ -651,7 +651,7 @@
                                                                         </div>                                                                                        
                                                                         <div class="btn-group">
                                                                             <h:commandLink action="#{seguimientoAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                return false">
+                                                                                        return false">
                                                                                 <span class="glyphicon glyphicon-trash"> </span>
                                                                                 <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                             </h:commandLink>
@@ -683,20 +683,20 @@
                                                     <table class="table table-striped table-responsive-sm">
                                                         <thead>
                                                             <tr>
-                                                                <th width="30%">Titulo</th>
-                                                                <th width="60%">Adjunto</th>
+                                                                <th width="60%">Titulo</th>
+                                                                <th width="30%">Tipo</th>
                                                                 <th width="20%"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody style="font-size: 11px">
-                                                            <c:forEach items="#{seguimientoAccion.mapAdjuntos}" var="adjunto">
-                                                                <c:if test="#{adjunto.value.tipoDeAdjunto =='DOCUMENTO'}">
+                                                            <c:forEach items="#{seguimientoAccion.listaAdjuntos}" var="adjunto">
+                                                                <c:if test="#{adjunto.tipoDeAdjunto =='DOCUMENTO'}">
                                                                     <tr>
                                                                         <td>
-                                                                            #{adjunto.titulo}
+                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank" >#{adjunto.titulo}</a>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="/datos#{adjunto.ubicacion}" target="blank" >Ver Archivo</a>
+                                                                            #{adjunto.extension}
                                                                         </td>
                                                                         <td>
                                                                             <div class="btn-group">
