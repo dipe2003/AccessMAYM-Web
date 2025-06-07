@@ -141,6 +141,7 @@ public class FacadeDatos {
      * @param idAccion
      * @param fechaDeteccion
      * @param descripcion
+     * @param referencias
      * @param analisisCausa
      * @param idArea
      * @param idDeteccion
@@ -159,10 +160,11 @@ public class FacadeDatos {
      * @param descripcion
      * @param idResponsable
      * @param fechaImplementacion
+     * @param nuevoTipoActividad
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
-    public int editarActividad(int idAccion, int idActividad, String descripcion, int idResponsable, Date fechaImplementacion){
-        return cEdicion.editarActividad(idAccion, idActividad, idResponsable, fechaImplementacion,descripcion);
+    public int editarActividad(int idAccion, int idActividad, String descripcion, int idResponsable, Date fechaImplementacion, TipoActividad nuevoTipoActividad){
+        return cEdicion.editarActividad(idAccion, idActividad, idResponsable, fechaImplementacion,descripcion, nuevoTipoActividad);
     }
     
     /**

@@ -11,6 +11,7 @@ import com.dperez.maymweb.modelo.area.Area;
 import com.dperez.maymweb.modelo.codificacion.Codificacion;
 import com.dperez.maymweb.modelo.deteccion.Deteccion;
 import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.acciones.actividad.TipoActividad;
 import com.dperez.maymweb.modelo.fortaleza.Fortaleza;
 import com.dperez.maymweb.modelo.producto.Producto;
 import com.dperez.maymweb.modelo.usuario.Responsable;
@@ -183,17 +184,20 @@ public class ControladorEdicionRegistro {
      * @param idResponsable
      * @param fechaEstimada
      * @param descripcion
+     * @param nuevoTipoActividad
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
-    public int editarActividad(int idAccion, int idActividad, int idResponsable, Date fechaEstimada, String descripcion){
+    public int editarActividad(int idAccion, int idActividad, int idResponsable, Date fechaEstimada, String descripcion, TipoActividad nuevoTipoActividad){
         Accion accion = repoAccion.find(idAccion);
         Actividad actividad = accion.findActividad(idActividad);
         actividad.setDescripcion(descripcion);
         actividad.setFechaEstimadaImplementacion(fechaEstimada);
+        actividad.setTipoDeActividad(nuevoTipoActividad);
         if(actividad.getResponsableImplementacion().getId() != idResponsable){
             Responsable responsable = repoResponsable.find(idResponsable);
             actividad.setResponsableImplementacion(responsable);
         }
+        accion.cambiarEstado();
         return repoAccion.update(accion).getId();
     }
     
