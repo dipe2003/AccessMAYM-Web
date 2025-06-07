@@ -90,7 +90,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Acciones Corectivas 
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Acciones Correctivas 
                                                 <c:if test="#{perfilUsuario.correctivas.size()>0}">
                                                     <span class="badge" style="background-color: #ac2925"> #{perfilUsuario.correctivas.size()}</span>
                                                 </c:if>
@@ -138,33 +138,9 @@
                                                                     <td>
                                                                         #{accion.descripcion}
                                                                     </td>
-                                                                    <c:choose>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                            <td style="background-color: red; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                            <td style="background-color: green; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                            <td style="background-color: black; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                            <td style="background-color: #ff9900; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <td style="background-color: yellow; color: #ff9900">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                    <td class="estado-#{accion.estadoDeAccion}">
+                                                                        #{accion.estadoDeAccion.descripcion}
+                                                                    </td>
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>                                            
@@ -225,33 +201,9 @@
                                                                     <td>
                                                                         #{accion.descripcion}
                                                                     </td>
-                                                                    <c:choose>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                            <td style="background-color: red; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                            <td style="background-color: green; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                            <td style="background-color: black; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                            <td style="background-color: #ff9900; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <td style="background-color: yellow; color: #ff9900">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                    <td class="estado-#{accion.estadoDeAccion}">
+                                                                        #{accion.estadoDeAccion.descripcion}
+                                                                    </td>
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>                                            
@@ -312,34 +264,10 @@
                                                                     </td>
                                                                     <td>                                                                   
                                                                         #{accion.descripcion}                                                                    
-                                                                    </td>
-                                                                    <c:choose>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PENDIENTE'}">
-                                                                            <td style="background-color: red; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'CERRADA'}" >
-                                                                            <td style="background-color: green; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'DESESTIMADA'}" >
-                                                                            <td style="background-color: black; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:when test="#{accion.estadoDeAccion == 'PROCESO_IMP'}" >
-                                                                            <td style="background-color: #ff9900; color: white">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <td style="background-color: yellow; color: #ff9900">
-                                                                                #{accion.estadoDeAccion.descripcion}
-                                                                            </td>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                    </td>                                                                  
+                                                                    <td class="estado-#{accion.estadoDeAccion}">
+                                                                        #{accion.estadoDeAccion.descripcion}
+                                                                    </td>                                                                        
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>                                            
@@ -448,7 +376,7 @@
                                             <strong><label for="password_actual">Password Actual:</label></strong>  
                                             <h:inputSecret class="form-control" id="password_actual" p:placeholder="Password Actual" value="#{perfilUsuario.actualPassword}" 
                                                            required="true" requiredMessage="No se ingreso password actual."/>
-                                             <h:message for="password_actual" class="msj_error"/>
+                                            <h:message for="password_actual" class="msj_error"/>
                                         </div>
                                         <div>
                                             <strong><label for="nuevo_password">Nuevo Password:</label></strong>  
@@ -460,7 +388,7 @@
                                             <strong><label for="rep_nuevo_password">Repetir Nuevo Password:</label></strong>  
                                             <h:inputSecret class="form-control" id="rep_nuevo_password" p:placeholder="Repeticion de Nuevo Password" value="#{perfilUsuario.repNuevoPassword}" 
                                                            required="true" requiredMessage="No se ingreso repeticion de password."/>
-                                             <h:message for="rep_nuevo_password" class="msj_error"/>
+                                            <h:message for="rep_nuevo_password" class="msj_error"/>
                                         </div>
                                     </div>
 

@@ -203,7 +203,7 @@ public class ActividadesAccion implements Serializable {
      */
     public void guardarActividad() throws IOException {
         if (fDatos.editarActividad(AccionSeleccionada.getId(), IdActividadEditar, descripcion, responsable,
-                fechaEstimada) < 0) {
+                fechaEstimada, tipoDeActividad) < 0) {
             FacesContext.getCurrentInstance().addMessage("form_agregar_actividades:btn_agregar_actividad",
                     new FacesMessage(SEVERITY_FATAL, "No se pudo guardar la Actividad", "No se pudo guardar la Actividad"));
             FacesContext.getCurrentInstance().renderResponse();
