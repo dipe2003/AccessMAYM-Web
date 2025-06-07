@@ -184,6 +184,7 @@ public class ControladorEdicionRegistro {
      * @param idResponsable
      * @param fechaEstimada
      * @param descripcion
+     * @param nuevoTipoActividad
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
     public int editarActividad(int idAccion, int idActividad, int idResponsable, Date fechaEstimada, String descripcion, TipoActividad nuevoTipoActividad){

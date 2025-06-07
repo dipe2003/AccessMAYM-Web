@@ -161,6 +161,7 @@ public class FacadeDatos {
      * @param descripcion
      * @param idResponsable
      * @param fechaImplementacion
+     * @param nuevoTipoActividad
      * @return Retorna -1 si no se actualizo. Retorna el IdActividad si se actualizo.
      */
     public int editarActividad(int idAccion, int idActividad, String descripcion, int idResponsable, Date fechaImplementacion, TipoActividad nuevoTipoActividad){
