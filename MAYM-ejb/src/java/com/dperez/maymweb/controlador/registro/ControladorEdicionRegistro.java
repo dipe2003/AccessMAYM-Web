@@ -32,16 +32,14 @@ public class ControladorEdicionRegistro {
     private final RepositorioPersistencia<Responsable> repoResponsable;
     private final RepositorioPersistencia<Fortaleza> repoFortalezas;
     
-    private final FabricaRepositorio fabricaRepositorio = new FabricaRepositorio();
-    
     //  Constructores
     public ControladorEdicionRegistro(){
-        repoAccion = fabricaRepositorio.getRespositorioAcciones();
-        repoArea = fabricaRepositorio.getRepositorioAreas();
-        repoDeteccion = fabricaRepositorio.getRepositorioDetecciones();
-        repoCodificacion = fabricaRepositorio.getRepositorioCodificaciones();
-        repoResponsable = fabricaRepositorio.getRepositorioResponsables();
-        repoFortalezas = fabricaRepositorio.getRepositorioFortalezas();
+        repoAccion = FabricaRepositorio.getRespositorioAcciones();
+        repoArea = FabricaRepositorio.getRepositorioAreas();
+        repoDeteccion = FabricaRepositorio.getRepositorioDetecciones();
+        repoCodificacion = FabricaRepositorio.getRepositorioCodificaciones();
+        repoResponsable = FabricaRepositorio.getRepositorioResponsables();
+        repoFortalezas = FabricaRepositorio.getRepositorioFortalezas();
     }
     
     /*
@@ -53,6 +51,7 @@ public class ControladorEdicionRegistro {
      * @param idAccion
      * @param fechaDeteccion
      * @param descripcion
+     * @param referencias
      * @param analisisCausa
      * @param idAreaSector
      * @param idDeteccion

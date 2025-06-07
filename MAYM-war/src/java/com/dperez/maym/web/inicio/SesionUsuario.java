@@ -151,11 +151,18 @@ public class SesionUsuario implements Serializable {
         try {
             if (facadeMain.ComprobarValidezPassword(Integer.valueOf(UsuarioSeleccionado), PasswordUsuario)) {
                 Usuario usuario = fLectura.GetUsuario(Integer.valueOf(UsuarioSeleccionado));
-                request.getSession().setAttribute("Usuario", usuario);
+                if (!usuario.isVigente()) {
+                    context.addMessage("formlogin:usr", new FacesMessage(SEVERITY_FATAL, "Usuario no vigente", "El usuario no está habilitado."));
+                    context.renderResponse();
+                } else {
+                    request.getSession().setAttribute("Usuario", usuario);
 
-                this.UsuarioLogueado = usuario;
-                this.PasswordUsuario = new String();
-                context.getExternalContext().redirect(url);
+                    this.UsuarioLogueado = usuario;
+                    this.PasswordUsuario = new String();
+                    cargarColores();
+                    url = context.getExternalContext().getRequestContextPath();
+                    context.getExternalContext().redirect(url + "/index.xhtml");
+                }
             } else {
                 context.addMessage("formlogin:pwd", new FacesMessage(SEVERITY_FATAL, "No Existe Usuario", "Los datos del usuario no son correctos"));
                 context.renderResponse();
