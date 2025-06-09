@@ -733,6 +733,8 @@ public class ListarAcciones implements Serializable {
             List<Accion> accionesPlan = fLectura.listarAcciones().stream()
                     .filter(a -> a.getFechaDeteccion().equals(accionFiltrada.getFechaDeteccion()) && a.getDeteccionAccion() == accionFiltrada.getDeteccionAccion())
                     .collect(Collectors.toList());
+            
+            accionesPlan.sort(Comparator.comparing(a->a.getAreaAccion()));
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
             StringBuilder strTitulo = new StringBuilder();
             StringBuilder strIntroduccion = new StringBuilder();
