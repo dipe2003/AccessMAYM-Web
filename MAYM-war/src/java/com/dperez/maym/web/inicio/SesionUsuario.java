@@ -8,12 +8,15 @@ package com.dperez.maym.web.inicio;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.herramientas.IOPropiedades;
+import com.dperez.maymweb.modelo.acciones.Estado;
 import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -51,6 +54,13 @@ public class SesionUsuario implements Serializable {
 
     private Usuario UsuarioLogueado;
 
+    // Filtros
+    private List<String> filtrosAplicados;
+    private String[] areasSeleccionadas;
+    private String[] deteccionesSeleccionadas;
+    private Estado[] estadosSeleccionados;
+    private String[] codificacionesSeleccionadas;
+
     // Sesion
     // Geters
     public Usuario getUsuarioLogueado() {
@@ -61,6 +71,28 @@ public class SesionUsuario implements Serializable {
         return opsApariencia;
     }
 
+    public List<String> getFiltrosAplicados() {
+        return filtrosAplicados;
+    }
+
+    public String[] getAreasSeleccionadas() {
+        return areasSeleccionadas;
+    }
+
+    public String[] getDeteccionesSeleccionadas() {
+        return deteccionesSeleccionadas;
+    }
+
+    public Estado[] getEstadosSeleccionados() {
+        return estadosSeleccionados;
+    }
+
+    public String[] getCodificacionesSeleccionadas() {
+        return codificacionesSeleccionadas;
+    }
+    
+    
+
     // Setters
     public void setUsuarioLogueado(Usuario UsuarioLogueado) {
         this.UsuarioLogueado = UsuarioLogueado;
@@ -68,6 +100,26 @@ public class SesionUsuario implements Serializable {
 
     public void setOpsApariencia(OpcionesApariencia opsApariencia) {
         this.opsApariencia = opsApariencia;
+    }
+
+    public void setFiltrosAplicados(List<String> filtrosAplicados) {
+        this.filtrosAplicados = filtrosAplicados;
+    }
+
+    public void setAreasSeleccionadas(String[] areasSeleccionadas) {
+        this.areasSeleccionadas = areasSeleccionadas;
+    }
+
+    public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {
+        this.deteccionesSeleccionadas = deteccionesSeleccionadas;
+    }
+
+    public void setEstadosSeleccionados(Estado[] estadosSeleccionados) {
+        this.estadosSeleccionados = estadosSeleccionados;
+    }
+
+    public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {
+        this.codificacionesSeleccionadas = codificacionesSeleccionadas;
     }
 
     // Metodos
@@ -107,6 +159,8 @@ public class SesionUsuario implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+        filtrosAplicados = new ArrayList<>();
 
         fLectura = new FacadeLectura();
         facadeMain = new FacadeMain();
@@ -202,4 +256,18 @@ public class SesionUsuario implements Serializable {
     public void cargarEmpresa() {
         this.UsuarioLogueado.setEmpresaUsuario(fLectura.getEmpresa(this.UsuarioLogueado.getEmpresaUsuario().getId()));
     }
+
+    //<editor-fold desc="Filtros">
+    public void addFiltro(String filtro) {
+        filtrosAplicados.add(filtro);
+    }
+
+    public void removeFiltro(String filtro) {
+        filtrosAplicados.remove(filtro);
+    }
+
+    public boolean contieneFiltro(String filtro) {
+        return filtrosAplicados.contains(filtro);
+    }
+    //</editor-fold>
 }

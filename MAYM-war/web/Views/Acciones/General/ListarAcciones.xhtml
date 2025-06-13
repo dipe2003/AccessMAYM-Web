@@ -437,17 +437,7 @@
                                                                     <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                         <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
                                                                             <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}" />
-                                                                            <f:ajax execute="@this" event="valueChange" onevent="indicador" listener="#{listarAcciones.filtrarPorArea(event)}" 
-                                                                                    render="form_tabla_acciones 
-                                                                                    form_filtros:modal_aplicar_filtros_areas 
-                                                                                    form_filtros:panel_modal_filtros_areas 
-                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                    form_filtros:panel_modal_filtros_detecciones 
-                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                    form_filtros:panel_modal_filtros_codificaciones 
-                                                                                    form_filtros:modal_aplicar_filtros_estados 
-                                                                                    form_filtros:panel_modal_filtros_estados 
-                                                                                    listado-correctivas:panel_filtros"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador"/>
                                                                         </c:forEach>
                                                                     </h:selectManyListbox>
                                                                 </div>
@@ -460,8 +450,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.filtrarPorArea()}" value="Aplicar Filtro">
                                                     <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
                                                             form_filtros:modal_aplicar_filtros_areas 
                                                             form_filtros:panel_modal_filtros_areas 
@@ -474,7 +464,21 @@
                                                             listado-correctivas:panel_filtros"/>                                                                        
                                                 </h:commandLink>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-danger" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorArea()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                        
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
                                                     <f:ajax render="panel_modal_filtros_areas listado-correctivas:panel_filtros" />
                                                 </h:commandButton>
@@ -485,7 +489,6 @@
                             </h:panelGroup>
                         </div>
                     </div>
-
 
                     <!-- APLICAR FILTRO POR DETECCION -->
                     <div id="modal_aplicar_filtros_detecciones" class="modal fade" style="padding-top: 15%" role="dialog">
@@ -511,17 +514,7 @@
                                                                     <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                         <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
                                                                             <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorDeteccion(event)}" 
-                                                                                    render="form_tabla_acciones 
-                                                                                    form_filtros:modal_aplicar_filtros_areas 
-                                                                                    form_filtros:panel_modal_filtros_areas 
-                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                    form_filtros:panel_modal_filtros_detecciones 
-                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                    form_filtros:panel_modal_filtros_codificaciones 
-                                                                                    form_filtros:modal_aplicar_filtros_estados 
-                                                                                    form_filtros:panel_modal_filtros_estados 
-                                                                                    listado-correctivas:panel_filtros"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador" />
                                                                         </c:forEach>
                                                                     </h:selectManyListbox>
                                                                 </div>
@@ -534,8 +527,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.filtrarPorDeteccion()}" value="Aplicar Filtro">
                                                     <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
                                                             form_filtros:modal_aplicar_filtros_areas 
                                                             form_filtros:panel_modal_filtros_areas 
@@ -548,7 +541,21 @@
                                                             listado-correctivas:panel_filtros"/>                                                                          
                                                 </h:commandLink>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-danger" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorDeteccion()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                          
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
                                                     <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
                                                 </h:commandButton>
@@ -584,17 +591,7 @@
                                                                     <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
                                                                         <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
                                                                             <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorCodificacion(event)}" 
-                                                                                    render="form_tabla_acciones 
-                                                                                    form_filtros:modal_aplicar_filtros_areas 
-                                                                                    form_filtros:panel_modal_filtros_areas 
-                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                    form_filtros:panel_modal_filtros_detecciones 
-                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                    form_filtros:panel_modal_filtros_codificaciones 
-                                                                                    form_filtros:modal_aplicar_filtros_estados 
-                                                                                    form_filtros:panel_modal_filtros_estados 
-                                                                                    listado-correctivas:panel_filtros"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador"/>
                                                                         </c:forEach>
                                                                     </h:selectManyListbox>
                                                                 </div>
@@ -607,8 +604,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.filtrarPorCodificacion()}" value="Aplicar Filtro">
                                                     <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
                                                             form_filtros:modal_aplicar_filtros_areas 
                                                             form_filtros:panel_modal_filtros_areas 
@@ -621,7 +618,21 @@
                                                             listado-correctivas:panel_filtros"/>                                                                          
                                                 </h:commandLink>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-danger" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorCodificacion()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                          
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
                                                     <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
                                                 </h:commandButton>
@@ -657,17 +668,7 @@
                                                                     <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >
                                                                         <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
                                                                             <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador"  listener="#{listarAcciones.filtrarPorEstado(event)}" 
-                                                                                    render="form_tabla_acciones 
-                                                                                    form_filtros:modal_aplicar_filtros_areas 
-                                                                                    form_filtros:panel_modal_filtros_areas 
-                                                                                    form_filtros:modal_aplicar_filtros_detecciones 
-                                                                                    form_filtros:panel_modal_filtros_detecciones 
-                                                                                    form_filtros:modal_aplicar_filtros_codificaciones 
-                                                                                    form_filtros:panel_modal_filtros_codificaciones 
-                                                                                    form_filtros:modal_aplicar_filtros_estados 
-                                                                                    form_filtros:panel_modal_filtros_estados 
-                                                                                    listado-correctivas:panel_filtros"/>
+                                                                            <f:ajax execute="@this" event="change" onevent="indicador" />
                                                                         </c:forEach>
                                                                     </h:selectManyListbox>
                                                                 </div>
@@ -679,9 +680,9 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
+                                        <div class="row">                                            
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-primary" style="width: 99%;"  action="#{listarAcciones.filtrarPorEstado()}" value="Aplicar Filtro">
                                                     <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
                                                             form_filtros:modal_aplicar_filtros_areas 
                                                             form_filtros:panel_modal_filtros_areas 
@@ -694,7 +695,21 @@
                                                             listado-correctivas:panel_filtros"/>                                                                         
                                                 </h:commandLink>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-4">
+                                                <h:commandLink class="btn btn-danger" style="width: 99%;"  action="#{listarAcciones.quitarFiltroPorEstado()}" value="Quitar Filtro">
+                                                    <f:ajax delay="10" onevent="indicador" render="form_tabla_acciones 
+                                                            form_filtros:modal_aplicar_filtros_areas 
+                                                            form_filtros:panel_modal_filtros_areas 
+                                                            form_filtros:modal_aplicar_filtros_detecciones 
+                                                            form_filtros:panel_modal_filtros_detecciones 
+                                                            form_filtros:modal_aplicar_filtros_codificaciones 
+                                                            form_filtros:panel_modal_filtros_codificaciones 
+                                                            form_filtros:modal_aplicar_filtros_estados 
+                                                            form_filtros:panel_modal_filtros_estados 
+                                                            listado-correctivas:panel_filtros"/>                                                                         
+                                                </h:commandLink>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <h:commandButton class="btn btn-default" style="width: 99%;" p:data-dismiss="modal" value="Cerrar">
                                                     <f:ajax render="panel_modal_filtros_detecciones listado-correctivas:panel_filtros" />
                                                 </h:commandButton>
