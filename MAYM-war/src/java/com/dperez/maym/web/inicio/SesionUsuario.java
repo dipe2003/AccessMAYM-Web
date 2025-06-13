@@ -10,11 +10,14 @@ import com.dperez.maym.web.herramientas.ManejadorPropiedades;
 import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.herramientas.IOPropiedades;
+import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -51,7 +54,15 @@ public class SesionUsuario implements Serializable {
     private String NombreUsuario;
     private Map<Integer, Usuario> Usuarios;
 
-    private Usuario UsuarioLogueado;    
+    private Usuario UsuarioLogueado;  
+    
+     // Filtros
+    private List<String> filtrosAplicados;
+    private String[] areasSeleccionadas;
+    private String[] deteccionesSeleccionadas;
+    private Estado[] estadosSeleccionados;
+    private String[] codificacionesSeleccionadas;
+    private TipoAccion tipoAccionListada;
 
     // Sesion
     // Geters
@@ -91,6 +102,30 @@ public class SesionUsuario implements Serializable {
         this.empresa = empresa;
     }
 
+    public List<String> getFiltrosAplicados() {
+        return filtrosAplicados;
+    }
+
+    public String[] getAreasSeleccionadas() {
+        return areasSeleccionadas;
+    }
+
+    public String[] getDeteccionesSeleccionadas() {
+        return deteccionesSeleccionadas;
+    }
+
+    public Estado[] getEstadosSeleccionados() {
+        return estadosSeleccionados;
+    }
+
+    public String[] getCodificacionesSeleccionadas() {
+        return codificacionesSeleccionadas;
+    }
+
+    public TipoAccion getTipoAccionListada() {
+        return tipoAccionListada;
+    }
+
     //  Setters
     public void setUsuarioSeleccionado(String UsuarioSeleccionado) {
         this.UsuarioSeleccionado = UsuarioSeleccionado;
@@ -102,6 +137,30 @@ public class SesionUsuario implements Serializable {
 
     public void setNombreUsuario(String NombreUsuario) {
         this.NombreUsuario = NombreUsuario;
+    }
+
+    public void setFiltrosAplicados(List<String> filtrosAplicados) {
+        this.filtrosAplicados = filtrosAplicados;
+    }
+
+    public void setAreasSeleccionadas(String[] areasSeleccionadas) {
+        this.areasSeleccionadas = areasSeleccionadas;
+    }
+
+    public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {
+        this.deteccionesSeleccionadas = deteccionesSeleccionadas;
+    }
+
+    public void setEstadosSeleccionados(Estado[] estadosSeleccionados) {
+        this.estadosSeleccionados = estadosSeleccionados;
+    }
+
+    public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {
+        this.codificacionesSeleccionadas = codificacionesSeleccionadas;
+    }
+
+    public void setTipoAccionListada(TipoAccion tipoAccionListada) {
+        this.tipoAccionListada = tipoAccionListada;
     }
 
     //  Metodos
@@ -230,4 +289,18 @@ public class SesionUsuario implements Serializable {
             context.renderResponse();
         }
     }
+    
+    //<editor-fold desc="Filtros">
+    public void addFiltro(String filtro) {
+        filtrosAplicados.add(filtro);
+    }
+
+    public void removeFiltro(String filtro) {
+        filtrosAplicados.remove(filtro);
+    }
+
+    public boolean contieneFiltro(String filtro) {
+        return filtrosAplicados.contains(filtro);
+    }
+    //</editor-fold>
 }
