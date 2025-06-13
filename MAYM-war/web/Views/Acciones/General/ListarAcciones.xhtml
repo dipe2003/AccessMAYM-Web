@@ -26,7 +26,7 @@
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapseFiltroExportar" class="panel-collapse collapse">
+                                        <div id="collapseFiltroExportar" class="panel-collapse #{sesionUsuario.filtrosAplicados.size()>0?'collapse in':'collapse'}">
                                             <div class="table-responsive-sm">
                                                 <h:panelGroup id="panel_filtros" >
                                                     <table class="table table-hover">                        
