@@ -9,6 +9,7 @@ import com.dperez.maymweb.facades.FacadeLectura;
 import com.dperez.maymweb.facades.FacadeMain;
 import com.dperez.maymweb.herramientas.IOPropiedades;
 import com.dperez.maymweb.modelo.acciones.Estado;
+import com.dperez.maymweb.modelo.acciones.TipoAccion;
 import com.dperez.maymweb.modelo.empresa.OpcionesApariencia;
 import com.dperez.maymweb.modelo.usuario.Usuario;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class SesionUsuario implements Serializable {
     private String[] deteccionesSeleccionadas;
     private Estado[] estadosSeleccionados;
     private String[] codificacionesSeleccionadas;
+    private TipoAccion tipoAccionListada;
 
     // Sesion
     // Geters
@@ -90,8 +92,10 @@ public class SesionUsuario implements Serializable {
     public String[] getCodificacionesSeleccionadas() {
         return codificacionesSeleccionadas;
     }
-    
-    
+
+    public TipoAccion getTipoAccionListada() {
+        return tipoAccionListada;
+    }       
 
     // Setters
     public void setUsuarioLogueado(Usuario UsuarioLogueado) {
@@ -122,6 +126,10 @@ public class SesionUsuario implements Serializable {
         this.codificacionesSeleccionadas = codificacionesSeleccionadas;
     }
 
+    public void setTipoAccionListada(TipoAccion tipoAccionListada) {
+        this.tipoAccionListada = tipoAccionListada;
+    }
+    
     // Metodos
     public Date getFechaActual() {
         return new Date();

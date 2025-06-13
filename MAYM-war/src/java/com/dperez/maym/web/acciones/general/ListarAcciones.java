@@ -634,8 +634,18 @@ public class ListarAcciones implements Serializable {
                 esBusqueda = true;
             }
         } else {
-            boolean conFiltros = !sesionUsuario.getFiltrosAplicados().isEmpty();
-            cambiarPagina(conFiltros, PaginaActual);
+            if (!sesionUsuario.getFiltrosAplicados().isEmpty()) {
+                if (tipoDeAccion == sesionUsuario.getTipoAccionListada()) {
+                    cambiarPagina(true, PaginaActual);
+                } else {
+                    sesionUsuario.getFiltrosAplicados().clear();
+                    sesionUsuario.setTipoAccionListada(tipoDeAccion);
+                    cambiarPagina(false, PaginaActual);
+                }
+            } else {
+                sesionUsuario.setTipoAccionListada(tipoDeAccion);
+                cambiarPagina(false, PaginaActual);
+            }
         }
     }
 
