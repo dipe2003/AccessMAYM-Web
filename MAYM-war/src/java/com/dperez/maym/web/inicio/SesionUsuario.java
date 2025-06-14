@@ -56,12 +56,7 @@ public class SesionUsuario implements Serializable {
     private Usuario UsuarioLogueado;
 
     // Filtros
-    private List<String> filtrosAplicados;
-    private String[] areasSeleccionadas;
-    private String[] deteccionesSeleccionadas;
-    private Estado[] estadosSeleccionados;
-    private String[] codificacionesSeleccionadas;
-    private TipoAccion tipoAccionListada;
+   
 
     // Sesion
     // Geters
@@ -71,31 +66,7 @@ public class SesionUsuario implements Serializable {
 
     public OpcionesApariencia getOpsApariencia() {
         return opsApariencia;
-    }
-
-    public List<String> getFiltrosAplicados() {
-        return filtrosAplicados;
-    }
-
-    public String[] getAreasSeleccionadas() {
-        return areasSeleccionadas;
-    }
-
-    public String[] getDeteccionesSeleccionadas() {
-        return deteccionesSeleccionadas;
-    }
-
-    public Estado[] getEstadosSeleccionados() {
-        return estadosSeleccionados;
-    }
-
-    public String[] getCodificacionesSeleccionadas() {
-        return codificacionesSeleccionadas;
-    }
-
-    public TipoAccion getTipoAccionListada() {
-        return tipoAccionListada;
-    }       
+    }         
 
     // Setters
     public void setUsuarioLogueado(Usuario UsuarioLogueado) {
@@ -104,31 +75,7 @@ public class SesionUsuario implements Serializable {
 
     public void setOpsApariencia(OpcionesApariencia opsApariencia) {
         this.opsApariencia = opsApariencia;
-    }
-
-    public void setFiltrosAplicados(List<String> filtrosAplicados) {
-        this.filtrosAplicados = filtrosAplicados;
-    }
-
-    public void setAreasSeleccionadas(String[] areasSeleccionadas) {
-        this.areasSeleccionadas = areasSeleccionadas;
-    }
-
-    public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {
-        this.deteccionesSeleccionadas = deteccionesSeleccionadas;
-    }
-
-    public void setEstadosSeleccionados(Estado[] estadosSeleccionados) {
-        this.estadosSeleccionados = estadosSeleccionados;
-    }
-
-    public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {
-        this.codificacionesSeleccionadas = codificacionesSeleccionadas;
-    }
-
-    public void setTipoAccionListada(TipoAccion tipoAccionListada) {
-        this.tipoAccionListada = tipoAccionListada;
-    }
+    }   
     
     // Metodos
     public Date getFechaActual() {
@@ -168,7 +115,7 @@ public class SesionUsuario implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-        filtrosAplicados = new ArrayList<>();
+        
 
         fLectura = new FacadeLectura();
         facadeMain = new FacadeMain();
@@ -265,17 +212,5 @@ public class SesionUsuario implements Serializable {
         this.UsuarioLogueado.setEmpresaUsuario(fLectura.getEmpresa(this.UsuarioLogueado.getEmpresaUsuario().getId()));
     }
 
-    //<editor-fold desc="Filtros">
-    public void addFiltro(String filtro) {
-        filtrosAplicados.add(filtro);
-    }
-
-    public void removeFiltro(String filtro) {
-        filtrosAplicados.remove(filtro);
-    }
-
-    public boolean contieneFiltro(String filtro) {
-        return filtrosAplicados.contains(filtro);
-    }
-    //</editor-fold>
+    
 }

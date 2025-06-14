@@ -30,8 +30,8 @@
                                                     </a>
                                                 </h4>
                                             </div>
-                                           
-                                            <div id="collapseFiltroExportar" class="panel-collapse #{sesionUsuario.filtrosAplicados.size()>0?'collapse in':'collapse'}">
+
+                                            <div id="collapseFiltroExportar" class="panel-collapse #{datosFiltros.filtrosAplicados.size()>0?'collapse in':'collapse'}">
                                                 <div class="table-responsive-sm">
                                                     <h:panelGroup id="panel_filtros" >
                                                         <table class="table table-hover">                        
@@ -428,21 +428,20 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body">
+                                                    <div class="panel-body" style="height:200px;overflow-y: scroll" >
                                                         <div class="table-responsive-sm">
-                                                            <h:panelGroup id="drop-filtro-areas">
+                                                            <h:panelGrid id="drop-filtro-areas" >
                                                                 <div>
                                                                     <label for="areas-disponibles">Areas Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyListbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                        <c:forEach var="entry" items="#{listarAcciones.areasEnRegistros}" >
-                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}" />
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador"/>
-                                                                        </c:forEach>
-                                                                    </h:selectManyListbox>
+                                                                    <h:selectManyCheckbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px; " 
+                                                                                          layout="pageDirection">
+                                                                        <f:selectItems var="entry" value="#{listarAcciones.areasEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}" />
+                                                                        <f:ajax execute="@this" event="change" />
+                                                                    </h:selectManyCheckbox>
                                                                 </div>
-                                                            </h:panelGroup>
+                                                            </h:panelGrid>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -505,19 +504,17 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body">
+                                                    <div class="panel-body" style="height:200px;overflow-y: scroll">
                                                         <div class="table-responsive-sm">
                                                             <h:panelGroup id="drop-filtro-detecciones">
                                                                 <div>
                                                                     <label for="detecciones-disponibles">Detecciones Disponibles</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyListbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                        <c:forEach var="entry" items="#{listarAcciones.deteccionesEnRegistros}" >
-                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador" />
-                                                                        </c:forEach>
-                                                                    </h:selectManyListbox>
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection">                                                                    
+                                                                        <f:selectItems var="entry" value="#{listarAcciones.deteccionesEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
+                                                                        <f:ajax execute="@this" event="change"  />
+                                                                    </h:selectManyCheckbox>
                                                                 </div>
                                                             </h:panelGroup>
                                                         </div>
@@ -582,19 +579,17 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body">
+                                                    <div class="panel-body" style="height:200px;overflow-y: scroll">
                                                         <div class="table-responsive-sm">
                                                             <h:panelGroup id="drop-filtro-codificaciones">
                                                                 <div>
                                                                     <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyListbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                        <c:forEach var="entry" items="#{listarAcciones.codificacionesEnRegistros}" >
-                                                                            <f:selectItem itemLabel="#{entry.nombre}" itemValue="#{entry.id}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador"/>
-                                                                        </c:forEach>
-                                                                    </h:selectManyListbox>
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection" >                                                                        
+                                                                        <f:selectItems value="#{listarAcciones.codificacionesEnRegistros}" var="entry" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
+                                                                        <f:ajax execute="@this" event="change" />                                                                       
+                                                                    </h:selectManyCheckbox>
                                                                 </div>
                                                             </h:panelGroup>
                                                         </div>
@@ -661,17 +656,15 @@
                                                 <div class="panel panel-primary">
                                                     <div class="panel-body">
                                                         <div class="table-responsive-sm">
-                                                            <h:panelGroup id="drop-filtro-estados">
+                                                            <h:panelGroup id="drop-filtro-estados" >
                                                                 <div>
                                                                     <label for="estados-disponibles">Estados Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyListbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" >
-                                                                        <c:forEach var="entry" items="#{listarAcciones.estadosEnRegistros}" >
-                                                                            <f:selectItem itemLabel="#{entry.descripcion}" itemValue="#{entry}"/>
-                                                                            <f:ajax execute="@this" event="change" onevent="indicador" />
-                                                                        </c:forEach>
-                                                                    </h:selectManyListbox>
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection"  >
+                                                                        <f:selectItems var="entry" value="#{listarAcciones.estadosEnRegistros}" itemLabel=" #{entry.descripcion}" itemValue="#{entry}"/>
+                                                                        <f:ajax execute="@this" event="change"  />
+                                                                    </h:selectManyCheckbox>
                                                                 </div>
                                                             </h:panelGroup>
                                                         </div>

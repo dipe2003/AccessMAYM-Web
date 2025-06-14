@@ -131,8 +131,8 @@ public class ListarAcciones implements Serializable {
     }
 
     public void filtrarPorFecha(AjaxBehaviorEvent event) {
-        if (!sesionUsuario.contieneFiltro("fechas")) {
-            sesionUsuario.addFiltro("fechas");
+        if (!filtros.contieneFiltro("fechas")) {
+            filtros.addFiltro("fechas");
         }
         FiltrarAcciones();
     }
@@ -147,7 +147,7 @@ public class ListarAcciones implements Serializable {
      * @return
      */
     private List<Accion> filtrarPorArea(List<Accion> accionesAFiltrar) {
-        return filtros.FiltrarAccionesPorArea(accionesAFiltrar, ObtenerIdsSeleccionados(sesionUsuario.getAreasSeleccionadas()));
+        return filtros.FiltrarAccionesPorArea(accionesAFiltrar, ObtenerIdsSeleccionados(filtros.getAreasSeleccionadas()));
     }
 
     /**
@@ -155,7 +155,7 @@ public class ListarAcciones implements Serializable {
      * nuevamente.
      */
     public void quitarFiltroPorArea() {
-        sesionUsuario.removeFiltro("areas");
+        filtros.removeFiltro("areas");
         ResetListasAreas();
         FiltrarAcciones();
     }
@@ -165,15 +165,15 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasAreas() {
         areasEnRegistros = filtros.ExtraerAreas((List<Accion>) (List<?>) ListaCompletaAcciones);
-        sesionUsuario.setAreasSeleccionadas(new String[areasEnRegistros.size()]);
+        filtros.setAreasSeleccionadas(new String[areasEnRegistros.size()]);
         for (int i = 0; i < areasEnRegistros.size(); i++) {
-            sesionUsuario.getAreasSeleccionadas()[i] = areasEnRegistros.get(i).getNombre();
+            filtros.getAreasSeleccionadas()[i] = areasEnRegistros.get(i).getNombre();
         }
     }
 
     public void filtrarPorArea() {
-        if (!sesionUsuario.contieneFiltro("areas")) {
-            sesionUsuario.addFiltro("areas");
+        if (!filtros.contieneFiltro("areas")) {
+            filtros.addFiltro("areas");
         }
         FiltrarAcciones();
     }
@@ -189,7 +189,7 @@ public class ListarAcciones implements Serializable {
      * @return
      */
     private List<Accion> filtrarPorDeteccion(List<Accion> accionesAFiltrar) {
-        return filtros.FiltrarAccionesPorDeteccion(accionesAFiltrar, ObtenerIdsSeleccionados(sesionUsuario.getDeteccionesSeleccionadas()));
+        return filtros.FiltrarAccionesPorDeteccion(accionesAFiltrar, ObtenerIdsSeleccionados(filtros.getDeteccionesSeleccionadas()));
     }
 
     /**
@@ -197,7 +197,7 @@ public class ListarAcciones implements Serializable {
      * nuevamente.
      */
     public void quitarFiltroPorDeteccion() {
-        sesionUsuario.removeFiltro("detecciones");
+        filtros.removeFiltro("detecciones");
         ResetListasDeteccion();
         FiltrarAcciones();
     }
@@ -207,15 +207,15 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasDeteccion() {
         deteccionesEnRegistros = filtros.ExtraerDetecciones((List<Accion>) (List<?>) ListaCompletaAcciones);
-        sesionUsuario.setDeteccionesSeleccionadas(new String[deteccionesEnRegistros.size()]);
+        filtros.setDeteccionesSeleccionadas(new String[deteccionesEnRegistros.size()]);
         for (int i = 0; i < deteccionesEnRegistros.size(); i++) {
-            sesionUsuario.getDeteccionesSeleccionadas()[i] = deteccionesEnRegistros.get(i).getNombre();
+            filtros.getDeteccionesSeleccionadas()[i] = deteccionesEnRegistros.get(i).getNombre();
         }
     }
 
     public void filtrarPorDeteccion() {
-        if (!sesionUsuario.contieneFiltro("detecciones")) {
-            sesionUsuario.addFiltro("detecciones");
+        if (!filtros.contieneFiltro("detecciones")) {
+            filtros.addFiltro("detecciones");
         }
         FiltrarAcciones();
     }
@@ -231,7 +231,7 @@ public class ListarAcciones implements Serializable {
      * @return
      */
     private List<Accion> filtrarPorCodificacion(List<Accion> accionesAFiltrar) {
-        return filtros.FiltrarAccionesPorCodificacion(accionesAFiltrar, ObtenerIdsSeleccionados(sesionUsuario.getCodificacionesSeleccionadas()));
+        return filtros.FiltrarAccionesPorCodificacion(accionesAFiltrar, ObtenerIdsSeleccionados(filtros.getCodificacionesSeleccionadas()));
     }
 
     /**
@@ -239,7 +239,7 @@ public class ListarAcciones implements Serializable {
      * nuevamente.
      */
     public void quitarFiltroPorCodificacion() {
-        sesionUsuario.removeFiltro("codificaciones");
+        filtros.removeFiltro("codificaciones");
         ResetListasCodificacion();
         FiltrarAcciones();
     }
@@ -249,15 +249,15 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasCodificacion() {
         codificacionesEnRegistros = filtros.ExtraerCodificaciones(ListaCompletaAcciones);
-        sesionUsuario.setCodificacionesSeleccionadas(new String[codificacionesEnRegistros.size()]);
+        filtros.setCodificacionesSeleccionadas(new String[codificacionesEnRegistros.size()]);
         for (int i = 0; i < codificacionesEnRegistros.size(); i++) {
-            sesionUsuario.getCodificacionesSeleccionadas()[i] = codificacionesEnRegistros.get(i).getNombre();
+            filtros.getCodificacionesSeleccionadas()[i] = codificacionesEnRegistros.get(i).getNombre();
         }
     }
 
     public void filtrarPorCodificacion() {
-        if (!sesionUsuario.contieneFiltro("codificaciones")) {
-            sesionUsuario.addFiltro("codificaciones");
+        if (!filtros.contieneFiltro("codificaciones")) {
+            filtros.addFiltro("codificaciones");
         }
         FiltrarAcciones();
     }
@@ -273,7 +273,7 @@ public class ListarAcciones implements Serializable {
      * @return
      */
     private List<Accion> filtrarPorEstado(List<Accion> accionesAFiltrar) {
-        return filtros.FiltrarAccionesPorEstado(accionesAFiltrar, Arrays.asList(sesionUsuario.getEstadosSeleccionados()));
+        return filtros.FiltrarAccionesPorEstado(accionesAFiltrar, Arrays.asList(filtros.getEstadosSeleccionados()));
     }
 
     /**
@@ -281,7 +281,7 @@ public class ListarAcciones implements Serializable {
      * nuevamente.
      */
     public void quitarFiltroPorEstado() {
-        sesionUsuario.removeFiltro("estados");
+        filtros.removeFiltro("estados");
         ResetListasEstado();
         FiltrarAcciones();
     }
@@ -291,12 +291,12 @@ public class ListarAcciones implements Serializable {
      */
     private void ResetListasEstado() {
         estadosEnRegistros = Estado.values();
-        sesionUsuario.setEstadosSeleccionados(estadosEnRegistros);
+        filtros.setEstadosSeleccionados(estadosEnRegistros);
     }
 
     public void filtrarPorEstado() {
-        if (!sesionUsuario.contieneFiltro("estados")) {
-            sesionUsuario.addFiltro("estados");
+        if (!filtros.contieneFiltro("estados")) {
+            filtros.addFiltro("estados");
         }
         FiltrarAcciones();
     }
@@ -313,14 +313,14 @@ public class ListarAcciones implements Serializable {
     }
 
     public void quitarFiltroTexto() {
-        sesionUsuario.removeFiltro("busqueda");
+        filtros.removeFiltro("busqueda");
         FiltrarAcciones();
     }
 
     public void filtrarTexto() {
         if (textoBusqueda != null && !textoBusqueda.isEmpty()) {
-            if (!sesionUsuario.contieneFiltro("busqueda")) {
-                sesionUsuario.addFiltro("busqueda");
+            if (!filtros.contieneFiltro("busqueda")) {
+                filtros.addFiltro("busqueda");
             }
             FiltrarAcciones();
         }
@@ -336,8 +336,9 @@ public class ListarAcciones implements Serializable {
     private void FiltrarAcciones() {
         List<Accion> accionesFiltradas = ListaCompletaAcciones;
         if (!accionesFiltradas.isEmpty()) {
-            for (int i = 0; i < sesionUsuario.getFiltrosAplicados().size(); i++) {
-                String filtro = sesionUsuario.getFiltrosAplicados().get(i);
+            int totalFiltros = filtros.getFiltrosAplicados().size();
+            for (int i = 0; i < totalFiltros; i++) {
+                String filtro = filtros.getFiltrosAplicados().get(i);
                 switch (filtro) {
                     case "fechas" -> {
                         // aplicar filtro de fechas
@@ -403,19 +404,19 @@ public class ListarAcciones implements Serializable {
     }
 
     public String[] getAreasSeleccionadas() {
-        return sesionUsuario.getAreasSeleccionadas();
+        return filtros.getAreasSeleccionadas();
     }
 
     public String[] getDeteccionesSeleccionadas() {
-        return sesionUsuario.getDeteccionesSeleccionadas();
+        return filtros.getDeteccionesSeleccionadas();
     }
 
     public Estado[] getEstadosSeleccionados() {
-        return sesionUsuario.getEstadosSeleccionados();
+        return filtros.getEstadosSeleccionados();
     }
 
     public String[] getCodificacionesSeleccionadas() {
-        return sesionUsuario.getCodificacionesSeleccionadas();
+        return filtros.getCodificacionesSeleccionadas();
     }
 
     public Date getFechaInicial() {
@@ -461,7 +462,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public List<String> getFiltrosAplicados() {
-        return sesionUsuario.getFiltrosAplicados();
+        return filtros.getFiltrosAplicados();
     }
 
     //</editor-fold>
@@ -487,19 +488,19 @@ public class ListarAcciones implements Serializable {
     }
 
     public void setAreasSeleccionadas(String[] areasSeleccionadas) {
-        this.sesionUsuario.setAreasSeleccionadas(areasSeleccionadas);
+        filtros.setAreasSeleccionadas(areasSeleccionadas);
     }
 
     public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {
-        sesionUsuario.setDeteccionesSeleccionadas(deteccionesSeleccionadas);
+        filtros.setDeteccionesSeleccionadas(deteccionesSeleccionadas);
     }
 
     public void setEstadosSeleccionados(Estado[] estadosSeleccionados) {
-        sesionUsuario.setEstadosSeleccionados(estadosSeleccionados);
+        filtros.setEstadosSeleccionados(estadosSeleccionados);
     }
 
     public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {
-        sesionUsuario.setCodificacionesSeleccionadas(codificacionesSeleccionadas);
+        filtros.setCodificacionesSeleccionadas(codificacionesSeleccionadas);
     }
 
     public void setFechaInicial(Date fechaInicial) {
@@ -545,7 +546,7 @@ public class ListarAcciones implements Serializable {
     }
 
     public void setFiltrosAplicados(List<String> filtrosAplicados) {
-        this.sesionUsuario.setFiltrosAplicados(filtrosAplicados);
+        filtros.setFiltrosAplicados(filtrosAplicados);
     }
 
     //</editor-fold>
@@ -572,12 +573,12 @@ public class ListarAcciones implements Serializable {
     }
 
     public void quitarFiltros() {
-        sesionUsuario.removeFiltro("estados");
-        sesionUsuario.removeFiltro("codificaciones");
-        sesionUsuario.removeFiltro("detecciones");
-        sesionUsuario.removeFiltro("areas");
-        sesionUsuario.removeFiltro("busqueda");
-        sesionUsuario.removeFiltro("fechas");
+        filtros.removeFiltro("estados");
+        filtros.removeFiltro("codificaciones");
+        filtros.removeFiltro("detecciones");
+        filtros.removeFiltro("areas");
+        filtros.removeFiltro("busqueda");
+        filtros.removeFiltro("fechas");
 
         ResetFechasAcciones();
         ResetListasAreas();
@@ -634,16 +635,16 @@ public class ListarAcciones implements Serializable {
                 esBusqueda = true;
             }
         } else {
-            if (!sesionUsuario.getFiltrosAplicados().isEmpty()) {
-                if (tipoDeAccion == sesionUsuario.getTipoAccionListada()) {
+            if (!filtros.getFiltrosAplicados().isEmpty()) {
+                if (tipoDeAccion == filtros.getTipoAccionListada()) {
                     cambiarPagina(true, PaginaActual);
                 } else {
-                    sesionUsuario.getFiltrosAplicados().clear();
-                    sesionUsuario.setTipoAccionListada(tipoDeAccion);
+                    filtros.getFiltrosAplicados().clear();
+                    filtros.setTipoAccionListada(tipoDeAccion);
                     cambiarPagina(false, PaginaActual);
                 }
             } else {
-                sesionUsuario.setTipoAccionListada(tipoDeAccion);
+                filtros.setTipoAccionListada(tipoDeAccion);
                 cambiarPagina(false, PaginaActual);
             }
         }
@@ -782,7 +783,7 @@ public class ListarAcciones implements Serializable {
 
     private List<Accion> obtenerAccionesParaExportar() {
         List<Accion> accionesFiltradas = ListaCompletaAcciones;
-        for (String filtro : sesionUsuario.getFiltrosAplicados()) {
+        for (String filtro : filtros.getFiltrosAplicados()) {
             switch (filtro) {
                 case "estados" ->
                     accionesFiltradas = filtrarPorEstado(accionesFiltradas);

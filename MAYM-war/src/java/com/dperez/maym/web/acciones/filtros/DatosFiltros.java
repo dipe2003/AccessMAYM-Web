@@ -19,15 +19,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
  *
  * @author dipe2
  */
-@ViewScoped
+@SessionScoped
 @Named
 public class DatosFiltros implements Serializable {
 
@@ -43,14 +43,76 @@ public class DatosFiltros implements Serializable {
         this.idAccionBuscada = idAccionBuscada;
     }
 
+    private List<String> filtrosAplicados;
+    private String[] areasSeleccionadas;
+    private String[] deteccionesSeleccionadas;
+    private Estado[] estadosSeleccionados;
+    private String[] codificacionesSeleccionadas;
+    private TipoAccion tipoAccionListada;
+
     public DatosFiltros() {
         fLectura = new FacadeLectura();
+        filtrosAplicados = new ArrayList<>();
     }
 
     public void init() {
         fLectura = new FacadeLectura();
+        filtrosAplicados = new ArrayList<>();
     }
 
+    //<editor-fold desc="Getters">
+    public List<String> getFiltrosAplicados() {
+        return filtrosAplicados;
+    }
+
+    public String[] getAreasSeleccionadas() {
+        return areasSeleccionadas;
+    }
+
+    public String[] getDeteccionesSeleccionadas() {
+        return deteccionesSeleccionadas;
+    }
+
+    public Estado[] getEstadosSeleccionados() {
+        return estadosSeleccionados;
+    }
+
+    public String[] getCodificacionesSeleccionadas() {
+        return codificacionesSeleccionadas;
+    }
+
+    public TipoAccion getTipoAccionListada() {
+        return tipoAccionListada;
+    }
+
+    //</editor-fold>
+    //<editor-fold desc="Setters">
+    public void setFiltrosAplicados(List<String> filtrosAplicados) {
+        this.filtrosAplicados = filtrosAplicados;
+
+    }
+
+    public void setAreasSeleccionadas(String[] areasSeleccionadas) {
+        this.areasSeleccionadas = areasSeleccionadas;
+    }
+
+    public void setDeteccionesSeleccionadas(String[] deteccionesSeleccionadas) {
+        this.deteccionesSeleccionadas = deteccionesSeleccionadas;
+    }
+
+    public void setEstadosSeleccionados(Estado[] estadosSeleccionados) {
+        this.estadosSeleccionados = estadosSeleccionados;
+    }
+
+    public void setCodificacionesSeleccionadas(String[] codificacionesSeleccionadas) {
+        this.codificacionesSeleccionadas = codificacionesSeleccionadas;
+    }
+
+    public void setTipoAccionListada(TipoAccion tipoAccionListada) {
+        this.tipoAccionListada = tipoAccionListada;
+    }
+
+    //</editor-fold>
     //**********************************************************************
     // Metodos de buscar Id
     //**********************************************************************
@@ -63,7 +125,6 @@ public class DatosFiltros implements Serializable {
         }
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect(url + "/Views/Acciones/General/ListarAcciones.xhtml?tipo=" + tipoDefault + "&buscarid=" + idAccionBuscada);
-
     }
     //**********************************************************************
     // Metodos de filtro de Fechas
@@ -97,8 +158,8 @@ public class DatosFiltros implements Serializable {
      */
     public List<Accion> FiltrarAccionesPorFechas(List<Accion> acciones, Date fechaDesde, Date fechaHasta) {
         return acciones.stream()
-                .filter((accion) -> ((accion.getFechaDeteccion().equals(fechaDesde) || accion.getFechaDeteccion().after(fechaDesde)) && 
-                        (accion.getFechaDeteccion().equals(fechaHasta) || accion.getFechaDeteccion().before(fechaHasta))))
+                .filter((accion) -> ((accion.getFechaDeteccion().equals(fechaDesde) || accion.getFechaDeteccion().after(fechaDesde))
+                && (accion.getFechaDeteccion().equals(fechaHasta) || accion.getFechaDeteccion().before(fechaHasta))))
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -185,7 +246,7 @@ public class DatosFiltros implements Serializable {
      * @param acciones
      * @return
      */
-    public  List<Codificacion> ExtraerCodificaciones(List<Accion> acciones) {
+    public List<Codificacion> ExtraerCodificaciones(List<Accion> acciones) {
         List<Codificacion> codificaciones = new ArrayList<>();
         if (!acciones.isEmpty()) {
             acciones.stream()
@@ -259,4 +320,18 @@ public class DatosFiltros implements Serializable {
                 .filter((elemento) -> elemento.getTextoFiltrable().contains(texto.toLowerCase()))
                 .collect(Collectors.toList());
     }
+    
+    //<editor-fold desc="Metodos Filtros de Aplicados">
+    public void addFiltro(String filtro) {
+        filtrosAplicados.add(filtro);
+    }
+
+    public void removeFiltro(String filtro) {
+        filtrosAplicados.remove(filtro);
+    }
+
+    public boolean contieneFiltro(String filtro) {
+        return filtrosAplicados.contains(filtro);
+    }
+    //</editor-fold>
 }
