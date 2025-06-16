@@ -155,6 +155,16 @@ public class FacadeDatos {
     }
     
     /**
+     * Actualiza Analisis de Causa en la base de datos.
+     * @param idAccion
+     * @param analisisCausa
+     * @return -1 si no se actualizo.
+     */
+    public int guardarAnalisisCausa(int idAccion, String analisisCausa){
+        return cEdicion.guardarAnalisisCausa(idAccion, analisisCausa);
+    }
+    
+    /**
      * Actualiza la actividad en la base de datos.
      * @param idAccion
      * @param idActividad

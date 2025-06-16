@@ -83,6 +83,18 @@ public class ControladorEdicionRegistro {
     }
     
     /**
+     * Actualiza Analisis de Causa
+     * @param idAccion
+     * @param analisisCausa
+     * @return 
+     */
+     public int guardarAnalisisCausa(int idAccion, String analisisCausa){
+        Accion accion = repoAccion.find(idAccion);
+        accion.setAnalisisCausa(analisisCausa);
+        return repoAccion.update(accion).getId();
+    }
+    
+    /**
      * Elimina la accion seleccionada.
      * @param idAccion
      * @return return Retorna -1 si no se elimino. Retorna el id de la accion eliminada.
