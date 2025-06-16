@@ -179,12 +179,25 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Analisis de Causa</div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong>                                    
-                            <h:inputTextarea class="form-control" id="analisis_causa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
-                                             rows="4" value="#{editarAccion.analisisCausa}"/>
-                        </div>
-
+                        <h:panelGroup id="panel_analisis_causa">
+                            <div class="form-group">
+                                <strong><label for="analisis_causa">Analisis de Causa Raiz:</label></strong> 
+                                <h:inputTextarea class="form-control" id="analisis_causa"  p:placeholder="Analisis de causa raiz utilizando por ejemplo la tecnica de 5 porques." 
+                                                 rows="4" value="#{editarAccion.analisisCausa}"/>        
+                            </div>
+                            <c:if test="#{editarAccion.analisisCausa.blank}">More actions
+                                <div class="form-group">
+                                    <label for="guardar_analisis_causa"></label>              
+                                    <h:commandLink id="guardar_analisis_causa" class="btn btn-primary" >
+                                        <span style="font-family: sans-serif;"> Guardar Analisis de Causa</span>
+                                        <f:ajax execute="analisis_causa" event="click" listener="#{editarAccion.guardarAnalisisCausa()}" onevent="indicador" 
+                                                render="panel_analisis_causa agregar_actividad"/>
+                                    </h:commandLink>
+                                </div>
+                                <div class="form-group-sm">
+                                    <h:message for="guardar_analisis_causa" class="msj_info"/>
+                                </div>
+                        </h:panelGroup>
                     </div>
                 </div>
 
@@ -643,7 +656,7 @@
                                                                         <td>
                                                                             <div class="btn-group">
                                                                                 <h:commandLink action="#{editarAccion.quitarAdjunto(adjunto.ida)}" class="btn btn-danger" value="Eliminar Adjunto" onclick="if (!confirm('Seguro que desea quitar este adjunto? Se eliminara inmediatamente de la accion.'))
-                                                                                                    return false">
+                                                                                            return false">
                                                                                     <span class="glyphicon glyphicon-trash"> </span>
                                                                                     <f:ajax render="panel_lista_adjuntos"  onevent="indicador"/>
                                                                                 </h:commandLink>
@@ -700,7 +713,7 @@
                             <f:ajax execute="analisis_causa descripcion referencias fecha_deteccion area codificacion deteccion clasificacion
                                     fecha_estimada_comprobacion_implementacion responsable_comprobacion_implementacion 
                                     fecha_estimada_comprobacion_eficacia responsable_comprobacion_eficacia cliente" event="click" listener="#{editarAccion.editarAccion()}" onevent="indicador" 
-                                    render="panel_mensajes panel_mensajes_implementacion panel_mensajes_eficacia agregar_actividad"/>
+                                    render="panel_mensajes panel_mensajes_implementacion panel_mensajes_eficacia agregar_actividad panel_analisis_causa"/>
                         </h:commandButton>
                     </div>
                     <div class='col-sm-4' >

@@ -530,7 +530,7 @@ public class EditarAccion implements Serializable {
     private void actualizarListaAdjuntos() {
         Accion accionSeguida = fLectura.GetAccion(IdAccionSeleccionada);
         if (!accionSeguida.getAdjuntosDeAccion().isEmpty()) {
-            listaAdjuntos= accionSeguida.getAdjuntosDeAccion();
+            listaAdjuntos = accionSeguida.getAdjuntosDeAccion();
             actualizarTotalesAdjuntos();
         }
     }
@@ -680,6 +680,31 @@ public class EditarAccion implements Serializable {
         // Si la actualizacion se realizo correctamente redirige a lista de acciones.
         ctx.addMessage("form_accion:guardar_accion", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron."));
         ctx.renderResponse();
+    }
+
+    /**
+     * Actualiza la accion correctiva con los datos nuevos. Si se muestra
+     * mensaje de confirmacion.
+     *
+     * @throws java.io.IOException
+     */
+    public void guardarAnalisisCausa() throws IOException {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        // actualizar accion
+        if (AnalisisCausa == null || AnalisisCausa.isBlank()) {
+            ctx.addMessage("form_accion:guardar_analisis_causa", new FacesMessage(SEVERITY_ERROR, "No se pudo guardar.", "Analisis de Causa no puede estar vacío."));
+            ctx.renderResponse();
+        } else {
+            if (fDatos.guardarAnalisisCausa(IdAccionSeleccionada, AnalisisCausa) == -1) {
+                // Si no se actualizo muestra mensaje de error.
+                ctx.addMessage("form_accion:guardar_analisis_causa", new FacesMessage(SEVERITY_ERROR, "No se pudo guardar.", "No se pudo guardar el analisis de causa de la Accion"));
+                ctx.renderResponse();
+            } else {
+                // Si la actualizacion se realizo correctamente redirige a lista de acciones.More actions
+                ctx.addMessage("form_accion:guardar_analisis_causa", new FacesMessage(SEVERITY_INFO, "Los datos se guardaron.", "Los datos se guardaron."));
+                ctx.renderResponse();
+            }
+        }
     }
 
     /**
