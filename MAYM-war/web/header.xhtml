@@ -9,7 +9,7 @@
     <ui:composition >
 
         <div class="container-fluid" >
-            <div class="row" style="background-image: linear-gradient(#{sesionUsuario.opsApariencia.colorSuperiorPanelTitulo}, #{sesionUsuario.opsApariencia.colorInferiorPanelTitulo})!important">
+            <div class="row" style="background-image: linear-gradient(180deg, #{sesionUsuario.opsApariencia.colorSuperiorPanelTitulo} 0%, #{sesionUsuario.opsApariencia.colorMedioPanelTitulo} 50%, #{sesionUsuario.opsApariencia.colorInferiorPanelTitulo} 90%)!important">
                 <div class="col-sm-4">
                     <c:choose>
                         <c:when test="#{sesionUsuario.usuarioLogueado == null or empty sesionUsuario.usuarioLogueado.empresaUsuario.ubicacionLogo}">

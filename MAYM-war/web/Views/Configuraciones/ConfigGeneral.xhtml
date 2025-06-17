@@ -155,6 +155,9 @@
                             case 'superior':
                                 document.getElementById('hiddenColorInput-superior').value = color;
                                 break;
+                                case 'medio':
+                                document.getElementById('hiddenColorInput-medio').value = color;
+                                break;
                             case 'fuente-encabezado':
                                 document.getElementById('hiddenColorInput-fuente-encabezado').value = color;
                                 break;
@@ -180,6 +183,9 @@
                 <h:form id="form-color" prependId="false">
                     <input type="hidden" id="hiddenColorInput-superior" name="hiddenColorInput-superior" />
                     <h:inputHidden id="hiddenColorInput-superior" value="#{configGeneral.colorSuperior}" />
+                    
+                    <input type="hidden" id="hiddenColorInput-medio" name="hiddenColorInput-medio" />
+                    <h:inputHidden id="hiddenColorInput-medio" value="#{configGeneral.colorMedio}" />
 
                     <input type="hidden" id="hiddenColorInput-fuente-encabezado" name="hiddenColorInput-fuente-encabezado" />
                     <h:inputHidden id="hiddenColorInput-fuente-encabezado" value="#{configGeneral.colorFuenteEncabezado}" />
@@ -249,40 +255,10 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td style="width: 80%">
-                                                                        <h:outputLabel for="colorPicker-inferior" value="Color Inferior/ Título Informes:" />
+                                                                        <h:outputLabel for="colorPicker-medio" value="Color Medio:" />
                                                                     </td>
                                                                     <td>
-                                                                        <input id="colorPicker-inferior" type="color" value="#{configGeneral.ops.colorInferiorPanelTitulo}" onchange="setColorValue(this.value, 'inferior')" />
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                    <td>
-                                                        <table>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td style="width: 80%">
-                                                                        <h:outputLabel for="colorPicker-fuente-titulo" value="Color de Fuente de Panel:" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <input id="colorPicker-fuente-titulo" type="color" value="#{configGeneral.ops.colorFuentePanelTitulo}" onchange="setColorValue(this.value, 'fuente-titulo')" />
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td style="width: 80%">
-                                                                        <h:outputLabel for="colorPicker-fuente-encabezado" value="Color de Fuente:" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <input id="colorPicker-fuente-encabezado" type="color" value="#{configGeneral.ops.colorFuentePanelEncabezado}" onchange="setColorValue(this.value, 'fuente-encabezado')" />
+                                                                        <input id="colorPicker-medio" type="color" value="#{configGeneral.ops.colorMedioPanelTitulo}" onchange="setColorValue(this.value, 'medio')" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -301,9 +277,54 @@
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-                                                    </td>
+                                                    </td>                                                                                                  
                                                 </tr>
                                                 <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-inferior" value="Color Inferior/ Título Informes:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-inferior" type="color" value="#{configGeneral.ops.colorInferiorPanelTitulo}" onchange="setColorValue(this.value, 'inferior')" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>      
+                                                    <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-fuente-titulo" value="Color de Fuente de Panel:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-fuente-titulo" type="color" value="#{configGeneral.ops.colorFuentePanelTitulo}" onchange="setColorValue(this.value, 'fuente-titulo')" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>                                                   
+                                                    
+                                                </tr>
+                                                <tr>
+                                                     <td>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td style="width: 80%">
+                                                                        <h:outputLabel for="colorPicker-fuente-encabezado" value="Color de Fuente:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input id="colorPicker-fuente-encabezado" type="color" value="#{configGeneral.ops.colorFuentePanelEncabezado}" onchange="setColorValue(this.value, 'fuente-encabezado')" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
                                                     <td><table>
                                                             <tbody>
                                                                 <tr>
@@ -328,7 +349,9 @@
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-                                                    </td>
+                                                    </td>                                                    
+                                                </tr>
+                                                <tr>
                                                     <td>
                                                         <table>
                                                             <tbody>

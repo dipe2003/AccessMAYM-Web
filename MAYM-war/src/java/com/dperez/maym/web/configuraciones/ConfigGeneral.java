@@ -43,6 +43,7 @@ public class ConfigGeneral implements Serializable {
     private Empresa empresaGuardada;
     private OpcionesApariencia ops;
     private String colorSuperior;
+    private String colorMedio;
     private String colorInferior;
     private String colorFuenteEncabezado;
     private String colorTitulo;
@@ -202,6 +203,14 @@ public class ConfigGeneral implements Serializable {
         this.colorSuperior = colorSuperior;
     }
 
+    public String getColorMedio() {
+        return colorMedio;
+    }
+
+    public void setColorMedio(String colorMedio) {
+        this.colorMedio = colorMedio;
+    }
+
     public String getColorInferior() {
         return colorInferior;
     }
@@ -317,7 +326,7 @@ public class ConfigGeneral implements Serializable {
     }
 
     public void guardarColor() throws IOException {
-        if (fAdmin.setConfiguracionApariencia(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), colorSuperior, colorInferior,
+        if (fAdmin.setConfiguracionApariencia(sesionUsuario.getUsuarioLogueado().getEmpresaUsuario().getId(), colorSuperior, colorMedio, colorInferior,
                 colorFuenteEncabezado, colorTitulo, colorFuenteTitulo, colorFondo, colorBoton) > 0) {
             sesionUsuario.cargarColores();
             FacesContext ctx = FacesContext.getCurrentInstance();
@@ -359,6 +368,7 @@ public class ConfigGeneral implements Serializable {
         }
         colorSuperior = ops.getColorSuperiorPanelTitulo();
         colorFuenteEncabezado = ops.getColorFuentePanelEncabezado();
+        colorMedio = ops.getColorMedioPanelTitulo();
         colorInferior = ops.getColorInferiorPanelTitulo();
         colorTitulo = ops.getColorPanelTitulo();
         colorFuenteTitulo = ops.getColorFuentePanelTitulo();

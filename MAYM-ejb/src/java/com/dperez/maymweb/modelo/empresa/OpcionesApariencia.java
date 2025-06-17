@@ -20,25 +20,27 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "OpcionesApariencia")
-public class OpcionesApariencia implements Serializable{
+public class OpcionesApariencia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    
+
     private String colorSuperiorPanelTitulo;
+    private String colorMedioPanelTitulo;
     private String colorInferiorPanelTitulo;
     private String colorFuentePanelEncabezado;
     private String colorPanelTitulo;
     private String colorFuentePanelTitulo;
     private String colorBody;
     private String colorBoton;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     private OpcionesSistema opcionesOpcionesSistema;
 
     public OpcionesApariencia() {
         colorSuperiorPanelTitulo = "#2a2a2a";
+        colorMedioPanelTitulo = "#000000";
         colorInferiorPanelTitulo = "#000000";
         colorPanelTitulo = "#337ab7";
         colorFuentePanelEncabezado = "#cce8f6";
@@ -47,9 +49,10 @@ public class OpcionesApariencia implements Serializable{
         colorBoton = "#337ab7";
     }
 
-    public OpcionesApariencia(String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo, String colorFuentePanelEncabezado, String colorPanelTitulo, 
+    public OpcionesApariencia(String colorSuperiorPanelTitulo, String colorMedioPanelTitulo, String colorInferiorPanelTitulo, String colorFuentePanelEncabezado, String colorPanelTitulo,
             String colorFuentePanelTitulo, String colorBody, String colorBoton) {
         this.colorSuperiorPanelTitulo = colorSuperiorPanelTitulo;
+        this.colorMedioPanelTitulo = colorMedioPanelTitulo;
         this.colorInferiorPanelTitulo = colorInferiorPanelTitulo;
         this.colorFuentePanelEncabezado = colorFuentePanelEncabezado;
         this.colorPanelTitulo = colorPanelTitulo;
@@ -61,6 +64,10 @@ public class OpcionesApariencia implements Serializable{
     //<editor-fold desc="GETTERS">
     public String getColorSuperiorPanelTitulo() {
         return colorSuperiorPanelTitulo;
+    }
+
+    public String getColorMedioPanelTitulo() {
+        return colorMedioPanelTitulo;
     }
 
     public String getColorInferiorPanelTitulo() {
@@ -94,13 +101,15 @@ public class OpcionesApariencia implements Serializable{
     public OpcionesSistema getOpcionesOpcionesSistema() {
         return opcionesOpcionesSistema;
     }
-    
-    
-    //</editor-fold>
 
+    //</editor-fold>
     //<editor-fold desc="SETTERS">
     public void setColorSuperiorPanelTitulo(String colorSuperiorPanelTitulo) {
         this.colorSuperiorPanelTitulo = colorSuperiorPanelTitulo;
+    }
+
+    public void setColorMedioPanelTitulo(String colorMedioPanelTitulo) {
+        this.colorMedioPanelTitulo = colorMedioPanelTitulo;
     }
 
     public void setColorInferiorPanelTitulo(String colorInferiorPanelTitulo) {
@@ -136,7 +145,6 @@ public class OpcionesApariencia implements Serializable{
     }
 
     //</editor-fold>
-    
     //<editor-fold desc="METODOS">
     public String getColorBrighter(String color) {
         Color colorBrighter = Color.decode(color).brighter();

@@ -93,6 +93,7 @@ public class FacadeAdministrador {
      * Setea las opciones de apariencia del sistema asociadas a la Empresa.
      * @param idEmpresa
      * @param colorSuperiorPanelTitulo
+     * @param colorMedioPanelTitulo
      * @param colorInferiorPanelTitulo
      * @param colorFuentePanelEncabezado
      * @param colorPanelTitulo
@@ -101,9 +102,9 @@ public class FacadeAdministrador {
      * @param colorBoton
      * @return 
      */
-    public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo,
+    public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorMedioPanelTitulo, String colorInferiorPanelTitulo,
             String colorFuentePanelEncabezado, String colorPanelTitulo, String colorFuentePanelTitulo, String colorBody, String colorBoton) {
-        return cConfig.setConfiguracionApariencia(idEmpresa, colorSuperiorPanelTitulo, colorInferiorPanelTitulo, colorFuentePanelEncabezado, 
+        return cConfig.setConfiguracionApariencia(idEmpresa, colorSuperiorPanelTitulo, colorMedioPanelTitulo, colorInferiorPanelTitulo, colorFuentePanelEncabezado, 
                 colorPanelTitulo, colorFuentePanelTitulo, colorBody, colorBoton);                
     }
     

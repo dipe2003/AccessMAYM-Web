@@ -135,6 +135,7 @@ public class ControladorConfiguracion {
      *
      * @param idEmpresa
      * @param colorSuperiorPanelTitulo
+     * @param colorMedioPanelTitulo
      * @param colorInferiorPanelTitulo
      * @param colorFuentePanelEncabezado
      * @param colorPanelTitulo
@@ -143,7 +144,7 @@ public class ControladorConfiguracion {
      * @param colorBoton
      * @return
      */
-    public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorInferiorPanelTitulo,
+    public int setConfiguracionApariencia(int idEmpresa, String colorSuperiorPanelTitulo, String colorMedioPanelTitulo, String colorInferiorPanelTitulo,
             String colorFuentePanelEncabezado, String colorPanelTitulo, String colorFuentePanelTitulo, String colorBody, String colorBoton) {
         Empresa empresa = repoEmpresa.find(idEmpresa);
         if (empresa != null) {
@@ -168,6 +169,9 @@ public class ControladorConfiguracion {
             }
             if (!colorSuperiorPanelTitulo.isBlank()) {
                 ops.setColorSuperiorPanelTitulo(colorSuperiorPanelTitulo);
+            }
+            if (!colorMedioPanelTitulo.isBlank()) {
+                ops.setColorMedioPanelTitulo(colorMedioPanelTitulo);
             }
             return repoEmpresa.update(empresa).getId();
         }

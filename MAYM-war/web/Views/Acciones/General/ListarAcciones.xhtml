@@ -35,7 +35,7 @@
                                                 <div class="table-responsive-sm">
                                                     <h:panelGroup id="panel_filtros" >
                                                         <table class="table table-hover">                        
-                                                            <tbody style="font-size: 11px">
+                                                            <tbody style="font-size: 1.5rem">
                                                                 <tr>
                                                                     <td>
                                                                         <div class="row">
@@ -99,10 +99,10 @@
                                                                                     <f:ajax delay="10" render="form_tabla_acciones panel_filtros" onevent="indicador" />                                                                           
                                                                                 </h:commandLink>
                                                                             </div>
-                                                                            <div class="col-md-1" style="font-size:14px">
+                                                                            <div class="col-md-1" style="font-size:1.5rem">
                                                                                 <strong>Filtros actuales:</strong>
                                                                             </div>
-                                                                            <div class="col-md-4" style="font-size:13px">
+                                                                            <div class="col-md-4" style="font-size:1.4rem">
                                                                                 <c:choose >
                                                                                     <c:when test="#{listarAcciones.filtrosAplicados.size() == 0}">
                                                                                         <div class="alert-info">
@@ -217,7 +217,7 @@
                         <c:otherwise> 
                             <div class="table-responsive-sm">
                                 <table class="table table-hover table-striped">
-                                    <thead style="font-size: 12px">
+                                    <thead style="font-size: 1.5rem">
                                         <tr>
                                             <th style="width: 5%">Fecha</th>
                                             <th style="width: 5%">Area</th>
@@ -231,7 +231,7 @@
                                         </tr>                                    
                                     </thead>
 
-                                    <tbody style="font-size: 11px">
+                                    <tbody style="font-size: 1.2rem">
                                         <c:forEach items="#{listarAcciones.listaAcciones}" var="accion">
                                             <tr>
                                                 <td>
@@ -435,7 +435,7 @@
                                                                     <label for="areas-disponibles">Areas Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 12px; " 
+                                                                    <h:selectManyCheckbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem; " 
                                                                                           layout="pageDirection">
                                                                         <f:selectItems var="entry" value="#{listarAcciones.areasEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}" />
                                                                         <f:ajax execute="@this" event="change" />
@@ -511,7 +511,7 @@
                                                                     <label for="detecciones-disponibles">Detecciones Disponibles</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection">                                                                    
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection">                                                                    
                                                                         <f:selectItems var="entry" value="#{listarAcciones.deteccionesEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change"  />
                                                                     </h:selectManyCheckbox>
@@ -586,7 +586,7 @@
                                                                     <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection" >                                                                        
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection" >                                                                        
                                                                         <f:selectItems value="#{listarAcciones.codificacionesEnRegistros}" var="entry" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change" />                                                                       
                                                                     </h:selectManyCheckbox>
@@ -661,7 +661,7 @@
                                                                     <label for="estados-disponibles">Estados Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 12px" layout="pageDirection"  >
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection"  >
                                                                         <f:selectItems var="entry" value="#{listarAcciones.estadosEnRegistros}" itemLabel=" #{entry.descripcion}" itemValue="#{entry}"/>
                                                                         <f:ajax execute="@this" event="change"  />
                                                                     </h:selectManyCheckbox>
