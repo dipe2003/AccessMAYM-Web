@@ -95,7 +95,7 @@
                                                                             </div>
                                                                             <div class="col-md-2">
                                                                                 <h:commandLink class="btn btn-primary" role="menuitem" tabindex="-1" action="#{listarAcciones.filtrarTexto()}" 
-                                                                                               ><img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-search-48.png" style='height: 20px' /> Buscar
+                                                                                               ><img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-search-48.png" style='height: 2rem' /> Buscar
                                                                                     <f:ajax delay="10" render="form_tabla_acciones panel_filtros" onevent="indicador" />                                                                           
                                                                                 </h:commandLink>
                                                                             </div>
@@ -163,19 +163,19 @@
                                                                                     <ul class="dropdown-menu" role="menu">
                                                                                         <li>
                                                                                             <h:commandLink class="dropdown-item"  action="#{listarAcciones.pdfteaListado()}" immediate="true">
-                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
                                                                                                 Listado completo (Pdf)
                                                                                             </h:commandLink>
                                                                                         </li>
                                                                                         <li>
                                                                                             <h:commandLink class="dropdown-item"  action="#{listarAcciones.excelseaConActividades()}" immediate="true">
-                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 2rem' />
                                                                                                 Listado completo (Excel)
                                                                                             </h:commandLink>
                                                                                         </li>
                                                                                         <li>
                                                                                             <h:commandLink class="dropdown-item" action="#{listarAcciones.excelsea()}" immediate="true">
-                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 20px' />
+                                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-ms-excel-50.png" style='height: 2rem' />
                                                                                                 Listado compacto (Excel)
                                                                                             </h:commandLink>
                                                                                         </li>
@@ -279,7 +279,7 @@
                                                 </td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="#{sesionUsuario.usuarioLogueado.permisoUsuario != null}" >
+                                                        <c:when test="#{sesionUsuario.usuarioLogueado.permisoUsuario != 'LECTURA'}" >
                                                             <div class="btn-group">
                                                                 <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
                                                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -288,13 +288,13 @@
                                                                 <ul class="dropdown-menu" role="menu">
                                                                     <li>
                                                                         <h:link outcome="VerAccion.xhtml?id=#{accion.id}" >
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 2rem' />
                                                                             Ver Accion Web
                                                                         </h:link>
                                                                     </li>
                                                                     <li>
                                                                         <h:link outcome="EditarAccion.xhtml?id=#{accion.id}" >
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-editar-128.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-editar-128.png" style='height: 2rem' />
                                                                             Editar Datos
                                                                         </h:link>
                                                                     </li>
@@ -302,33 +302,33 @@
                                                                         <c:if test="#{accion.estadoDeAccion != 'DESESTIMADA'}">
                                                                             <li>                                                            
                                                                                 <h:link outcome="ActividadesAccion.xhtml?id=#{accion.id}&amp;editar=0">
-                                                                                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-agregar-página-web-64.png" style='height: 20px' />
+                                                                                    <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-agregar-página-web-64.png" style='height: 2rem' />
                                                                                     Agregar Actividad
                                                                                 </h:link>
                                                                             </li>  
                                                                         </c:if>
                                                                         <li><h:link outcome="SeguimientoAccion.xhtml?id=#{accion.id}" >
-                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-huellas-30.png" style='height: 20px' />
+                                                                                <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-huellas-30.png" style='height: 2rem' />
                                                                                 Realizar Seguimiento
                                                                             </h:link>
                                                                         </li>
                                                                     </c:if>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
                                                                             Ver Accion (pdf)
                                                                         </h:commandLink>  
                                                                     </li>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
                                                                             Ver Accion sin Estado (pdf)
                                                                         </h:commandLink>  
                                                                     </li>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">                                                                       
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                            Crear Plan de Accion (pdf)
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
+                                                                            Ver Plan de Accion (pdf)
                                                                         </h:commandLink>   
                                                                     </li>
                                                                 </ul>
@@ -343,26 +343,26 @@
                                                                 <ul class="dropdown-menu" role="menu">
                                                                     <li>
                                                                         <h:link class="dropdown-item" title="Ver Accion" outcome="VerAccion.xhtml?id=#{accion.id}">                                                                        
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-web-50.png" style='height: 2rem' />
                                                                             Ver Accion Web
                                                                         </h:link>
                                                                     </li>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, false)}" title="Exportar a PDF">                                                                       
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
                                                                             Ver Accion (pdf)
                                                                         </h:commandLink>  
                                                                     </li>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" action="#{listarAcciones.pdfteaRegistro(accion.id, true)}" title="Exportar a PDF (sin Estado)">                                                                       
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
                                                                             Ver Accion sin Estado (pdf)
                                                                         </h:commandLink>  
                                                                     </li>
                                                                     <li>
                                                                         <h:commandLink class="dropdown-item" title="Exportar Plan de Accion pdf" action="#{listarAcciones.pdfteaPlanAccion(accion.id)}" immediate="true">
-                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 20px' />
-                                                                            Crear Plan de Accion (pdf)
+                                                                            <img src="#{facesContext.externalContext.requestContextPath}/Resources/Images/icons8-pdf-32.png" style='height: 2rem' />
+                                                                            Ver Plan de Accion (pdf)
                                                                         </h:commandLink>   
                                                                     </li>
                                                                 </ul>
@@ -428,14 +428,14 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body" style="height:200px;overflow-y: scroll" >
+                                                    <div class="panel-body" style="height:20rem;overflow-y: scroll" >
                                                         <div class="table-responsive-sm">
                                                             <h:panelGrid id="drop-filtro-areas" >
                                                                 <div>
                                                                     <label for="areas-disponibles">Areas Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem; " 
+                                                                    <h:selectManyCheckbox id="areas-disponibles" value="#{listarAcciones.areasSeleccionadas}" style="height:20rem; width: 100%; font-size: 1rem; " 
                                                                                           layout="pageDirection">
                                                                         <f:selectItems var="entry" value="#{listarAcciones.areasEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}" />
                                                                         <f:ajax execute="@this" event="change" />
@@ -504,14 +504,14 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body" style="height:200px;overflow-y: scroll">
+                                                    <div class="panel-body" style="height:20rem;overflow-y: scroll">
                                                         <div class="table-responsive-sm">
                                                             <h:panelGroup id="drop-filtro-detecciones">
                                                                 <div>
                                                                     <label for="detecciones-disponibles">Detecciones Disponibles</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection">                                                                    
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.deteccionesSeleccionadas}" style="height:20rem; width: 100%; font-size: 1rem" layout="pageDirection">                                                                    
                                                                         <f:selectItems var="entry" value="#{listarAcciones.deteccionesEnRegistros}" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change"  />
                                                                     </h:selectManyCheckbox>
@@ -579,14 +579,14 @@
                                             <div class="col-sm-12">
                                                 <!-- Filtros -->
                                                 <div class="panel panel-primary">
-                                                    <div class="panel-body" style="height:200px;overflow-y: scroll">
+                                                    <div class="panel-body" style="height:20rem;overflow-y: scroll">
                                                         <div class="table-responsive-sm">
                                                             <h:panelGroup id="drop-filtro-codificaciones">
                                                                 <div>
                                                                     <label for="codificaciones-disponibles">Codificaciones Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection" >                                                                        
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.codificacionesSeleccionadas}" style="height:20rem; width: 100%; font-size: 1rem" layout="pageDirection" >                                                                        
                                                                         <f:selectItems value="#{listarAcciones.codificacionesEnRegistros}" var="entry" itemLabel=" #{entry.nombre}" itemValue="#{entry.id}"/>
                                                                         <f:ajax execute="@this" event="change" />                                                                       
                                                                     </h:selectManyCheckbox>
@@ -661,7 +661,7 @@
                                                                     <label for="estados-disponibles">Estados Disponibles:</label>
                                                                 </div>
                                                                 <div>
-                                                                    <h:selectManyCheckbox value="#{listarAcciones.estadosSeleccionados}" style="height:200px; width: 100%; font-size: 1.5rem" layout="pageDirection"  >
+                                                                    <h:selectManyCheckbox value="#{listarAcciones.estadosSeleccionados}" style="height:20rem; width: 100%; font-size: 1rem" layout="pageDirection"  >
                                                                         <f:selectItems var="entry" value="#{listarAcciones.estadosEnRegistros}" itemLabel=" #{entry.descripcion}" itemValue="#{entry}"/>
                                                                         <f:ajax execute="@this" event="change"  />
                                                                     </h:selectManyCheckbox>

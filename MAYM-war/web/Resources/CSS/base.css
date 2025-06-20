@@ -13,6 +13,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     src: url(../Fonts/LibreSansSerifSSi.ttf);
 }
 
+@font-face {
+    font-family: BagnardSans;
+    src: url(../Fonts/BagnardSans.otf);
+}
+
 .alerta{
     font-family: LibreSans;
     background-color: black;

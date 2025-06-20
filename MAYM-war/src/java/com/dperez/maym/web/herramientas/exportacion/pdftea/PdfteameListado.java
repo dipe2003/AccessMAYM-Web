@@ -42,24 +42,19 @@ import javax.servlet.http.HttpServletResponse;
 @Named
 public class PdfteameListado implements Serializable {
 
-    private CargarArchivo cArchivo;
+    private CargarArchivo cArchivo = new CargarArchivo();
     // 1 pulgada = 72
     private Document documento = new Document();
     private Empresa empresa;
     private final Color colorFilaImpar = new Color(245, 245, 245);
 
-    public PdfteameListado(Empresa empresa) {
-        this.empresa = empresa;
-        documento.setPageSize(PageSize.A4.rotate());
-        documento.setMargins(18, 18, 90, 36);
-        cArchivo = new CargarArchivo();
-    }
-
     public PdfteameListado() {
+        documento.setPageSize(PageSize.A4.rotate());
+        documento.setMargins(18, 18, 90, 36);        
     }
 
     public void ExportarListado(String nombreArchivo, String tituloListado, List<Accion> acciones) {
-
+        this.empresa = acciones.get(0).getEmpresaAccion();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
@@ -79,7 +74,7 @@ public class PdfteameListado implements Serializable {
             // tabla listado de acciones, el total de columnas es fijo basado en los atributos que tiene la accion por defecto 11 (no inluye el tipo de Accion)            
             PdfPTable tabla = CrearTablaListado(11, new int[]{4, 9, 6, 17, 17, 17, 7, 4, 5, 7, 7});
 
-             CrearFilaTitulo(tabla, false);
+            CrearFilaTitulo(tabla, false);
 
             // FILAS RESTANTES - Datos de Acciones
             int contador = 0;
@@ -151,8 +146,8 @@ public class PdfteameListado implements Serializable {
     }
 
     public void ExportarPlanAccion(String nombreArchivo, String tituloPlan, List<Accion> acciones,
-            String textoIntroduccion, Empresa empresa) {
-
+            String textoIntroduccion) {
+        this.empresa = acciones.get(0).getEmpresaAccion();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
@@ -162,7 +157,6 @@ public class PdfteameListado implements Serializable {
             OutputStream outputStream = response.getOutputStream();
             PdfWriter writer = PdfWriter.getInstance(documento, outputStream);
 
-            Accion accion = acciones.stream().findFirst().get();
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
 
             TablaEncabezado event = new TablaEncabezado(CrearEncabezado(tituloPlan), 16, 570);
@@ -183,7 +177,7 @@ public class PdfteameListado implements Serializable {
             PdfPTable tabla = CrearTablaListado(10, new int[]{8, 7, 18, 18, 19, 7, 5, 5, 7, 6});
 
             CrearFilaTitulo(tabla, true);
-            
+
             // FILAS RESTANTES - Datos de Acciones
             int contador = 0;
             boolean impar = true;
@@ -194,7 +188,7 @@ public class PdfteameListado implements Serializable {
                 tabla.addCell(CrearCeldaContenido(a.getDescripcion(), impar, 0));
                 tabla.addCell(CrearCeldaContenido(a.getAnalisisCausa().equals("") ? "Sin Definir" : a.getAnalisisCausa(), impar, 0));
                 // Celda ACTIVIDADES
-                if (a.getActividadesDeAccion().size() > 0) {
+                if (!a.getActividadesDeAccion().isEmpty()) {
                     PdfPTable tablaActividades = CrearTablaActividades(3, new int[]{19, 8, 4});
                     final boolean repImpar = impar;
                     a.getActividadesDeAccion().forEach((act) -> {
@@ -432,8 +426,8 @@ public class PdfteameListado implements Serializable {
             logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo-maym-wider.png"));
         } catch (IOException ex) {
             ex.getMessage();
-            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo-maym-wider.png"));            
-        }catch(Exception ex){
+            logo = Image.getInstance(FacesContext.getCurrentInstance().getExternalContext().getResource("/Resources/Images/logo-maym-wider.png"));
+        } catch (Exception ex) {
             frase.add("[No se pudo cargar logo]");
         }
         if (logo != null) {

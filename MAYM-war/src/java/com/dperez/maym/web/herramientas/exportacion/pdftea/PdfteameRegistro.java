@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 @Named
 public class PdfteameRegistro implements Serializable {
 
-    private CargarArchivo cArchivo;
+    private CargarArchivo cArchivo  = new CargarArchivo();
     private Empresa empresa;
 
     // 1 pulgada = 72
@@ -53,13 +53,10 @@ public class PdfteameRegistro implements Serializable {
     private final Font fuenteContenidoCelda = FontFactory.getFont("arialbi", 8, Font.NORMAL, new Color(0, 0, 0));
     private final Color colorFilaImpar = new Color(245,245,245);
 
-    public PdfteameRegistro(Empresa empresa) {
-        this.empresa = empresa;
-        cArchivo = new CargarArchivo();
-    }
+    public PdfteameRegistro() {}
 
     public void ExportarRegistro(String nombreArchivo, String tituloListado, Accion accion, boolean excluirComprobaciones) {
-
+        this.empresa = accion.getEmpresaAccion();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
@@ -111,7 +108,7 @@ public class PdfteameRegistro implements Serializable {
             tablaGeneral.setComplete(true);
             documento.add(tablaGeneral);
 
-            if (accion.getProductosInvolucrados().size() > 0) {
+            if (!accion.getProductosInvolucrados().isEmpty()) {
                 documento.add(CrearTituloSeccion("Producto Involucrado"));
                 tablaGeneral.addCell(CrearCeldaVacia(5, false));
                 PdfPTable tablaProducto = CrearTablaRegistro(2, new int[]{50, 50});
@@ -137,7 +134,7 @@ public class PdfteameRegistro implements Serializable {
             // Celda ACTIVIDADES
             int contador = 1;
             boolean filaPar = false;
-            if (accion.getActividadesDeAccion().size() > 0) {
+            if (!accion.getActividadesDeAccion().isEmpty()) {
                 for (Actividad act : accion.getActividadesDeAccion()) {
 
                     tablaActividades.addCell(CrearCeldaContenido(act.getTipoDeActividad().getDescripcion() + ": " + act.getDescripcion(), filaPar, 0, 0));
@@ -189,7 +186,7 @@ public class PdfteameRegistro implements Serializable {
                     tablaImplementacion.addCell(CrearCeldaVacia(3, false));
                     tablaImplementacion.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
                     tablaImplementacion.addCell(CrearCeldaContenido(accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                            : accion.getComprobacionImplementacion().getResultadoComprobacion().getDescripcion() + ": "
+                            : implementacion + ": "
                             + accion.getComprobacionImplementacion().getObservaciones(), false, 2, 0));
                 } else {
                     tablaImplementacion.addCell(CrearCeldaContenido(implementacion, false, 3, 0));
@@ -233,7 +230,7 @@ public class PdfteameRegistro implements Serializable {
                     tablaEficacia.addCell(CrearCeldaVacia(3, false));
                     tablaEficacia.addCell(CrearCeldaTitulo("Resultados de Comprobacion", 0));
                     tablaEficacia.addCell(CrearCeldaContenido(accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion().equals("") ? "Sin Observaciones"
-                            : accion.getComprobacionEficacia().getResultadoComprobacion().getDescripcion() + ": "
+                            : eficacia + ": "
                             + accion.getComprobacionEficacia().getObservaciones(), false, 2, 0));
                 } else {
                     tablaEficacia.addCell(CrearCeldaContenido(eficacia, false, 3, 0));
