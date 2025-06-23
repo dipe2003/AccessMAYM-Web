@@ -340,7 +340,7 @@
                                                                 <div class="col-sm-6">
                                                                     <div class="form-group">
                                                                         <strong><label for="fecha_comprobacion_implementacion">Fecha de Comprobacion</label></strong>
-                                                                        <h:inputText id="fecha_comprobacion_implementacion" class="form-control calendario" value="#{seguimientoAccion.strFechaComprobacionImplementacion}" />
+                                                                        <h:inputText id="fecha_comprobacion_implementacion" p:placeholder="#{seguimientoAccion.accionSeleccionada.comprobacionImplementacion.strFechaEstimada}" class="form-control calendario" value="#{seguimientoAccion.strFechaComprobacionImplementacion}" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-6">
@@ -432,7 +432,7 @@
                                                                 <div class="col-sm-6">
                                                                     <div class="form-group">
                                                                         <strong><label for="fecha_comprobacion_eficacia">Fecha de Comprobacion</label></strong>
-                                                                        <h:inputText id="fecha_comprobacion_eficacia" class="form-control calendario" value="#{seguimientoAccion.strFechaComprobacionEficacia}" />
+                                                                        <h:inputText id="fecha_comprobacion_eficacia" class="form-control calendario" p:placeholder="#{seguimientoAccion.accionSeleccionada.comprobacionEficacia.strFechaEstimada}" value="#{seguimientoAccion.strFechaComprobacionEficacia}" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-6">

@@ -631,8 +631,8 @@ public class ListarAcciones implements Serializable {
             Accion accion = fLectura.getAccion(id);
             if (accion != null) {
                 ListaCompletaAcciones.add(accion);
-                cambiarPagina(true, PaginaActual);
                 esBusqueda = true;
+                cambiarPagina(false, PaginaActual);               
             }
         } else {
             if (!filtros.getFiltrosAplicados().isEmpty()) {
@@ -651,7 +651,9 @@ public class ListarAcciones implements Serializable {
     }
 
     public void cambiarPagina(boolean conFiltros, int numero) {
-        cargarAcciones();
+        if (!esBusqueda) {
+            cargarAcciones();
+        }
         if (conFiltros) {
             PaginaActual = numero;
             FiltrarAcciones();
